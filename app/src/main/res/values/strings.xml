@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lüğət</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="home_second">Home Second</string>
+
+    <string name="yaddashda_olanlar">Yaddaşda olanlar</string>
+    <string name="shebeke">Şəbəkə</string>
+    <string name="paylash">Paylaş</string>
+    <string name="komek">Kömək</string>
+
+    <string name="diger">Digər</string>
+    <string name="haqqinda">Haqqında</string>
+    <string name="proq_dili">Proqram dili</string>
+    <string name="azerbaycan">Azərbaycan</string>
+    <string name="alman">Alman</string>
+    <string name="axtar">Axtar</string>
+
+    <string name="sil">Sil</string>
+    <string name="info">Proqram haqda məlumat</string>
+    <string name="name">Elvin Məmmədov</string>
+
+    <string name="speech_prompt">Salam. Nəsə deyin</string>
+    <string name="speech_not_supported">Bağışlayın amma sizin dediyiniz söz qeydə alınmadı</string>
+
+
+
+</resources>

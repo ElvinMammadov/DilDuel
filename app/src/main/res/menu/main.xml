@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/de_az"
+        android:title="DE-AZ"/>
+    <item
+        android:id="@+id/az_de"
+        android:title="AZ-DE"/>
+    <group  >
+
+
+        <item
+            android:id="@+id/proqramdili"
+            android:title="@string/proq_dili">
+        <menu>
+            <item
+
+                android:id="@+id/azer"
+                android:title="@string/azerbaycan"/>
+            <item
+
+                android:id="@+id/alman"
+                android:title="@string/alman"/>
+
+        </menu>
+        </item>
+
+    </group>
+</menu>

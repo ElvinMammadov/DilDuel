@@ -79,9 +79,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btnSpeak = (Button) findViewById(R.id.voice);
-//        btnClear = (Button) findViewById(R.id.clear);
+//        btnSpeak = (Button) findViewById(R.id.voice);
+        btnClear = (Button) findViewById(R.id.clear);
+        btnClear.setVisibility(View.INVISIBLE);
         final EditText editText = findViewById(R.id.edit_search);
+
+        final TextView textView =findViewById(R.id.textView);
+        textView.setVisibility(View.INVISIBLE);
+
 
         dbHelper = new DBHelper(this);
 
@@ -116,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(String value) {
 
+                textView.setVisibility(View.VISIBLE);
+
 
                 String id =  Global.getState(MainActivity.this,"dic_type");
                 int dicType = id == null? R.id.de_az:Integer.valueOf(id);
@@ -125,16 +132,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        btnSpeak.setOnClickListener(new View.OnClickListener() {
+//        btnSpeak.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                promptSpeechInput();
+//            }
+//        });
 
+        btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                promptSpeechInput();
+            public void onClick(View view) {
+                editText.setText("");
+                btnClear.setVisibility(View.INVISIBLE);
             }
         });
 
 
-        TextView textView =findViewById(R.id.textView);
 
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -150,6 +164,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 dictionaryFragment.adapter.getFilter().filter(s);
 
+                if(s.length() > 0){
+                    btnClear.setVisibility(View.VISIBLE);
+                }else{
+                    btnClear.setVisibility(View.INVISIBLE);
+                }
+
 
             }
 
@@ -161,20 +181,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
-    private void promptSpeechInput() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,  RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.GERMAN);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-                getString(R.string.speech_prompt));
-        try {
-            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
-        } catch (ActivityNotFoundException a) {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.speech_not_supported),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
+//    private void promptSpeechInput() {
+//        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,  RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.GERMAN);
+//        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+//                getString(R.string.speech_prompt));
+//        try {
+//            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+//        } catch (ActivityNotFoundException a) {
+//            Toast.makeText(getApplicationContext(),
+//                    getString(R.string.speech_not_supported),
+//                    Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     /**
      * Receiving speech input
@@ -395,6 +415,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     };
+
+
 
 
 

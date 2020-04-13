@@ -116,10 +116,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public Word getWord(String key, int dicType)
     {
 
-        String tableName = getTableName(dicType);
-        String q = "SELECT * FROM " + tableName+ "  WHERE upper([key]) = upper(?)";
+        final String tableName = getTableName(dicType);
+        final String q = String.format("SELECT * FROM %s  WHERE upper([key]) = upper(?)", tableName);
         Log.i("Burdan ","kecdi 1");
-        Word word = new Word();
+        final Word word = new Word();
         Cursor result = null;
         try {
             result = mDB.rawQuery(q,new String[]{key});

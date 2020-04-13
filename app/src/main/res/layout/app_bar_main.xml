@@ -80,6 +80,44 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme">
+
+            <TextView
+                android:id="@+id/dil1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="80dp"
+                android:text="DE"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/change"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@drawable/mylist"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/dil2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:paddingRight="100dp"
+                android:text="AZ"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="20dp" />
+
+        </androidx.appcompat.widget.Toolbar>
 
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -88,7 +126,10 @@
 
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+
+    </FrameLayout>
 
 
 

@@ -21,4 +21,5 @@ public class Global {
         return sharedPref.getString(key, null);
 
     }
+
 }

@@ -75,9 +75,14 @@ public class DictionaryFragment extends Fragment {
     public void resetDataSource(ArrayList<String> source){
         mSource =source;
 
-        adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,mSource);
+        if(getActivity()!=null){
 
-        dicList.setAdapter(adapter);
+            adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,mSource);
+            dicList.setAdapter(adapter);
+        }
+
+
+
 
     }
 

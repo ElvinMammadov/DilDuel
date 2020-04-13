@@ -99,6 +99,8 @@ public class DBHelper extends SQLiteOpenHelper {
         String tableName = getTableName(dicType);
         String q = "SELECT * FROM "+tableName;
 
+        Log.i("Table Name ",  tableName +"Isleyir 1");
+
         Log.i("Her shey","Isleyir 1");
         Cursor result = mDB.rawQuery(q,null);
 
@@ -230,11 +232,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
         String tableName = "";
 
-        if(dicTyp == R.id.de_az){
+        if(dicTyp == 321){
             tableName = de_Az;
 
 
-        }else if(dicTyp ==R.id.az_de ){
+        }else if(dicTyp == 123 ){
 
             tableName = az_De;
         }

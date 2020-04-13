@@ -47,16 +47,18 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 
-    MenuItem menuDeAz;
-    MenuItem menuAzDe;
+//    MenuItem menuDeAz;
+//    MenuItem menuAzDe;
     MenuItem menuAzer;
     MenuItem menuAlman;
     MenuItem menuProqramDili;
     private PopupWindow pw;
     private Button btnSpeak;
-    private Button btnClear;
+    private Button btnClear,btnChange;
 
-    Toolbar toolbar;
+    private TextView textView1, textView2;
+
+    Toolbar toolbar,toolbar2;
 
     DBHelper dbHelper;
 
@@ -64,8 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     BookmarkFragment bookmarkFragment;
 
     private final int REQ_CODE_SPEECH_INPUT = 100;
-
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -77,10 +77,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
+        toolbar2 = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
+
+        textView1 = (TextView)findViewById(R.id.dil1);
+        textView2 = (TextView)findViewById(R.id.dil2);
 
 //        btnSpeak = (Button) findViewById(R.id.voice);
         btnClear = (Button) findViewById(R.id.clear);
+        btnChange = (Button) findViewById(R.id.change);
+
         btnClear.setVisibility(View.INVISIBLE);
         final EditText editText = findViewById(R.id.edit_search);
 
@@ -106,12 +112,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         goToFragment(dictionaryFragment,true);
 
+        String id =  Global.getState(this,"dic_type");
+
+        Log.i("teze Id",id +" budur");
+
+                if (id == null) {
+//                    Global.saveState(this, "dic_type", String.valueOf(id));
+
+                    id = "321";
+                    Global.saveState(this, "dic_type", String.valueOf(id));
+                    textView1.setText("DE");
+                    textView2.setText("AZ");
+
+                    Log.i("I deyishdi oldu",id +" budur");
+                    ArrayList<String> source = dbHelper.getWord(Integer.valueOf(id));
+                    dictionaryFragment.resetDataSource(source);
+
+
+        }else if (id.equals("123")) {
+                    id = "123";
+
+
+//                    Global.saveState(this, "dic_type", String.valueOf(id));
+                    Global.saveState(this, "dic_type", String.valueOf(id));
+                    textView1.setText("AZ");
+                    textView2.setText("DE");
+
+                    Log.i("I deyishdi oldu",id +" budur");
+
+                    ArrayList<String> source = dbHelper.getWord(Integer.valueOf(id));
+
+                    dictionaryFragment.resetDataSource(source);
+                    Log.i("Item Selected", "az_de");
+                }else {
+
+                    Log.i("Burdasan",id +" budur");
+                    id = "321";
+                    textView1.setText("DE");
+                    textView2.setText("AZ");
+                    Global.saveState(this, "dic_type", String.valueOf(id));
+
+                    ArrayList<String> source = dbHelper.getWord(Integer.valueOf(id));
+                    dictionaryFragment.resetDataSource(source);
+
+                }
+
         dictionaryFragment.setOnFragmentListener(new FragmentListener() {
             @Override
             public void onItemClick(String value) {
 
                 String id =  Global.getState(MainActivity.this,"dic_type");
-                int dicType = id == null? R.id.de_az:Integer.valueOf(id);
+                int dicType = id == null? 123:Integer.valueOf(id);
 
                 goToFragment(DetailFragment.getNewInstances(value,dbHelper,dicType),false);
             }
@@ -125,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                 String id =  Global.getState(MainActivity.this,"dic_type");
-                int dicType = id == null? R.id.de_az:Integer.valueOf(id);
+                int dicType = id == null? 123:Integer.valueOf(id);
 
                 goToFragment(DetailFragment.getNewInstances(value,dbHelper,dicType),false);
 
@@ -145,6 +196,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view) {
                 editText.setText("");
                 btnClear.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        btnChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                int id = 0;
+
+                Log.i("duyme "," basildi");
+                String a = textView1.getText().toString();
+
+                Log.i("a-nin  "," neticesi budur " +a);
+
+                if(a.equals("AZ")){
+                    textView1.setText("DE");
+                    textView2.setText("AZ");
+                    id = 321;
+
+
+                    Global.saveState(MainActivity.this,"dic_type",String.valueOf(id));
+
+                    ArrayList<String> source = dbHelper.getWord(id);
+                    dictionaryFragment.resetDataSource(source);
+                }else if(a.equals("DE")){
+
+                    id = 123;
+                    textView1.setText("AZ");
+                    textView2.setText("DE");
+
+                    Global.saveState(MainActivity.this,"dic_type",String.valueOf(id));
+
+                    ArrayList<String> source = dbHelper.getWord(id);
+                    dictionaryFragment.resetDataSource(source);
+                }
             }
         });
 
@@ -180,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         }
+
 
 //    private void promptSpeechInput() {
 //        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -237,8 +325,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreateOptionsMenu(menu);
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        menuDeAz = menu.findItem(R.id.de_az);
-        menuAzDe= menu.findItem(R.id.az_de);
+
+//        menuDeAz = menu.findItem(R.id.de_az);
+//        menuAzDe= menu.findItem(R.id.az_de);
         menuAzer = menu.findItem(R.id.azer);
         menuAlman= menu.findItem(R.id.alman);
         menuProqramDili = menu.findItem(R.id.proqramdili);
@@ -248,17 +337,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.i("Id",id +" budur");
 
 
-        if (id!= null){
-
-            onOptionsItemSelected(menu.findItem(Integer.valueOf(id)));
-
-        }else{
-
-            ArrayList<String> source = dbHelper.getWord(R.id.de_az);
-
-            dictionaryFragment.resetDataSource(source);
-
-        }
+//        if (id!= null){
+//
+//            onOptionsItemSelected(menu.findItem(Integer.valueOf(id)));
+//
+//        }else{
+//
+//            ArrayList<String> source = dbHelper.getWord(123);
+//
+//            dictionaryFragment.resetDataSource(source);
+//
+//        }
 
         return true;
     }
@@ -269,25 +358,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Log.i("Idimizi indi ","budur"+id);
 
-        if (id == R.id.de_az){
-            Global.saveState(this,"dic_type",String.valueOf(id));
+//        if (id == 321){
+//            Global.saveState(this,"dic_type",String.valueOf(id));
+//
+//            ArrayList<String> source = dbHelper.getWord(id);
+//          dictionaryFragment.resetDataSource(source);
+//
+//          return true;
+//
+//
+//        }else if (id == 123) {
+//            Global.saveState(this, "dic_type", String.valueOf(id));
+//
+//            ArrayList<String> source = dbHelper.getWord(id);
+//
+//            dictionaryFragment.resetDataSource(source);
+//            Log.i("Item Selected", "az_de");
+//            return true;
 
-            ArrayList<String> source = dbHelper.getWord(id);
-          dictionaryFragment.resetDataSource(source);
-
-          return true;
-
-
-        }else if (id == R.id.az_de){
-            Global.saveState(this,"dic_type",String.valueOf(id));
-
-            ArrayList<String> source = dbHelper.getWord(id);
-
-            dictionaryFragment.resetDataSource(source);
-            Log.i("Item Selected","az_de");
-            return true;
-
-        }else if (id == R.id.alman){
+        if (id == R.id.alman){
 
             LocaleUtils.setSelectedLanguageId("de");
             Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
@@ -361,8 +450,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        String activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName();
        if (activeFragment.equals(BookmarkFragment.class.getSimpleName())){
 
-           menuDeAz.setVisible(false);
-           menuAzDe.setVisible(false);
+//           menuDeAz.setVisible(false);
+//           menuAzDe.setVisible(false);
            menuAlman.setVisible(false);
            menuAzer.setVisible(false);
            menuProqramDili.setVisible(false);
@@ -370,8 +459,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
            toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
 
        }else{
-           menuDeAz.setVisible(true);
-           menuAzDe.setVisible(true);
+//           menuDeAz.setVisible(true);
+//           menuAzDe.setVisible(true);
            menuAlman.setVisible(true);
            menuAzer.setVisible(true);
            menuProqramDili.setVisible(true);
@@ -415,9 +504,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     };
-
-
-
 
 
 

@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <item
-        android:id="@+id/de_az"
-        android:title="DE-AZ"/>
-    <item
-        android:id="@+id/az_de"
-        android:title="AZ-DE"/>
+<!--    <item-->
+<!--        android:id="@+id/de_az"-->
+<!--        android:title="DE-AZ"/>-->
+<!--    <item-->
+<!--        android:id="@+id/az_de"-->
+<!--        android:title="AZ-DE"/>-->
     <group  >
 
 

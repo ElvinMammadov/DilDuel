@@ -80,8 +80,8 @@ public class DetailFragment extends Fragment {
 
         Log.i("Buranin idisi","budur "+ idiniOyren);
 
-        int azer = 2131230794;
-        int alman = 2131230829;
+        int azer = 123;
+        int alman = 321;
 
         int ikinciAlman = 2131230830;
 
@@ -151,8 +151,8 @@ public class DetailFragment extends Fragment {
 
                 Log.i("Buranin idisi","budur "+ idiniOyren);
 
-                int azer = 2131230794;
-                int alman = 2131230829;
+                int azer = 123;
+                int alman = 321;
 
                 int ikinciAlman = 2131230830;
 

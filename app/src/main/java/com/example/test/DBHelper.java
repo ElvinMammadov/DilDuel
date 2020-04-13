@@ -119,18 +119,22 @@ public class DBHelper extends SQLiteOpenHelper {
         String tableName = getTableName(dicType);
         String q = "SELECT * FROM " + tableName+ "  WHERE upper([key]) = upper(?)";
         Log.i("Burdan ","kecdi 1");
-        Cursor result = mDB.rawQuery(q,new String[]{key});
-
         Word word = new Word();
-
-        if (result.moveToFirst()){
-            word.key = result.getString(result.getColumnIndex(col_key));
-            word.value = result.getString(result.getColumnIndex(col_value));
-
+        Cursor result = null;
+        try {
+            result = mDB.rawQuery(q,new String[]{key});
+            if (result.moveToFirst()){
+                word.key = result.getString(result.getColumnIndex(col_key));
+                word.value = result.getString(result.getColumnIndex(col_value));
+            }
+        }
+        finally {
+            if (result != null) {
+                result.close();
+            }
         }
 
         return word;
-
     }
 
     public void addBookmark(Word word){

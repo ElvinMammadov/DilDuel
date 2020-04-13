@@ -28,6 +28,7 @@ public class DetailFragment extends Fragment {
     private DBHelper mDBHelper;
     private int mDicType;
     private TextToSpeech mTTS;
+    private Word word;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -49,15 +50,12 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        word =  mDBHelper.getWord(value,mDicType);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail, container, false);
@@ -70,8 +68,6 @@ public class DetailFragment extends Fragment {
         tvWordTranslate = (WebView) view.findViewById(R.id.tvWordTranslate);
         btnBookmark = (ImageButton) view.findViewById(R.id.btnBookmark);
         btnVolume = (ImageButton) view.findViewById(R.id.btnVolume);
-
-       final Word word =  mDBHelper.getWord(value,mDicType);
 
        tvWord.setText(word.key);
        tvWordTranslate.loadDataWithBaseURL(null,word.value,"text/html","utf-8",null);

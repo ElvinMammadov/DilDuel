@@ -118,21 +118,25 @@ public class DBHelper extends SQLiteOpenHelper {
     public Word getWord(String key, int dicType)
     {
 
-        String tableName = getTableName(dicType);
-        String q = "SELECT * FROM " + tableName+ "  WHERE upper([key]) = upper(?)";
+        final String tableName = getTableName(dicType);
+        final String q = String.format("SELECT * FROM %s  WHERE upper([key]) = upper(?)", tableName);
         Log.i("Burdan ","kecdi 1");
-        Cursor result = mDB.rawQuery(q,new String[]{key});
-
-        Word word = new Word();
-
-        while (result.moveToNext()){
-            word.key = result.getString(result.getColumnIndex(col_key));
-            word.value = result.getString(result.getColumnIndex(col_value));
-
+        final Word word = new Word();
+        Cursor result = null;
+        try {
+            result = mDB.rawQuery(q,new String[]{key});
+            if (result.moveToFirst()){
+                word.key = result.getString(result.getColumnIndex(col_key));
+                word.value = result.getString(result.getColumnIndex(col_value));
+            }
+        }
+        finally {
+            if (result != null) {
+                result.close();
+            }
         }
 
         return word;
-
     }
 
     public void addBookmark(Word word){

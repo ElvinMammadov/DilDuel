@@ -123,7 +123,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Word word = new Word();
 
-        while (result.moveToNext()){
+        if (result.moveToFirst()){
             word.key = result.getString(result.getColumnIndex(col_key));
             word.value = result.getString(result.getColumnIndex(col_value));
 

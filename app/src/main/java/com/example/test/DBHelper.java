@@ -31,6 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private final String col_key = "key";
     private final String col_value = "value";
+    private final String col_type = "type";
 
     public SQLiteDatabase mDB;
 
@@ -142,8 +143,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public void addBookmark(Word word){
 
         try{
-            String q = "INSERT INTO bookmark(["+col_key+"],["+col_value+"]) VALUES (?,?);";
-            mDB.execSQL(q, new Object[]{word.key,word.value});
+            String q = "INSERT INTO bookmark(["+col_key+"],["+col_value+"],["+col_type+"]) VALUES (?,?,?);";
+            mDB.execSQL(q, new Object[]{word.key,word.value,word.dicType});
 
         }catch(SQLException ex){
 
@@ -222,6 +223,8 @@ public class DBHelper extends SQLiteOpenHelper {
             word = new Word();
             word.key = result.getString(result.getColumnIndex(col_key));
             word.value = result.getString(result.getColumnIndex(col_value));
+            word.dicType = result.getInt(result.getColumnIndex(col_type));
+
         }
 
 

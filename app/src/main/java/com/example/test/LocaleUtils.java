@@ -16,7 +16,7 @@ import java.util.Locale;
 
 public class LocaleUtils {
 
-    public static final String ENGLISH = "en";
+    public static final String AZ = "en";
     public static final String DEUTSCH = "de";
 
 
@@ -49,9 +49,9 @@ public class LocaleUtils {
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({ENGLISH, DEUTSCH})
+    @StringDef({AZ, DEUTSCH})
     public @interface LocaleDef {
-        String[] SUPPORTED_LOCALES = {ENGLISH, DEUTSCH};
+        String[] SUPPORTED_LOCALES = {AZ, DEUTSCH};
     }
 
 

@@ -20,6 +20,8 @@ public class BookmarkFragment extends Fragment {
     private DBHelper mDbHelper;
     private  BookmarkAdapter adapter;
 
+    MainActivity mainActivity = new MainActivity();
+
     private String value = "Hello";
 
 
@@ -52,6 +54,7 @@ public class BookmarkFragment extends Fragment {
         super.onViewCreated(view,savedInstanceState);
 
         setHasOptionsMenu(true);
+
 
 
         ListView bookmarkList = (ListView) view.findViewById(R.id.bookmarkList);

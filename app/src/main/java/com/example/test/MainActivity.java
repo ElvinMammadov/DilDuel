@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private PopupWindow pw;
     private Button btnSpeak;
     private Button btnClear,btnChange;
+    FrameLayout newFrame;
 
     private TextView textView1, textView2;
 
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         toolbar2 = findViewById(R.id.toolbar2);
+        newFrame = findViewById(R.id.frame);
         setSupportActionBar(toolbar);
 
         textView1 = (TextView)findViewById(R.id.dil1);
@@ -165,6 +168,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int dicType = id == null? 123:Integer.valueOf(id);
 
                 goToFragment(DetailFragment.getNewInstances(value,dbHelper,dicType),false);
+                toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
+                toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
+                newFrame.setVisibility(View.GONE);
+                //toolbar2.setVisibility(View.INVISIBLE);
+                //toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
             }
         });
 
@@ -172,13 +180,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(String value) {
 
-                textView.setVisibility(View.VISIBLE);
-
-
                 String id =  Global.getState(MainActivity.this,"dic_type");
                 int dicType = id == null? 123:Integer.valueOf(id);
 
-                goToFragment(DetailFragment.getNewInstances(value,dbHelper,dicType),false);
+                goToFragment(DetailFragmentBookmark.getNewInstances(value,dbHelper),false);
 
             }
         });
@@ -206,10 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 int id = 0;
 
-                Log.i("duyme "," basildi");
                 String a = textView1.getText().toString();
-
-                Log.i("a-nin  "," neticesi budur " +a);
 
                 if(a.equals("AZ")){
                     textView1.setText("DE");
@@ -269,20 +271,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-//    private void promptSpeechInput() {
-//        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,  RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.GERMAN);
-//        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-//                getString(R.string.speech_prompt));
-//        try {
-//            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
-//        } catch (ActivityNotFoundException a) {
-//            Toast.makeText(getApplicationContext(),
-//                    getString(R.string.speech_not_supported),
-//                    Toast.LENGTH_SHORT).show();
-//        }
-//    }
 
     /**
      * Receiving speech input
@@ -309,6 +297,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
+        boolean value = false;
+
+        Fragment fr=getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        String fragmentName = fr.getClass().getSimpleName();
+        Log.i("Fragment", " budur " + fragmentName);
+
+        String check= "DetailFragment";
+
+        if(fragmentName.equals(check)){
+
+            value = true;
+            Log.i("value", " budur " + value);
+            menuAlman.setVisible(true);
+            menuAzer.setVisible(true);
+            menuProqramDili.setVisible(true);
+            toolbar.findViewById(R.id.edit_search).setVisibility(View.VISIBLE);
+            toolbar.findViewById(R.id.textView).setVisibility(View.GONE);
+            toolbar.setTitle("");
+            newFrame.setVisibility(View.VISIBLE);
+
+
+        }
+
+//        String activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName();
+//
+//        if(activeFragment.equals(DictionaryFragment.class.getSimpleName())) {
+//            menuAlman.setVisible(true);
+//            menuAzer.setVisible(true);
+//            menuProqramDili.setVisible(true);
+//            toolbar.findViewById(R.id.edit_search).setVisibility(View.VISIBLE);
+//            toolbar.findViewById(R.id.textView).setVisibility(View.GONE);
+//            toolbar.setTitle("");
+//            newFrame.setVisibility(View.VISIBLE);
+//        }
+
+
 
         DrawerLayout drawer =(DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)){
@@ -337,17 +361,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.i("Id",id +" budur");
 
 
-//        if (id!= null){
-//
-//            onOptionsItemSelected(menu.findItem(Integer.valueOf(id)));
-//
-//        }else{
-//
-//            ArrayList<String> source = dbHelper.getWord(123);
-//
-//            dictionaryFragment.resetDataSource(source);
-//
-//        }
 
         return true;
     }
@@ -356,40 +369,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         int id = item.getItemId();
 
-        Log.i("Idimizi indi ","budur"+id);
 
-//        if (id == 321){
-//            Global.saveState(this,"dic_type",String.valueOf(id));
-//
-//            ArrayList<String> source = dbHelper.getWord(id);
-//          dictionaryFragment.resetDataSource(source);
-//
-//          return true;
-//
-//
-//        }else if (id == 123) {
-//            Global.saveState(this, "dic_type", String.valueOf(id));
-//
-//            ArrayList<String> source = dbHelper.getWord(id);
-//
-//            dictionaryFragment.resetDataSource(source);
-//            Log.i("Item Selected", "az_de");
-//            return true;
 
         if (id == R.id.alman){
+            Log.i("Idimiz indi ","budur"+id);
+
+            Log.i("Alman id  ","budur "+ R.id.alman);
 
             LocaleUtils.setSelectedLanguageId("de");
-            Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+            Intent i = getBaseContext().getPackageManager()
+                    .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
 
             return true;
         }
 
         else if (id == R.id.azer){
+            Log.i("Idimiz indi ","budur"+id);
+            Log.i("Az id  ","budur "+ R.id.azer);
 
         LocaleUtils.setSelectedLanguageId("en");
-        Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-        startActivity(i);
+            Intent i = getBaseContext().getPackageManager()
+                    .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
 
 
         return true;
@@ -406,6 +410,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName();
             if(!activeFragment.equals(BookmarkFragment.class.getSimpleName())){
                 goToFragment(bookmarkFragment,false);
+                //toolbar2.setVisibility(View.INVISIBLE);
             }
 
         }else if(id==R.id.nav_about){
@@ -457,8 +462,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
            menuProqramDili.setVisible(false);
            toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
            toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
+           newFrame.setVisibility(View.GONE);
 
-       }else{
+       }else if(activeFragment.equals(DetailFragmentBookmark.class.getSimpleName())) {
+//           menuDeAz.setVisible(true);
+//           menuAzDe.setVisible(true);
+           menuAlman.setVisible(true);
+           menuAzer.setVisible(true);
+           menuProqramDili.setVisible(true);
+           toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
+           toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
+           newFrame.setVisibility(View.GONE);
+       }
+//       else if(activeFragment.equals(DetailFragment.class.getSimpleName())) {
+////           menuDeAz.setVisible(true);
+////           menuAzDe.setVisible(true);
+//           menuAlman.setVisible(true);
+//           menuAzer.setVisible(true);
+//           menuProqramDili.setVisible(true);
+//           toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
+//           toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
+//           newFrame.setVisibility(View.GONE);
+//       }
+
+       else {
 //           menuDeAz.setVisible(true);
 //           menuAzDe.setVisible(true);
            menuAlman.setVisible(true);
@@ -467,6 +494,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
            toolbar.findViewById(R.id.edit_search).setVisibility(View.VISIBLE);
            toolbar.findViewById(R.id.textView).setVisibility(View.GONE);
            toolbar.setTitle("");
+           newFrame.setVisibility(View.VISIBLE);
 
        }
        return  true;
@@ -492,9 +520,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pw.showAtLocation(layout, Gravity.CENTER_VERTICAL, 0, 0);
 
 
-        ImageButton btncancel = (ImageButton) layout.findViewById(R.id.button_close);
+        ImageButton btnCancel = (ImageButton) layout.findViewById(R.id.button_close);
 
-        btncancel.setOnClickListener(cancel_click);
+        btnCancel.setOnClickListener(cancel_click);
 
     }
 

@@ -51,6 +51,9 @@ public class DetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         word =  mDBHelper.getWord(value,mDicType);
+        word.dicType = mDicType;
+        Log.i("Key ","is "+ word.key);
+        Log.i("Value ","is "+ word.value);
     }
 
     @Override

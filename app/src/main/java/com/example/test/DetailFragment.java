@@ -188,6 +188,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        //Below whole code gets string from edit Text and pronounce it into German
         mTTS = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {

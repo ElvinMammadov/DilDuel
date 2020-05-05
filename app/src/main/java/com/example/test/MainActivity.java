@@ -1,11 +1,9 @@
 package com.example.test;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
+
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -25,9 +23,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.speech.RecognizerIntent;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,14 +42,11 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-
-//    MenuItem menuDeAz;
-//    MenuItem menuAzDe;
+    //Declaration Menu Items, Buttons, textviews and etc.
     MenuItem menuAzer;
     MenuItem menuAlman;
     MenuItem menuProqramDili;
     private PopupWindow pw;
-    private Button btnSpeak;
     private Button btnClear,btnChange;
     FrameLayout newFrame;
 
@@ -86,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView1 = (TextView)findViewById(R.id.dil1);
         textView2 = (TextView)findViewById(R.id.dil2);
 
-//        btnSpeak = (Button) findViewById(R.id.voice);
+
         btnClear = (Button) findViewById(R.id.clear);
         btnChange = (Button) findViewById(R.id.change);
 
@@ -97,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView.setVisibility(View.INVISIBLE);
 
 
+        //DbHelper gets list from SQL database
         dbHelper = new DBHelper(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -110,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Declaration Dictionary Fragment and Bookmark Fragment.
         dictionaryFragment = new DictionaryFragment();
         bookmarkFragment = BookmarkFragment.getNewInstance(dbHelper);
 
@@ -133,10 +127,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         }else if (id.equals("123")) {
+
                     id = "123";
-
-
-//                    Global.saveState(this, "dic_type", String.valueOf(id));
                     Global.saveState(this, "dic_type", String.valueOf(id));
                     textView1.setText("AZ");
                     textView2.setText("DE");
@@ -171,8 +163,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
                 toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
                 newFrame.setVisibility(View.GONE);
-                //toolbar2.setVisibility(View.INVISIBLE);
-                //toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
             }
         });
 
@@ -188,14 +178,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-//        btnSpeak.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                promptSpeechInput();
-//            }
-//        });
 
+
+        // Clear button on Edit Text. When you press it, it clears edit Text.
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        //Change Button in the middle. Changes dictionary on the Dictionary Fragment
         btnChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -217,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     textView1.setText("DE");
                     textView2.setText("AZ");
                     id = 321;
-
 
                     Global.saveState(MainActivity.this,"dic_type",String.valueOf(id));
 
@@ -237,9 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-
-
-
+        //Checking values on EditText
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -249,7 +232,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-//                dictionaryFragment.filterValue(s.toString());
 
                 dictionaryFragment.adapter.getFilter().filter(s);
 
@@ -258,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }else{
                     btnClear.setVisibility(View.INVISIBLE);
                 }
-
 
             }
 
@@ -269,8 +250,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         }
-
-
 
     /**
      * Receiving speech input
@@ -297,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        boolean value = false;
+
 
         Fragment fr=getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         String fragmentName = fr.getClass().getSimpleName();
@@ -307,8 +286,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(fragmentName.equals(check)){
 
-            value = true;
-            Log.i("value", " budur " + value);
             menuAlman.setVisible(true);
             menuAzer.setVisible(true);
             menuProqramDili.setVisible(true);
@@ -319,20 +296,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         }
-
-//        String activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName();
-//
-//        if(activeFragment.equals(DictionaryFragment.class.getSimpleName())) {
-//            menuAlman.setVisible(true);
-//            menuAzer.setVisible(true);
-//            menuProqramDili.setVisible(true);
-//            toolbar.findViewById(R.id.edit_search).setVisibility(View.VISIBLE);
-//            toolbar.findViewById(R.id.textView).setVisibility(View.GONE);
-//            toolbar.setTitle("");
-//            newFrame.setVisibility(View.VISIBLE);
-//        }
-
-
 
         DrawerLayout drawer =(DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)){
@@ -350,17 +313,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-//        menuDeAz = menu.findItem(R.id.de_az);
-//        menuAzDe= menu.findItem(R.id.az_de);
         menuAzer = menu.findItem(R.id.azer);
         menuAlman= menu.findItem(R.id.alman);
         menuProqramDili = menu.findItem(R.id.proqramdili);
 
        String id =  Global.getState(this,"dic_type");
-
-        Log.i("Id",id +" budur");
-
-
 
         return true;
     }
@@ -368,8 +325,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item){
 
         int id = item.getItemId();
-
-
 
         if (id == R.id.alman){
             Log.i("Idimiz indi ","budur"+id);
@@ -410,7 +365,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName();
             if(!activeFragment.equals(BookmarkFragment.class.getSimpleName())){
                 goToFragment(bookmarkFragment,false);
-                //toolbar2.setVisibility(View.INVISIBLE);
             }
 
         }else if(id==R.id.nav_about){
@@ -455,8 +409,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        String activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName();
        if (activeFragment.equals(BookmarkFragment.class.getSimpleName())){
 
-//           menuDeAz.setVisible(false);
-//           menuAzDe.setVisible(false);
            menuAlman.setVisible(false);
            menuAzer.setVisible(false);
            menuProqramDili.setVisible(false);
@@ -465,8 +417,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
            newFrame.setVisibility(View.GONE);
 
        }else if(activeFragment.equals(DetailFragmentBookmark.class.getSimpleName())) {
-//           menuDeAz.setVisible(true);
-//           menuAzDe.setVisible(true);
+
            menuAlman.setVisible(true);
            menuAzer.setVisible(true);
            menuProqramDili.setVisible(true);
@@ -474,20 +425,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
            toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
            newFrame.setVisibility(View.GONE);
        }
-//       else if(activeFragment.equals(DetailFragment.class.getSimpleName())) {
-////           menuDeAz.setVisible(true);
-////           menuAzDe.setVisible(true);
-//           menuAlman.setVisible(true);
-//           menuAzer.setVisible(true);
-//           menuProqramDili.setVisible(true);
-//           toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
-//           toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
-//           newFrame.setVisibility(View.GONE);
-//       }
+       else if(activeFragment.equals(DetailFragment.class.getSimpleName())) {
+
+           menuAlman.setVisible(true);
+           menuAzer.setVisible(true);
+           menuProqramDili.setVisible(true);
+           toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
+           toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
+           newFrame.setVisibility(View.GONE);
+       }
 
        else {
-//           menuDeAz.setVisible(true);
-//           menuAzDe.setVisible(true);
+
            menuAlman.setVisible(true);
            menuAzer.setVisible(true);
            menuProqramDili.setVisible(true);

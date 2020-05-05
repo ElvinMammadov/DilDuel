@@ -43,7 +43,6 @@ public class DictionaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-
         return inflater.inflate(R.layout.fragment_dictionary, container, false);
     }
 
@@ -82,23 +81,8 @@ public class DictionaryFragment extends Fragment {
         }
 
 
-
-
     }
 
-//    public void filterValue(String value){
-//
-//
-//        int size = adapter.getCount();
-//        for (int i = 0; i <size;i++){
-//            if(adapter.getItem(i).startsWith(value)){
-//
-//                dicList.setSelection(i);
-//                break;
-//            }
-//        }
-//
-//}
 
 
     public void onAttach(Context context){

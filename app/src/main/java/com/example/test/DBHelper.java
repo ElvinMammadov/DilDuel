@@ -151,7 +151,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         }
 
-
     }
 
     public void removeBookmark(Word word){
@@ -180,7 +179,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         }catch(SQLException ex){
 
-
         }
     }
 
@@ -196,7 +194,6 @@ public class DBHelper extends SQLiteOpenHelper {
             source.add(result.getString(result.getColumnIndex(col_key)));
 
         }
-
 
         return source;
 
@@ -227,9 +224,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         }
 
-
         return word;
-
 
 
     }

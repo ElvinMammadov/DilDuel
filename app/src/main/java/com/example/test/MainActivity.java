@@ -33,6 +33,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.firebase.client.Firebase;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private PopupWindow pw;
     private Button btnClear,btnChange;
     FrameLayout newFrame;
+    Firebase firebase;
 
     private TextView textView1, textView2;
 
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     DictionaryFragment dictionaryFragment;
     BookmarkFragment bookmarkFragment;
+    FeedbackFragment feedbackFragment =  new FeedbackFragment();
 
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Firebase.setAndroidContext(this);
 
         Application.getInstance().initAppLanguage(this);
 
@@ -79,14 +84,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView2 = (TextView)findViewById(R.id.dil2);
 
 
+
         btnClear = (Button) findViewById(R.id.clear);
         btnChange = (Button) findViewById(R.id.change);
 
         btnClear.setVisibility(View.INVISIBLE);
         final EditText editText = findViewById(R.id.edit_search);
 
-        final TextView textView =findViewById(R.id.textView);
+        TextView textView =findViewById(R.id.textView);
         textView.setVisibility(View.INVISIBLE);
+
 
 
         //DbHelper gets list from SQL database
@@ -160,9 +167,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int dicType = id == null? 123:Integer.valueOf(id);
 
                 goToFragment(DetailFragment.getNewInstances(value,dbHelper,dicType),false);
-                toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
-                toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
-                newFrame.setVisibility(View.GONE);
+//                toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
+//                toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
+//                newFrame.setVisibility(View.GONE);
             }
         });
 
@@ -283,8 +290,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.i("Fragment", " budur " + fragmentName);
 
         String check= "DetailFragment";
+        String check2= "FeedbackFragment";
 
-        if(fragmentName.equals(check)){
+
+        if(fragmentName.equals(check)||fragmentName.equals(check2)){
 
             menuAlman.setVisible(true);
             menuAzer.setVisible(true);
@@ -371,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             initiatePopupWindow();
 
-        }else if (id == R.id.nav_share){
+        }else if (id == R.id.nav_share) {
 
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
@@ -380,7 +389,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
-        }
+        }else if (id == R.id.elaqe){
+
+//          FragmentManager manager = getSupportFragmentManager();
+//          manager.beginTransaction().replace(R.id.fragment_container,feedbackFragment).commit();
+
+            String activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName();
+            if(!activeFragment.equals(FeedbackFragment.class.getSimpleName())){
+                goToFragment(feedbackFragment,false);
+            }
+    }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -426,6 +444,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
            newFrame.setVisibility(View.GONE);
        }
        else if(activeFragment.equals(DetailFragment.class.getSimpleName())) {
+
+           menuAlman.setVisible(true);
+           menuAzer.setVisible(true);
+           menuProqramDili.setVisible(true);
+           toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
+           toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
+           newFrame.setVisibility(View.GONE);
+
+       }
+       else if(activeFragment.equals(FeedbackFragment.class.getSimpleName())) {
 
            menuAlman.setVisible(true);
            menuAzer.setVisible(true);

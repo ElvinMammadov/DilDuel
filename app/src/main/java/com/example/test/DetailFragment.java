@@ -75,6 +75,10 @@ public class DetailFragment extends Fragment {
        tvWord.setText(word.key);
        tvWordTranslate.loadDataWithBaseURL(null,word.value,"text/html","utf-8",null);
 
+        ((MainActivity)getActivity()).toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
+        ((MainActivity)getActivity()).toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
+        ((MainActivity)getActivity()).newFrame.setVisibility(View.GONE);
+
         String idiniOyren = ((MainActivity)getActivity()).idOyren();
 
         Log.i("Buranin idisi","budur "+ idiniOyren);

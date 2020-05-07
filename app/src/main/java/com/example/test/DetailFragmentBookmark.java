@@ -29,7 +29,6 @@ public class DetailFragmentBookmark extends Fragment {
     private TextToSpeech mTTS;
     private Word word;
 
-    MainActivity mainActivity = new MainActivity();
 
     public DetailFragmentBookmark() {
         // Required empty public constructor

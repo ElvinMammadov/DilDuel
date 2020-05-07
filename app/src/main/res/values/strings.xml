@@ -18,6 +18,19 @@
     <string name="shebeke">Şəbəkə</string>
     <string name="paylash">Paylaş</string>
     <string name="komek">Kömək</string>
+    <string name="elaqe">Bizimlə əlaqə</string>
+
+    <string name="izah">Tətbiq və lügət haqda təklif və iradınızı mesaj bölməsində qeyd edə bilərsiz. Əgər cavablanmasını istəyirsinizsə emailinizi mesaj bölməsində zəhmət olmasa əlavə edin  </string>
+
+
+    <string name="ad">Ad</string>
+    <string name="qeyd">Mesaj</string>
+    <string name="gonder">Göndər</string>
+    <string name="bagla">Bağla</string>
+    <string name="adınıyaz">Adınızı yazın</string>
+    <string name="mesajyaz">Mesajınızı burada qeyd edin</string>
+
+
 
     <string name="diger">Digər</string>
     <string name="haqqinda">Haqqında</string>
@@ -32,6 +45,8 @@
 
     <string name="speech_prompt">Salam. Nəsə deyin</string>
     <string name="speech_not_supported">Bağışlayın amma sizin dediyiniz söz qeydə alınmadı</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
 
 
 

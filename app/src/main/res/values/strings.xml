@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Lüğət</string>
+    <string name="app_name">Az-De Lüğət</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -42,6 +42,12 @@
     <string name="sil">Sil</string>
     <string name="info">Proqram haqda məlumat</string>
     <string name="name">Elvin Məmmədov</string>
+    <string name="rate">Tətbiqi qiymətləndir</string>
+
+    <string name="kitab_haqda">Lüğət Çərkəz Qurbanlının redaktorluğu ilə çıxarılmış Almanca-Azərbaycanca
+Lüğət kitabı əsasında hazırlanmışdır</string>
+
+    <string name="tsk">Tətbiqin hazırlanmasında Ömər Faiq Orucluya öz təşəkkürümü bildirirəm</string>
 
     <string name="speech_prompt">Salam. Nəsə deyin</string>
     <string name="speech_not_supported">Bağışlayın amma sizin dediyiniz söz qeydə alınmadı</string>

@@ -1,9 +1,11 @@
-package com.example.test;
+package com.Dictionary;
 
 import android.annotation.SuppressLint;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -32,14 +34,31 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import android.content.Context;
 
 import com.firebase.client.Firebase;
+//import com.google.android.gms.ads.AdListener;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdSize;
+//import com.google.android.gms.ads.AdView;
+//import com.google.android.gms.ads.MobileAds;
+//import com.google.android.gms.ads.RequestConfiguration;
+//import com.google.android.gms.ads.initialization.InitializationStatus;
+//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.Arrays;
+
+//import static com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_G;
+//import static com.google.android.gms.ads.mediation.MediationAdRequest.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -58,19 +77,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     DBHelper dbHelper;
 
+
     DictionaryFragment dictionaryFragment;
     BookmarkFragment bookmarkFragment;
     FeedbackFragment feedbackFragment =  new FeedbackFragment();
 
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
+    private AdView adView;
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Firebase.setAndroidContext(this);
+
+
 
         Application.getInstance().initAppLanguage(this);
 
@@ -131,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Log.i("I deyishdi oldu",id +" budur");
                     ArrayList<String> source = dbHelper.getWord(Integer.valueOf(id));
                     dictionaryFragment.resetDataSource(source);
-
 
         }else if (id.equals("123")) {
 
@@ -380,7 +408,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             initiatePopupWindow();
 
-        }else if (id == R.id.nav_share) {
+        } else if(id==R.id.rate){
+
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=" + getPackageName())));
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+            }
+
+     }else if (id == R.id.nav_share) {
 
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");

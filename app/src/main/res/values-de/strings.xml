@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Lüğət</string>
+    <string name="app_name">Az-De Lüğət</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
 
@@ -26,10 +26,16 @@
 
 
     <string name="yaddashda_olanlar">Lesezeichen</string>
+    <string name="kitab_haqda">Das Wörterbuch basiert auf dem Buch  Deutsch-Aserbaidschanisches Wörterbuch , herausgegeben von Cherkez Gurbanli.</string>
 
     <string name="shebeke">Netzwerk</string>
 
+
+    <string name="tsk">Ich danke Omar Faiq Orujlu für die Vorbereitung des Antrags.</string>
+
     <string name="paylash">Teilen</string>
+
+    <string name="rate">Bewerten Sie die App</string>
 
     <string name="komek">Hilfe</string>
 
@@ -45,14 +51,14 @@
 
     <string name="alman">Deutsch</string>
 
-    <string name="izah">Proqram və lügət haqda təklif və şikayətinizi burada qeyd edə bilərsiz.</string>
+    <string name="izah">Hier können Sie Ihre Vorschläge und Beschwerden zum Programm und Wörterbuch notieren.</string>
 
     <string name="ad">Name</string>
     <string name="qeyd">Nachricht an uns</string>
     <string name="gonder">Senden</string>
     <string name="bagla">Schließen</string>
-    <string name="adınıyaz">Adınızı yazın</string>
-    <string name="mesajyaz">Mesajınızı burada qeyd edin</string>
+    <string name="adınıyaz">Schreiben Sie bitte Ihren Namen</string>
+    <string name="mesajyaz">Notieren Sie Ihre Nachricht hier</string>
 
     <string name="axtar">Suchen</string>
 

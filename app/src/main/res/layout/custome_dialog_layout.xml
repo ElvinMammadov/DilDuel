@@ -9,22 +9,22 @@
 
     <LinearLayout
         android:id="@+id/relativeLayout1"
-        android:layout_width="280dp"
-        android:layout_height="300dp"
+        android:layout_width="wrap_content"
+        android:layout_height="414dp"
         android:layout_centerInParent="true"
-        android:background="@android:color/darker_gray"
+        android:background="?attr/colorPrimary"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:gravity="center"
             android:layout_marginTop="50dp"
             android:layout_marginRight="30dp"
+            android:gravity="center"
             android:text="@string/info"
-            android:textSize="20sp"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/background_light"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/developer"
@@ -34,52 +34,70 @@
             android:layout_marginRight="30dp"
             android:gravity="center"
             android:text="Developer"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/background_light"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/name"
-            android:gravity="center"
-            android:layout_marginRight="30dp"
             android:layout_marginTop="10dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"/>
+            android:layout_marginRight="30dp"
+            android:gravity="center"
+            android:text="@string/name"
+            android:textColor="@android:color/background_light"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Email"
-            android:gravity="center"
-            android:layout_marginRight="30dp"
             android:layout_marginTop="30dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"/>
+            android:layout_marginRight="30dp"
+            android:gravity="center"
+            android:text="Email"
+            android:textColor="@android:color/background_light"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="elvin.m@hotmail.com"
-            android:gravity="center"
-            android:layout_marginRight="30dp"
-            android:textColorLink="@android:color/black"
-            android:autoLink = "email"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:autoLink="email"
+            android:gravity="center"
+            android:text="elvin.m@hotmail.com"
+            android:textColorLink="@android:color/background_light"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="346dp"
+            android:layout_height="91dp"
+            android:fontFamily="sans-serif"
+            android:gravity="bottom|center"
+            android:text="@string/kitab_haqda"
+            android:textColor="@color/design_default_color_background"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:gravity="center"
+            android:text="@string/tsk"
+            android:textColor="@color/design_default_color_background"
             android:textSize="16sp" />
     </LinearLayout>
-
 
 
     <ImageButton
         android:id="@+id/button_close"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignRight="@+id/relativeLayout1"
         android:layout_alignTop="@+id/relativeLayout1"
-        android:background="@android:color/darker_gray"
+        android:layout_alignRight="@+id/relativeLayout1"
+        android:background="?attr/colorPrimary"
 
         android:src="@drawable/close" />
 

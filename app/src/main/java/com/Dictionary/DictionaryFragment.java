@@ -1,4 +1,4 @@
-package com.example.test;
+package com.Dictionary;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,11 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class DictionaryFragment extends Fragment {
@@ -26,6 +38,9 @@ public class DictionaryFragment extends Fragment {
     private ArrayList<String> mSource = new ArrayList<String>();
 
 
+    private AdView adView;
+    private AdRequest adRequest;
+
 
     public DictionaryFragment() {
         // Required empty public constructor
@@ -36,6 +51,9 @@ public class DictionaryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
     }
 
     @Override
@@ -43,11 +61,34 @@ public class DictionaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_dictionary, container, false);
+
+        View rootView = inflater.inflate(R.layout.fragment_dictionary, container, false);
+
+        List<String> testDeviceIds = Arrays.asList("d59bdc327d63");
+        RequestConfiguration configuration =
+                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+        MobileAds.setRequestConfiguration(configuration);
+        adView = new AdView(getActivity());
+        //adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        //adView.setAdSize(AdSize.BANNER);
+        //LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.layout_admob);
+        //layout.addView(adView);
+        adView = (AdView) rootView.findViewById(R.id.adView);
+        adRequest = new AdRequest.Builder().build();
+
+        Log.i("Ads ","budur " +adRequest);
+        adView.loadAd(adRequest);
+
+        return rootView;
+
+
+
+
     }
 
     public void onViewCreated(View view,Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
+
 
 
 
@@ -82,6 +123,14 @@ public class DictionaryFragment extends Fragment {
 
 
     }
+
+
+        public void adMobs(){
+
+
+
+
+     }
 
 
 

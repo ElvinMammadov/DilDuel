@@ -1,4 +1,4 @@
-package com.example.test;
+package com.Dictionary;
 
 public class Word {
 

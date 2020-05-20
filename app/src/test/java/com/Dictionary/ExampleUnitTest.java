@@ -1,4 +1,4 @@
-package com.example.test;
+package com.Dictionary;
 
 import org.junit.Test;
 

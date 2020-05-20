@@ -1,4 +1,4 @@
-package com.example.test;
+package com.Dictionary;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class BookmarkAdapter extends BaseAdapter {
 

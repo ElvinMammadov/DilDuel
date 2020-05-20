@@ -17,6 +17,12 @@
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_share"
                 android:title="@string/paylash" />
+
+            <item
+                android:id="@+id/rate"
+                android:icon="@drawable/ic_star"
+                android:title="@string/rate"
+                />
         </menu>
 
     </item>
@@ -29,10 +35,7 @@
                 android:title="@string/elaqe"
 
                 />
-            <item
-                android:id="@+id/nav_help"
-                android:icon="@drawable/ic_help"
-                android:title="@string/komek" />
+
             <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/ic_info"
@@ -43,5 +46,10 @@
         </item>
 
     </group>
+
+
+
+
 </menu>
+
 

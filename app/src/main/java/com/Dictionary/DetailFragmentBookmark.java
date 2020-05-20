@@ -1,4 +1,4 @@
-package com.example.test;
+package com.Dictionary;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,8 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Locale;
 
-
-public class DetailFragment extends Fragment {
+public class DetailFragmentBookmark extends Fragment {
 
     private String value = "";
     private TextView tvWord;
@@ -30,16 +29,17 @@ public class DetailFragment extends Fragment {
     private TextToSpeech mTTS;
     private Word word;
 
-    public DetailFragment() {
+
+    public DetailFragmentBookmark() {
         // Required empty public constructor
     }
 
-    public static DetailFragment getNewInstances(String value,DBHelper dbHelper,int dicType){
+    public static DetailFragmentBookmark getNewInstances(String value,DBHelper dbHelper){
 
-        DetailFragment fragment = new DetailFragment();
+        DetailFragmentBookmark fragment = new DetailFragmentBookmark();
         fragment.value = value;
         fragment.mDBHelper = dbHelper;
-        fragment.mDicType = dicType;
+        //fragment.mDicType = dicType;
 
         return fragment;
 
@@ -50,8 +50,8 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        word =  mDBHelper.getWord(value,mDicType);
-        word.dicType = mDicType;
+        word =  mDBHelper.getWordFromBookmark(value);
+        //word.dicType = mDicType;
         Log.i("Key ","is "+ word.key);
         Log.i("Value ","is "+ word.value);
     }
@@ -71,15 +71,14 @@ public class DetailFragment extends Fragment {
         tvWordTranslate = (WebView) view.findViewById(R.id.tvWordTranslate);
         btnBookmark = (ImageButton) view.findViewById(R.id.btnBookmark);
         btnVolume = (ImageButton) view.findViewById(R.id.btnVolume);
+//        mainActivity.toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
+//        ((MainActivity)getActivity()).toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
+//        ((MainActivity)getActivity()).newFrame.setVisibility(View.GONE);
 
-       tvWord.setText(word.key);
-       tvWordTranslate.loadDataWithBaseURL(null,word.value,"text/html","utf-8",null);
+        tvWord.setText(word.key);
+        tvWordTranslate.loadDataWithBaseURL(null,word.value,"text/html","utf-8",null);
 
-        ((MainActivity)getActivity()).toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
-        ((MainActivity)getActivity()).toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
-        ((MainActivity)getActivity()).newFrame.setVisibility(View.GONE);
-
-        String idiniOyren = ((MainActivity)getActivity()).idOyren();
+        String idiniOyren = String.valueOf(word.dicType);
 
         Log.i("Buranin idisi","budur "+ idiniOyren);
 
@@ -120,13 +119,13 @@ public class DetailFragment extends Fragment {
         }
 
 
-       Word bookmarkWord = mDBHelper.getWordFromBookmark(value);
-       int isMark = bookmarkWord == null? 0:1;
-       btnBookmark.setTag(isMark);
+        Word bookmarkWord = mDBHelper.getWordFromBookmark(value);
+        int isMark = bookmarkWord == null? 0:1;
+        btnBookmark.setTag(isMark);
 
 
-       int icon = bookmarkWord == null? R.drawable.ic_bookmark_border:R.drawable.ic_bookmark_fill;
-       btnBookmark.setImageResource(icon);
+        int icon = bookmarkWord == null? R.drawable.ic_bookmark_border:R.drawable.ic_bookmark_fill;
+        btnBookmark.setImageResource(icon);
 
         btnBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +149,7 @@ public class DetailFragment extends Fragment {
 
 
 
-                String idiniOyren = ((MainActivity)getActivity()).idOyren();
+                String idiniOyren = String.valueOf(word.dicType);;
 
                 Log.i("Buranin idisi","budur "+ idiniOyren);
 
@@ -192,7 +191,6 @@ public class DetailFragment extends Fragment {
             }
         });
 
-        //Below whole code gets string from edit Text and pronounce it into German
         mTTS = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {

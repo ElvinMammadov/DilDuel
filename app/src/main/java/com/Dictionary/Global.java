@@ -1,4 +1,4 @@
-package com.example.test;
+package com.Dictionary;
 
 import android.app.Activity;
 import android.content.Context;

@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -64,20 +65,58 @@ public class DictionaryFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_dictionary, container, false);
 
-        List<String> testDeviceIds = Arrays.asList("d59bdc327d63");
-        RequestConfiguration configuration =
-                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-        MobileAds.setRequestConfiguration(configuration);
-        adView = new AdView(getActivity());
+//        List<String> testDeviceIds = Arrays.asList("d59bdc327d63");
+//        RequestConfiguration configuration =
+//                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+//        MobileAds.setRequestConfiguration(configuration);
+//        adView = new AdView(getActivity());
         //adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
         //adView.setAdSize(AdSize.BANNER);
         //LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.layout_admob);
         //layout.addView(adView);
-        adView = (AdView) rootView.findViewById(R.id.adView);
-        adRequest = new AdRequest.Builder().build();
+        adView = (AdView) rootView.findViewById(R.id.adView2);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         Log.i("Ads ","budur " +adRequest);
         adView.loadAd(adRequest);
+
+
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                Log.d("onAdFailedToLoad ","This is why: "+errorCode);
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        });
 
         return rootView;
 
@@ -88,6 +127,8 @@ public class DictionaryFragment extends Fragment {
 
     public void onViewCreated(View view,Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
+
+
 
 
 

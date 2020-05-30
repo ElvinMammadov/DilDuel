@@ -14,8 +14,14 @@
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="411dp"
+        android:layout_marginRight="411dp"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="50dp" />
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintGuide_percent="0.15"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvWord"
@@ -23,49 +29,50 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
-        android:text="A"
         android:textColor="@android:color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        ads:layout_constraintBottom_toTopOf="@+id/guideline"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintTop_toTopOf="parent"
+        ads:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
         android:id="@+id/btnBookmark"
         android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="5dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="7dp"
+
+        android:layout_marginLeft="7dp"
+
+        android:layout_marginTop="16dp"
         android:background="?actionBarItemBackground"
         android:src="@drawable/ic_bookmark_border"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintStart_toEndOf="@+id/btnVolume"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        ads:layout_constraintBottom_toTopOf="@+id/guideline"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toEndOf="@+id/btnVolume"
+        ads:layout_constraintTop_toTopOf="parent"
+        ads:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
         android:id="@+id/btnVolume"
         android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_height="50dp"
 
 
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginLeft="21dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
         android:background="?actionBarItemBackground"
         android:src="@drawable/ic_volume_up"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toStartOf="@+id/btnBookmark"
-        app:layout_constraintStart_toEndOf="@+id/tvWord"
-        app:layout_constraintTop_toTopOf="parent" />
+        ads:layout_constraintBottom_toTopOf="@+id/guideline"
+        ads:layout_constraintEnd_toStartOf="@+id/btnBookmark"
+        ads:layout_constraintStart_toEndOf="@+id/tvWord"
+        ads:layout_constraintTop_toTopOf="parent"
+        ads:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -74,45 +81,33 @@
 
 
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.90" />
+        ads:layout_constraintGuide_percent="0.89" />
 
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="405dp"
-        android:layout_marginTop="2dp"
+        android:layout_height="0dp"
         android:background="#fff"
-        ads:layout_constraintBottom_toTopOf="@+id/adView"
+        ads:layout_constraintBottom_toTopOf="@+id/guideline2"
         ads:layout_constraintHorizontal_bias="0.0"
-        ads:layout_constraintVertical_bias="0.0"
+        ads:layout_constraintVertical_bias="1.0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWord">
+        app:layout_constraintTop_toBottomOf="@+id/guideline">
 
         <WebView
             android:id="@+id/tvWordTranslate"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#fff"
-            android:text="Salam" />
+            android:layout_height="wrap_content"
+            android:background="#fff" />
 
 
     </ScrollView>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-
-        android:orientation="horizontal"
-
-        app:layout_constraintGuide_percent="1.0" />
-
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -123,11 +118,11 @@
         android:layout_marginBottom="1dp"
         android:foregroundGravity="center_vertical"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        ads:adUnitId="ca-app-pub-5853546703249054/9709642636"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toBottomOf="@+id/scrollView2">
+        ads:layout_constraintTop_toBottomOf="@+id/guideline2">
 
     </com.google.android.gms.ads.AdView>
 

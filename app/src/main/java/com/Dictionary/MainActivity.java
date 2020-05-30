@@ -37,28 +37,19 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 
 import com.firebase.client.Firebase;
-//import com.google.android.gms.ads.AdListener;
-//import com.google.android.gms.ads.AdRequest;
-//import com.google.android.gms.ads.AdSize;
-//import com.google.android.gms.ads.AdView;
-//import com.google.android.gms.ads.MobileAds;
-//import com.google.android.gms.ads.RequestConfiguration;
-//import com.google.android.gms.ads.initialization.InitializationStatus;
-//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+
 
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//import static com.google.android.gms.ads.RequestConfiguration.MAX_AD_CONTENT_RATING_G;
-//import static com.google.android.gms.ads.mediation.MediationAdRequest.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -84,10 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
-    private AdView adView;
-
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
 
@@ -98,6 +85,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
 
         Firebase.setAndroidContext(this);
+
+
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
 
 
 
@@ -150,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.i("teze Id",id +" budur");
 
                 if (id == null) {
-//                    Global.saveState(this, "dic_type", String.valueOf(id));
+
 
                     id = "321";
                     Global.saveState(this, "dic_type", String.valueOf(id));
@@ -195,9 +190,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int dicType = id == null? 123:Integer.valueOf(id);
 
                 goToFragment(DetailFragment.getNewInstances(value,dbHelper,dicType),false);
-//                toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
-//                toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
-//                newFrame.setVisibility(View.GONE);
+
             }
         });
 
@@ -415,22 +408,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Uri.parse("market://details?id=" + getPackageName())));
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.Dictionary" + getPackageName())));
             }
 
      }else if (id == R.id.nav_share) {
 
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
-            String shareBody = "Here is the share content body";
+            String shareBody = "https://play.google.com/store/apps/details?id=com.Dictionary";
             sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
         }else if (id == R.id.elaqe){
 
-//          FragmentManager manager = getSupportFragmentManager();
-//          manager.beginTransaction().replace(R.id.fragment_container,feedbackFragment).commit();
 
             String activeFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName();
             if(!activeFragment.equals(FeedbackFragment.class.getSimpleName())){

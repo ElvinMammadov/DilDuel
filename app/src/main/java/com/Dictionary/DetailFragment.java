@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -17,11 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -66,6 +70,8 @@ public class DetailFragment extends Fragment {
         word.dicType = mDicType;
         Log.i("Key ","is "+ word.key);
         Log.i("Value ","is "+ word.value);
+
+
     }
 
     @Override
@@ -75,20 +81,57 @@ public class DetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        List<String> testDeviceIds = Arrays.asList("d59bdc327d63");
-        RequestConfiguration configuration =
-                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-        MobileAds.setRequestConfiguration(configuration);
-        adView = new AdView(getActivity());
+//        List<String> testDeviceIds = Arrays.asList("d59bdc327d63");
+//        RequestConfiguration configuration =
+//                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+//        MobileAds.setRequestConfiguration(configuration);
+//        adView = new AdView(getActivity());
         //adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
         //adView.setAdSize(AdSize.BANNER);
         //LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.layout_admob);
         //layout.addView(adView);
         adView = (AdView) rootView.findViewById(R.id.adView);
-        adRequest = new AdRequest.Builder().build();
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         Log.i("Ads ","budur " +adRequest);
         adView.loadAd(adRequest);
+
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                Log.d("onAdFailedToLoad ","This is why 2: "+errorCode);
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        });
 
         return rootView;
     }
@@ -96,6 +139,11 @@ public class DetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+
         tvWord = (TextView) view.findViewById(R.id.tvWord);
         tvWordTranslate = (WebView) view.findViewById(R.id.tvWordTranslate);
         btnBookmark = (ImageButton) view.findViewById(R.id.btnBookmark);
@@ -105,7 +153,7 @@ public class DetailFragment extends Fragment {
        tvWordTranslate.loadDataWithBaseURL(null,word.value,"text/html","utf-8",null);
 
         ((MainActivity)getActivity()).toolbar.findViewById(R.id.edit_search).setVisibility(View.GONE);
-        ((MainActivity)getActivity()).toolbar.findViewById(R.id.textView).setVisibility(View.VISIBLE);
+        ((MainActivity)getActivity()).toolbar.findViewById(R.id.textView).setVisibility(View.INVISIBLE);
         ((MainActivity)getActivity()).newFrame.setVisibility(View.GONE);
 
         String idiniOyren = ((MainActivity)getActivity()).idOyren();

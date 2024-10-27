@@ -17,6 +17,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
+import flutter_dic.android.app.src.main.kotlin.com.Dictionary.MainActivity;
+
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest

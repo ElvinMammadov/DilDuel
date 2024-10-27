@@ -27,9 +27,9 @@ import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
+
+import flutter_dic.android.app.src.main.kotlin.com.Dictionary.MainActivity;
 
 
 public class DetailFragment extends Fragment {

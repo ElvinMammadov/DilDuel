@@ -13,6 +13,8 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import flutter_dic.android.app.src.main.kotlin.com.Dictionary.MainActivity;
+
 
 public class BookmarkFragment extends Fragment {
 

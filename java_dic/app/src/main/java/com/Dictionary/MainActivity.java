@@ -34,7 +34,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import android.content.Context;
 
 import com.firebase.client.Firebase;
 
@@ -47,8 +46,6 @@ import com.google.android.material.navigation.NavigationView;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -186,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(String value) {
 
-                String id =  Global.getState(MainActivity.this,"dic_type");
+                String id =  Global.getState(flutter_dic.android.app.src.main.kotlin.com.example.flutter_dic.MainActivity.this,"dic_type");
                 int dicType = id == null? 123:Integer.valueOf(id);
 
                 goToFragment(DetailFragment.getNewInstances(value,dbHelper,dicType),false);
@@ -198,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(String value) {
 
-                String id =  Global.getState(MainActivity.this,"dic_type");
+                String id =  Global.getState(flutter_dic.android.app.src.main.kotlin.com.example.flutter_dic.MainActivity.this,"dic_type");
                 int dicType = id == null? 123:Integer.valueOf(id);
 
                 goToFragment(DetailFragmentBookmark.getNewInstances(value,dbHelper),false);
@@ -232,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     textView2.setText("AZ");
                     id = 321;
 
-                    Global.saveState(MainActivity.this,"dic_type",String.valueOf(id));
+                    Global.saveState(flutter_dic.android.app.src.main.kotlin.com.example.flutter_dic.MainActivity.this,"dic_type",String.valueOf(id));
 
                     ArrayList<String> source = dbHelper.getWord(id);
                     dictionaryFragment.resetDataSource(source);
@@ -242,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     textView1.setText("AZ");
                     textView2.setText("DE");
 
-                    Global.saveState(MainActivity.this,"dic_type",String.valueOf(id));
+                    Global.saveState(flutter_dic.android.app.src.main.kotlin.com.example.flutter_dic.MainActivity.this,"dic_type",String.valueOf(id));
 
                     ArrayList<String> source = dbHelper.getWord(id);
                     dictionaryFragment.resetDataSource(source);
@@ -515,7 +512,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("deprecation")
     private void initiatePopupWindow() {
 
-        LayoutInflater inflater = (LayoutInflater) MainActivity.this
+        LayoutInflater inflater = (LayoutInflater) flutter_dic.android.app.src.main.kotlin.com.example.flutter_dic.MainActivity.this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("WrongViewCast") View layout = inflater.inflate(R.layout.custome_dialog_layout,
                 (ViewGroup) findViewById(R.id.button_close));

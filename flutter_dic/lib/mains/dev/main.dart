@@ -4,7 +4,7 @@ import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_
 import 'package:flutter_dic/core/di/dependency_injection.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
-import 'package:flutter_dic/features/widgets/services/navigator.dart';
+import 'package:flutter_dic/core/navigation/app_router.dart';
 import 'package:injectable/injectable.dart';
 
 Future<void> main() async {
@@ -28,6 +28,6 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.system,
-        routerConfig: router,
+        routerConfig: AppRouter.router,
       );
 }

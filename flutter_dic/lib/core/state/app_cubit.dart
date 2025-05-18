@@ -1,26 +1,30 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/state/app_state.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class AppCubit extends Cubit<AppState> {
-  // Default to AzDe (123)
-  AppCubit() : super(const AppState(dictionaryType: 123));
+  // Default to AzDe
+  AppCubit() : super(const AppState(dictionaryType: DictionaryType.azDe));
 
-
-  void setDictionaryType(int newType) {
-    emit(state.copyWith(dictionaryType: newType));
+  void setDictionaryType(DictionaryType newType) {
+    emit(
+      state.copyWith(dictionaryType: newType),
+    );
   }
 
-  // Get the dictionary name based on the integer value
-  String getDictionaryName() {
-    switch (state.dictionaryType) {
-      case 123:
-        return "AzDe";
-      case 321:
-        return "DeAz";
-      default:
-        return "Unknown";
-    }
+  void toggleDictionaryType() {
+    final DictionaryType newType = state.dictionaryType == DictionaryType.azDe
+        ? DictionaryType.deAz
+        : DictionaryType.azDe;
+    emit(
+      state.copyWith(dictionaryType: newType),
+    );
   }
+
+  // Get the dictionary name
+  String getDictionaryName() => state.dictionaryType.name;
+
+  // Get the dictionary value for database operations
+  int getDictionaryValue() => state.dictionaryType.value;
 }

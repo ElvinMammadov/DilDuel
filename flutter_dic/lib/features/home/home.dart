@@ -1,3 +1,5 @@
+library home;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';
 import 'package:go_router/go_router.dart';
@@ -47,4 +49,4 @@ class HomeShell extends StatelessWidget {
       ),
     );
   }
-}
+} 

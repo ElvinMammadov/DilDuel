@@ -10,6 +10,65 @@ class SearchSection extends StatefulWidget {
 class _SearchSectionState extends State<SearchSection> {
   final SearchController _controller = SearchController();
   String query = '';
+  final SpeechToText _speech = SpeechToText();
+  bool _isListening = false;
+  bool _speechInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initSpeech();
+  }
+
+  Future<void> _initSpeech() async {
+    _speechInitialized = await _speech.initialize(
+      onStatus: (String status) {
+        if (status == 'done') {
+          setState(() => _isListening = false);
+        }
+      },
+      onError: (SpeechRecognitionError errorNotification) {
+        setState(() => _isListening = false);
+      },
+    );
+
+    setState(() {});
+  }
+
+  Future<void> _startListening(String dictionaryName) async {
+    if (!_speechInitialized) {
+      return;
+    }
+
+    if (!_isListening) {
+      // Set language based on dictionary type
+      final String locale = dictionaryName == 'AzDe' ? 'az-AZ' : 'de-DE';
+
+      setState(() => _isListening = true);
+      try {
+        await _speech.listen(
+          onResult: (SpeechRecognitionResult result) {
+            setState(() {
+              query = result.recognizedWords;
+              _controller.text = query;
+            });
+            context.read<SearchBloc>().search(query, dictionaryName);
+          },
+          localeId: locale,
+          listenOptions: SpeechListenOptions(
+            cancelOnError: true,
+            partialResults: true,
+            listenMode: ListenMode.confirmation,
+          ),
+        );
+      } catch (e) {
+        setState(() => _isListening = false);
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +81,18 @@ class _SearchSectionState extends State<SearchSection> {
       final String dictionaryName =
           context.read<AppCubit>().getDictionaryName();
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(
+          vertical: Dimensions.padding8,
+          horizontal: Dimensions.padding8,
+        ),
         child: Column(
           children: <Widget>[
             SearchBar(
               controller: _controller,
-              elevation: const WidgetStatePropertyAll<double?>(0.2),
+              elevation:
+                  const WidgetStatePropertyAll<double?>(Dimensions.itemHeight1),
               padding: const WidgetStatePropertyAll<EdgeInsets>(
-                EdgeInsets.symmetric(horizontal: 8.0),
+                EdgeInsets.symmetric(horizontal: Dimensions.padding8),
               ),
               leading: const Icon(Icons.search),
               trailing: isTyping
@@ -46,8 +109,11 @@ class _SearchSectionState extends State<SearchSection> {
                     ]
                   : <Widget>[
                       IconButton(
-                        icon: const Icon(Icons.mic),
-                        onPressed: () {},
+                        icon: Icon(
+                          _isListening ? Icons.mic : Icons.mic_none,
+                          color: _isListening ? Colors.red : null,
+                        ),
+                        onPressed: () => _startListening(dictionaryName),
                       ),
                     ],
               onChanged: (String text) {

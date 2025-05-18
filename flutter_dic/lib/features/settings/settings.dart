@@ -1,5 +1,10 @@
+library settings;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';
+
+part 'presentation/settings_screen.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -16,30 +21,34 @@ class SettingsPage extends StatelessWidget {
         showProfileButton: false,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(Dimensions.padding16),
         children: <Widget>[
           // Profile Header
           Row(
             children: <Widget>[
               const CircleAvatar(
-                radius: 32,
+                radius: Dimensions.itemHeight32,
                 backgroundColor: Colors.grey,
-                child: Icon(Icons.person, size: 32, color: Colors.white),
+                child: Icon(
+                  Icons.person,
+                  size: Dimensions.itemHeight32,
+                  color: Colors.white,
+                ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: Dimensions.itemWidth16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text('Elvin Mammadov', style: theme.textTheme.titleMedium),
                   Text('elvin@example.com',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: color.onSurface.withOpacity(0.6),
+                        color: color.onSurface.withAlpha(153),
                       )),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: Dimensions.itemHeight24),
 
           // Settings items
           _buildTile(
@@ -53,7 +62,7 @@ class SettingsPage extends StatelessWidget {
               onTap: () {}),
           _buildTile(context, Icons.info, 'About', '', onTap: () {}),
 
-          const Divider(height: 32),
+          const Divider(height: Dimensions.itemHeight32),
 
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
@@ -82,7 +91,7 @@ class SettingsPage extends StatelessWidget {
           trailing: const Icon(Icons.chevron_right),
           onTap: onTap,
         ),
-        const Divider(height: 1),
+        const Divider(height: Dimensions.itemHeight1),
       ],
     );
   }

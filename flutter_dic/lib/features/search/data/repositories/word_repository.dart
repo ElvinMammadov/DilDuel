@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 
-import 'package:flutter_dic/core/error/exceptions.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:flutter_dic/core/error/failures.dart';
 

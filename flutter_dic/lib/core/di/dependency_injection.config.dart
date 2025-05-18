@@ -12,6 +12,12 @@ import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source.
     as _i868;
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart'
     as _i550;
+import 'package:flutter_dic/core/state/app_cubit.dart' as _i382;
+import 'package:flutter_dic/features/quiz/data/repositories/quiz_repository_impl.dart'
+    as _i125;
+import 'package:flutter_dic/features/quiz/domain/repositories/quiz_repository.dart'
+    as _i928;
+import 'package:flutter_dic/features/quiz/quiz.dart' as _i730;
 import 'package:flutter_dic/features/search/data/repositories/word_repository.dart'
     as _i706;
 import 'package:flutter_dic/features/search/data/repositories/word_repository_impl.dart'
@@ -33,11 +39,16 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    gh.factory<_i382.AppCubit>(() => _i382.AppCubit());
     gh.lazySingleton<_i868.WordLocalDataSource>(() => _i550.DBHelper());
+    gh.lazySingleton<_i928.QuizRepository>(() => _i125.QuizRepositoryImpl(
+        localDataSource: gh<_i868.WordLocalDataSource>()));
     gh.lazySingleton<_i706.WordRepository>(() => _i894.WordRepositoryImpl(
         localDataSource: gh<_i868.WordLocalDataSource>()));
     gh.factory<_i327.SearchWord>(
         () => _i327.SearchWord(gh<_i706.WordRepository>()));
+    gh.factory<_i730.QuizBloc>(
+        () => _i730.QuizBloc(repository: gh<_i928.QuizRepository>()));
     gh.factory<_i53.SearchBloc>(
         () => _i53.SearchBloc(searchWord: gh<_i327.SearchWord>()));
     return this;

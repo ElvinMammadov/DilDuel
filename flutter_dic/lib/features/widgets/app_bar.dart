@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/state/app_state.dart';
-import 'package:flutter_dic/features/settings/settings.dart';
+import 'package:flutter_dic/core/navigation/app_router.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_dic/core/utils/dimensions.dart';
 
 class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -21,7 +23,7 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final AppState appState = context.watch<AppCubit>().state;
-    final bool isAzDe = appState.dictionaryType == 123;
+    final bool isAzDe = appState.dictionaryType == DictionaryType.azDe;
     final String fromLang = isAzDe ? 'Az' : 'De';
     final String toLang = isAzDe ? 'De' : 'Az';
     return AppBar(
@@ -33,7 +35,7 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (onBackPressed != null) {
                   onBackPressed!();
                 } else {
-                  Navigator.pop(context);
+                  context.pop();
                 }
               },
             )
@@ -43,36 +45,32 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
           Row(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(right: 8.0),
+                padding: const EdgeInsets.only(right: Dimensions.padding8),
                 child: Card(
-                  elevation: 0.5,
+                  elevation: Dimensions.itemHeight1,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(Dimensions.itemHeight8),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
+                      horizontal: Dimensions.padding8,
+                      vertical: Dimensions.padding4,
                     ),
                     child: InkWell(
                       onTap: () {
-                        context.read<AppCubit>().setDictionaryType(
-                              appState.dictionaryType == 123 ? 321 : 123,
-                            );
+                        context.read<AppCubit>().toggleDictionaryType();
                       },
                       child: Row(
                         children: <Widget>[
                           Text(fromLang),
-                          const SizedBox(width: 4),
+                          const SizedBox(width: Dimensions.itemWidth4),
                           Icon(
                             Icons.compare_arrows,
-                            size: 24,
+                            size: Dimensions.itemHeight24,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            toLang,
-                          ),
+                          const SizedBox(width: Dimensions.itemWidth4),
+                          Text(toLang),
                         ],
                       ),
                     ),
@@ -80,15 +78,9 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.person),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (BuildContext context) => const SettingsPage(),
-                    ),
-                  );
-                },
+                icon: const Icon(Icons.settings),
+                tooltip: 'Settings',
+                onPressed: () => context.push(AppRouter.settings),
               ),
             ],
           ),

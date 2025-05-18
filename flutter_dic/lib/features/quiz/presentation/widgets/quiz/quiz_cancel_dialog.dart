@@ -17,13 +17,13 @@ class QuizCancelDialog extends StatelessWidget {
         ),
         actions: <Widget>[
           TextButton(
-            onPressed: () => context.pop(),
+            onPressed: () => Navigator.pop(context),
             child: const Text('No'),
           ),
           TextButton(
             onPressed: () {
               onCancel();
-              context.pop();
+              Navigator.pop(context);
             },
             style: TextButton.styleFrom(
               foregroundColor: AppTheme.errorColor,

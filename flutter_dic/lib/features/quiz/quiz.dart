@@ -12,7 +12,6 @@ import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/features/quiz/domain/entities/quiz_word.dart';
 import 'package:flutter_dic/features/quiz/domain/models/quiz_result.dart';
 import 'package:flutter_dic/features/quiz/domain/repositories/quiz_repository.dart';
-import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:intl/intl.dart';

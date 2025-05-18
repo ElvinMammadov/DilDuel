@@ -17,13 +17,13 @@ class QuizRestartDialog extends StatelessWidget {
         ),
         actions: <Widget>[
           TextButton(
-            onPressed: () => context.pop(),
+            onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
               onRestart();
-              context.pop();
+              Navigator.pop(context);
             },
             style: TextButton.styleFrom(
               foregroundColor: AppTheme.errorColor,

@@ -16,17 +16,55 @@ class _SearchBottomSheetScreen extends StatefulWidget {
 
 class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
   late final FlutterTts _flutterTts;
+  bool _isBookmarked = false;
+
+  bool get _isAzDe => widget.locale == 'az-AZ';
 
   @override
   void initState() {
     super.initState();
     _flutterTts = FlutterTts();
-    _flutterTts.setLanguage(widget.locale);
+    _flutterTts.setLanguage('de-DE');
     _flutterTts.setSpeechRate(0.5);
+    _checkIfBookmarked();
   }
 
-  Future<void> _speak() async {
-    await _flutterTts.speak(widget.searchWord.key);
+  Future<void> _checkIfBookmarked() async {
+    if (context.mounted) {
+      final bool isBookmarked = await DBHelper.isBookmarked(widget.searchWord);
+      if (mounted) {
+        setState(() {
+          _isBookmarked = isBookmarked;
+        });
+      }
+    }
+  }
+
+  Future<void> _speak(String text) async {
+    await _flutterTts.speak(text);
+  }
+
+  Future<void> _toggleBookmark() async {
+    try {
+      if (_isBookmarked) {
+        await DBHelper.removeBookmark(widget.searchWord);
+      } else {
+        await DBHelper.addBookmark(widget.searchWord);
+      }
+      if (mounted) {
+        setState(() {
+          _isBookmarked = !_isBookmarked;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to update bookmark'),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -36,56 +74,28 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Container(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: Padding(
+  Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(Dimensions.padding16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                bottom: Dimensions.padding16,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      widget.searchWord.key,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.volume_up,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onPressed: _speak,
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.bookmark_border,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onPressed: () {
-                      // TODO: implement bookmark action
-                    },
-                  ),
-                ],
-              ),
+            WordRow(
+              text: widget.searchWord.key,
+              isGerman: !_isAzDe,
+              isKey: true,
+              onSpeak: !_isAzDe ? () => _speak(widget.searchWord.key) : null,
+              onBookmark: _toggleBookmark,
+              isBookmarked: _isBookmarked,
             ),
-            Text(
-              widget.searchWord.value,
-              style: Theme.of(context).textTheme.bodyLarge,
+            const SizedBox(height: Dimensions.itemHeight16),
+            WordRow(
+              text: widget.searchWord.value,
+              isGerman: _isAzDe,
+              isKey: false,
+              onSpeak: _isAzDe ? () => _speak(widget.searchWord.value) : null,
             ),
           ],
         ),
-      ),
-    );
+      );
 }

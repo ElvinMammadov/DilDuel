@@ -38,6 +38,7 @@ class _ResultsTabState extends State<ResultsTab> {
                   AsyncSnapshot<Map<String, dynamic>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Card(
+                    margin: EdgeInsets.zero,
                     child: ListTile(
                       title: Text('Loading statistics...'),
                     ),
@@ -48,6 +49,7 @@ class _ResultsTabState extends State<ResultsTab> {
                     <String, dynamic>{'totalQuizzes': 0, 'averageScore': '0.0'};
 
                 return Card(
+                  margin: EdgeInsets.zero,
                   child: ListTile(
                     title: const Text('Quiz Statistics'),
                     subtitle: Text('Total Quizzes: ${stats['totalQuizzes']}\n'
@@ -57,7 +59,10 @@ class _ResultsTabState extends State<ResultsTab> {
               },
             ),
             const Padding(
-              padding: EdgeInsets.only(top: Dimensions.padding20),
+              padding: EdgeInsets.only(
+                top: Dimensions.padding20,
+                bottom: Dimensions.padding12,
+              ),
               child: Text(
                 'Quiz History',
                 style: TextStyle(
@@ -66,7 +71,6 @@ class _ResultsTabState extends State<ResultsTab> {
                 ),
               ),
             ),
-            const SizedBox(height: Dimensions.itemHeight10),
             FutureBuilder<List<QuizResult>>(
               future: _resultsFuture,
               builder: (BuildContext context,
@@ -80,18 +84,19 @@ class _ResultsTabState extends State<ResultsTab> {
 
                 if (results.isEmpty) {
                   return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(Dimensions.padding16),
-                      child: Text('No quiz results yet. '
-                          'Take a quiz to see your history!'),
+                    child: Text(
+                      'No quiz results yet. Take a quiz to see your history!',
+                      textAlign: TextAlign.center,
                     ),
                   );
                 }
 
-                return ListView.builder(
+                return ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: results.length,
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: Dimensions.itemHeight8),
                   itemBuilder: (BuildContext context, int index) {
                     final QuizResult result = results[index];
                     final String date =
@@ -101,6 +106,7 @@ class _ResultsTabState extends State<ResultsTab> {
                             .toStringAsFixed(1);
 
                     return Card(
+                      margin: EdgeInsets.zero,
                       child: ListTile(
                         title: Text('Quiz #${index + 1}'),
                         subtitle: Text(

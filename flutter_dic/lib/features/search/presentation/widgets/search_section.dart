@@ -83,16 +83,23 @@ class _SearchSectionState extends State<SearchSection> {
       return Padding(
         padding: const EdgeInsets.symmetric(
           vertical: Dimensions.padding8,
-          horizontal: Dimensions.padding8,
+          horizontal: Dimensions.padding16,
         ),
         child: Column(
           children: <Widget>[
             SearchBar(
               controller: _controller,
               elevation:
-                  const WidgetStatePropertyAll<double?>(Dimensions.itemHeight1),
+                  const WidgetStatePropertyAll<double?>(0.5),
               padding: const WidgetStatePropertyAll<EdgeInsets>(
                 EdgeInsets.symmetric(horizontal: Dimensions.padding8),
+              ),
+              shape: const WidgetStatePropertyAll<OutlinedBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(AppSizes.mainBorderRadius),
+                  ),
+                ),
               ),
               leading: const Icon(Icons.search),
               trailing: isTyping
@@ -123,7 +130,6 @@ class _SearchSectionState extends State<SearchSection> {
                 context.read<SearchBloc>().search(text, dictionaryName);
               },
             ),
-            // <- You can define this widget below
           ],
         ),
       );

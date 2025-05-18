@@ -19,7 +19,7 @@ class SearchItems extends StatelessWidget {
                   final Word word = state.words[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.padding8,
+                      horizontal: Dimensions.padding16,
                     ),
                     child: GestureDetector(
                       onTap: () {
@@ -27,7 +27,7 @@ class SearchItems extends StatelessWidget {
                           context,
                           word,
                           appState.dictionaryType == DictionaryType.azDe
-                              ? 'tr-TR'
+                              ? 'az-AZ'
                               : 'de-DE',
                         );
                       },

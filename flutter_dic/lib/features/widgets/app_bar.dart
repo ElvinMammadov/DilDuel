@@ -25,6 +25,7 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
     final String fromLang = isAzDe ? 'Az' : 'De';
     final String toLang = isAzDe ? 'De' : 'Az';
     return AppBar(
+      elevation: 0.5,
       title: Text(title ?? ''),
       leading: showBackButton
           ? IconButton(
@@ -76,7 +77,10 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.settings),
+                icon: Icon(
+                  Icons.settings,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 tooltip: 'Settings',
                 onPressed: () => Navigator.pushNamed(context, '/settings'),
               ),

@@ -42,95 +42,90 @@ class _QuizQuestionState extends State<QuizQuestion> {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(Dimensions.padding16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  AppCard(
-                    elevation: Dimensions.itemHeight2,
-                    backgroundColor: AppTheme.mainColor.withAlpha(13),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.itemHeight8),
-                      side: BorderSide(
-                        color: AppTheme.mainColor.withAlpha(77),
-                        width: 1.5,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(Dimensions.padding16),
-                      child: Text(
-                        widget.word.question,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(
-                              color: AppTheme.textPrimaryLight,
-                              fontWeight: FontWeight.w600,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              AppCard(
+                elevation: Dimensions.itemHeight2,
+                backgroundColor: AppTheme.mainColor.withAlpha(13),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(Dimensions.itemHeight8),
+                  side: BorderSide(
+                    color: AppTheme.mainColor.withAlpha(77),
+                    width: 1.5,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: Dimensions.padding20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        ...widget.word.options.map((String option) {
-                          final bool isSelected = selectedAnswer == option;
-                          final bool isCorrect =
-                              widget.word.correctAnswer == option;
-
-                          final Color buttonColor = showAnswer
-                              ? (isCorrect
-                                  ? AppTheme.successColor.withAlpha(26)
-                                  : (isSelected
-                                      ? AppTheme.errorColor.withAlpha(26)
-                                      : Colors.white))
-                              : Colors.white;
-
-                          final Color textColor = showAnswer
-                              ? (isCorrect
-                                  ? AppTheme.successColor
-                                  : (isSelected
-                                      ? AppTheme.errorColor
-                                      : AppTheme.textPrimaryLight))
-                              : AppTheme.textPrimaryLight;
-
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: Dimensions.padding8,
-                            ),
-                            child: AppElevatedButton(
-                              text: option,
-                              backgroundColor: buttonColor,
-                              textColor: textColor,
-                              onPressed: showAnswer
-                                  ? () {}
-                                  : () => _handleAnswer(option),
-                            ),
-                          );
-                        }),
-                        if (showAnswer)
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: Dimensions.padding20),
-                            child: AppElevatedButton(
-                              text: 'Continue',
-                              backgroundColor: AppTheme.mainColor,
-                              textColor: Colors.white,
-                              onPressed: _handleContinue,
-                            ),
-                          ),
-                      ],
-                    ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(Dimensions.padding16),
+                  child: Text(
+                    widget.word.question,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(
+                          color: AppTheme.textPrimaryLight,
+                          fontWeight: FontWeight.w600,
+                        ),
+                    textAlign: TextAlign.center,
                   ),
-                ],
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(top: Dimensions.padding20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    ...widget.word.options.map((String option) {
+                      final bool isSelected = selectedAnswer == option;
+                      final bool isCorrect =
+                          widget.word.correctAnswer == option;
+
+                      final Color buttonColor = showAnswer
+                          ? (isCorrect
+                              ? AppTheme.successColor.withAlpha(26)
+                              : (isSelected
+                                  ? AppTheme.errorColor.withAlpha(26)
+                                  : Colors.white))
+                          : Colors.white;
+
+                      final Color textColor = showAnswer
+                          ? (isCorrect
+                              ? AppTheme.successColor
+                              : (isSelected
+                                  ? AppTheme.errorColor
+                                  : AppTheme.textPrimaryLight))
+                          : AppTheme.textPrimaryLight;
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Dimensions.padding8,
+                        ),
+                        child: AppElevatedButton(
+                          text: option,
+                          backgroundColor: buttonColor,
+                          textColor: textColor,
+                          onPressed: showAnswer
+                              ? () {}
+                              : () => _handleAnswer(option),
+                        ),
+                      );
+                    }),
+                    if (showAnswer)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: Dimensions.padding20),
+                        child: AppElevatedButton(
+                          text: 'Continue',
+                          backgroundColor: AppTheme.mainColor,
+                          textColor: Colors.white,
+                          onPressed: _handleContinue,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       );

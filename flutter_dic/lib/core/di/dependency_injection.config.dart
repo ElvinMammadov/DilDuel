@@ -13,6 +13,7 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
+import '../../features/bookmarks/bookmarks.dart' as _i1027;
 import '../../features/quiz/data/repositories/quiz_repository_impl.dart'
     as _i656;
 import '../../features/quiz/domain/repositories/quiz_repository.dart' as _i613;
@@ -41,6 +42,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final sharedPreferencesModule = _$SharedPreferencesModule();
     gh.factory<_i901.AppCubit>(() => _i901.AppCubit());
+    gh.factory<_i1027.BookmarksBloc>(() => _i1027.BookmarksBloc());
     await gh.singletonAsync<_i460.SharedPreferences>(
       () => sharedPreferencesModule.prefs,
       preResolve: true,

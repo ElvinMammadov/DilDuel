@@ -8,8 +8,9 @@ import 'package:flutter_dic/core/state/theme_state.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/features/home/home.dart';
 import 'package:flutter_dic/features/settings/settings.dart';
+import 'package:flutter_dic/features/bookmarks/bookmarks.dart';
+import 'package:flutter_dic/features/quiz/quiz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:nested/nested.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,12 +18,18 @@ Future<void> main() async {
   await DBHelper.initDB();
   runApp(
     MultiBlocProvider(
-      providers: <SingleChildWidget>[
+      providers: <BlocProvider<dynamic>>[
         BlocProvider<AppCubit>(
           create: (BuildContext context) => sl<AppCubit>(),
         ),
         BlocProvider<ThemeCubit>(
           create: (BuildContext context) => sl<ThemeCubit>(),
+        ),
+        BlocProvider<BookmarksBloc>(
+          create: (BuildContext context) => sl<BookmarksBloc>(),
+        ),
+        BlocProvider<QuizBloc>(
+          create: (BuildContext context) => sl<QuizBloc>(),
         ),
       ],
       child: const MyApp(),

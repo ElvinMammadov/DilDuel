@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/state/app_state.dart';
-import 'package:flutter_dic/core/navigation/app_router.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 
 class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -35,7 +33,7 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (onBackPressed != null) {
                   onBackPressed!();
                 } else {
-                  context.pop();
+                  Navigator.pop(context);
                 }
               },
             )
@@ -80,7 +78,7 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 icon: const Icon(Icons.settings),
                 tooltip: 'Settings',
-                onPressed: () => context.push(AppRouter.settings),
+                onPressed: () => Navigator.pushNamed(context, '/settings'),
               ),
             ],
           ),

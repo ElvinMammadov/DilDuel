@@ -1,35 +1,48 @@
-library home;
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dic/core/di/dependency_injection.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_dic/features/search/search.dart';
+import 'package:flutter_dic/features/quiz/quiz.dart';
+import 'package:flutter_dic/features/training/training.dart';
 
-class HomeShell extends StatelessWidget {
-  final Widget child;
-
-  const HomeShell({super.key, required this.child});
-
-  static const List<String> tabs = <String>[
-    '/dictionary',
-    '/quiz',
-    '/training',
-  ];
+class HomeShell extends StatefulWidget {
+  const HomeShell({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final String location = GoRouterState.of(context).uri.toString();
-    final int currentIndex =
-        tabs.indexWhere((String tab) => location.startsWith(tab));
+  State<HomeShell> createState() => _HomeShellState();
+}
 
-    return Scaffold(
+class _HomeShellState extends State<HomeShell> {
+  int _currentIndex = 0;
+  
+  // Pre-instantiate all pages
+  final List<Widget> _pages = const <Widget>[
+    SearchScreen(),
+    QuizScreen(),
+    TrainingScreen(),
+  ];
+
+  void _onTabTapped(int index) {
+    if (index == _currentIndex) return;
+    setState(() => _currentIndex = index);
+  }
+
+  @override
+  Widget build(BuildContext context) => BlocProvider<QuizBloc>(
+    create: (BuildContext context) => sl<QuizBloc>(),
+    child: Scaffold(
       appBar: const DilDuelAppBar(
         title: 'Dil Duel',
         showBackButton: false,
       ),
-      body: child,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex < 0 ? 0 : currentIndex,
-        onTap: (int index) => context.go(tabs[index]),
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Colors.grey,
         items: const <BottomNavigationBarItem>[
@@ -47,6 +60,6 @@ class HomeShell extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
 } 

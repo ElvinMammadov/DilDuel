@@ -4,7 +4,11 @@ import 'package:injectable/injectable.dart';
 
 final GetIt sl = GetIt.instance;
 
-@injectableInit
-Future<void> configureDependencies({String env = Environment.dev}) async {
-  sl.init(environment: env);
-}
+@InjectableInit(
+  initializerName: 'init',
+  preferRelativeImports: true,
+  asExtension: true,
+)
+Future<void> configureDependencies({String? env}) async => sl.init(
+      environment: env,
+    );

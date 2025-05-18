@@ -3,17 +3,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
+import 'package:flutter_dic/core/state/theme_cubit.dart';
+import 'package:flutter_dic/core/state/theme_state.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
-import 'package:flutter_dic/core/navigation/app_router.dart';
+import 'package:flutter_dic/features/home/home.dart';
+import 'package:flutter_dic/features/settings/settings.dart';
 import 'package:injectable/injectable.dart';
+import 'package:nested/nested.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies(env: Environment.dev);
   await DBHelper.initDB();
   runApp(
-    BlocProvider<AppCubit>(
-      create: (BuildContext context) => AppCubit(),
+    MultiBlocProvider(
+      providers: <SingleChildWidget>[
+        BlocProvider<AppCubit>(
+          create: (BuildContext context) => sl<AppCubit>(),
+        ),
+        BlocProvider<ThemeCubit>(
+          create: (BuildContext context) => sl<ThemeCubit>(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
@@ -23,11 +34,28 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp.router(
+  Widget build(BuildContext context) {
+    final ThemeCubit themeCubit = context.watch<ThemeCubit>();
+
+    return MaterialApp(
         title: 'Flutter Demo',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.system,
-        routerConfig: AppRouter.router,
-      );
+        themeMode: _getThemeMode(themeCubit.currentTheme),
+        home: const HomeShell(),
+        routes: <String, WidgetBuilder>{
+          '/settings': (BuildContext context) => const SettingsScreen(),
+        });
+  }
+
+  ThemeMode _getThemeMode(ThemeType themeType) {
+    switch (themeType) {
+      case ThemeType.light:
+        return ThemeMode.light;
+      case ThemeType.dark:
+        return ThemeMode.dark;
+      case ThemeType.system:
+        return ThemeMode.system;
+    }
+  }
 }

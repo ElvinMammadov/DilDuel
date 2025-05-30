@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
@@ -14,25 +15,34 @@ import 'package:injectable/injectable.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await configureDependencies(env: Environment.prod);
   await DBHelper.initDB();
   runApp(
-    MultiBlocProvider(
-      providers: <BlocProvider<dynamic>>[
-        BlocProvider<AppCubit>(
-          create: (BuildContext context) => sl<AppCubit>(),
-        ),
-        BlocProvider<ThemeCubit>(
-          create: (BuildContext context) => sl<ThemeCubit>(),
-        ),
-        BlocProvider<BookmarksBloc>(
-          create: (BuildContext context) => sl<BookmarksBloc>(),
-        ),
-        BlocProvider<QuizBloc>(
-          create: (BuildContext context) => sl<QuizBloc>(),
-        ),
+    EasyLocalization(
+      supportedLocales: const <Locale>[
+        Locale('az'),
+        Locale('de'),
       ],
-      child: const MyApp(),
+      path: 'assets/translations',
+      fallbackLocale: const Locale('az'),
+      child: MultiBlocProvider(
+        providers: <BlocProvider<dynamic>>[
+          BlocProvider<AppCubit>(
+            create: (BuildContext context) => sl<AppCubit>(),
+          ),
+          BlocProvider<ThemeCubit>(
+            create: (BuildContext context) => sl<ThemeCubit>(),
+          ),
+          BlocProvider<BookmarksBloc>(
+            create: (BuildContext context) => sl<BookmarksBloc>(),
+          ),
+          BlocProvider<QuizBloc>(
+            create: (BuildContext context) => sl<QuizBloc>(),
+          ),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -45,7 +55,7 @@ class MyApp extends StatelessWidget {
     final ThemeCubit themeCubit = context.watch<ThemeCubit>();
     
     return MaterialApp(
-      title: 'Dil Duel',
+      title: 'app.title'.tr(),
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: _getThemeMode(themeCubit.currentTheme),
@@ -53,6 +63,9 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/settings': (BuildContext context) => const SettingsScreen(),
       },
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
     );
   }
 

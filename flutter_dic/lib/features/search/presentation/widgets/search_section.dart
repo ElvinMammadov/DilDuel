@@ -102,6 +102,7 @@ class _SearchSectionState extends State<SearchSection> {
                 ),
               ),
               leading: const Icon(Icons.search),
+              hintText: 'search.placeholder'.tr(),
               trailing: isTyping
                   ? <Widget>[
                       IconButton(

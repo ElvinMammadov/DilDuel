@@ -10,15 +10,12 @@ class QuizRestartDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        title: const Text('Restart Quiz?'),
-        content: const Text(
-          'Are you sure you want to restart?'
-          ' Your current progress will be lost.',
-        ),
+        title: Text('quiz.restart'.tr()),
+        content: Text('quiz.confirm_restart'.tr()),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('common.cancel'.tr()),
           ),
           TextButton(
             onPressed: () {
@@ -28,7 +25,7 @@ class QuizRestartDialog extends StatelessWidget {
             style: TextButton.styleFrom(
               foregroundColor: AppTheme.errorColor,
             ),
-            child: const Text('Restart'),
+            child: Text('quiz.restart'.tr()),
           ),
         ],
       );

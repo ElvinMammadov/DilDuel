@@ -24,12 +24,12 @@ class BookmarksScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: Dimensions.itemHeight16),
                     Text(
-                      'No bookmarks yet',
+                      'bookmarks.empty'.tr(),
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: Dimensions.itemHeight8),
                     Text(
-                      'Your bookmarked words will appear here',
+                      'bookmarks.empty_description'.tr(),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
@@ -55,8 +55,8 @@ class BookmarksScreen extends StatelessWidget {
                     context.read<BookmarksBloc>().removeBookmark(word);
                     SnackbarUtils.showInfo(
                       context,
-                      message: 'Bookmark removed',
-                      actionLabel: 'Undo',
+                      message: 'bookmarks.removed'.tr(),
+                      actionLabel: 'bookmarks.undo'.tr(),
                       onActionPressed: () {
                         context.read<BookmarksBloc>().addBookmark(word);
                       },
@@ -67,9 +67,9 @@ class BookmarksScreen extends StatelessWidget {
                       title: Text(
                         word.key,
                         style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       subtitle: Text(word.value),
                       trailing: IconButton(
@@ -79,8 +79,8 @@ class BookmarksScreen extends StatelessWidget {
                           context.read<BookmarksBloc>().removeBookmark(word);
                           SnackbarUtils.showInfo(
                             context,
-                            message: 'Bookmark removed',
-                            actionLabel: 'Undo',
+                            message: 'bookmarks.removed'.tr(),
+                            actionLabel: 'bookmarks.undo'.tr(),
                             onActionPressed: () {
                               context.read<BookmarksBloc>().addBookmark(word);
                             },
@@ -106,7 +106,7 @@ class BookmarksScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: Dimensions.itemHeight16),
                   Text(
-                    'Error loading bookmarks',
+                    'bookmarks.error'.tr(),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: Dimensions.itemHeight8),
@@ -119,14 +119,14 @@ class BookmarksScreen extends StatelessWidget {
                     onPressed: () {
                       context.read<BookmarksBloc>().loadBookmarks();
                     },
-                    child: const Text('Try Again'),
+                    child: Text('bookmarks.try_again'.tr()),
                   ),
                 ],
               ),
             );
           }
 
-          return const Center(child: Text('Something went wrong'));
+          return Center(child: Text('common.something_wrong'.tr()));
         },
       );
 } 

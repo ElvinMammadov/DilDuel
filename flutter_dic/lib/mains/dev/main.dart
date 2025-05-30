@@ -11,28 +11,38 @@ import 'package:flutter_dic/features/settings/settings.dart';
 import 'package:flutter_dic/features/bookmarks/bookmarks.dart';
 import 'package:flutter_dic/features/quiz/quiz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await configureDependencies(env: Environment.dev);
   await DBHelper.initDB();
   runApp(
-    MultiBlocProvider(
-      providers: <BlocProvider<dynamic>>[
-        BlocProvider<AppCubit>(
-          create: (BuildContext context) => sl<AppCubit>(),
-        ),
-        BlocProvider<ThemeCubit>(
-          create: (BuildContext context) => sl<ThemeCubit>(),
-        ),
-        BlocProvider<BookmarksBloc>(
-          create: (BuildContext context) => sl<BookmarksBloc>(),
-        ),
-        BlocProvider<QuizBloc>(
-          create: (BuildContext context) => sl<QuizBloc>(),
-        ),
+    EasyLocalization(
+      supportedLocales: const <Locale>[
+        Locale('az'),
+        Locale('de'),
       ],
-      child: const MyApp(),
+      path: 'assets/translations',
+      fallbackLocale: const Locale('az'),
+      child: MultiBlocProvider(
+        providers: <BlocProvider<dynamic>>[
+          BlocProvider<AppCubit>(
+            create: (BuildContext context) => sl<AppCubit>(),
+          ),
+          BlocProvider<ThemeCubit>(
+            create: (BuildContext context) => sl<ThemeCubit>(),
+          ),
+          BlocProvider<BookmarksBloc>(
+            create: (BuildContext context) => sl<BookmarksBloc>(),
+          ),
+          BlocProvider<QuizBloc>(
+            create: (BuildContext context) => sl<QuizBloc>(),
+          ),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -45,14 +55,18 @@ class MyApp extends StatelessWidget {
     final ThemeCubit themeCubit = context.watch<ThemeCubit>();
 
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: _getThemeMode(themeCubit.currentTheme),
-        home: const HomeShell(),
-        routes: <String, WidgetBuilder>{
-          '/settings': (BuildContext context) => const SettingsScreen(),
-        });
+      title: 'app.title'.tr(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: _getThemeMode(themeCubit.currentTheme),
+      home: const HomeShell(),
+      routes: <String, WidgetBuilder>{
+        '/settings': (BuildContext context) => const SettingsScreen(),
+      },
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+    );
   }
 
   ThemeMode _getThemeMode(ThemeType themeType) {

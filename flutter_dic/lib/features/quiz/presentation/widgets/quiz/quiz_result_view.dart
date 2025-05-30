@@ -1,81 +1,54 @@
 part of quiz;
 
 class QuizResultView extends StatelessWidget {
-  final int score;
-  final int totalQuestions;
+  final QuizComplete state;
   final VoidCallback onTryAgain;
 
   const QuizResultView({
     super.key,
-    required this.score,
-    required this.totalQuestions,
+    required this.state,
     required this.onTryAgain,
   });
 
   @override
   Widget build(BuildContext context) {
-    final double percentage = (score / totalQuestions) * 100;
-    final String emoji = _getEmojiForScore(percentage);
+    final int correctAnswers = state.score;
+    final int totalQuestions = state.totalQuestions;
+    final double percentage = (correctAnswers / totalQuestions) * 100;
 
     return Center(
-      child: AppCard(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              emoji,
-              style: Theme.of(context).textTheme.displayLarge,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            _getEmojiForScore(percentage),
+            style: const TextStyle(fontSize: 64),
+          ),
+          const SizedBox(height: Dimensions.padding16),
+          Text(
+            'quiz.score'.tr(args: <String>['$correctAnswers/$totalQuestions']),
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              color: _getColorForScore(percentage),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: Dimensions.padding20),
-              child: Text(
-                'Quiz Complete!',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: AppTheme.textPrimaryLight,
-                      fontWeight: FontWeight.w600,
-                    ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: Dimensions.padding20),
+            child: Text(
+              _getMessageForScore(percentage),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: AppTheme.textSecondaryLight,
               ),
+              textAlign: TextAlign.center,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: Dimensions.padding20),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    'Score: $score/$totalQuestions',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: AppTheme.textPrimaryLight,
-                        ),
-                  ),
-                  Text(
-                    '${percentage.toStringAsFixed(1)}%',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: _getColorForScore(percentage),
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                ],
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: Dimensions.padding40),
+            child: AppElevatedButton(
+              text: 'quiz.try_again'.tr(),
+              onPressed: onTryAgain,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: Dimensions.padding20),
-              child: Text(
-                _getMessageForScore(percentage),
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: AppTheme.textSecondaryLight,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: Dimensions.padding40),
-              child: AppElevatedButton(
-                text: 'Try Again',
-                onPressed: onTryAgain,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -96,14 +69,14 @@ class QuizResultView extends StatelessWidget {
 
   String _getMessageForScore(double percentage) {
     if (percentage >= 90) {
-      return 'Excellent! You\'re a vocabulary master!';
+      return 'quiz.results.excellent'.tr();
     }
     if (percentage >= 70) {
-      return 'Great job! Keep up the good work!';
+      return 'quiz.results.great'.tr();
     }
     if (percentage >= 50) {
-      return 'Good effort! Practice makes perfect!';
+      return 'quiz.results.good'.tr();
     }
-    return 'Keep practicing! You\'ll improve!';
+    return 'quiz.results.keep_trying'.tr();
   }
 } 

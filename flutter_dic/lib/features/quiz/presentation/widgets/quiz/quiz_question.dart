@@ -116,7 +116,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
                         padding: const EdgeInsets.only(
                             top: Dimensions.padding20),
                         child: AppElevatedButton(
-                          text: 'Continue',
+                          text: 'quiz.next'.tr(),
                           backgroundColor: AppTheme.mainColor,
                           textColor: Colors.white,
                           onPressed: _handleContinue,

@@ -16,14 +16,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _packageInfo = PackageInfo.fromPlatform();
   }
 
+  void _showLanguageBottomSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => const LanguageBottomSheet(),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(Dimensions.itemHeight16),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: const DilDuelAppBar(
-        title: 'Settings',
+      appBar: DilDuelAppBar(
+        title: 'settings.title'.tr(),
         showBackButton: true,
         showProfileButton: false,
       ),
@@ -47,18 +59,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   const SizedBox(height: Dimensions.itemHeight16),
                   Text(
-                    'Elvin Mammadov',
+                    'settings.profile.name'.tr(),
                     style: theme.textTheme.titleLarge,
                   ),
                   Text(
-                    'elvin@example.com',
+                    'settings.profile.email'.tr(),
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                   const SizedBox(height: Dimensions.itemHeight16),
                   AppElevatedButton(
-                    text: 'Edit Profile',
+                    text: 'settings.profile.edit'.tr(),
                     onPressed: () {
                       // TODO: Implement edit profile
                     },
@@ -73,12 +85,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Card(
             child: ListTile(
               leading: const Icon(Icons.language, color: AppTheme.mainColor),
-              title: const Text('Language'),
-              subtitle: const Text('Azerbaijani - German'),
+              title: Text('settings.language'.tr()),
+              subtitle: Text(context.locale.languageCode == 'az'
+                  ? 'Azerbaijani'
+                  : 'German'),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                // TODO: Implement language selection
-              },
+              onTap: _showLanguageBottomSheet,
             ),
           ),
           const SizedBox(height: Dimensions.itemHeight8),
@@ -96,7 +108,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Icons.help_outline,
                     color: AppTheme.mainColor,
                   ),
-                  title: const Text('Frequently Asked Questions'),
+                  title: Text('settings.faq.title'.tr()),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
                     // TODO: Implement FAQ screen navigation
@@ -104,14 +116,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const Divider(),
                 ListTile(
-                  title: const Text('How to use the dictionary?'),
+                  title: Text('settings.faq.dictionary_usage'.tr()),
                   trailing: const Icon(Icons.expand_more),
                   onTap: () {
                     // TODO: Implement FAQ item expansion
                   },
                 ),
                 ListTile(
-                  title: const Text('How does the quiz work?'),
+                  title: Text('settings.faq.quiz_usage'.tr()),
                   trailing: const Icon(Icons.expand_more),
                   onTap: () {
                     // TODO: Implement FAQ item expansion
@@ -133,8 +145,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 return ListTile(
                   leading:
                       const Icon(Icons.info_outline, color: AppTheme.mainColor),
-                  title: const Text('About'),
-                  subtitle: Text('Version $version'),
+                  title: Text('settings.about'.tr()),
+                  subtitle:
+                      Text('settings.version'.tr(args: <String>[version])),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
                     // TODO: Implement about screen navigation
@@ -147,7 +160,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           // Logout Button
           AppElevatedButton(
-            text: 'Logout',
+            text: 'settings.logout'.tr(),
             backgroundColor: AppTheme.errorColor,
             onPressed: () {
               // TODO: Implement logout functionality

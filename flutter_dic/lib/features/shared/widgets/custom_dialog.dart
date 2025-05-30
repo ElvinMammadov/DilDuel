@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CustomDialog extends StatelessWidget {
   final String title;
   final String message;
-  final String confirmText;
-  final String cancelText;
   final VoidCallback? onConfirm;
   final VoidCallback? onCancel;
 
@@ -14,8 +13,6 @@ class CustomDialog extends StatelessWidget {
     super.key,
     required this.title,
     required this.message,
-    this.confirmText = 'Confirm',
-    this.cancelText = 'Cancel',
     this.onConfirm,
     this.onCancel,
   });
@@ -31,7 +28,7 @@ class CustomDialog extends StatelessWidget {
               onCancel?.call();
             },
             child: Text(
-              cancelText,
+              'common.cancel'.tr(),
               style: const TextStyle(color: AppTheme.textSecondaryLight),
             ),
           ),
@@ -43,7 +40,7 @@ class CustomDialog extends StatelessWidget {
             style: TextButton.styleFrom(
               foregroundColor: AppTheme.mainColor,
             ),
-            child: Text(confirmText),
+            child: Text('common.confirm'.tr()),
           ),
         ],
       );

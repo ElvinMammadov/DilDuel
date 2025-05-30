@@ -5,6 +5,7 @@ import 'package:flutter_dic/features/search/search.dart';
 import 'package:flutter_dic/features/quiz/quiz.dart';
 import 'package:flutter_dic/features/training/training.dart';
 import 'package:flutter_dic/features/bookmarks/bookmarks.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -36,8 +37,8 @@ class _HomeShellState extends State<HomeShell> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: const DilDuelAppBar(
-      title: 'Dil Duel',
+    appBar:  DilDuelAppBar(
+      title: 'app.title'.tr(),
       showBackButton: false,
     ),
     body: IndexedStack(
@@ -50,22 +51,22 @@ class _HomeShellState extends State<HomeShell> {
       selectedItemColor: Theme.of(context).colorScheme.primary,
       unselectedItemColor: Colors.grey,
       type: BottomNavigationBarType.fixed,
-      items: const <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.book),
-          label: 'Dictionary',
+          icon: const Icon(Icons.book),
+          label: 'app.search'.tr(),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.bookmark),
-          label: 'Bookmarks',
+          icon: const Icon(Icons.bookmark),
+          label: 'app.bookmarks'.tr(),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.quiz),
-          label: 'Quiz',
+          icon: const Icon(Icons.quiz),
+          label: 'app.quiz'.tr(),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.fitness_center),
-          label: 'Training',
+          icon: const Icon(Icons.fitness_center),
+          label: 'app.training'.tr(),
         ),
       ],
     ),

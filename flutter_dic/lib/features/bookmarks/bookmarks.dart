@@ -1,5 +1,6 @@
 library bookmarks;
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';

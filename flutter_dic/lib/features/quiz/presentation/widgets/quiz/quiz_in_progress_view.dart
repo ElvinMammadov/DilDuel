@@ -53,14 +53,23 @@ class QuizInProgressView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              'Question ${state.currentIndex + 1}/${state.words.length}',
+                              'quiz.question'.tr(
+                                args: <String>[
+                                  '${state.currentIndex + 1}',
+                                  '${state.words.length}',
+                                ],
+                              ),
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 Text(
-                                  'Score: ${state.score}',
+                                  'quiz.score'.tr(
+                                    args: <String>[
+                                      '${state.score}',
+                                    ],
+                                  ),
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium

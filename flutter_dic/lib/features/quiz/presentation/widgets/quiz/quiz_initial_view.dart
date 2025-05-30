@@ -11,7 +11,7 @@ class QuizInitialView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Center(
         child: AppElevatedButton(
-          text: 'Start Quiz',
+          text: 'quiz.start'.tr(),
           onPressed: onStart,
         ),
       );

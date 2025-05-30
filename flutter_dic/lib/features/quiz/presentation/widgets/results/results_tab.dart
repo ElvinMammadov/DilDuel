@@ -37,10 +37,10 @@ class _ResultsTabState extends State<ResultsTab> {
               builder: (BuildContext context,
                   AsyncSnapshot<Map<String, dynamic>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Card(
+                  return Card(
                     margin: EdgeInsets.zero,
                     child: ListTile(
-                      title: Text('Loading statistics...'),
+                      title: Text('quiz.results.loading'.tr()),
                     ),
                   );
                 }
@@ -51,21 +51,25 @@ class _ResultsTabState extends State<ResultsTab> {
                 return Card(
                   margin: EdgeInsets.zero,
                   child: ListTile(
-                    title: const Text('Quiz Statistics'),
-                    subtitle: Text('Total Quizzes: ${stats['totalQuizzes']}\n'
-                        'Average Score: ${stats['averageScore']}%'),
+                    title: Text('quiz.results.statistics'.tr()),
+                    subtitle: Text(
+                      'quiz.results.stats_details'.tr(args: <String>[
+                        '${stats['totalQuizzes']}',
+                        '${stats['averageScore']}'
+                      ]),
+                    ),
                   ),
                 );
               },
             ),
-            const Padding(
-              padding: EdgeInsets.only(
+            Padding(
+              padding: const EdgeInsets.only(
                 top: Dimensions.padding20,
                 bottom: Dimensions.padding12,
               ),
               child: Text(
-                'Quiz History',
-                style: TextStyle(
+                'quiz.results.history'.tr(),
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -83,9 +87,9 @@ class _ResultsTabState extends State<ResultsTab> {
                     snapshot.data ?? <QuizResult>[];
 
                 if (results.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Text(
-                      'No quiz results yet. Take a quiz to see your history!',
+                      'quiz.results.empty'.tr(),
                       textAlign: TextAlign.center,
                     ),
                   );
@@ -108,10 +112,15 @@ class _ResultsTabState extends State<ResultsTab> {
                     return Card(
                       margin: EdgeInsets.zero,
                       child: ListTile(
-                        title: Text('Quiz #${index + 1}'),
+                        title: Text('quiz.results.quiz_number'
+                            .tr(args: <String>['${index + 1}'])),
                         subtitle: Text(
-                            'Score: ${result.score}/${result.totalQuestions} '
-                            '($percentage%)'),
+                          'quiz.results.score_details'.tr(args: <String>[
+                            '${result.score}',
+                            '${result.totalQuestions}',
+                            percentage
+                          ]),
+                        ),
                         trailing: Text(date),
                       ),
                     );

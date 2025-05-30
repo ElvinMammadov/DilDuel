@@ -10,15 +10,12 @@ class QuizCancelDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        title: const Text('Cancel Quiz?'),
-        content: const Text(
-          'Are you sure you want to cancel the quiz?'
-          ' Your progress will be lost.',
-        ),
+        title: Text('quiz.cancel'.tr()),
+        content: Text('quiz.confirm_cancel'.tr()),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('No'),
+            child: Text('common.no'.tr()),
           ),
           TextButton(
             onPressed: () {
@@ -28,7 +25,7 @@ class QuizCancelDialog extends StatelessWidget {
             style: TextButton.styleFrom(
               foregroundColor: AppTheme.errorColor,
             ),
-            child: const Text('Yes'),
+            child: Text('common.yes'.tr()),
           ),
         ],
       );

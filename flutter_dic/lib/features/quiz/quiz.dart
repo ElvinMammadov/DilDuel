@@ -1,5 +1,6 @@
 library quiz;
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
@@ -14,7 +15,6 @@ import 'package:flutter_dic/features/quiz/domain/models/quiz_result.dart';
 import 'package:flutter_dic/features/quiz/domain/repositories/quiz_repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:dartz/dartz.dart' as dartz;
-import 'package:intl/intl.dart';
 
 
 // Bloc

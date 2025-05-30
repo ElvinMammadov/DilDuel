@@ -4,7 +4,7 @@ class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => const DefaultTabController(
+  Widget build(BuildContext context) =>  DefaultTabController(
         length: 2,
         child: Column(
           children: <Widget>[
@@ -16,17 +16,17 @@ class QuizScreen extends StatelessWidget {
                 dividerColor: Colors.transparent,
                 tabs: <Widget>[
                   Tab(
-                    text: 'Quiz',
+                    text: 'quiz.title'.tr(),
                     height: 35,
                   ),
                   Tab(
-                    text: 'Results',
+                    text: 'quiz.results.title'.tr(),
                     height: 35,
                   ),
                 ],
               ),
             ),
-            Expanded(
+            const Expanded(
               child: TabBarView(
                 children: <Widget>[
                   QuizContent(),

@@ -1,0 +1,87 @@
+{
+  "app": {
+    "title": "Sprachduell",
+    "settings": "Einstellungen",
+    "bookmarks": "Lesezeichen",
+    "quiz": "Quiz",
+    "search": "Suche",
+    "training": "Training"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "theme": "Design",
+    "language": "Sprache",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System",
+    "about": "Über",
+    "version": "Version {0}",
+    "profile": {
+      "title": "Profil",
+      "edit": "Profil bearbeiten",
+      "name": "Elvin Mammadov",
+      "email": "elvin@example.com"
+    },
+    "faq": {
+      "title": "Häufig gestellte Fragen",
+      "dictionary_usage": "Wie benutze ich das Wörterbuch?",
+      "quiz_usage": "Wie funktioniert das Quiz?"
+    },
+    "logout": "Abmelden"
+  },
+  "quiz": {
+    "title": "Quiz",
+    "start": "Quiz starten",
+    "next": "Weiter",
+    "finish": "Beenden",
+    "score": "Punktzahl: {}",
+    "correct": "Richtig",
+    "wrong": "Falsch",
+    "restart": "Neustarten",
+    "cancel": "Abbrechen",
+    "confirm_restart": "Möchten Sie das Quiz wirklich neu starten?",
+    "confirm_cancel": "Möchten Sie das Quiz wirklich abbrechen?",
+    "yes": "Ja",
+    "no": "Nein",
+    "question": "Frage {}/{}",
+    "try_again": "Erneut versuchen",
+    "error": "Fehler: {}",
+    "finished": "Quiz abgeschlossen!",
+    "results": {
+      "title": "Ergebnisse",
+      "history": "Quiz-Verlauf",
+      "statistics": "Quiz-Statistiken",
+      "stats_details": "Gesamtanzahl Quiz: {}\nDurchschnittliche Punktzahl: {}%",
+      "score_details": "Punktzahl: {}/{} ({}%)",
+      "quiz_number": "Quiz #{}",
+      "loading": "Statistiken werden geladen...",
+      "empty": "Noch keine Quiz-Ergebnisse. Machen Sie ein Quiz, um Ihren Verlauf zu sehen!",
+      "excellent": "Ausgezeichnet! Sie sind ein Vokabelmeister!",
+      "great": "Großartige Arbeit! Weiter so!",
+      "good": "Guter Versuch! Übung macht den Meister!",
+      "keep_trying": "Weiter üben! Sie werden sich verbessern!"
+    }
+  },
+  "search": {
+    "placeholder": "Wort suchen...",
+    "no_results": "Keine Ergebnisse gefunden",
+    "error": "Ein Fehler ist aufgetreten"
+  },
+  "bookmarks": {
+    "empty": "Keine Lesezeichen",
+    "empty_description": "Ihre Lesezeichen werden hier angezeigt",
+    "removed": "Aus Lesezeichen entfernt",
+    "undo": "Rückgängig",
+    "error": "Fehler beim Laden der Lesezeichen",
+    "try_again": "Erneut versuchen"
+  },
+  "common": {
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen",
+    "error": "Ein Fehler ist aufgetreten",
+    "try_again": "Erneut versuchen",
+    "something_wrong": "Etwas ist schiefgelaufen",
+    "yes": "Ja",
+    "no": "Nein"
+  }
+} 

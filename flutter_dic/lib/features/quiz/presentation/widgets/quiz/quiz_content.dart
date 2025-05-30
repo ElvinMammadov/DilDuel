@@ -23,9 +23,8 @@ class QuizContent extends StatelessWidget {
 
           if (state is QuizComplete) {
             return QuizResultView(
-              score: state.score,
-              totalQuestions: state.totalQuestions,
               onTryAgain: () => context.read<QuizBloc>().resetQuiz(),
+              state: state,
             );
           }
 

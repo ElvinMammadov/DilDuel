@@ -1,0 +1,87 @@
+{
+  "app": {
+    "title": "Dil Duel",
+    "settings": "Parametrlər",
+    "bookmarks": "Seçilmişlər",
+    "quiz": "Test",
+    "search": "Axtar",
+    "training": "Məşq"
+  },
+  "settings": {
+    "title": "Parametrlər",
+    "theme": "Tema",
+    "language": "Dil",
+    "light": "Açıq",
+    "dark": "Tünd",
+    "system": "Sistem",
+    "about": "Haqqında",
+    "version": "Versiya {}",
+    "profile": {
+      "title": "Profil",
+      "edit": "Profili düzəlt",
+      "name": "Elvin Mammadov",
+      "email": "elvin@example.com"
+    },
+    "faq": {
+      "title": "Tez-tez soruşulan suallar",
+      "dictionary_usage": "Lüğətdən necə istifadə etməli?",
+      "quiz_usage": "Test necə işləyir?"
+    },
+    "logout": "Çıxış"
+  },
+  "quiz": {
+    "title": "Test",
+    "start": "Testə başla",
+    "next": "Növbəti",
+    "finish": "Bitir",
+    "score": "Xal: {}",
+    "correct": "Düzgün",
+    "wrong": "Səhv",
+    "restart": "Yenidən başla",
+    "cancel": "Ləğv et",
+    "confirm_restart": "Testi yenidən başlatmaq istədiyinizə əminsiniz?",
+    "confirm_cancel": "Testi ləğv etmək istədiyinizə əminsiniz?",
+    "yes": "Bəli",
+    "no": "Xeyr",
+    "question": "Sual {}/{}",
+    "try_again": "Yenidən cəhd et",
+    "error": "Xəta: {}",
+    "finished": "Test tamamlandı!",
+    "results": {
+      "title": "Nəticələr",
+      "history": "Test Tarixçəsi",
+      "statistics": "Test Statistikası",
+      "stats_details": "Ümumi Test: {}\nOrta Xal: {}%",
+      "score_details": "Xal: {}/{} ({}%)",
+      "quiz_number": "Test #{}",
+      "loading": "Statistika yüklənir...",
+      "empty": "Hələ test nəticələri yoxdur. Test edin və tarixçənizi görün!",
+      "excellent": "Əla! Siz söz ehtiyatı ustasısınız!",
+      "great": "Əla iş! Davam edin!",
+      "good": "Yaxşı səy! Təcrübə mükəmməlləşdirir!",
+      "keep_trying": "Təcrübə etməyə davam edin! Təkmilləşəcəksiniz!"
+    }
+  },
+  "search": {
+    "placeholder": "Söz axtar...",
+    "no_results": "Nəticə tapılmadı",
+    "error": "Xəta baş verdi"
+  },
+  "bookmarks": {
+    "empty": "Seçilmiş sözlər yoxdur",
+    "empty_description": "Seçilmiş sözləriniz burada görünəcək",
+    "removed": "Seçilmişlərdən silindi",
+    "undo": "Geri al",
+    "error": "Seçilmişləri yükləmək xətası",
+    "try_again": "Yenidən cəhd et"
+  },
+  "common": {
+    "confirm": "Təsdiq et",
+    "cancel": "Ləğv et",
+    "error": "Xəta baş verdi",
+    "try_again": "Yenidən cəhd et",
+    "something_wrong": "Nəsə səhv getdi",
+    "yes": "Bəli",
+    "no": "Xeyr"
+  }
+} 

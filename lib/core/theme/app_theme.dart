@@ -116,7 +116,7 @@ class AppTheme {
       shadowColor: shadowColor,
     ),
     bottomSheetTheme: const CustomBottomSheetTheme(),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: cardColor,
       elevation: elevationSmall,
       shadowColor: shadowColor,
@@ -159,7 +159,7 @@ class AppTheme {
       elevation: elevationSmall,
       shadowColor: shadowColor,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: const Color(0xFF424242),
       elevation: elevationSmall,
       shadowColor: shadowColor,

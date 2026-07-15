@@ -25,7 +25,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace = "com.Dictionary"
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -37,7 +37,7 @@ android {
         applicationId = "com.Dictionary"
 
         minSdkVersion 26
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
     }

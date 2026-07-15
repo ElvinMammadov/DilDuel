@@ -130,7 +130,7 @@ class _PillSearchBar extends StatelessWidget {
     final Color chipBg = isDark ? const Color(0x14FFFFFF) : AppTheme.chipBgLight;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      margin: EdgeInsets.zero,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: surface,

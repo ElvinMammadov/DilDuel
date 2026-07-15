@@ -15,6 +15,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  EasyLocalization.logger.enableBuildModes = [];
   await EasyLocalization.ensureInitialized();
   await configureDependencies(env: Environment.dev);
   await DBHelper.initDB();

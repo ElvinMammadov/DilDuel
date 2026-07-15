@@ -15,6 +15,7 @@ import 'package:injectable/injectable.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  EasyLocalization.logger.enableBuildModes = [];
   await EasyLocalization.ensureInitialized();
   await configureDependencies(env: Environment.prod);
   await DBHelper.initDB();

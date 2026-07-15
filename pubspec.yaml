@@ -30,6 +30,7 @@ dependencies:
   package_info_plus: ^8.3.0
   shared_preferences: ^2.2.2
   easy_localization: ^3.0.7+1
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:

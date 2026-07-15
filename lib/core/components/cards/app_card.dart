@@ -25,7 +25,7 @@ class AppCard extends StatelessWidget {
       shape: shape ?? RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Dimensions.itemHeight8),
       ),
-      color: backgroundColor ?? AppTheme.cardColor,
+      color: backgroundColor ?? AppTheme.surfaceLight,
       borderOnForeground: true,
       child: Padding(
         padding: padding ?? const EdgeInsets.all(Dimensions.padding16),

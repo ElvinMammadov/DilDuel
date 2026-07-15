@@ -21,7 +21,7 @@ class AppElevatedButton extends StatelessWidget {
   });
 
   ButtonStyle _getButtonStyle() => ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor ?? AppTheme.buttonColor,
+        backgroundColor: backgroundColor ?? AppTheme.mainColor,
         foregroundColor: textColor ?? Colors.white,
         textStyle: const TextStyle(
           fontWeight: FontWeight.w600,

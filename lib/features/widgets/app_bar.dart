@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/state/app_state.dart';
-import 'package:flutter_dic/core/utils/dimensions.dart';
+import 'package:flutter_dic/core/theme/app_theme.dart';
 
 class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -21,72 +21,82 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final AppState appState = context.watch<AppCubit>().state;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final bool isAzDe = appState.dictionaryType == DictionaryType.azDe;
-    final String fromLang = isAzDe ? 'Az' : 'De';
-    final String toLang = isAzDe ? 'De' : 'Az';
+    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+
     return AppBar(
-      elevation: 0.5,
-      title: Text(title ?? ''),
+      elevation: 0,
+      titleSpacing: 0,
       leading: showBackButton
           ? IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                if (onBackPressed != null) {
-                  onBackPressed!();
-                } else {
-                  Navigator.pop(context);
-                }
-              },
+              icon: Icon(Icons.arrow_back, color: textPrimary),
+              onPressed: onBackPressed ?? () => Navigator.pop(context),
             )
           : null,
-      actions: <Widget>[
-        if (showProfileButton)
-          Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: Dimensions.padding8),
-                child: Card(
-                  elevation: Dimensions.itemHeight1,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(Dimensions.itemHeight8),
+      title: Padding(
+        padding: EdgeInsets.only(left: showBackButton ? 0 : 20),
+        child: Text(
+          showBackButton ? (title ?? '') : 'Dil Duel',
+          style: AppTheme.titleLarge(textPrimary),
+        ),
+      ),
+      actions: showProfileButton
+          ? <Widget>[
+              // Direction switcher pill
+              GestureDetector(
+                onTap: () => context.read<AppCubit>().toggleDictionaryType(),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: surface,
+                    border: Border.all(color: border),
+                    borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.padding8,
-                      vertical: Dimensions.padding4,
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        context.read<AppCubit>().toggleDictionaryType();
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Text(fromLang),
-                          const SizedBox(width: Dimensions.itemWidth4),
-                          Icon(
-                            Icons.compare_arrows,
-                            size: Dimensions.itemHeight24,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          const SizedBox(width: Dimensions.itemWidth4),
-                          Text(toLang),
-                        ],
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        'Az',
+                        style: AppTheme.bodyMedium(
+                          isAzDe ? textPrimary : textSecondary,
+                        ).copyWith(fontWeight: FontWeight.w700, fontSize: 13),
                       ),
-                    ),
+                      const SizedBox(width: 6),
+                      Icon(Icons.compare_arrows, size: 16, color: primary),
+                      const SizedBox(width: 6),
+                      Text(
+                        'De',
+                        style: AppTheme.bodyMedium(
+                          isAzDe ? textSecondary : textPrimary,
+                        ).copyWith(fontWeight: FontWeight.w700, fontSize: 13),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: Theme.of(context).colorScheme.primary,
+              const SizedBox(width: 8),
+              // Settings icon button
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/settings'),
+                child: Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: surface,
+                    border: Border.all(color: border),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.settings_outlined, size: 16, color: textSecondary),
                 ),
-                tooltip: 'Settings',
-                onPressed: () => Navigator.pushNamed(context, '/settings'),
               ),
-            ],
-          ),
-      ],
+              const SizedBox(width: 20),
+            ]
+          : null,
     );
   }
 

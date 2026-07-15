@@ -85,55 +85,119 @@ class _SearchSectionState extends State<SearchSection> {
           vertical: Dimensions.padding8,
           horizontal: Dimensions.padding16,
         ),
-        child: Column(
-          children: <Widget>[
-            SearchBar(
-              controller: _controller,
-              elevation:
-                  const WidgetStatePropertyAll<double?>(0.5),
-              padding: const WidgetStatePropertyAll<EdgeInsets>(
-                EdgeInsets.symmetric(horizontal: Dimensions.padding8),
-              ),
-              shape: const WidgetStatePropertyAll<OutlinedBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(AppSizes.mainBorderRadius),
-                  ),
-                ),
-              ),
-              leading: const Icon(Icons.search),
-              hintText: 'search.placeholder'.tr(),
-              trailing: isTyping
-                  ? <Widget>[
-                      IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          setState(() {
-                            _controller.clear();
-                            query = '';
-                          });
-                        },
-                      ),
-                    ]
-                  : <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          _isListening ? Icons.mic : Icons.mic_none,
-                          color: _isListening ? Colors.red : null,
-                        ),
-                        onPressed: () => _startListening(dictionaryName),
-                      ),
-                    ],
-              onChanged: (String text) {
-                setState(() {
-                  query = text;
-                });
-                context.read<SearchBloc>().search(text, dictionaryName);
-              },
-            ),
-          ],
+        child: _PillSearchBar(
+          controller: _controller,
+          isTyping: isTyping,
+          isListening: _isListening,
+          onChanged: (String text) {
+            setState(() => query = text);
+            context.read<SearchBloc>().search(text, dictionaryName);
+          },
+          onClear: () => setState(() {
+            _controller.clear();
+            query = '';
+          }),
+          onMic: () => _startListening(dictionaryName),
         ),
       );
     });
+  }
+}
+
+class _PillSearchBar extends StatelessWidget {
+  final SearchController controller;
+  final bool isTyping;
+  final bool isListening;
+  final ValueChanged<String> onChanged;
+  final VoidCallback onClear;
+  final VoidCallback onMic;
+
+  const _PillSearchBar({
+    required this.controller,
+    required this.isTyping,
+    required this.isListening,
+    required this.onChanged,
+    required this.onClear,
+    required this.onMic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color chipBg = isDark ? const Color(0x14FFFFFF) : AppTheme.chipBgLight;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: surface,
+        border: Border.all(color: border, width: 1.5),
+        borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
+        boxShadow: isDark
+            ? null
+            : <BoxShadow>[
+                BoxShadow(
+                  color: const Color(0x0A140A3C),
+                  blurRadius: 2,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+      ),
+      child: Row(
+        children: <Widget>[
+          Icon(Icons.search, size: 18, color: textSecondary),
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              onChanged: onChanged,
+              style: AppTheme.bodyLarge(
+                isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight,
+              ),
+              decoration: InputDecoration(
+                hintText: 'search.placeholder'.tr(),
+                hintStyle: AppTheme.bodyLarge(textSecondary),
+                border: InputBorder.none,
+                isDense: true,
+                contentPadding: EdgeInsets.zero,
+              ),
+            ),
+          ),
+          if (isTyping)
+            GestureDetector(
+              onTap: onClear,
+              child: Container(
+                width: 26,
+                height: 26,
+                decoration: BoxDecoration(color: chipBg, shape: BoxShape.circle),
+                child: Icon(Icons.close, size: 12, color: textSecondary),
+              ),
+            )
+          else
+            GestureDetector(
+              onTap: onMic,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: isListening
+                      ? (isDark ? const Color(0x33FF7A7D) : const Color(0xFFFFEAEA))
+                      : chipBg,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  isListening ? Icons.mic : Icons.mic_none,
+                  size: 15,
+                  color: isListening ? const Color(0xFFE5484D) : textSecondary,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }

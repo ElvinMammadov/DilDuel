@@ -5,16 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5b72a69-eaa0-46c0-ab09-4ecdf05fd290" name="Changes" comment="Created flutter project for dictionary new">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Flutter/AppFrameworkInfo.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/AppFrameworkInfo.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/theme/app_theme.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/theme/app_theme.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/home/home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/quiz/presentation/screens/quiz_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/quiz/presentation/screens/quiz_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/quiz/presentation/widgets/quiz/quiz_in_progress_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/quiz/presentation/widgets/quiz/quiz_in_progress_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/quiz/presentation/widgets/quiz/quiz_question.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/quiz/presentation/widgets/quiz/quiz_question.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/quiz/presentation/widgets/quiz/quiz_result_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/quiz/presentation/widgets/quiz/quiz_result_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/search/presentation/widgets/search_bottom_sheet_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/search/presentation/widgets/search_bottom_sheet_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/search/presentation/widgets/search_items.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/search/presentation/widgets/search_items.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/search/presentation/widgets/search_section.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/search/presentation/widgets/search_section.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/widgets/app_bar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/widgets/app_bar.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +66,9 @@
   <component name="GitRewordedCommitMessages">
     <option name="onto" value="cdcd16a1409806096fa54b62add8b894f0e8b850" />
   </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="0d091e2f-9f4e-45b1-913f-f6fcc0966d10" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -80,6 +87,7 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "dev",
     "io.flutter.project.isFirstOpen": "true",
     "io.flutter.reload.alreadyRun": "true",

@@ -8,7 +8,6 @@ import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/state/app_state.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
-import 'package:flutter_dic/core/utils/sizes.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:flutter_dic/features/search/domain/usecases/search_word.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';

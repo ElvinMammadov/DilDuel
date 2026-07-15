@@ -39,94 +39,101 @@ class _QuizQuestionState extends State<QuizQuestion> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              AppCard(
-                elevation: Dimensions.itemHeight2,
-                backgroundColor: AppTheme.mainColor.withAlpha(13),
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Dimensions.itemHeight8),
-                  side: BorderSide(
-                    color: AppTheme.mainColor.withAlpha(77),
-                    width: 1.5,
-                  ),
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final Color primaryTint = isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final Color success = isDark ? AppTheme.successColorDark : AppTheme.successColor;
+    final Color successTint = isDark ? AppTheme.successTintDark : AppTheme.successTint;
+    final Color error = isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
+    final Color errorTint = isDark ? AppTheme.errorTintDark : AppTheme.errorTint;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        // Question card
+        Container(
+          margin: const EdgeInsets.only(top: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 36),
+          decoration: BoxDecoration(
+            color: primaryTint,
+            border: Border.all(color: primary, width: 1.5),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            widget.word.question,
+            style: AppTheme.wordSource(textPrimary, size: 24),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const SizedBox(height: 20),
+        // Answer options
+        ...widget.word.options.map((String option) {
+          final bool isSelected = selectedAnswer == option;
+          final bool isCorrect = widget.word.correctAnswer == option;
+
+          Color bg = surface;
+          Color textColor = textPrimary;
+          Color borderColor = border;
+
+          if (showAnswer) {
+            if (isCorrect) {
+              bg = successTint;
+              textColor = success;
+              borderColor = success;
+            } else if (isSelected) {
+              bg = errorTint;
+              textColor = error;
+              borderColor = error;
+            } else {
+              textColor = textSecondary;
+            }
+          }
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: GestureDetector(
+              onTap: showAnswer ? null : () => _handleAnswer(option),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: bg,
+                  border: Border.all(color: borderColor, width: 1.5),
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(Dimensions.padding16),
-                  child: Text(
-                    widget.word.question,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineMedium
-                        ?.copyWith(
-                          color: AppTheme.textPrimaryLight,
-                          fontWeight: FontWeight.w600,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: Dimensions.padding20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    ...widget.word.options.map((String option) {
-                      final bool isSelected = selectedAnswer == option;
-                      final bool isCorrect =
-                          widget.word.correctAnswer == option;
-
-                      final Color buttonColor = showAnswer
-                          ? (isCorrect
-                              ? AppTheme.successColor.withAlpha(26)
-                              : (isSelected
-                                  ? AppTheme.errorColor.withAlpha(26)
-                                  : Colors.white))
-                          : Colors.white;
-
-                      final Color textColor = showAnswer
-                          ? (isCorrect
-                              ? AppTheme.successColor
-                              : (isSelected
-                                  ? AppTheme.errorColor
-                                  : AppTheme.textPrimaryLight))
-                          : AppTheme.textPrimaryLight;
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Dimensions.padding8,
-                        ),
-                        child: AppElevatedButton(
-                          text: option,
-                          backgroundColor: buttonColor,
-                          textColor: textColor,
-                          onPressed: showAnswer
-                              ? () {}
-                              : () => _handleAnswer(option),
-                        ),
-                      );
-                    }),
-                    if (showAnswer)
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: Dimensions.padding20),
-                        child: AppElevatedButton(
-                          text: 'quiz.next'.tr(),
-                          backgroundColor: AppTheme.mainColor,
-                          textColor: Colors.white,
-                          onPressed: _handleContinue,
-                        ),
-                      ),
-                  ],
+                child: Text(
+                  option,
+                  style: AppTheme.titleMedium(textColor).copyWith(fontSize: 16),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            ],
+            ),
+          );
+        }),
+        if (showAnswer) ...<Widget>[
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: _handleContinue,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              decoration: BoxDecoration(
+                color: primary,
+                borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
+              ),
+              child: Text(
+                'quiz.next'.tr(),
+                style: AppTheme.titleMedium(Colors.white).copyWith(fontSize: 15),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ],
-      );
+      ],
+    );
+  }
 }

@@ -31,7 +31,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
+
+    final bool isDark = theme.brightness == Brightness.dark;
+    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final Color error = isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
+    final Color errorTint = isDark ? AppTheme.errorTintDark : AppTheme.errorTint;
 
     return Scaffold(
       appBar: DilDuelAppBar(
@@ -40,134 +48,256 @@ class _SettingsScreenState extends State<SettingsScreen> {
         showProfileButton: false,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(Dimensions.padding16),
+        padding: const EdgeInsets.fromLTRB(18, 16, 18, 30),
         children: <Widget>[
-          // Profile Card
-          Card(
+          // Profile card
+          _SettingsCard(
+            border: border,
+            surface: surface,
             child: Padding(
-              padding: const EdgeInsets.all(Dimensions.padding16),
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
               child: Column(
                 children: <Widget>[
-                  const CircleAvatar(
-                    radius: Dimensions.itemHeight40,
-                    backgroundColor: AppTheme.mainColor,
-                    child: Icon(
-                      Icons.person,
-                      size: Dimensions.itemHeight32,
-                      color: Colors.white,
+                  CircleAvatar(
+                    radius: 36,
+                    backgroundColor: primary,
+                    child: const Icon(Icons.person, size: 28, color: Colors.white),
+                  ),
+                  const SizedBox(height: 10),
+                  Text('settings.profile.name'.tr(), style: AppTheme.titleMedium(textPrimary).copyWith(fontSize: 17)),
+                  const SizedBox(height: 2),
+                  Text('settings.profile.email'.tr(), style: AppTheme.bodyMedium(textSecondary).copyWith(fontSize: 13)),
+                  const SizedBox(height: 14),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: primary,
+                        borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
+                      ),
+                      child: Text('settings.profile.edit'.tr(), style: AppTheme.bodyMedium(Colors.white).copyWith(fontWeight: FontWeight.w700, fontSize: 13)),
                     ),
-                  ),
-                  const SizedBox(height: Dimensions.itemHeight16),
-                  Text(
-                    'settings.profile.name'.tr(),
-                    style: theme.textTheme.titleLarge,
-                  ),
-                  Text(
-                    'settings.profile.email'.tr(),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.6),
-                    ),
-                  ),
-                  const SizedBox(height: Dimensions.itemHeight16),
-                  AppElevatedButton(
-                    text: 'settings.profile.edit'.tr(),
-                    onPressed: () {
-                      // TODO: Implement edit profile
-                    },
                   ),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: Dimensions.itemHeight16),
+          const SizedBox(height: 14),
 
-          // Language Card
-          Card(
-            child: ListTile(
-              leading: const Icon(Icons.language, color: AppTheme.mainColor),
-              title: Text('settings.language'.tr()),
-              subtitle: Text(context.locale.languageCode == 'az'
-                  ? 'Azerbaijani'
-                  : 'German'),
-              trailing: const Icon(Icons.chevron_right),
+          // Language
+          _SettingsCard(
+            border: border,
+            surface: surface,
+            child: _SettingsRow(
+              icon: Icons.language_outlined,
+              iconColor: primary,
+              title: 'settings.language'.tr(),
+              subtitle: context.locale.languageCode == 'az' ? 'Azərbaycan dili' : 'German',
+              textPrimary: textPrimary,
+              textSecondary: textSecondary,
               onTap: _showLanguageBottomSheet,
             ),
           ),
-          const SizedBox(height: Dimensions.itemHeight8),
+          const SizedBox(height: 8),
 
-          // Theme Card
-          const ThemeCard(),
-          const SizedBox(height: Dimensions.itemHeight8),
+          // Theme
+          _SettingsCard(
+            border: border,
+            surface: surface,
+            child: const ThemeCard(),
+          ),
+          const SizedBox(height: 8),
 
-          // FAQ Card
-          Card(
+          // FAQ
+          _SettingsCard(
+            border: border,
+            surface: surface,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ListTile(
-                  leading: const Icon(
-                    Icons.help_outline,
-                    color: AppTheme.mainColor,
-                  ),
-                  title: Text('settings.faq.title'.tr()),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    // TODO: Implement FAQ screen navigation
-                  },
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+                  child: Text('settings.faq.title'.tr(), style: AppTheme.titleMedium(textPrimary)),
                 ),
-                const Divider(),
-                ListTile(
-                  title: Text('settings.faq.dictionary_usage'.tr()),
-                  trailing: const Icon(Icons.expand_more),
-                  onTap: () {
-                    // TODO: Implement FAQ item expansion
-                  },
+                Divider(height: 1, color: border),
+                _FaqItem(
+                  question: 'settings.faq.dictionary_usage'.tr(),
+                  answer: 'Axtar bölməsində sözü yazın və ya mikrofon düyməsi ilə səsli axtarış edin.',
+                  textPrimary: textPrimary,
+                  textSecondary: textSecondary,
+                  border: border,
+                  showDivider: true,
                 ),
-                ListTile(
-                  title: Text('settings.faq.quiz_usage'.tr()),
-                  trailing: const Icon(Icons.expand_more),
-                  onTap: () {
-                    // TODO: Implement FAQ item expansion
-                  },
+                _FaqItem(
+                  question: 'settings.faq.quiz_usage'.tr(),
+                  answer: 'Hər testdə 10 sual olur. Düzgün cavabları seçərək xalınızı artırın.',
+                  textPrimary: textPrimary,
+                  textSecondary: textSecondary,
+                  border: border,
+                  showDivider: false,
                 ),
               ],
             ),
           ),
-          const SizedBox(height: Dimensions.itemHeight8),
+          const SizedBox(height: 8),
 
-          // About Card
-          Card(
+          // About
+          _SettingsCard(
+            border: border,
+            surface: surface,
             child: FutureBuilder<PackageInfo>(
               future: _packageInfo,
-              builder:
-                  (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
-                final String version =
-                    snapshot.hasData ? snapshot.data!.version : '...';
-                return ListTile(
-                  leading:
-                      const Icon(Icons.info_outline, color: AppTheme.mainColor),
-                  title: Text('settings.about'.tr()),
-                  subtitle:
-                      Text('settings.version'.tr(args: <String>[version])),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    // TODO: Implement about screen navigation
-                  },
+              builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+                final String version = snapshot.hasData ? snapshot.data!.version : '...';
+                return _SettingsRow(
+                  icon: Icons.info_outline,
+                  iconColor: primary,
+                  title: 'settings.about'.tr(),
+                  subtitle: 'settings.version'.tr(args: <String>[version]),
+                  textPrimary: textPrimary,
+                  textSecondary: textSecondary,
+                  onTap: () {},
                 );
               },
             ),
           ),
-          const SizedBox(height: Dimensions.itemHeight24),
+          const SizedBox(height: 14),
 
-          // Logout Button
-          AppElevatedButton(
-            text: 'settings.logout'.tr(),
-            backgroundColor: AppTheme.errorColor,
-            onPressed: () {
-              // TODO: Implement logout functionality
-            },
+          // Logout
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              decoration: BoxDecoration(
+                color: errorTint,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Text(
+                'settings.logout'.tr(),
+                style: AppTheme.titleMedium(error).copyWith(fontSize: 15),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ],
       ),
     );
   }
+}
+
+class _SettingsCard extends StatelessWidget {
+  final Widget child;
+  final Color border;
+  final Color surface;
+
+  const _SettingsCard({required this.child, required this.border, required this.surface});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        decoration: BoxDecoration(
+          color: surface,
+          border: Border.all(color: border),
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: child,
+      );
+}
+
+class _SettingsRow extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String subtitle;
+  final Color textPrimary;
+  final Color textSecondary;
+  final VoidCallback? onTap;
+
+  const _SettingsRow({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.subtitle,
+    required this.textPrimary,
+    required this.textSecondary,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) => InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: <Widget>[
+              Icon(icon, size: 20, color: iconColor),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(title, style: AppTheme.titleMedium(textPrimary).copyWith(fontSize: 15)),
+                    Text(subtitle, style: AppTheme.bodyMedium(textSecondary).copyWith(fontSize: 13)),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right, size: 16, color: textSecondary.withValues(alpha: 0.4)),
+            ],
+          ),
+        ),
+      );
+}
+
+class _FaqItem extends StatefulWidget {
+  final String question;
+  final String answer;
+  final Color textPrimary;
+  final Color textSecondary;
+  final Color border;
+  final bool showDivider;
+
+  const _FaqItem({
+    required this.question,
+    required this.answer,
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.border,
+    required this.showDivider,
+  });
+
+  @override
+  State<_FaqItem> createState() => _FaqItemState();
+}
+
+class _FaqItemState extends State<_FaqItem> {
+  bool _open = false;
+
+  @override
+  Widget build(BuildContext context) => Column(
+        children: <Widget>[
+          InkWell(
+            onTap: () => setState(() => _open = !_open),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Row(
+                children: <Widget>[
+                  Expanded(child: Text(widget.question, style: AppTheme.bodyLarge(widget.textPrimary).copyWith(fontSize: 14))),
+                  AnimatedRotation(
+                    duration: const Duration(milliseconds: 200),
+                    turns: _open ? 0.5 : 0,
+                    child: Icon(Icons.keyboard_arrow_down, size: 18, color: widget.textSecondary),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_open)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+              child: Text(widget.answer, style: AppTheme.bodyMedium(widget.textSecondary).copyWith(height: 1.5, fontSize: 13)),
+            ),
+          if (widget.showDivider) Divider(height: 1, color: widget.border),
+        ],
+      );
 }

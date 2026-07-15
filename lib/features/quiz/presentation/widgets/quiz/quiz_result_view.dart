@@ -12,60 +12,73 @@ class QuizResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final Color primaryTint = isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+
     final int correctAnswers = state.score;
     final int totalQuestions = state.totalQuestions;
     final double percentage = (correctAnswers / totalQuestions) * 100;
 
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            _getEmojiForScore(percentage),
-            style: const TextStyle(fontSize: 64),
-          ),
-          const SizedBox(height: Dimensions.padding16),
-          Text(
-            'quiz.score'.tr(args: <String>['$correctAnswers/$totalQuestions']),
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: _getColorForScore(percentage),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: Dimensions.padding20),
-            child: Text(
-              _getMessageForScore(percentage),
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: AppTheme.textSecondaryLight,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // Score circle
+            Container(
+              width: 88,
+              height: 88,
+              decoration: BoxDecoration(color: primaryTint, shape: BoxShape.circle),
+              child: Center(
+                child: Text(
+                  '$correctAnswers/$totalQuestions',
+                  style: AppTheme.titleLarge(primary).copyWith(fontSize: 22),
+                ),
               ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              _getTitleForScore(percentage),
+              style: AppTheme.titleLarge(textPrimary).copyWith(fontSize: 20),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              _getMessageForScore(percentage),
+              style: AppTheme.bodyMedium(textSecondary),
               textAlign: TextAlign.center,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: Dimensions.padding40),
-            child: AppElevatedButton(
-              text: 'quiz.try_again'.tr(),
-              onPressed: onTryAgain,
+            const SizedBox(height: 28),
+            GestureDetector(
+              onTap: onTryAgain,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 26),
+                decoration: BoxDecoration(
+                  color: primary,
+                  borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
+                ),
+                child: Text(
+                  'quiz.try_again'.tr(),
+                  style: AppTheme.titleMedium(Colors.white).copyWith(fontSize: 14),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  String _getEmojiForScore(double percentage) {
-    if (percentage >= 90) return '🏆';
-    if (percentage >= 70) return '🌟';
-    if (percentage >= 50) return '👍';
-    return '💪';
+  String _getTitleForScore(double percentage) {
+    if (percentage >= 90) return 'Təbriklər!';
+    if (percentage >= 70) return 'Əla nəticə!';
+    if (percentage >= 50) return 'Yaxşı cəhd!';
+    return 'Davam edin!';
   }
 
-  Color _getColorForScore(double percentage) {
-    if (percentage >= 90) return AppTheme.successColor;
-    if (percentage >= 70) return AppTheme.successColor.withAlpha(204);
-    if (percentage >= 50) return AppTheme.warningColor;
-    return AppTheme.errorColor;
-  }
 
   String _getMessageForScore(double percentage) {
     if (percentage >= 90) {

@@ -74,28 +74,80 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(Dimensions.padding16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            WordRow(
-              text: widget.searchWord.key,
-              isGerman: !_isAzDe,
-              isKey: true,
-              onSpeak: !_isAzDe ? () => _speak(widget.searchWord.key) : null,
-              onBookmark: _toggleBookmark,
-              isBookmarked: _isBookmarked,
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final Color primaryTint = isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      padding: const EdgeInsets.fromLTRB(24, 10, 24, 44),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // Drag handle
+          Center(
+            child: Container(
+              width: 36,
+              height: 5,
+              margin: const EdgeInsets.only(bottom: 14),
+              decoration: BoxDecoration(
+                color: border,
+                borderRadius: BorderRadius.circular(100),
+              ),
             ),
-            const SizedBox(height: Dimensions.itemHeight16),
-            WordRow(
-              text: widget.searchWord.value,
-              isGerman: _isAzDe,
-              isKey: false,
-              onSpeak: _isAzDe ? () => _speak(widget.searchWord.value) : null,
-            ),
-          ],
-        ),
-      );
+          ),
+          // Word + TTS + bookmark row
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  widget.searchWord.key,
+                  style: AppTheme.wordSource(textPrimary, size: 28),
+                ),
+              ),
+              const SizedBox(width: 12),
+              // TTS button
+              GestureDetector(
+                onTap: !_isAzDe ? () => _speak(widget.searchWord.key) : null,
+                child: Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(color: primaryTint, shape: BoxShape.circle),
+                  child: Icon(Icons.volume_up_outlined, size: 19, color: primary),
+                ),
+              ),
+              const SizedBox(width: 8),
+              // Bookmark button
+              GestureDetector(
+                onTap: _toggleBookmark,
+                child: Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(color: primaryTint, shape: BoxShape.circle),
+                  child: Icon(
+                    _isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
+                    size: 19,
+                    color: primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          // Translation
+          Text(widget.searchWord.value, style: AppTheme.bodyLarge(textSecondary).copyWith(fontSize: 19)),
+        ],
+      ),
+    );
+  }
 }

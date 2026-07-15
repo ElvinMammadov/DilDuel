@@ -54,11 +54,11 @@ class _SearchSectionState extends State<SearchSection> {
             });
             context.read<SearchBloc>().search(query, dictionaryName);
           },
-          localeId: locale,
           listenOptions: SpeechListenOptions(
             cancelOnError: true,
             partialResults: true,
             listenMode: ListenMode.confirmation,
+            localeId: locale,
           ),
         );
       } catch (e) {

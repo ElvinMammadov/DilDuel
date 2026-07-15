@@ -65,7 +65,14 @@
   "search": {
     "placeholder": "Söz axtar...",
     "no_results": "Nəticə tapılmadı",
-    "error": "Xəta baş verdi"
+    "empty": {
+      "title": "Söz axtarmağa başlayın",
+      "description": "Tərcümə etmək istədiyiniz sözü yazın və ya mikrofon düyməsinə basın"
+    },
+    "error": {
+      "title": "Axtarış alınmadı",
+      "description": "İnternet bağlantınızı yoxlayıb yenidən cəhd edin"
+    }
   },
   "bookmarks": {
     "empty": "Seçilmiş sözlər yoxdur",

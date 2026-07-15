@@ -65,7 +65,14 @@
   "search": {
     "placeholder": "Wort suchen...",
     "no_results": "Keine Ergebnisse gefunden",
-    "error": "Ein Fehler ist aufgetreten"
+    "empty": {
+      "title": "Suche beginnen",
+      "description": "Geben Sie ein Wort ein oder tippen Sie auf das Mikrofon"
+    },
+    "error": {
+      "title": "Suche fehlgeschlagen",
+      "description": "Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut"
+    }
   },
   "bookmarks": {
     "empty": "Keine Lesezeichen",

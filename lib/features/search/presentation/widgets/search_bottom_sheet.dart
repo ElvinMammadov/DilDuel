@@ -3,13 +3,15 @@ part of search;
 void showSearchBottomSheet(
   BuildContext context,
   Word searchWord,
-  String locale,
-) {
+  String locale, {
+  VoidCallback? onBookmarkToggled,
+}) {
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) => _SearchBottomSheetScreen(
       searchWord: searchWord,
       locale: locale,
+      onBookmarkToggled: onBookmarkToggled,
     ),
     useSafeArea: true,
     isScrollControlled: true,

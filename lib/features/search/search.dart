@@ -11,6 +11,7 @@ import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:flutter_dic/features/search/domain/usecases/search_word.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
+import 'package:flutter_dic/features/bookmarks/bookmarks.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';

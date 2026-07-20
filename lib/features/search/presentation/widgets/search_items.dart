@@ -51,6 +51,8 @@ class SearchItems extends StatelessWidget {
                         appState.dictionaryType == DictionaryType.azDe
                             ? 'az-AZ'
                             : 'de-DE',
+                        onBookmarkToggled: () =>
+                            context.read<BookmarksBloc>().loadBookmarks(),
                       ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(

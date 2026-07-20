@@ -3,10 +3,12 @@ part of search;
 class _SearchBottomSheetScreen extends StatefulWidget {
   final Word searchWord;
   final String locale;
+  final VoidCallback? onBookmarkToggled;
 
   const _SearchBottomSheetScreen({
     required this.searchWord,
     this.locale = 'de-DE',
+    this.onBookmarkToggled,
   });
 
   @override
@@ -55,6 +57,7 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
         setState(() {
           _isBookmarked = !_isBookmarked;
         });
+        widget.onBookmarkToggled?.call();
       }
     } catch (e) {
       if (mounted) {

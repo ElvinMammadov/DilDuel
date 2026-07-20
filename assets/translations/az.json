@@ -16,11 +16,14 @@
     "system": "Sistem",
     "about": "Haqqında",
     "version": "Versiya {}",
+    "sign_in": "Daxil ol",
     "profile": {
       "title": "Profil",
       "edit": "Profili düzəlt",
       "name": "Elvin Mammadov",
-      "email": "elvin@example.com"
+      "email": "elvin@example.com",
+      "guest": "Qonaq",
+      "guest_hint": "Profil məlumatlarına giriş üçün daxil olun"
     },
     "faq": {
       "title": "Tez-tez soruşulan suallar",
@@ -93,4 +96,4 @@
     "yes": "Bəli",
     "no": "Xeyr"
   }
-} 
+}

@@ -111,7 +111,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
                 decoration: BoxDecoration(
                   color: bg,
                   border: Border.all(color: borderColor, width: 1.5),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(AppTheme.borderRadius),
                 ),
                 child: Text(
                   option,

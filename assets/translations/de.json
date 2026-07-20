@@ -16,11 +16,14 @@
     "system": "System",
     "about": "Über",
     "version": "Version {0}",
+    "sign_in": "Anmelden",
     "profile": {
       "title": "Profil",
       "edit": "Profil bearbeiten",
       "name": "Elvin Mammadov",
-      "email": "elvin@example.com"
+      "email": "elvin@example.com",
+      "guest": "Gast",
+      "guest_hint": "Melden Sie sich an, um auf Ihre Profildaten zuzugreifen"
     },
     "faq": {
       "title": "Häufig gestellte Fragen",
@@ -93,4 +96,4 @@
     "yes": "Ja",
     "no": "Nein"
   }
-} 
+}

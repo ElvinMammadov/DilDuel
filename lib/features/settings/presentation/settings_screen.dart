@@ -10,6 +10,9 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   late Future<PackageInfo> _packageInfo;
 
+  // TODO: replace with real auth state once sign-in is implemented
+  static const bool _isSignedIn = false;
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +37,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     final bool isDark = theme.brightness == Brightness.dark;
     final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final Color primaryTint =
+        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
     final Color textPrimary =
         isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
     final Color textSecondary =
@@ -63,18 +68,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: <Widget>[
                   CircleAvatar(
                     radius: 36,
-                    backgroundColor: primary,
-                    child:
-                        const Icon(Icons.person, size: 28, color: Colors.white),
+                    backgroundColor: _isSignedIn ? primary : primaryTint,
+                    child: Icon(
+                      Icons.person,
+                      size: 28,
+                      color: _isSignedIn ? Colors.white : primary,
+                    ),
                   ),
                   const SizedBox(height: 10),
-                  Text('settings.profile.name'.tr(),
+                  if (_isSignedIn) ...<Widget>[
+                    Text(
+                      'settings.profile.name'.tr(),
                       style: AppTheme.titleMedium(textPrimary)
-                          .copyWith(fontSize: 17)),
-                  const SizedBox(height: 2),
-                  Text('settings.profile.email'.tr(),
+                          .copyWith(fontSize: 17),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'settings.profile.email'.tr(),
                       style: AppTheme.bodyMedium(textSecondary)
-                          .copyWith(fontSize: 13)),
+                          .copyWith(fontSize: 13),
+                    ),
+                  ] else ...<Widget>[
+                    Text(
+                      'settings.profile.guest'.tr(),
+                      style: AppTheme.titleMedium(textPrimary)
+                          .copyWith(fontSize: 17),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'settings.profile.guest_hint'.tr(),
+                      style: AppTheme.bodyMedium(textSecondary)
+                          .copyWith(fontSize: 13),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                   const SizedBox(height: 14),
                   GestureDetector(
                     onTap: () {},
@@ -86,9 +113,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         borderRadius:
                             BorderRadius.circular(AppTheme.borderRadiusPill),
                       ),
-                      child: Text('settings.profile.edit'.tr(),
-                          style: AppTheme.bodyMedium(Colors.white).copyWith(
-                              fontWeight: FontWeight.w700, fontSize: 13)),
+                      child: Text(
+                        _isSignedIn
+                            ? 'settings.profile.edit'.tr()
+                            : 'settings.sign_in'.tr(),
+                        style: AppTheme.bodyMedium(Colors.white).copyWith(
+                            fontWeight: FontWeight.w700, fontSize: 13),
+                      ),
                     ),
                   ),
                 ],
@@ -176,29 +207,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   subtitle: 'settings.version'.tr(args: <String>[version]),
                   textPrimary: textPrimary,
                   textSecondary: textSecondary,
+                  showChevron: false,
                   onTap: () {},
                 );
               },
             ),
           ),
-          const SizedBox(height: 14),
 
-          // Logout
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              decoration: BoxDecoration(
-                color: errorTint,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Text(
-                'settings.logout'.tr(),
-                style: AppTheme.titleMedium(error).copyWith(fontSize: 15),
-                textAlign: TextAlign.center,
+          // Logout — only shown when signed in
+          if (_isSignedIn) ...<Widget>[
+            const SizedBox(height: 14),
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                decoration: BoxDecoration(
+                  color: errorTint,
+                  borderRadius: BorderRadius.circular(AppTheme.borderRadius),
+                ),
+                child: Text(
+                  'settings.logout'.tr(),
+                  style: AppTheme.titleMedium(error).copyWith(fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-          ),
+          ],
         ],
       ),
     );
@@ -225,22 +259,24 @@ class _SettingsCard extends StatelessWidget {
 }
 
 class _SettingsRow extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
+  final IconData? icon;
+  final Color? iconColor;
   final String title;
   final String subtitle;
   final Color textPrimary;
   final Color textSecondary;
   final VoidCallback? onTap;
+  final bool showChevron;
 
   const _SettingsRow({
-    required this.icon,
-    required this.iconColor,
+    this.icon,
+    this.iconColor,
     required this.title,
     required this.subtitle,
     required this.textPrimary,
     required this.textSecondary,
     this.onTap,
+    this.showChevron = true,
   });
 
   @override
@@ -251,8 +287,10 @@ class _SettingsRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: <Widget>[
-              Icon(icon, size: 20, color: iconColor),
-              const SizedBox(width: 12),
+              if (icon != null) ...<Widget>[
+                Icon(icon, size: 20, color: iconColor),
+                const SizedBox(width: 12),
+              ],
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,8 +304,9 @@ class _SettingsRow extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right,
-                  size: 16, color: textSecondary.withValues(alpha: 0.4)),
+              if (showChevron)
+                Icon(Icons.chevron_right,
+                    size: 16, color: textSecondary.withValues(alpha: 0.4)),
             ],
           ),
         ),

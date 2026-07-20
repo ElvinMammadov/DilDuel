@@ -64,7 +64,11 @@
       "excellent": "Əla! Siz söz ehtiyatı ustasısınız!",
       "great": "Əla iş! Davam edin!",
       "good": "Yaxşı səy! Təcrübə mükəmməlləşdirir!",
-      "keep_trying": "Təcrübə etməyə davam edin! Təkmilləşəcəksiniz!"
+      "keep_trying": "Təcrübə etməyə davam edin! Təkmilləşəcəksiniz!",
+      "title_excellent": "Təbriklər!",
+      "title_great": "Əla nəticə!",
+      "title_good": "Yaxşı cəhd!",
+      "title_keep_trying": "Davam edin!"
     }
   },
   "search": {

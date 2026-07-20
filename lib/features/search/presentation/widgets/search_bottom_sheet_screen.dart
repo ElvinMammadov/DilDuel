@@ -32,13 +32,11 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
   }
 
   Future<void> _checkIfBookmarked() async {
-    if (context.mounted) {
-      final bool isBookmarked = await DBHelper.isBookmarked(widget.searchWord);
-      if (mounted) {
-        setState(() {
-          _isBookmarked = isBookmarked;
-        });
-      }
+    final bool isBookmarked = await DBHelper.isBookmarked(widget.searchWord);
+    if (mounted) {
+      setState(() {
+        _isBookmarked = isBookmarked;
+      });
     }
   }
 

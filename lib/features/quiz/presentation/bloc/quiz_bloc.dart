@@ -34,7 +34,7 @@ class QuizBloc extends Cubit<QuizState> {
   /// [answer] is the selected option
   ///
   /// Updates the score and moves to the next question or completes the quiz
-  void answerQuestion(String answer) {
+  Future<void> answerQuestion(String answer) async {
     if (state is! QuizInProgress) return;
 
     final QuizInProgress currentState = state as QuizInProgress;
@@ -52,7 +52,7 @@ class QuizBloc extends Cubit<QuizState> {
         totalQuestions: currentState.words.length,
         dateTime: DateTime.now(),
       );
-      DBHelper.insertQuizResult(result);
+      await DBHelper.insertQuizResult(result);
 
       emit(QuizComplete(
         totalQuestions: currentState.words.length,

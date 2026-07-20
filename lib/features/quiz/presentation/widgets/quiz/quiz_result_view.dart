@@ -80,10 +80,10 @@ class QuizResultView extends StatelessWidget {
   }
 
   String _getTitleForScore(double percentage) {
-    if (percentage >= 90) return 'Təbriklər!';
-    if (percentage >= 70) return 'Əla nəticə!';
-    if (percentage >= 50) return 'Yaxşı cəhd!';
-    return 'Davam edin!';
+    if (percentage >= 90) return 'quiz.results.title_excellent'.tr();
+    if (percentage >= 70) return 'quiz.results.title_great'.tr();
+    if (percentage >= 50) return 'quiz.results.title_good'.tr();
+    return 'quiz.results.title_keep_trying'.tr();
   }
 
   String _getMessageForScore(double percentage) {

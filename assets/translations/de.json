@@ -64,7 +64,11 @@
       "excellent": "Ausgezeichnet! Sie sind ein Vokabelmeister!",
       "great": "Großartige Arbeit! Weiter so!",
       "good": "Guter Versuch! Übung macht den Meister!",
-      "keep_trying": "Weiter üben! Sie werden sich verbessern!"
+      "keep_trying": "Weiter üben! Sie werden sich verbessern!",
+      "title_excellent": "Herzlichen Glückwunsch!",
+      "title_great": "Hervorragendes Ergebnis!",
+      "title_good": "Guter Versuch!",
+      "title_keep_trying": "Weiter so!"
     }
   },
   "search": {

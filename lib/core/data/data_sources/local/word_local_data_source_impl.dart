@@ -66,7 +66,10 @@ class DBHelper implements WordLocalDataSource {
     );
   }
 
-  static String getTableName(int dicType) => dicType == 321 ? deAz : azDe;
+  static const int _deAzTypeValue = 321; // matches DictionaryType.deAz.value
+
+  static String getTableName(int dicType) =>
+      dicType == _deAzTypeValue ? deAz : azDe;
 
   static Future<List<String>> getWords(int dicType) async {
     final String tableName = getTableName(dicType);

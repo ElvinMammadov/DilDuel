@@ -7,4 +7,4 @@ class QuizLoadingView extends StatelessWidget {
   Widget build(BuildContext context) => const Center(
         child: CircularProgressIndicator(),
       );
-} 
+}

@@ -12,4 +12,4 @@ import 'package:injectable/injectable.dart';
 
 part 'presentation/screens/bookmarks_screen.dart';
 part 'presentation/bloc/bookmarks_bloc.dart';
-part 'presentation/bloc/bookmarks_state.dart'; 
+part 'presentation/bloc/bookmarks_state.dart';

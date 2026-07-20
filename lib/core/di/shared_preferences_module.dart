@@ -6,4 +6,4 @@ abstract class SharedPreferencesModule {
   @singleton
   @preResolve
   Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
-} 
+}

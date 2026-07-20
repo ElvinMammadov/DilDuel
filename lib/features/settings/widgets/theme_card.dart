@@ -25,7 +25,7 @@ class ThemeCard extends StatelessWidget {
               themeText = 'System';
               break;
           }
-          
+
           return Card(
             child: ListTile(
               leading: const Icon(Icons.palette, color: AppTheme.mainColor),
@@ -37,4 +37,4 @@ class ThemeCard extends StatelessWidget {
           );
         },
       );
-} 
+}

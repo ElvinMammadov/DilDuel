@@ -52,6 +52,8 @@
       "history": "Test Tarixçəsi",
       "statistics": "Test Statistikası",
       "stats_details": "Ümumi Test: {}\nOrta Xal: {}%",
+      "total_quizzes_label": "Ümumi Test",
+      "average_score_label": "Orta Xal",
       "score_details": "Xal: {}/{} ({}%)",
       "quiz_number": "Test #{}",
       "loading": "Statistika yüklənir...",

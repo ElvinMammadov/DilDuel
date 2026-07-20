@@ -22,4 +22,4 @@ mixin DatabaseModel {
 
   /// The primary key column name
   String get primaryKey => 'id';
-} 
+}

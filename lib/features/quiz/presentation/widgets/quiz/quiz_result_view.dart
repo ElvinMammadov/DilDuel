@@ -14,9 +14,12 @@ class QuizResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint = isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color primaryTint =
+        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+    final Color textPrimary =
+        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
 
     final int correctAnswers = state.score;
     final int totalQuestions = state.totalQuestions;
@@ -32,7 +35,8 @@ class QuizResultView extends StatelessWidget {
             Container(
               width: 88,
               height: 88,
-              decoration: BoxDecoration(color: primaryTint, shape: BoxShape.circle),
+              decoration:
+                  BoxDecoration(color: primaryTint, shape: BoxShape.circle),
               child: Center(
                 child: Text(
                   '$correctAnswers/$totalQuestions',
@@ -55,14 +59,17 @@ class QuizResultView extends StatelessWidget {
             GestureDetector(
               onTap: onTryAgain,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 26),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 26),
                 decoration: BoxDecoration(
                   color: primary,
-                  borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
+                  borderRadius:
+                      BorderRadius.circular(AppTheme.borderRadiusPill),
                 ),
                 child: Text(
                   'quiz.try_again'.tr(),
-                  style: AppTheme.titleMedium(Colors.white).copyWith(fontSize: 14),
+                  style:
+                      AppTheme.titleMedium(Colors.white).copyWith(fontSize: 14),
                 ),
               ),
             ),
@@ -79,7 +86,6 @@ class QuizResultView extends StatelessWidget {
     return 'Davam edin!';
   }
 
-
   String _getMessageForScore(double percentage) {
     if (percentage >= 90) {
       return 'quiz.results.excellent'.tr();
@@ -92,4 +98,4 @@ class QuizResultView extends StatelessWidget {
     }
     return 'quiz.results.keep_trying'.tr();
   }
-} 
+}

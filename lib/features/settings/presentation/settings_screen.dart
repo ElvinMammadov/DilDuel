@@ -34,12 +34,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     final bool isDark = theme.brightness == Brightness.dark;
     final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color textPrimary =
+        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
     final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
     final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
     final Color error = isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
-    final Color errorTint = isDark ? AppTheme.errorTintDark : AppTheme.errorTint;
+    final Color errorTint =
+        isDark ? AppTheme.errorTintDark : AppTheme.errorTint;
 
     return Scaffold(
       appBar: DilDuelAppBar(
@@ -61,22 +64,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   CircleAvatar(
                     radius: 36,
                     backgroundColor: primary,
-                    child: const Icon(Icons.person, size: 28, color: Colors.white),
+                    child:
+                        const Icon(Icons.person, size: 28, color: Colors.white),
                   ),
                   const SizedBox(height: 10),
-                  Text('settings.profile.name'.tr(), style: AppTheme.titleMedium(textPrimary).copyWith(fontSize: 17)),
+                  Text('settings.profile.name'.tr(),
+                      style: AppTheme.titleMedium(textPrimary)
+                          .copyWith(fontSize: 17)),
                   const SizedBox(height: 2),
-                  Text('settings.profile.email'.tr(), style: AppTheme.bodyMedium(textSecondary).copyWith(fontSize: 13)),
+                  Text('settings.profile.email'.tr(),
+                      style: AppTheme.bodyMedium(textSecondary)
+                          .copyWith(fontSize: 13)),
                   const SizedBox(height: 14),
                   GestureDetector(
                     onTap: () {},
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 22, vertical: 10),
                       decoration: BoxDecoration(
                         color: primary,
-                        borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
+                        borderRadius:
+                            BorderRadius.circular(AppTheme.borderRadiusPill),
                       ),
-                      child: Text('settings.profile.edit'.tr(), style: AppTheme.bodyMedium(Colors.white).copyWith(fontWeight: FontWeight.w700, fontSize: 13)),
+                      child: Text('settings.profile.edit'.tr(),
+                          style: AppTheme.bodyMedium(Colors.white).copyWith(
+                              fontWeight: FontWeight.w700, fontSize: 13)),
                     ),
                   ),
                 ],
@@ -93,7 +105,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icons.language_outlined,
               iconColor: primary,
               title: 'settings.language'.tr(),
-              subtitle: context.locale.languageCode == 'az' ? 'Azərbaycan dili' : 'German',
+              subtitle: context.locale.languageCode == 'az'
+                  ? 'Azərbaycan dili'
+                  : 'German',
               textPrimary: textPrimary,
               textSecondary: textSecondary,
               onTap: _showLanguageBottomSheet,
@@ -118,12 +132,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-                  child: Text('settings.faq.title'.tr(), style: AppTheme.titleMedium(textPrimary)),
+                  child: Text('settings.faq.title'.tr(),
+                      style: AppTheme.titleMedium(textPrimary)),
                 ),
                 Divider(height: 1, color: border),
                 _FaqItem(
                   question: 'settings.faq.dictionary_usage'.tr(),
-                  answer: 'Axtar bölməsində sözü yazın və ya mikrofon düyməsi ilə səsli axtarış edin.',
+                  answer: 'Axtar bölməsində sözü yazın '
+                      'və ya mikrofon düyməsi ilə səsli axtarış edin.',
                   textPrimary: textPrimary,
                   textSecondary: textSecondary,
                   border: border,
@@ -131,7 +147,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 _FaqItem(
                   question: 'settings.faq.quiz_usage'.tr(),
-                  answer: 'Hər testdə 10 sual olur. Düzgün cavabları seçərək xalınızı artırın.',
+                  answer: 'Hər testdə 10 sual olur. '
+                      'Düzgün cavabları seçərək xalınızı artırın.',
                   textPrimary: textPrimary,
                   textSecondary: textSecondary,
                   border: border,
@@ -148,8 +165,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             surface: surface,
             child: FutureBuilder<PackageInfo>(
               future: _packageInfo,
-              builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
-                final String version = snapshot.hasData ? snapshot.data!.version : '...';
+              builder:
+                  (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+                final String version =
+                    snapshot.hasData ? snapshot.data!.version : '...';
                 return _SettingsRow(
                   icon: Icons.info_outline,
                   iconColor: primary,
@@ -191,7 +210,8 @@ class _SettingsCard extends StatelessWidget {
   final Color border;
   final Color surface;
 
-  const _SettingsCard({required this.child, required this.border, required this.surface});
+  const _SettingsCard(
+      {required this.child, required this.border, required this.surface});
 
   @override
   Widget build(BuildContext context) => Container(
@@ -237,12 +257,17 @@ class _SettingsRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(title, style: AppTheme.titleMedium(textPrimary).copyWith(fontSize: 15)),
-                    Text(subtitle, style: AppTheme.bodyMedium(textSecondary).copyWith(fontSize: 13)),
+                    Text(title,
+                        style: AppTheme.titleMedium(textPrimary)
+                            .copyWith(fontSize: 15)),
+                    Text(subtitle,
+                        style: AppTheme.bodyMedium(textSecondary)
+                            .copyWith(fontSize: 13)),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, size: 16, color: textSecondary.withValues(alpha: 0.4)),
+              Icon(Icons.chevron_right,
+                  size: 16, color: textSecondary.withValues(alpha: 0.4)),
             ],
           ),
         ),
@@ -282,11 +307,15 @@ class _FaqItemState extends State<_FaqItem> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               child: Row(
                 children: <Widget>[
-                  Expanded(child: Text(widget.question, style: AppTheme.bodyLarge(widget.textPrimary).copyWith(fontSize: 14))),
+                  Expanded(
+                      child: Text(widget.question,
+                          style: AppTheme.bodyLarge(widget.textPrimary)
+                              .copyWith(fontSize: 14))),
                   AnimatedRotation(
                     duration: const Duration(milliseconds: 200),
                     turns: _open ? 0.5 : 0,
-                    child: Icon(Icons.keyboard_arrow_down, size: 18, color: widget.textSecondary),
+                    child: Icon(Icons.keyboard_arrow_down,
+                        size: 18, color: widget.textSecondary),
                   ),
                 ],
               ),
@@ -295,7 +324,9 @@ class _FaqItemState extends State<_FaqItem> {
           if (_open)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
-              child: Text(widget.answer, style: AppTheme.bodyMedium(widget.textSecondary).copyWith(height: 1.5, fontSize: 13)),
+              child: Text(widget.answer,
+                  style: AppTheme.bodyMedium(widget.textSecondary)
+                      .copyWith(height: 1.5, fontSize: 13)),
             ),
           if (widget.showDivider) Divider(height: 1, color: widget.border),
         ],

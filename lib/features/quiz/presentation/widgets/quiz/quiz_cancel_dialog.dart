@@ -29,4 +29,4 @@ class QuizCancelDialog extends StatelessWidget {
           ),
         ],
       );
-} 
+}

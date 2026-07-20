@@ -12,16 +12,16 @@ class QuizResult {
   });
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-      'id': id,
-      'score': score,
-      'totalQuestions': totalQuestions,
-      'dateTime': dateTime.toIso8601String(),
-    };
+        'id': id,
+        'score': score,
+        'totalQuestions': totalQuestions,
+        'dateTime': dateTime.toIso8601String(),
+      };
 
   factory QuizResult.fromMap(Map<String, dynamic> map) => QuizResult(
-      id: map['id'] as int?,
-      score: map['score'] as int,
-      totalQuestions: map['totalQuestions'] as int,
-      dateTime: DateTime.parse(map['dateTime'] as String),
-    );
-} 
+        id: map['id'] as int?,
+        score: map['score'] as int,
+        totalQuestions: map['totalQuestions'] as int,
+        dateTime: DateTime.parse(map['dateTime'] as String),
+      );
+}

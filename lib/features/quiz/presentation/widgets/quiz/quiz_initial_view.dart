@@ -15,4 +15,4 @@ class QuizInitialView extends StatelessWidget {
           onPressed: onStart,
         ),
       );
-} 
+}

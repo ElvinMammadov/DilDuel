@@ -16,4 +16,4 @@ class BookmarksError extends BookmarksState {
   final String message;
 
   BookmarksError(this.message);
-} 
+}

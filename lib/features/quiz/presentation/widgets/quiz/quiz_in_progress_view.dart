@@ -36,7 +36,8 @@ class QuizInProgressView extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textPrimary =
+        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
     final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
     final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
     final Color error = isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
@@ -77,7 +78,8 @@ class QuizInProgressView extends StatelessWidget {
                           const SizedBox(width: 14),
                           GestureDetector(
                             onTap: () => _showRestartDialog(context),
-                            child: Icon(Icons.refresh, size: 18, color: primary),
+                            child:
+                                Icon(Icons.refresh, size: 18, color: primary),
                           ),
                           const SizedBox(width: 14),
                           GestureDetector(

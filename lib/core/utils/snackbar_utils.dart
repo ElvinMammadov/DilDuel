@@ -97,4 +97,4 @@ class SnackbarUtils {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-} 
+}

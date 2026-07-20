@@ -77,9 +77,12 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint = isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color primaryTint =
+        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+    final Color textPrimary =
+        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
     final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
     final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
 
@@ -122,8 +125,10 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
                 child: Container(
                   width: 46,
                   height: 46,
-                  decoration: BoxDecoration(color: primaryTint, shape: BoxShape.circle),
-                  child: Icon(Icons.volume_up_outlined, size: 19, color: primary),
+                  decoration:
+                      BoxDecoration(color: primaryTint, shape: BoxShape.circle),
+                  child:
+                      Icon(Icons.volume_up_outlined, size: 19, color: primary),
                 ),
               ),
               const SizedBox(width: 8),
@@ -133,7 +138,8 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
                 child: Container(
                   width: 46,
                   height: 46,
-                  decoration: BoxDecoration(color: primaryTint, shape: BoxShape.circle),
+                  decoration:
+                      BoxDecoration(color: primaryTint, shape: BoxShape.circle),
                   child: Icon(
                     _isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
                     size: 19,
@@ -145,7 +151,8 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
           ),
           const SizedBox(height: 10),
           // Translation
-          Text(widget.searchWord.value, style: AppTheme.bodyLarge(textSecondary).copyWith(fontSize: 19)),
+          Text(widget.searchWord.value,
+              style: AppTheme.bodyLarge(textSecondary).copyWith(fontSize: 19)),
         ],
       ),
     );

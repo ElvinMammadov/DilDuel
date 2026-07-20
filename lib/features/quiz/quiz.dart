@@ -15,7 +15,6 @@ import 'package:flutter_dic/features/quiz/domain/repositories/quiz_repository.da
 import 'package:injectable/injectable.dart';
 import 'package:dartz/dartz.dart' as dartz;
 
-
 // Bloc
 part 'presentation/bloc/quiz_bloc.dart';
 part 'presentation/bloc/quiz_state.dart';
@@ -30,10 +29,9 @@ part 'presentation/widgets/quiz/quiz_result_view.dart';
 part 'presentation/widgets/results/results_tab.dart';
 part 'presentation/widgets/quiz/quiz_loading_view.dart';
 
-
 // Dialogs
 part 'presentation/widgets/quiz/quiz_restart_dialog.dart';
 part 'presentation/widgets/quiz/quiz_cancel_dialog.dart';
 
 // Screens
-part 'presentation/screens/quiz_screen.dart'; 
+part 'presentation/screens/quiz_screen.dart';

@@ -13,13 +13,21 @@ class BookmarksScreen extends StatelessWidget {
 
           if (state is BookmarksLoaded) {
             final bool isDark = Theme.of(context).brightness == Brightness.dark;
-            final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-            final Color primaryTint = isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-            final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-            final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-            final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-            final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-            final Color error = isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
+            final Color primary =
+                isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+            final Color primaryTint =
+                isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+            final Color textPrimary =
+                isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+            final Color textSecondary = isDark
+                ? AppTheme.textSecondaryDark
+                : AppTheme.textSecondaryLight;
+            final Color surface =
+                isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+            final Color border =
+                isDark ? AppTheme.borderDark : AppTheme.borderLight;
+            final Color error =
+                isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
 
             if (state.bookmarks.isEmpty) {
               return Center(
@@ -31,11 +39,15 @@ class BookmarksScreen extends StatelessWidget {
                       Container(
                         width: 72,
                         height: 72,
-                        decoration: BoxDecoration(color: primaryTint, shape: BoxShape.circle),
-                        child: Icon(Icons.bookmark_outline, size: 30, color: primary),
+                        decoration: BoxDecoration(
+                            color: primaryTint, shape: BoxShape.circle),
+                        child: Icon(Icons.bookmark_outline,
+                            size: 30, color: primary),
                       ),
                       const SizedBox(height: 14),
-                      Text('bookmarks.empty'.tr(), style: AppTheme.titleMedium(textPrimary).copyWith(fontSize: 18)),
+                      Text('bookmarks.empty'.tr(),
+                          style: AppTheme.titleMedium(textPrimary)
+                              .copyWith(fontSize: 18)),
                       const SizedBox(height: 6),
                       Text(
                         'bookmarks.empty_description'.tr(),
@@ -73,11 +85,13 @@ class BookmarksScreen extends StatelessWidget {
                         context,
                         message: 'bookmarks.removed'.tr(),
                         actionLabel: 'bookmarks.undo'.tr(),
-                        onActionPressed: () => context.read<BookmarksBloc>().addBookmark(word),
+                        onActionPressed: () =>
+                            context.read<BookmarksBloc>().addBookmark(word),
                       );
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 14),
                       decoration: BoxDecoration(
                         color: surface,
                         border: Border.all(color: border),
@@ -89,23 +103,30 @@ class BookmarksScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(word.key, style: AppTheme.wordSource(textPrimary)),
+                                Text(word.key,
+                                    style: AppTheme.wordSource(textPrimary)),
                                 const SizedBox(height: 3),
-                                Text(word.value, style: AppTheme.bodyMedium(textSecondary)),
+                                Text(word.value,
+                                    style: AppTheme.bodyMedium(textSecondary)),
                               ],
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
-                              context.read<BookmarksBloc>().removeBookmark(word);
+                              context
+                                  .read<BookmarksBloc>()
+                                  .removeBookmark(word);
                               SnackbarUtils.showInfo(
                                 context,
                                 message: 'bookmarks.removed'.tr(),
                                 actionLabel: 'bookmarks.undo'.tr(),
-                                onActionPressed: () => context.read<BookmarksBloc>().addBookmark(word),
+                                onActionPressed: () => context
+                                    .read<BookmarksBloc>()
+                                    .addBookmark(word),
                               );
                             },
-                            child: Icon(Icons.bookmark, size: 20, color: primary),
+                            child:
+                                Icon(Icons.bookmark, size: 20, color: primary),
                           ),
                         ],
                       ),
@@ -151,4 +172,4 @@ class BookmarksScreen extends StatelessWidget {
           return Center(child: Text('common.something_wrong'.tr()));
         },
       );
-} 
+}

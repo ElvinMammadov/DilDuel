@@ -24,8 +24,10 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final bool isAzDe = appState.dictionaryType == DictionaryType.azDe;
     final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color textPrimary =
+        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
     final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
     final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
 
@@ -51,11 +53,13 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
               GestureDetector(
                 onTap: () => context.read<AppCubit>().toggleDictionaryType(),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: surface,
                     border: Border.all(color: border),
-                    borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
+                    borderRadius:
+                        BorderRadius.circular(AppTheme.borderRadiusPill),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -91,7 +95,8 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
                     border: Border.all(color: border),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.settings_outlined, size: 16, color: textSecondary),
+                  child: Icon(Icons.settings_outlined,
+                      size: 16, color: textSecondary),
                 ),
               ),
               const SizedBox(width: 20),

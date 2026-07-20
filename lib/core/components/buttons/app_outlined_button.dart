@@ -21,7 +21,7 @@ class AppOutlinedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color = borderColor ?? AppTheme.mainColor;
-    
+
     return SizedBox(
       width: width,
       child: OutlinedButton(
@@ -46,16 +46,16 @@ class AppOutlinedButton extends StatelessWidget {
         ),
         onPressed: isLoading ? null : onPressed,
         child: isLoading
-          ? SizedBox(
-              height: Dimensions.itemHeight20,
-              width: Dimensions.itemWidth20,
-              child: CircularProgressIndicator(
-                strokeWidth: Dimensions.itemWidth2,
-                valueColor: AlwaysStoppedAnimation<Color>(color),
-              ),
-            )
-          : Text(text),
+            ? SizedBox(
+                height: Dimensions.itemHeight20,
+                width: Dimensions.itemWidth20,
+                child: CircularProgressIndicator(
+                  strokeWidth: Dimensions.itemWidth2,
+                  valueColor: AlwaysStoppedAnimation<Color>(color),
+                ),
+              )
+            : Text(text),
       ),
     );
   }
-} 
+}

@@ -126,8 +126,10 @@ class _PillSearchBar extends StatelessWidget {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
     final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color chipBg = isDark ? const Color(0x14FFFFFF) : AppTheme.chipBgLight;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color chipBg =
+        isDark ? const Color(0x14FFFFFF) : AppTheme.chipBgLight;
 
     return Container(
       margin: EdgeInsets.zero,
@@ -139,10 +141,10 @@ class _PillSearchBar extends StatelessWidget {
         boxShadow: isDark
             ? null
             : <BoxShadow>[
-                BoxShadow(
-                  color: const Color(0x0A140A3C),
+                const BoxShadow(
+                  color: Color(0x0A140A3C),
                   blurRadius: 2,
-                  offset: const Offset(0, 1),
+                  offset: Offset(0, 1),
                 ),
               ],
       ),
@@ -172,7 +174,8 @@ class _PillSearchBar extends StatelessWidget {
               child: Container(
                 width: 26,
                 height: 26,
-                decoration: BoxDecoration(color: chipBg, shape: BoxShape.circle),
+                decoration:
+                    BoxDecoration(color: chipBg, shape: BoxShape.circle),
                 child: Icon(Icons.close, size: 12, color: textSecondary),
               ),
             )
@@ -185,7 +188,9 @@ class _PillSearchBar extends StatelessWidget {
                 height: 32,
                 decoration: BoxDecoration(
                   color: isListening
-                      ? (isDark ? const Color(0x33FF7A7D) : const Color(0xFFFFEAEA))
+                      ? (isDark
+                          ? const Color(0x33FF7A7D)
+                          : const Color(0xFFFFEAEA))
                       : chipBg,
                   shape: BoxShape.circle,
                 ),

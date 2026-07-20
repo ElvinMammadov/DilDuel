@@ -8,12 +8,18 @@ class SearchItems extends StatelessWidget {
         builder: (BuildContext context, SearchState state) {
           final bool isDark = Theme.of(context).brightness == Brightness.dark;
           final AppState appState = context.watch<AppCubit>().state;
-          final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-          final Color primaryTint = isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-          final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-          final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-          final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-          final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+          final Color primary =
+              isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+          final Color primaryTint =
+              isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+          final Color textPrimary =
+              isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+          final Color textSecondary =
+              isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+          final Color surface =
+              isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+          final Color border =
+              isDark ? AppTheme.borderDark : AppTheme.borderLight;
 
           if (state is SearchLoading) {
             return Center(
@@ -42,10 +48,13 @@ class SearchItems extends StatelessWidget {
                       onTap: () => showSearchBottomSheet(
                         context,
                         word,
-                        appState.dictionaryType == DictionaryType.azDe ? 'az-AZ' : 'de-DE',
+                        appState.dictionaryType == DictionaryType.azDe
+                            ? 'az-AZ'
+                            : 'de-DE',
                       ),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
                         decoration: BoxDecoration(
                           color: surface,
                           border: Border.all(color: border),
@@ -57,13 +66,18 @@ class SearchItems extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(word.key, style: AppTheme.wordSource(textPrimary)),
+                                  Text(word.key,
+                                      style: AppTheme.wordSource(textPrimary)),
                                   const SizedBox(height: 3),
-                                  Text(word.value, style: AppTheme.bodyMedium(textSecondary)),
+                                  Text(word.value,
+                                      style:
+                                          AppTheme.bodyMedium(textSecondary)),
                                 ],
                               ),
                             ),
-                            Icon(Icons.chevron_right, size: 18, color: textSecondary.withValues(alpha: 0.4)),
+                            Icon(Icons.chevron_right,
+                                size: 18,
+                                color: textSecondary.withValues(alpha: 0.4)),
                           ],
                         ),
                       ),
@@ -116,11 +130,13 @@ class _EmptySearchState extends StatelessWidget {
                 Container(
                   width: 64,
                   height: 64,
-                  decoration: BoxDecoration(color: primaryTint, shape: BoxShape.circle),
+                  decoration:
+                      BoxDecoration(color: primaryTint, shape: BoxShape.circle),
                   child: Icon(Icons.search, size: 26, color: primary),
                 ),
                 const SizedBox(height: 14),
-                Text('search.empty.title'.tr(), style: AppTheme.titleMedium(textPrimary)),
+                Text('search.empty.title'.tr(),
+                    style: AppTheme.titleMedium(textPrimary)),
                 const SizedBox(height: 6),
                 Text(
                   'search.empty.description'.tr(),
@@ -156,13 +172,18 @@ class _ErrorSearchState extends StatelessWidget {
                 Container(
                   width: 64,
                   height: 64,
-                  decoration: const BoxDecoration(color: AppTheme.errorTint, shape: BoxShape.circle),
-                  child: const Icon(Icons.error_outline, size: 26, color: AppTheme.errorColor),
+                  decoration: const BoxDecoration(
+                      color: AppTheme.errorTint, shape: BoxShape.circle),
+                  child: const Icon(Icons.error_outline,
+                      size: 26, color: AppTheme.errorColor),
                 ),
                 const SizedBox(height: 14),
-                Text('search.error.title'.tr(), style: AppTheme.titleMedium(textPrimary)),
+                Text('search.error.title'.tr(),
+                    style: AppTheme.titleMedium(textPrimary)),
                 const SizedBox(height: 6),
-                Text('search.error.description'.tr(), style: AppTheme.bodyMedium(textSecondary), textAlign: TextAlign.center),
+                Text('search.error.description'.tr(),
+                    style: AppTheme.bodyMedium(textSecondary),
+                    textAlign: TextAlign.center),
               ],
             ),
           ),

@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeCubit themeCubit = context.watch<ThemeCubit>();
-    
+
     return MaterialApp(
       title: 'app.title'.tr(),
       theme: AppTheme.lightTheme,

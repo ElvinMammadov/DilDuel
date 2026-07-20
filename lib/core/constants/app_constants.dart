@@ -36,4 +36,4 @@ class AppConstants {
   static const Duration shortAnimationDuration = Duration(milliseconds: 200);
   static const Duration mediumAnimationDuration = Duration(milliseconds: 350);
   static const Duration longAnimationDuration = Duration(milliseconds: 500);
-} 
+}

@@ -20,16 +20,17 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-      elevation: elevation ?? Dimensions.itemHeight1,
-      shadowColor: Colors.black12,
-      shape: shape ?? RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Dimensions.itemHeight8),
-      ),
-      color: backgroundColor ?? AppTheme.surfaceLight,
-      borderOnForeground: true,
-      child: Padding(
-        padding: padding ?? const EdgeInsets.all(Dimensions.padding16),
-        child: child,
-      ),
-    );
-} 
+        elevation: elevation ?? Dimensions.itemHeight1,
+        shadowColor: Colors.black12,
+        shape: shape ??
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Dimensions.itemHeight8),
+            ),
+        color: backgroundColor ?? AppTheme.surfaceLight,
+        borderOnForeground: true,
+        child: Padding(
+          padding: padding ?? const EdgeInsets.all(Dimensions.padding16),
+          child: child,
+        ),
+      );
+}

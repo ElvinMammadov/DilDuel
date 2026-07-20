@@ -42,15 +42,21 @@ class _QuizQuestionState extends State<QuizQuestion> {
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint = isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color textPrimary = isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color primaryTint =
+        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+    final Color textPrimary =
+        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
     final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
     final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color success = isDark ? AppTheme.successColorDark : AppTheme.successColor;
-    final Color successTint = isDark ? AppTheme.successTintDark : AppTheme.successTint;
+    final Color success =
+        isDark ? AppTheme.successColorDark : AppTheme.successColor;
+    final Color successTint =
+        isDark ? AppTheme.successTintDark : AppTheme.successTint;
     final Color error = isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
-    final Color errorTint = isDark ? AppTheme.errorTintDark : AppTheme.errorTint;
+    final Color errorTint =
+        isDark ? AppTheme.errorTintDark : AppTheme.errorTint;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -100,7 +106,8 @@ class _QuizQuestionState extends State<QuizQuestion> {
               onTap: showAnswer ? null : () => _handleAnswer(option),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
                 decoration: BoxDecoration(
                   color: bg,
                   border: Border.all(color: borderColor, width: 1.5),
@@ -127,7 +134,8 @@ class _QuizQuestionState extends State<QuizQuestion> {
               ),
               child: Text(
                 'quiz.next'.tr(),
-                style: AppTheme.titleMedium(Colors.white).copyWith(fontSize: 15),
+                style:
+                    AppTheme.titleMedium(Colors.white).copyWith(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
             ),

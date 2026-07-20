@@ -52,6 +52,8 @@
       "history": "Quiz-Verlauf",
       "statistics": "Quiz-Statistiken",
       "stats_details": "Gesamtanzahl Quiz: {}\nDurchschnittliche Punktzahl: {}%",
+      "total_quizzes_label": "Gesamtanzahl Quiz",
+      "average_score_label": "Ø Punktzahl",
       "score_details": "Punktzahl: {}/{} ({}%)",
       "quiz_number": "Quiz #{}",
       "loading": "Statistiken werden geladen...",

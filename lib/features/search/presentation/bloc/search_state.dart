@@ -13,5 +13,4 @@ class SearchLoaded extends SearchState {
   SearchLoaded(this.words);
 }
 
-class SearchError extends SearchState {
-}
+class SearchError extends SearchState {}

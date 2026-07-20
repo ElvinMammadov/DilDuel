@@ -40,4 +40,4 @@ class BookmarksBloc extends Cubit<BookmarksState> {
       emit(BookmarksError(e.toString()));
     }
   }
-} 
+}

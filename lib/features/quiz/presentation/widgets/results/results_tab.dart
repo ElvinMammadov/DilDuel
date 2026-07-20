@@ -1,5 +1,57 @@
 part of quiz;
 
+class _MetricChip extends StatelessWidget {
+  const _MetricChip({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.padding12,
+          vertical: Dimensions.padding12,
+        ),
+        decoration: BoxDecoration(
+          color: AppTheme.primaryTint,
+          borderRadius: BorderRadius.circular(AppTheme.borderRadius),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              value,
+              style: const TextStyle(
+                color: AppTheme.mainColor,
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: const TextStyle(
+                color: AppTheme.secondaryColor,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
+Color _scoreColor(double pct) {
+  if (pct >= 70) return AppTheme.successColor;
+  if (pct >= 40) return AppTheme.warningColor;
+  return AppTheme.errorColor;
+}
+
+Color _scoreBg(double pct) {
+  if (pct >= 70) return AppTheme.successTint;
+  if (pct >= 40) return const Color(0xFFFFF3E0);
+  return AppTheme.errorTint;
+}
+
 class ResultsTab extends StatefulWidget {
   const ResultsTab({super.key});
 
@@ -50,13 +102,37 @@ class _ResultsTabState extends State<ResultsTab> {
 
                 return Card(
                   margin: EdgeInsets.zero,
-                  child: ListTile(
-                    title: Text('quiz.results.statistics'.tr()),
-                    subtitle: Text(
-                      'quiz.results.stats_details'.tr(args: <String>[
-                        '${stats['totalQuizzes']}',
-                        '${stats['averageScore']}'
-                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimensions.padding16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'quiz.results.statistics'.tr(),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: Dimensions.padding12),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: _MetricChip(
+                                label: 'quiz.results.total_quizzes_label'.tr(),
+                                value: '${stats['totalQuizzes']}',
+                              ),
+                            ),
+                            const SizedBox(width: Dimensions.padding8),
+                            Expanded(
+                              child: _MetricChip(
+                                label: 'quiz.results.average_score_label'.tr(),
+                                value: '${stats['averageScore']}%',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -87,10 +163,17 @@ class _ResultsTabState extends State<ResultsTab> {
                     snapshot.data ?? <QuizResult>[];
 
                 if (results.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'quiz.results.empty'.tr(),
-                      textAlign: TextAlign.center,
+                  return Padding(
+                    padding: const EdgeInsets.only(top: Dimensions.padding20),
+                    child: Center(
+                      child: Text(
+                        'quiz.results.empty'.tr(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: AppTheme.secondaryColor,
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
                   );
                 }
@@ -105,23 +188,80 @@ class _ResultsTabState extends State<ResultsTab> {
                     final QuizResult result = results[index];
                     final String date =
                         DateFormat('MMM d, y HH:mm').format(result.dateTime);
+                    final double percentageValue =
+                        (result.score / result.totalQuestions) * 100;
                     final String percentage =
-                        ((result.score / result.totalQuestions) * 100)
-                            .toStringAsFixed(1);
+                        percentageValue.toStringAsFixed(1);
 
                     return Card(
                       margin: EdgeInsets.zero,
-                      child: ListTile(
-                        title: Text('quiz.results.quiz_number'
-                            .tr(args: <String>['${index + 1}'])),
-                        subtitle: Text(
-                          'quiz.results.score_details'.tr(args: <String>[
-                            '${result.score}',
-                            '${result.totalQuestions}',
-                            percentage
-                          ]),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.padding16,
+                          vertical: Dimensions.padding12,
                         ),
-                        trailing: Text(date),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    'quiz.results.quiz_number'
+                                        .tr(args: <String>['${index + 1}']),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      color: AppTheme.textPrimaryLight,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'quiz.results.score_details'
+                                        .tr(args: <String>[
+                                      '${result.score}',
+                                      '${result.totalQuestions}',
+                                      percentage,
+                                    ]),
+                                    style: const TextStyle(
+                                      color: AppTheme.secondaryColor,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    date,
+                                    style: const TextStyle(
+                                      color: AppTheme.secondaryColor,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: Dimensions.padding12),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: Dimensions.padding12,
+                                vertical: Dimensions.padding8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: _scoreBg(percentageValue),
+                                borderRadius: BorderRadius.circular(
+                                    AppTheme.borderRadius),
+                              ),
+                              child: Text(
+                                '$percentage%',
+                                style: TextStyle(
+                                  color: _scoreColor(percentageValue),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

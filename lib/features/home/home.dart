@@ -38,19 +38,19 @@ class _HomeShellState extends State<HomeShell> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar:  DilDuelAppBar(
-      title: 'app.title'.tr(),
-      showBackButton: false,
-    ),
-    body: IndexedStack(
-      index: _currentIndex,
-      children: _pages,
-    ),
-    bottomNavigationBar: _DesignedNavBar(
-      currentIndex: _currentIndex,
-      onTap: _onTabTapped,
-    ),
-  );
+        appBar: DilDuelAppBar(
+          title: 'app.title'.tr(),
+          showBackButton: false,
+        ),
+        body: IndexedStack(
+          index: _currentIndex,
+          children: _pages,
+        ),
+        bottomNavigationBar: _DesignedNavBar(
+          currentIndex: _currentIndex,
+          onTap: _onTabTapped,
+        ),
+      );
 }
 
 class _DesignedNavBar extends StatelessWidget {
@@ -63,16 +63,19 @@ class _DesignedNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint = isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color textSecondary = isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color primaryTint =
+        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
     final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
     final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
 
-    final List<({IconData icon, String label})> items = <({IconData icon, String label})>[
-      (icon: Icons.menu_book_outlined, label: 'app.search'.tr()),
-      (icon: Icons.bookmark_outline, label: 'app.bookmarks'.tr()),
-      (icon: Icons.quiz_outlined, label: 'app.quiz'.tr()),
-      (icon: Icons.fitness_center_outlined, label: 'app.training'.tr()),
+    final List<({IconData icon, String label})> items =
+        <({IconData icon, String label})>[
+      (icon: Icons.search, label: 'app.search'.tr()),
+      (icon: Icons.favorite_border, label: 'app.bookmarks'.tr()),
+      (icon: Icons.school_outlined, label: 'app.quiz'.tr()),
+      (icon: Icons.draw_outlined, label: 'app.training'.tr()),
     ];
 
     return Container(
@@ -88,7 +91,7 @@ class _DesignedNavBar extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(items.length, (i) {
+        children: List<Widget>.generate(items.length, (int i) {
           final bool active = i == currentIndex;
           return GestureDetector(
             onTap: () => onTap(i),
@@ -112,7 +115,9 @@ class _DesignedNavBar extends StatelessWidget {
                   Text(
                     items[i].label,
                     style: AppTheme.labelSmall(active ? primary : textSecondary)
-                        .copyWith(fontWeight: active ? FontWeight.w700 : FontWeight.w600),
+                        .copyWith(
+                            fontWeight:
+                                active ? FontWeight.w700 : FontWeight.w600),
                   ),
                 ],
               ),
@@ -125,10 +130,10 @@ class _DesignedNavBar extends StatelessWidget {
 
   IconData _filledIcon(IconData outline) {
     final Map<IconData, IconData> map = <IconData, IconData>{
-      Icons.menu_book_outlined: Icons.menu_book,
-      Icons.bookmark_outline: Icons.bookmark,
-      Icons.quiz_outlined: Icons.quiz,
-      Icons.fitness_center_outlined: Icons.fitness_center,
+      Icons.search: Icons.search,
+      Icons.favorite_border: Icons.favorite,
+      Icons.school_outlined: Icons.school,
+      Icons.draw_outlined: Icons.draw,
     };
     return map[outline] ?? outline;
   }

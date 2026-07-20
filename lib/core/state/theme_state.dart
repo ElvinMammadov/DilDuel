@@ -1,10 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum ThemeType {
-  light,
-  dark,
-  system
-}
+enum ThemeType { light, dark, system }
 
 class ThemeState extends Equatable {
   final ThemeType themeType;
@@ -22,4 +18,4 @@ class ThemeState extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[themeType];
-} 
+}

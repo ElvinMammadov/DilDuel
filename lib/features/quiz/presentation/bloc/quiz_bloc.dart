@@ -53,7 +53,7 @@ class QuizBloc extends Cubit<QuizState> {
         dateTime: DateTime.now(),
       );
       DBHelper.insertQuizResult(result);
-      
+
       emit(QuizComplete(
         totalQuestions: currentState.words.length,
         score: newScore,

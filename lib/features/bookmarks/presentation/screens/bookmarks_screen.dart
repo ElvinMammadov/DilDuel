@@ -30,33 +30,11 @@ class BookmarksScreen extends StatelessWidget {
                 isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
 
             if (state.bookmarks.isEmpty) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                            color: primaryTint, shape: BoxShape.circle),
-                        child: Icon(Icons.bookmark_outline,
-                            size: 30, color: primary),
-                      ),
-                      const SizedBox(height: 14),
-                      Text('bookmarks.empty'.tr(),
-                          style: AppTheme.titleMedium(textPrimary)
-                              .copyWith(fontSize: 18)),
-                      const SizedBox(height: 6),
-                      Text(
-                        'bookmarks.empty_description'.tr(),
-                        style: AppTheme.bodyMedium(textSecondary),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
+              return _BookmarksEmptyState(
+                primary: primary,
+                primaryTint: primaryTint,
+                textPrimary: textPrimary,
+                textSecondary: textSecondary,
               );
             }
 
@@ -65,73 +43,24 @@ class BookmarksScreen extends StatelessWidget {
               itemCount: state.bookmarks.length,
               itemBuilder: (BuildContext context, int index) {
                 final Word word = state.bookmarks[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Dismissible(
-                    key: Key(word.key),
-                    background: Container(
-                      decoration: BoxDecoration(
-                        color: error.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 16),
-                      child: Icon(Icons.delete_outline, color: error),
-                    ),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (_) {
-                      context.read<BookmarksBloc>().removeBookmark(word);
-                      SnackbarUtils.showInfo(
-                        context,
-                        message: 'bookmarks.removed'.tr(),
-                        actionLabel: 'bookmarks.undo'.tr(),
-                        onActionPressed: () =>
-                            context.read<BookmarksBloc>().addBookmark(word),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
-                      decoration: BoxDecoration(
-                        color: surface,
-                        border: Border.all(color: border),
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(word.key,
-                                    style: AppTheme.wordSource(textPrimary)),
-                                const SizedBox(height: 3),
-                                Text(word.value,
-                                    style: AppTheme.bodyMedium(textSecondary)),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              context
-                                  .read<BookmarksBloc>()
-                                  .removeBookmark(word);
-                              SnackbarUtils.showInfo(
-                                context,
-                                message: 'bookmarks.removed'.tr(),
-                                actionLabel: 'bookmarks.undo'.tr(),
-                                onActionPressed: () => context
-                                    .read<BookmarksBloc>()
-                                    .addBookmark(word),
-                              );
-                            },
-                            child:
-                                Icon(Icons.bookmark, size: 20, color: primary),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                return _BookmarkItem(
+                  word: word,
+                  surface: surface,
+                  border: border,
+                  textPrimary: textPrimary,
+                  textSecondary: textSecondary,
+                  primary: primary,
+                  error: error,
+                  onRemoveWithUndo: () {
+                    context.read<BookmarksBloc>().removeBookmark(word);
+                    SnackbarUtils.showInfo(
+                      context,
+                      message: 'bookmarks.removed'.tr(),
+                      actionLabel: 'bookmarks.undo'.tr(),
+                      onActionPressed: () =>
+                          context.read<BookmarksBloc>().addBookmark(word),
+                    );
+                  },
                 );
               },
             );
@@ -171,5 +100,119 @@ class BookmarksScreen extends StatelessWidget {
 
           return Center(child: Text('common.something_wrong'.tr()));
         },
+      );
+}
+
+class _BookmarksEmptyState extends StatelessWidget {
+  final Color primary;
+  final Color primaryTint;
+  final Color textPrimary;
+  final Color textSecondary;
+
+  const _BookmarksEmptyState({
+    required this.primary,
+    required this.primaryTint,
+    required this.textPrimary,
+    required this.textSecondary,
+  });
+
+  @override
+  Widget build(BuildContext context) => Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 72,
+                height: 72,
+                decoration:
+                    BoxDecoration(color: primaryTint, shape: BoxShape.circle),
+                child:
+                    Icon(Icons.bookmark_outline, size: 30, color: primary),
+              ),
+              const SizedBox(height: 14),
+              Text('bookmarks.empty'.tr(),
+                  style:
+                      AppTheme.titleMedium(textPrimary).copyWith(fontSize: 18)),
+              const SizedBox(height: 6),
+              Text(
+                'bookmarks.empty_description'.tr(),
+                style: AppTheme.bodyMedium(textSecondary),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
+class _BookmarkItem extends StatelessWidget {
+  final Word word;
+  final Color surface;
+  final Color border;
+  final Color textPrimary;
+  final Color textSecondary;
+  final Color primary;
+  final Color error;
+  final VoidCallback onRemoveWithUndo;
+
+  const _BookmarkItem({
+    required this.word,
+    required this.surface,
+    required this.border,
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.primary,
+    required this.error,
+    required this.onRemoveWithUndo,
+  });
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Dismissible(
+          key: Key(word.key),
+          background: Container(
+            decoration: BoxDecoration(
+              color: error.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.only(right: 16),
+            child: Icon(Icons.delete_outline, color: error),
+          ),
+          direction: DismissDirection.endToStart,
+          onDismissed: (_) => onRemoveWithUndo(),
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: surface,
+              border: Border.all(color: border),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(word.key,
+                          style: AppTheme.wordSource(textPrimary)),
+                      const SizedBox(height: 3),
+                      Text(word.value,
+                          style: AppTheme.bodyMedium(textSecondary)),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: onRemoveWithUndo,
+                  child: Icon(Icons.bookmark, size: 20, color: primary),
+                ),
+              ],
+            ),
+          ),
+        ),
       );
 }

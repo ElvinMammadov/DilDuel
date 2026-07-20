@@ -42,47 +42,20 @@ class SearchItems extends StatelessWidget {
                 itemCount: state.words.length,
                 itemBuilder: (BuildContext context, int index) {
                   final Word word = state.words[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: GestureDetector(
-                      onTap: () => showSearchBottomSheet(
-                        context,
-                        word,
-                        appState.dictionaryType == DictionaryType.azDe
-                            ? 'az-AZ'
-                            : 'de-DE',
-                        onBookmarkToggled: () =>
-                            context.read<BookmarksBloc>().loadBookmarks(),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 14),
-                        decoration: BoxDecoration(
-                          color: surface,
-                          border: Border.all(color: border),
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(word.key,
-                                      style: AppTheme.wordSource(textPrimary)),
-                                  const SizedBox(height: 3),
-                                  Text(word.value,
-                                      style:
-                                          AppTheme.bodyMedium(textSecondary)),
-                                ],
-                              ),
-                            ),
-                            Icon(Icons.chevron_right,
-                                size: 18,
-                                color: textSecondary.withValues(alpha: 0.4)),
-                          ],
-                        ),
-                      ),
+                  return _WordCard(
+                    word: word,
+                    surface: surface,
+                    border: border,
+                    textPrimary: textPrimary,
+                    textSecondary: textSecondary,
+                    onTap: () => showSearchBottomSheet(
+                      context,
+                      word,
+                      appState.dictionaryType == DictionaryType.azDe
+                          ? 'az-AZ'
+                          : 'de-DE',
+                      onBookmarkToggled: () =>
+                          context.read<BookmarksBloc>().loadBookmarks(),
                     ),
                   );
                 },
@@ -105,6 +78,60 @@ class SearchItems extends StatelessWidget {
             textSecondary: textSecondary,
           );
         },
+      );
+}
+
+class _WordCard extends StatelessWidget {
+  final Word word;
+  final Color surface;
+  final Color border;
+  final Color textPrimary;
+  final Color textSecondary;
+  final VoidCallback onTap;
+
+  const _WordCard({
+    required this.word,
+    required this.surface,
+    required this.border,
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: surface,
+              border: Border.all(color: border),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(word.key,
+                          style: AppTheme.wordSource(textPrimary)),
+                      const SizedBox(height: 3),
+                      Text(word.value,
+                          style: AppTheme.bodyMedium(textSecondary)),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right,
+                    size: 18,
+                    color: textSecondary.withValues(alpha: 0.4)),
+              ],
+            ),
+          ),
+        ),
       );
 }
 

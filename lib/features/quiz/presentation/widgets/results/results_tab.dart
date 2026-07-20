@@ -40,6 +40,93 @@ class _MetricChip extends StatelessWidget {
       );
 }
 
+class _ResultCard extends StatelessWidget {
+  final QuizResult result;
+  final int index;
+
+  const _ResultCard({required this.result, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    final String date =
+        DateFormat('MMM d, y HH:mm').format(result.dateTime);
+    final double percentageValue =
+        (result.score / result.totalQuestions) * 100;
+    final String percentage = percentageValue.toStringAsFixed(1);
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.padding16,
+          vertical: Dimensions.padding12,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'quiz.results.quiz_number'
+                        .tr(args: <String>['${index + 1}']),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: AppTheme.textPrimaryLight,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'quiz.results.score_details'.tr(args: <String>[
+                      '${result.score}',
+                      '${result.totalQuestions}',
+                      percentage,
+                    ]),
+                    style: const TextStyle(
+                      color: AppTheme.secondaryColor,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    date,
+                    style: const TextStyle(
+                      color: AppTheme.secondaryColor,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: Dimensions.padding12),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.padding12,
+                vertical: Dimensions.padding8,
+              ),
+              decoration: BoxDecoration(
+                color: _scoreBg(percentageValue),
+                borderRadius:
+                    BorderRadius.circular(AppTheme.borderRadius),
+              ),
+              child: Text(
+                '$percentage%',
+                style: TextStyle(
+                  color: _scoreColor(percentageValue),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 Color _scoreColor(double pct) {
   if (pct >= 70) return AppTheme.successColor;
   if (pct >= 40) return AppTheme.warningColor;
@@ -178,93 +265,21 @@ class _ResultsTabState extends State<ResultsTab> {
                   );
                 }
 
-                return ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: results.length,
-                  separatorBuilder: (_, __) =>
-                      const SizedBox(height: Dimensions.itemHeight8),
-                  itemBuilder: (BuildContext context, int index) {
-                    final QuizResult result = results[index];
-                    final String date =
-                        DateFormat('MMM d, y HH:mm').format(result.dateTime);
-                    final double percentageValue =
-                        (result.score / result.totalQuestions) * 100;
-                    final String percentage =
-                        percentageValue.toStringAsFixed(1);
-
-                    return Card(
-                      margin: EdgeInsets.zero,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.padding16,
-                          vertical: Dimensions.padding12,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'quiz.results.quiz_number'
-                                        .tr(args: <String>['${index + 1}']),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                      color: AppTheme.textPrimaryLight,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    'quiz.results.score_details'
-                                        .tr(args: <String>[
-                                      '${result.score}',
-                                      '${result.totalQuestions}',
-                                      percentage,
-                                    ]),
-                                    style: const TextStyle(
-                                      color: AppTheme.secondaryColor,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    date,
-                                    style: const TextStyle(
-                                      color: AppTheme.secondaryColor,
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: Dimensions.padding12),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: Dimensions.padding12,
-                                vertical: Dimensions.padding8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _scoreBg(percentageValue),
-                                borderRadius: BorderRadius.circular(
-                                    AppTheme.borderRadius),
-                              ),
-                              child: Text(
-                                '$percentage%',
-                                style: TextStyle(
-                                  color: _scoreColor(percentageValue),
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                return Column(
+                  children: List<Widget>.generate(
+                    results.length,
+                    (int index) => Padding(
+                      padding: EdgeInsets.only(
+                        bottom: index < results.length - 1
+                            ? Dimensions.itemHeight8
+                            : 0,
                       ),
-                    );
-                  },
+                      child: _ResultCard(
+                        result: results[index],
+                        index: index,
+                      ),
+                    ),
+                  ),
                 );
               },
             ),

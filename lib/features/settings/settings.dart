@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
 import 'package:flutter_dic/core/state/theme_cubit.dart';
 import 'package:flutter_dic/core/state/theme_state.dart';
+import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';

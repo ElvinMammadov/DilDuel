@@ -46,14 +46,19 @@ class QuizInProgressView extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       slivers: <Widget>[
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+          padding: const EdgeInsets.fromLTRB(
+              Dimensions.padding16,
+              Dimensions.padding4,
+              Dimensions.padding16,
+              0),
           sliver: SliverToBoxAdapter(
             child: Container(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(Dimensions.padding14),
               decoration: BoxDecoration(
                 color: surface,
                 border: Border.all(color: border),
-                borderRadius: BorderRadius.circular(18),
+                borderRadius:
+                    BorderRadius.circular(Dimensions.borderRadiusLarge),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -66,36 +71,38 @@ class QuizInProgressView extends StatelessWidget {
                           '${state.currentIndex + 1}',
                           '${state.words.length}',
                         ]),
-                        style: AppTheme.titleMedium(textPrimary),
+                        style: AppTextStyles.titleMedium(textPrimary),
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
                             'quiz.score'.tr(args: <String>['${state.score}']),
-                            style: AppTheme.titleMedium(primary),
+                            style: AppTextStyles.titleMedium(primary),
                           ),
-                          const SizedBox(width: 14),
+                          const SizedBox(width: Dimensions.itemWidth14),
                           GestureDetector(
                             onTap: () => _showRestartDialog(context),
-                            child:
-                                Icon(Icons.refresh, size: 18, color: primary),
+                            child: Icon(Icons.refresh,
+                                size: Dimensions.itemWidth18, color: primary),
                           ),
-                          const SizedBox(width: 14),
+                          const SizedBox(width: Dimensions.itemWidth14),
                           GestureDetector(
                             onTap: () => _showCancelDialog(context),
-                            child: Icon(Icons.close, size: 18, color: error),
+                            child: Icon(Icons.close,
+                                size: Dimensions.itemWidth18, color: error),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: Dimensions.itemHeight10),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius:
+                        BorderRadius.circular(Dimensions.borderRadiusPill),
                     child: LinearProgressIndicator(
                       value: (state.currentIndex + 1) / state.words.length,
-                      minHeight: 6,
+                      minHeight: Dimensions.itemHeight6,
                       backgroundColor: border,
                       valueColor: AlwaysStoppedAnimation<Color>(primary),
                     ),

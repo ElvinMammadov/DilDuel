@@ -3,6 +3,7 @@ class Dimensions {
   static const double itemHeight2 = 2.0;
   static const double itemHeight3 = 3.0;
   static const double itemHeight4 = 4.0;
+  static const double itemHeight5 = 5.0;
   static const double itemHeight6 = 6.0;
   static const double itemHeight7 = 7.0;
   static const double itemHeight8 = 8.0;
@@ -16,15 +17,21 @@ class Dimensions {
   static const double itemHeight22 = 22.0;
   static const double itemHeight24 = 24.0;
   static const double itemHeight25 = 25.0;
+  static const double itemHeight26 = 26.0;
   static const double itemHeight28 = 28.0;
   static const double itemHeight30 = 30.0;
   static const double itemHeight32 = 32.0;
+  static const double itemHeight34 = 34.0;
   static const double itemHeight36 = 36.0;
   static const double itemHeight40 = 40.0;
+  static const double itemHeight44 = 44.0;
+  static const double itemHeight46 = 46.0;
   static const double itemHeight50 = 50.0;
   static const double itemHeight56 = 56.0;
   static const double itemHeight60 = 60.0;
+  static const double itemHeight64 = 64.0;
   static const double itemHeight65 = 65.0;
+  static const double itemHeight72 = 72.0;
   static const double itemHeight88 = 88.0;
   static const double itemHeight95 = 95.0;
 
@@ -41,14 +48,19 @@ class Dimensions {
   static const double itemWidth15 = 15.0;
   static const double itemWidth16 = 16.0;
   static const double itemWidth18 = 18.0;
+  static const double itemWidth19 = 19.0;
   static const double itemWidth20 = 20.0;
   static const double itemWidth22 = 22.0;
   static const double itemWidth24 = 24.0;
+  static const double itemWidth26 = 26.0;
   static const double itemWidth28 = 28.0;
   static const double itemWidth32 = 32.0;
+  static const double itemWidth34 = 34.0;
   static const double itemWidth36 = 36.0;
   static const double itemWidth40 = 40.0;
   static const double itemWidth44 = 44.0;
+  static const double itemWidth46 = 46.0;
+  static const double itemWidth64 = 64.0;
 
   static const double padding2 = 2.0;
   static const double padding3 = 3.0;
@@ -70,8 +82,10 @@ class Dimensions {
   static const double padding27 = 27.0;
   static const double padding30 = 30.0;
   static const double padding32 = 32.0;
+  static const double padding36 = 36.0;
   static const double padding38 = 38.0;
   static const double padding40 = 40.0;
+  static const double padding44 = 44.0;
   static const double padding42 = 42.0;
   static const double padding45 = 45.0;
   static const double padding48 = 48.0;
@@ -80,4 +94,20 @@ class Dimensions {
   static const double padding60 = 60.0;
   static const double padding80 = 80.0;
   static const double padding100 = 100.0;
+
+  // ─── Border radii ─────────────────────────────────────────────
+  static const double borderRadius = 12.0;
+  static const double borderRadiusMedium = 20.0;
+  static const double borderRadiusLarge = 18.0;
+  static const double borderRadiusSheet = 28.0;
+  static const double borderRadiusPill = 100.0;
+
+  // ─── Spacing ─────────────────────────────────────────────────
+  static const double spacing = 8.0;
+  static const double spacingSmall = 4.0;
+  static const double spacingLarge = 16.0;
+
+  // ─── Elevations ───────────────────────────────────────────────
+  static const double elevationSmall = 0.0;
+  static const double elevationNormal = 1.0;
 }

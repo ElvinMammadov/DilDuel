@@ -7,6 +7,7 @@ import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/error/failures.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
+import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/features/quiz/domain/entities/quiz_word.dart';

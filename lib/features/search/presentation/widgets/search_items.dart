@@ -36,9 +36,14 @@ class SearchItems extends StatelessWidget {
                 textSecondary: textSecondary,
               );
             }
-            return Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+                return Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(
+                      Dimensions.padding20,
+                      Dimensions.padding4,
+                      Dimensions.padding20,
+                      Dimensions.padding20,
+                    ),
                 itemCount: state.words.length,
                 itemBuilder: (BuildContext context, int index) {
                   final Word word = state.words[index];
@@ -100,16 +105,17 @@ class _WordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: Dimensions.padding10),
         child: GestureDetector(
           onTap: onTap,
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.padding16,
+                vertical: Dimensions.padding14),
             decoration: BoxDecoration(
               color: surface,
               border: Border.all(color: border),
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
             ),
             child: Row(
               children: <Widget>[
@@ -118,15 +124,15 @@ class _WordCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(word.key,
-                          style: AppTheme.wordSource(textPrimary)),
-                      const SizedBox(height: 3),
+                          style: AppTextStyles.wordSource(textPrimary)),
+                      const SizedBox(height: Dimensions.itemHeight3),
                       Text(word.value,
-                          style: AppTheme.bodyMedium(textSecondary)),
+                          style: AppTextStyles.bodyMedium(textSecondary)),
                     ],
                   ),
                 ),
                 Icon(Icons.chevron_right,
-                    size: 18,
+                    size: Dimensions.itemWidth18,
                     color: textSecondary.withValues(alpha: 0.4)),
               ],
             ),
@@ -152,24 +158,26 @@ class _EmptySearchState extends StatelessWidget {
   Widget build(BuildContext context) => Expanded(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.padding24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 64,
-                  height: 64,
+                  width: Dimensions.itemWidth64,
+                  height: Dimensions.itemHeight64,
                   decoration:
                       BoxDecoration(color: primaryTint, shape: BoxShape.circle),
-                  child: Icon(Icons.search, size: 26, color: primary),
+                  child: Icon(Icons.search,
+                      size: Dimensions.itemWidth26, color: primary),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: Dimensions.itemHeight14),
                 Text('search.empty.title'.tr(),
-                    style: AppTheme.titleMedium(textPrimary)),
-                const SizedBox(height: 6),
+                    style: AppTextStyles.titleMedium(textPrimary)),
+                const SizedBox(height: Dimensions.itemHeight6),
                 Text(
                   'search.empty.description'.tr(),
-                  style: AppTheme.bodyMedium(textSecondary),
+                  style: AppTextStyles.bodyMedium(textSecondary),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -194,24 +202,26 @@ class _ErrorSearchState extends StatelessWidget {
   Widget build(BuildContext context) => Expanded(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.padding24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 64,
-                  height: 64,
+                  width: Dimensions.itemWidth64,
+                  height: Dimensions.itemHeight64,
                   decoration: const BoxDecoration(
                       color: AppTheme.errorTint, shape: BoxShape.circle),
                   child: const Icon(Icons.error_outline,
-                      size: 26, color: AppTheme.errorColor),
+                      size: Dimensions.itemWidth26,
+                      color: AppTheme.errorColor),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: Dimensions.itemHeight14),
                 Text('search.error.title'.tr(),
-                    style: AppTheme.titleMedium(textPrimary)),
-                const SizedBox(height: 6),
+                    style: AppTextStyles.titleMedium(textPrimary)),
+                const SizedBox(height: Dimensions.itemHeight6),
                 Text('search.error.description'.tr(),
-                    style: AppTheme.bodyMedium(textSecondary),
+                    style: AppTextStyles.bodyMedium(textSecondary),
                     textAlign: TextAlign.center),
               ],
             ),

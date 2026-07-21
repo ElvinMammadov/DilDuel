@@ -35,7 +35,7 @@ class AppElevatedButton extends StatelessWidget {
         elevation: Dimensions.itemHeight1,
         shadowColor: Colors.black12,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
+          borderRadius: BorderRadius.circular(Dimensions.borderRadiusPill),
         ),
       );
 

@@ -129,15 +129,16 @@ class _PillSearchBar extends StatelessWidget {
     final Color textSecondary =
         isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
     final Color chipBg =
-        isDark ? const Color(0x14FFFFFF) : AppTheme.chipBgLight;
+        isDark ? AppTheme.borderDark : AppTheme.chipBgLight;
 
     return Container(
       margin: EdgeInsets.zero,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.padding16, vertical: Dimensions.padding10),
       decoration: BoxDecoration(
         color: surface,
         border: Border.all(color: border, width: 1.5),
-        borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
+        borderRadius: BorderRadius.circular(Dimensions.borderRadiusPill),
         boxShadow: isDark
             ? null
             : <BoxShadow>[
@@ -150,18 +151,19 @@ class _PillSearchBar extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          Icon(Icons.search, size: 18, color: textSecondary),
-          const SizedBox(width: 8),
+          Icon(Icons.search,
+              size: Dimensions.itemWidth18, color: textSecondary),
+          const SizedBox(width: Dimensions.itemWidth8),
           Expanded(
             child: TextField(
               controller: controller,
               onChanged: onChanged,
-              style: AppTheme.bodyLarge(
+              style: AppTextStyles.bodyLarge(
                 isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight,
               ),
               decoration: InputDecoration(
                 hintText: 'search.placeholder'.tr(),
-                hintStyle: AppTheme.bodyLarge(textSecondary),
+                hintStyle: AppTextStyles.bodyLarge(textSecondary),
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
@@ -172,11 +174,12 @@ class _PillSearchBar extends StatelessWidget {
             GestureDetector(
               onTap: onClear,
               child: Container(
-                width: 26,
-                height: 26,
+                width: Dimensions.itemWidth26,
+                height: Dimensions.itemHeight26,
                 decoration:
                     BoxDecoration(color: chipBg, shape: BoxShape.circle),
-                child: Icon(Icons.close, size: 12, color: textSecondary),
+                child: Icon(Icons.close,
+                    size: Dimensions.itemWidth12, color: textSecondary),
               ),
             )
           else
@@ -184,20 +187,20 @@ class _PillSearchBar extends StatelessWidget {
               onTap: onMic,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                width: 32,
-                height: 32,
+                width: Dimensions.itemWidth32,
+                height: Dimensions.itemHeight32,
                 decoration: BoxDecoration(
                   color: isListening
                       ? (isDark
-                          ? const Color(0x33FF7A7D)
-                          : const Color(0xFFFFEAEA))
+                          ? AppTheme.errorTintDark
+                          : AppTheme.errorTint)
                       : chipBg,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   isListening ? Icons.mic : Icons.mic_none,
-                  size: 15,
-                  color: isListening ? const Color(0xFFE5484D) : textSecondary,
+                  size: Dimensions.itemWidth15,
+                  color: isListening ? AppTheme.errorColor : textSecondary,
                 ),
               ),
             ),

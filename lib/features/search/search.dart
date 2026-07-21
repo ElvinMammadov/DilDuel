@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dic/core/error/failures.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/state/app_state.dart';
+import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';

@@ -39,7 +39,12 @@ class BookmarksScreen extends StatelessWidget {
             }
 
             return ListView.builder(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+              padding: const EdgeInsets.fromLTRB(
+                Dimensions.padding20,
+                Dimensions.padding8,
+                Dimensions.padding20,
+                Dimensions.padding20,
+              ),
               itemCount: state.bookmarks.length,
               itemBuilder: (BuildContext context, int index) {
                 final Word word = state.bookmarks[index];
@@ -73,7 +78,7 @@ class BookmarksScreen extends StatelessWidget {
                 children: <Widget>[
                   const Icon(
                     Icons.error_outline,
-                    size: 64,
+                    size: Dimensions.itemHeight64,
                     color: AppTheme.errorColor,
                   ),
                   const SizedBox(height: Dimensions.itemHeight16),
@@ -119,26 +124,26 @@ class _BookmarksEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.padding30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                width: 72,
-                height: 72,
+                width: Dimensions.itemHeight72,
+                height: Dimensions.itemHeight72,
                 decoration:
                     BoxDecoration(color: primaryTint, shape: BoxShape.circle),
-                child:
-                    Icon(Icons.bookmark_outline, size: 30, color: primary),
+                child: Icon(Icons.bookmark_outline,
+                    size: Dimensions.itemHeight30, color: primary),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: Dimensions.itemHeight14),
               Text('bookmarks.empty'.tr(),
                   style:
-                      AppTheme.titleMedium(textPrimary).copyWith(fontSize: 18)),
-              const SizedBox(height: 6),
+                      AppTextStyles.titleMedium(textPrimary)),
+              const SizedBox(height: Dimensions.itemHeight6),
               Text(
                 'bookmarks.empty_description'.tr(),
-                style: AppTheme.bodyMedium(textSecondary),
+                style: AppTextStyles.bodyMedium(textSecondary),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -170,27 +175,28 @@ class _BookmarkItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: Dimensions.padding10),
         child: Dismissible(
           key: Key(word.key),
           background: Container(
             decoration: BoxDecoration(
               color: error.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
             ),
             alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: Dimensions.padding16),
             child: Icon(Icons.delete_outline, color: error),
           ),
           direction: DismissDirection.endToStart,
           onDismissed: (_) => onRemoveWithUndo(),
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.padding16,
+                vertical: Dimensions.padding14),
             decoration: BoxDecoration(
               color: surface,
               border: Border.all(color: border),
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
             ),
             child: Row(
               children: <Widget>[
@@ -199,16 +205,17 @@ class _BookmarkItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(word.key,
-                          style: AppTheme.wordSource(textPrimary)),
-                      const SizedBox(height: 3),
+                          style: AppTextStyles.wordSource(textPrimary)),
+                      const SizedBox(height: Dimensions.itemHeight3),
                       Text(word.value,
-                          style: AppTheme.bodyMedium(textSecondary)),
+                          style: AppTextStyles.bodyMedium(textSecondary)),
                     ],
                   ),
                 ),
                 GestureDetector(
                   onTap: onRemoveWithUndo,
-                  child: Icon(Icons.bookmark, size: 20, color: primary),
+                  child: Icon(Icons.bookmark,
+                      size: Dimensions.itemWidth20, color: primary),
                 ),
               ],
             ),

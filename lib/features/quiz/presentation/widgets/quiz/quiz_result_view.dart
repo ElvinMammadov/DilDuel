@@ -27,49 +27,50 @@ class QuizResultView extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: Dimensions.padding20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // Score circle
             Container(
-              width: 88,
-              height: 88,
+              width: Dimensions.itemHeight88,
+              height: Dimensions.itemHeight88,
               decoration:
                   BoxDecoration(color: primaryTint, shape: BoxShape.circle),
               child: Center(
                 child: Text(
                   '$correctAnswers/$totalQuestions',
-                  style: AppTheme.titleLarge(primary).copyWith(fontSize: 22),
+                  style: AppTextStyles.scoreDisplay(primary),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: Dimensions.itemHeight16),
             Text(
               _getTitleForScore(percentage),
-              style: AppTheme.titleLarge(textPrimary).copyWith(fontSize: 20),
+              style: AppTextStyles.titleXLarge(textPrimary),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: Dimensions.itemHeight8),
             Text(
               _getMessageForScore(percentage),
-              style: AppTheme.bodyMedium(textSecondary),
+              style: AppTextStyles.bodyMedium(textSecondary),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 28),
+            const SizedBox(height: Dimensions.itemHeight28),
             GestureDetector(
               onTap: onTryAgain,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 26),
+                padding: const EdgeInsets.symmetric(
+                    vertical: Dimensions.padding12,
+                    horizontal: Dimensions.padding26),
                 decoration: BoxDecoration(
                   color: primary,
                   borderRadius:
-                      BorderRadius.circular(AppTheme.borderRadiusPill),
+                      BorderRadius.circular(Dimensions.borderRadiusPill),
                 ),
                 child: Text(
                   'quiz.try_again'.tr(),
                   style:
-                      AppTheme.titleMedium(Colors.white).copyWith(fontSize: 14),
+                      AppTextStyles.labelLarge(Colors.white),
                 ),
               ),
             ),

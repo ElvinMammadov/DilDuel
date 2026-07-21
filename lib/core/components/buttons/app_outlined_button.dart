@@ -37,7 +37,7 @@ class AppOutlinedButton extends StatelessWidget {
             letterSpacing: 0.5,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppTheme.borderRadius),
+            borderRadius: BorderRadius.circular(Dimensions.borderRadius),
           ),
           padding: const EdgeInsets.symmetric(
             horizontal: Dimensions.padding24,

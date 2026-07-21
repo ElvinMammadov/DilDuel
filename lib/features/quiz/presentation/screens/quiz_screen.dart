@@ -20,12 +20,13 @@ class QuizScreen extends StatelessWidget {
             indicatorColor: primary,
             indicatorWeight: 2.5,
             dividerColor: Colors.transparent,
-            labelStyle: AppTheme.titleMedium(primary).copyWith(fontSize: 15),
-            unselectedLabelStyle: AppTheme.titleMedium(textSecondary)
-                .copyWith(fontSize: 15, fontWeight: FontWeight.w600),
+            labelStyle: AppTextStyles.titleSmall(primary),
+            unselectedLabelStyle: AppTextStyles.titleSmall(textSecondary),
             tabs: <Widget>[
-              Tab(text: 'quiz.title'.tr(), height: 44),
-              Tab(text: 'quiz.results.title'.tr(), height: 44),
+              Tab(text: 'quiz.title'.tr(), height: Dimensions.itemHeight44),
+              Tab(
+                  text: 'quiz.results.title'.tr(),
+                  height: Dimensions.itemHeight44),
             ],
           ),
           const Expanded(

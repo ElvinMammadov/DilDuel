@@ -56,69 +56,76 @@ class _SettingsScreenState extends State<SettingsScreen> {
         showProfileButton: false,
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(18, 16, 18, 30),
+        padding: const EdgeInsets.fromLTRB(
+          Dimensions.padding18,
+          Dimensions.padding16,
+          Dimensions.padding18,
+          Dimensions.padding30,
+        ),
         children: <Widget>[
           // Profile card
           _SettingsCard(
             border: border,
             surface: surface,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+              padding: const EdgeInsets.fromLTRB(
+                Dimensions.padding20,
+                Dimensions.padding24,
+                Dimensions.padding20,
+                Dimensions.padding24,
+              ),
               child: Column(
                 children: <Widget>[
                   CircleAvatar(
-                    radius: 36,
+                    radius: Dimensions.itemHeight36,
                     backgroundColor: _isSignedIn ? primary : primaryTint,
                     child: Icon(
                       Icons.person,
-                      size: 28,
+                      size: Dimensions.itemWidth28,
                       color: _isSignedIn ? Colors.white : primary,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: Dimensions.itemHeight10),
                   if (_isSignedIn) ...<Widget>[
                     Text(
                       'settings.profile.name'.tr(),
-                      style: AppTheme.titleMedium(textPrimary)
-                          .copyWith(fontSize: 17),
+                      style: AppTextStyles.titleMedium(textPrimary),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: Dimensions.itemHeight2),
                     Text(
                       'settings.profile.email'.tr(),
-                      style: AppTheme.bodyMedium(textSecondary)
-                          .copyWith(fontSize: 13),
+                      style: AppTextStyles.bodySmall(textSecondary),
                     ),
                   ] else ...<Widget>[
                     Text(
                       'settings.profile.guest'.tr(),
-                      style: AppTheme.titleMedium(textPrimary)
-                          .copyWith(fontSize: 17),
+                      style: AppTextStyles.titleMedium(textPrimary),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: Dimensions.itemHeight2),
                     Text(
                       'settings.profile.guest_hint'.tr(),
-                      style: AppTheme.bodyMedium(textSecondary)
+                      style: AppTextStyles.bodyMedium(textSecondary)
                           .copyWith(fontSize: 13),
                       textAlign: TextAlign.center,
                     ),
                   ],
-                  const SizedBox(height: 14),
+                  const SizedBox(height: Dimensions.itemHeight14),
                   GestureDetector(
                     onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 22, vertical: 10),
+                          horizontal: Dimensions.padding22,
+                          vertical: Dimensions.padding10),
                       decoration: BoxDecoration(
                         color: primary,
                         borderRadius:
-                            BorderRadius.circular(AppTheme.borderRadiusPill),
+                            BorderRadius.circular(Dimensions.borderRadiusPill),
                       ),
                       child: Text(
                         _isSignedIn
                             ? 'settings.profile.edit'.tr()
                             : 'settings.sign_in'.tr(),
-                        style: AppTheme.bodyMedium(Colors.white).copyWith(
-                            fontWeight: FontWeight.w700, fontSize: 13),
+                        style: AppTextStyles.labelMedium(Colors.white),
                       ),
                     ),
                   ),
@@ -126,7 +133,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: Dimensions.itemHeight14),
 
           // Language
           _SettingsCard(
@@ -162,9 +169,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+                  padding: const EdgeInsets.fromLTRB(
+                    Dimensions.padding16,
+                    Dimensions.padding14,
+                    Dimensions.padding16,
+                    Dimensions.padding14,
+                  ),
                   child: Text('settings.faq.title'.tr(),
-                      style: AppTheme.titleMedium(textPrimary)),
+                      style: AppTextStyles.titleMedium(textPrimary)),
                 ),
                 Divider(height: 1, color: border),
                 _FaqItem(
@@ -216,18 +228,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           // Logout — only shown when signed in
           if (_isSignedIn) ...<Widget>[
-            const SizedBox(height: 14),
+            const SizedBox(height: Dimensions.itemHeight14),
             GestureDetector(
               onTap: () {},
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 15),
+                padding: const EdgeInsets.symmetric(
+                    vertical: Dimensions.padding15),
                 decoration: BoxDecoration(
                   color: errorTint,
-                  borderRadius: BorderRadius.circular(AppTheme.borderRadius),
+                  borderRadius: BorderRadius.circular(Dimensions.borderRadius),
                 ),
                 child: Text(
                   'settings.logout'.tr(),
-                  style: AppTheme.titleMedium(error).copyWith(fontSize: 15),
+                  style: AppTextStyles.titleSmall(error),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -252,7 +265,7 @@ class _SettingsCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: surface,
           border: Border.all(color: border),
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
         ),
         child: child,
       );
@@ -282,31 +295,32 @@ class _SettingsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: const EdgeInsets.symmetric(
+              horizontal: Dimensions.padding16,
+              vertical: Dimensions.padding14),
           child: Row(
             children: <Widget>[
               if (icon != null) ...<Widget>[
-                Icon(icon, size: 20, color: iconColor),
-                const SizedBox(width: 12),
+                Icon(icon, size: Dimensions.itemWidth20, color: iconColor),
+                const SizedBox(width: Dimensions.itemWidth12),
               ],
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(title,
-                        style: AppTheme.titleMedium(textPrimary)
-                            .copyWith(fontSize: 15)),
+                        style: AppTextStyles.titleSmall(textPrimary)),
                     Text(subtitle,
-                        style: AppTheme.bodyMedium(textSecondary)
-                            .copyWith(fontSize: 13)),
+                        style: AppTextStyles.bodySmall(textSecondary)),
                   ],
                 ),
               ),
               if (showChevron)
                 Icon(Icons.chevron_right,
-                    size: 16, color: textSecondary.withValues(alpha: 0.4)),
+                    size: Dimensions.itemWidth16,
+                    color: textSecondary.withValues(alpha: 0.4)),
             ],
           ),
         ),
@@ -343,18 +357,20 @@ class _FaqItemState extends State<_FaqItem> {
           InkWell(
             onTap: () => setState(() => _open = !_open),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Dimensions.padding16,
+                  vertical: Dimensions.padding14),
               child: Row(
                 children: <Widget>[
                   Expanded(
                       child: Text(widget.question,
-                          style: AppTheme.bodyLarge(widget.textPrimary)
-                              .copyWith(fontSize: 14))),
+                          style: AppTextStyles.bodyMedium(widget.textPrimary))),
                   AnimatedRotation(
                     duration: const Duration(milliseconds: 200),
                     turns: _open ? 0.5 : 0,
                     child: Icon(Icons.keyboard_arrow_down,
-                        size: 18, color: widget.textSecondary),
+                        size: Dimensions.itemWidth18,
+                        color: widget.textSecondary),
                   ),
                 ],
               ),
@@ -362,9 +378,14 @@ class _FaqItemState extends State<_FaqItem> {
           ),
           if (_open)
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+              padding: const EdgeInsets.fromLTRB(
+                Dimensions.padding16,
+                0,
+                Dimensions.padding16,
+                Dimensions.padding14,
+              ),
               child: Text(widget.answer,
-                  style: AppTheme.bodyMedium(widget.textSecondary)
+                  style: AppTextStyles.bodyMedium(widget.textSecondary)
                       .copyWith(height: 1.5, fontSize: 13)),
             ),
           if (widget.showDivider) Divider(height: 1, color: widget.border),

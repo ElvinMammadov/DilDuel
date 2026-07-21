@@ -63,20 +63,22 @@ class _QuizQuestionState extends State<QuizQuestion> {
       children: <Widget>[
         // Question card
         Container(
-          margin: const EdgeInsets.only(top: 16),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 36),
+          margin: const EdgeInsets.only(top: Dimensions.padding16),
+          padding: const EdgeInsets.symmetric(
+              horizontal: Dimensions.padding20,
+              vertical: Dimensions.padding36),
           decoration: BoxDecoration(
             color: primaryTint,
             border: Border.all(color: primary, width: 1.5),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(Dimensions.borderRadiusMedium),
           ),
           child: Text(
             widget.word.question,
-            style: AppTheme.wordSource(textPrimary, size: 24),
+            style: AppTextStyles.wordSource(textPrimary, size: 24),
             textAlign: TextAlign.center,
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: Dimensions.itemHeight20),
         // Answer options
         ...widget.word.options.map((String option) {
           final bool isSelected = selectedAnswer == option;
@@ -101,21 +103,22 @@ class _QuizQuestionState extends State<QuizQuestion> {
           }
 
           return Padding(
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: Dimensions.padding10),
             child: GestureDetector(
               onTap: showAnswer ? null : () => _handleAnswer(option),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                    vertical: Dimensions.padding15,
+                    horizontal: Dimensions.padding16),
                 decoration: BoxDecoration(
                   color: bg,
                   border: Border.all(color: borderColor, width: 1.5),
-                  borderRadius: BorderRadius.circular(AppTheme.borderRadius),
+                  borderRadius: BorderRadius.circular(Dimensions.borderRadius),
                 ),
                 child: Text(
                   option,
-                  style: AppTheme.titleMedium(textColor).copyWith(fontSize: 16),
+                  style: AppTextStyles.bodyLargeBold(textColor),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -123,19 +126,21 @@ class _QuizQuestionState extends State<QuizQuestion> {
           );
         }),
         if (showAnswer) ...<Widget>[
-          const SizedBox(height: 10),
+          const SizedBox(height: Dimensions.itemHeight10),
           GestureDetector(
             onTap: _handleContinue,
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(
+                  vertical: Dimensions.padding14),
               decoration: BoxDecoration(
                 color: primary,
-                borderRadius: BorderRadius.circular(AppTheme.borderRadiusPill),
+                borderRadius:
+                    BorderRadius.circular(Dimensions.borderRadiusPill),
               ),
               child: Text(
                 'quiz.next'.tr(),
                 style:
-                    AppTheme.titleMedium(Colors.white).copyWith(fontSize: 15),
+                    AppTextStyles.titleSmall(Colors.white),
                 textAlign: TextAlign.center,
               ),
             ),

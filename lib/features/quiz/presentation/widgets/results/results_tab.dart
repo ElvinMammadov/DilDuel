@@ -7,37 +7,33 @@ class _MetricChip extends StatelessWidget {
   final String value;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.padding12,
-          vertical: Dimensions.padding12,
-        ),
-        decoration: BoxDecoration(
-          color: AppTheme.primaryTint,
-          borderRadius: BorderRadius.circular(AppTheme.borderRadius),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              value,
-              style: const TextStyle(
-                color: AppTheme.mainColor,
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: const TextStyle(
-                color: AppTheme.secondaryColor,
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-      );
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final Color primaryTint =
+        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Dimensions.padding12,
+        vertical: Dimensions.padding12,
+      ),
+      decoration: BoxDecoration(
+        color: primaryTint,
+        borderRadius: BorderRadius.circular(Dimensions.borderRadius),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(value, style: AppTextStyles.scoreDisplay(primary)),
+          const SizedBox(height: Dimensions.itemHeight2),
+          Text(label, style: AppTextStyles.caption(textSecondary)),
+        ],
+      ),
+    );
+  }
 }
 
 class _ResultCard extends StatelessWidget {
@@ -48,8 +44,13 @@ class _ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String date =
-        DateFormat('MMM d, y HH:mm').format(result.dateTime);
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color textPrimary =
+        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+
+    final String date = DateFormat('MMM d, y HH:mm').format(result.dateTime);
     final double percentageValue =
         (result.score / result.totalQuestions) * 100;
     final String percentage = percentageValue.toStringAsFixed(1);
@@ -71,31 +72,21 @@ class _ResultCard extends StatelessWidget {
                   Text(
                     'quiz.results.quiz_number'
                         .tr(args: <String>['${index + 1}']),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: AppTheme.textPrimaryLight,
-                    ),
+                    style: AppTextStyles.labelLarge(textPrimary),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: Dimensions.itemHeight2),
                   Text(
                     'quiz.results.score_details'.tr(args: <String>[
                       '${result.score}',
                       '${result.totalQuestions}',
                       percentage,
                     ]),
-                    style: const TextStyle(
-                      color: AppTheme.secondaryColor,
-                      fontSize: 13,
-                    ),
+                    style: AppTextStyles.bodySmall(textSecondary),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: Dimensions.itemHeight4),
                   Text(
                     date,
-                    style: const TextStyle(
-                      color: AppTheme.secondaryColor,
-                      fontSize: 11,
-                    ),
+                    style: AppTextStyles.labelSmall(textSecondary),
                   ),
                 ],
               ),
@@ -108,16 +99,11 @@ class _ResultCard extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: _scoreBg(percentageValue),
-                borderRadius:
-                    BorderRadius.circular(AppTheme.borderRadius),
+                borderRadius: BorderRadius.circular(Dimensions.borderRadius),
               ),
               child: Text(
                 '$percentage%',
-                style: TextStyle(
-                  color: _scoreColor(percentageValue),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                ),
+                style: AppTextStyles.labelLarge(_scoreColor(percentageValue)),
               ),
             ),
           ],
@@ -135,7 +121,7 @@ Color _scoreColor(double pct) {
 
 Color _scoreBg(double pct) {
   if (pct >= 70) return AppTheme.successTint;
-  if (pct >= 40) return const Color(0xFFFFF3E0);
+  if (pct >= 40) return AppTheme.warningTint;
   return AppTheme.errorTint;
 }
 
@@ -162,128 +148,133 @@ class _ResultsTabState extends State<ResultsTab> {
   }
 
   @override
-  Widget build(BuildContext context) => RefreshIndicator(
-        onRefresh: () async {
-          setState(() {
-            _loadData();
-          });
-        },
-        child: ListView(
-          padding: const EdgeInsets.all(Dimensions.padding16),
-          children: <Widget>[
-            FutureBuilder<Map<String, dynamic>>(
-              future: _statisticsFuture,
-              builder: (BuildContext context,
-                  AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Card(
-                    margin: EdgeInsets.zero,
-                    child: ListTile(
-                      title: Text('quiz.results.loading'.tr()),
-                    ),
-                  );
-                }
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color textPrimary =
+        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
 
-                final Map<String, dynamic> stats = snapshot.data ??
-                    <String, dynamic>{'totalQuizzes': 0, 'averageScore': '0.0'};
-
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {
+          _loadData();
+        });
+      },
+      child: ListView(
+        padding: const EdgeInsets.all(Dimensions.padding16),
+        children: <Widget>[
+          FutureBuilder<Map<String, dynamic>>(
+            future: _statisticsFuture,
+            builder: (BuildContext context,
+                AsyncSnapshot<Map<String, dynamic>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
                 return Card(
                   margin: EdgeInsets.zero,
-                  child: Padding(
-                    padding: const EdgeInsets.all(Dimensions.padding16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'quiz.results.statistics'.tr(),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                  child: ListTile(
+                    title: Text('quiz.results.loading'.tr()),
+                  ),
+                );
+              }
+
+              final Map<String, dynamic> stats = snapshot.data ??
+                  <String, dynamic>{
+                    'totalQuizzes': 0,
+                    'averageScore': '0.0',
+                  };
+
+              return Card(
+                margin: EdgeInsets.zero,
+                child: Padding(
+                  padding: const EdgeInsets.all(Dimensions.padding16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'quiz.results.statistics'.tr(),
+                        style: AppTextStyles.titleSmall(textPrimary),
+                      ),
+                      const SizedBox(height: Dimensions.padding12),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: _MetricChip(
+                              label:
+                                  'quiz.results.total_quizzes_label'.tr(),
+                              value: '${stats['totalQuizzes']}',
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: Dimensions.padding12),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: _MetricChip(
-                                label: 'quiz.results.total_quizzes_label'.tr(),
-                                value: '${stats['totalQuizzes']}',
-                              ),
+                          const SizedBox(width: Dimensions.padding8),
+                          Expanded(
+                            child: _MetricChip(
+                              label:
+                                  'quiz.results.average_score_label'.tr(),
+                              value: '${stats['averageScore']}%',
                             ),
-                            const SizedBox(width: Dimensions.padding8),
-                            Expanded(
-                              child: _MetricChip(
-                                label: 'quiz.results.average_score_label'.tr(),
-                                value: '${stats['averageScore']}%',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: Dimensions.padding20,
-                bottom: Dimensions.padding12,
-              ),
-              child: Text(
-                'quiz.results.history'.tr(),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
+              );
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: Dimensions.padding20,
+              bottom: Dimensions.padding12,
             ),
-            FutureBuilder<List<QuizResult>>(
-              future: _resultsFuture,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<QuizResult>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            child: Text(
+              'quiz.results.history'.tr(),
+              style: AppTextStyles.titleXLarge(textPrimary),
+            ),
+          ),
+          FutureBuilder<List<QuizResult>>(
+            future: _resultsFuture,
+            builder: (BuildContext context,
+                AsyncSnapshot<List<QuizResult>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                final List<QuizResult> results =
-                    snapshot.data ?? <QuizResult>[];
+              final List<QuizResult> results =
+                  snapshot.data ?? <QuizResult>[];
 
-                if (results.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: Dimensions.padding20),
-                    child: Center(
-                      child: Text(
-                        'quiz.results.empty'.tr(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: AppTheme.secondaryColor,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-
-                return Column(
-                  children: List<Widget>.generate(
-                    results.length,
-                    (int index) => Padding(
-                      padding: EdgeInsets.only(
-                        bottom: index < results.length - 1
-                            ? Dimensions.itemHeight8
-                            : 0,
-                      ),
-                      child: _ResultCard(
-                        result: results[index],
-                        index: index,
-                      ),
+              if (results.isEmpty) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.only(top: Dimensions.padding20),
+                  child: Center(
+                    child: Text(
+                      'quiz.results.empty'.tr(),
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.bodyMedium(textSecondary),
                     ),
                   ),
                 );
-              },
-            ),
-          ],
-        ),
-      );
+              }
+
+              return Column(
+                children: List<Widget>.generate(
+                  results.length,
+                  (int index) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: index < results.length - 1
+                          ? Dimensions.itemHeight8
+                          : 0,
+                    ),
+                    child: _ResultCard(
+                      result: results[index],
+                      index: index,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }

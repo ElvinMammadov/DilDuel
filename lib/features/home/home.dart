@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';
 import 'package:flutter_dic/features/search/search.dart';
@@ -114,10 +115,8 @@ class _DesignedNavBar extends StatelessWidget {
                   const SizedBox(height: 3),
                   Text(
                     items[i].label,
-                    style: AppTheme.labelSmall(active ? primary : textSecondary)
-                        .copyWith(
-                            fontWeight:
-                                active ? FontWeight.w700 : FontWeight.w600),
+                    style: AppTextStyles.labelSmall(
+                        active ? primary : textSecondary),
                   ),
                 ],
               ),

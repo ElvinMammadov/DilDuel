@@ -90,9 +90,15 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
     return Container(
       decoration: BoxDecoration(
         color: surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(Dimensions.borderRadiusSheet)),
       ),
-      padding: const EdgeInsets.fromLTRB(24, 10, 24, 44),
+      padding: const EdgeInsets.fromLTRB(
+        Dimensions.padding24,
+        Dimensions.padding10,
+        Dimensions.padding24,
+        Dimensions.padding44,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,12 +106,13 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
           // Drag handle
           Center(
             child: Container(
-              width: 36,
-              height: 5,
-              margin: const EdgeInsets.only(bottom: 14),
+              width: Dimensions.itemWidth36,
+              height: Dimensions.itemHeight5,
+              margin: const EdgeInsets.only(bottom: Dimensions.padding14),
               decoration: BoxDecoration(
                 color: border,
-                borderRadius: BorderRadius.circular(100),
+                borderRadius:
+                    BorderRadius.circular(Dimensions.borderRadiusPill),
               ),
             ),
           ),
@@ -116,44 +123,44 @@ class _SearchBottomSheetScreenState extends State<_SearchBottomSheetScreen> {
               Expanded(
                 child: Text(
                   widget.searchWord.key,
-                  style: AppTheme.wordSource(textPrimary, size: 28),
+                  style: AppTextStyles.wordSource(textPrimary, size: 28),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: Dimensions.itemWidth12),
               // TTS button
               GestureDetector(
                 onTap: !_isAzDe ? () => _speak(widget.searchWord.key) : null,
                 child: Container(
-                  width: 46,
-                  height: 46,
+                  width: Dimensions.itemWidth46,
+                  height: Dimensions.itemHeight46,
                   decoration:
                       BoxDecoration(color: primaryTint, shape: BoxShape.circle),
-                  child:
-                      Icon(Icons.volume_up_outlined, size: 19, color: primary),
+                  child: Icon(Icons.volume_up_outlined,
+                      size: Dimensions.itemWidth19, color: primary),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: Dimensions.itemWidth8),
               // Bookmark button
               GestureDetector(
                 onTap: _toggleBookmark,
                 child: Container(
-                  width: 46,
-                  height: 46,
+                  width: Dimensions.itemWidth46,
+                  height: Dimensions.itemHeight46,
                   decoration:
                       BoxDecoration(color: primaryTint, shape: BoxShape.circle),
                   child: Icon(
                     _isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
-                    size: 19,
+                    size: Dimensions.itemWidth19,
                     color: primary,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: Dimensions.itemHeight10),
           // Translation
           Text(widget.searchWord.value,
-              style: AppTheme.bodyLarge(textSecondary).copyWith(fontSize: 19)),
+              style: AppTextStyles.bodyXLarge(textSecondary)),
         ],
       ),
     );

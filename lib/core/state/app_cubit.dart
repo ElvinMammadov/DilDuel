@@ -4,8 +4,8 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class AppCubit extends Cubit<AppState> {
-  // Default to AzDe
-  AppCubit() : super(const AppState(dictionaryType: DictionaryType.azDe));
+  // Default to DeAz (German → Azerbaijani)
+  AppCubit() : super(const AppState(dictionaryType: DictionaryType.deAz));
 
   void setDictionaryType(DictionaryType newType) {
     emit(

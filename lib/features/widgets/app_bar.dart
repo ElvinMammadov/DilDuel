@@ -54,14 +54,15 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: showProfileButton
           ? <Widget>[
-              // Direction switcher pill
+              // Direction switcher pill — shows active source → target
               GestureDetector(
                 onTap: () =>
                     context.read<AppCubit>().toggleDictionaryType(),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.padding12,
-                      vertical: Dimensions.padding8),
+                    horizontal: Dimensions.padding12,
+                    vertical: Dimensions.padding8,
+                  ),
                   decoration: BoxDecoration(
                     color: surface,
                     border: Border.all(color: border),
@@ -71,21 +72,25 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      // Source language (active / bold)
                       Text(
-                        'Az',
-                        style: AppTextStyles.labelMedium(
-                          isAzDe ? textPrimary : textSecondary,
+                        isAzDe ? 'Az' : 'De',
+                        style: AppTextStyles.labelMedium(primary),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.itemWidth6,
+                        ),
+                        child: Icon(
+                          Icons.arrow_forward_rounded,
+                          size: Dimensions.itemWidth14,
+                          color: primary,
                         ),
                       ),
-                      const SizedBox(width: Dimensions.itemWidth6),
-                      Icon(Icons.compare_arrows,
-                          size: Dimensions.itemWidth16, color: primary),
-                      const SizedBox(width: Dimensions.itemWidth6),
+                      // Target language (dimmed)
                       Text(
-                        'De',
-                        style: AppTextStyles.labelMedium(
-                          isAzDe ? textSecondary : textPrimary,
-                        ),
+                        isAzDe ? 'De' : 'Az',
+                        style: AppTextStyles.labelMedium(textSecondary),
                       ),
                     ],
                   ),

@@ -16,4 +16,7 @@ class SearchBloc extends Cubit<SearchState> {
       (List<Word> words) => emit(SearchLoaded(words)),
     );
   }
+
+  /// Resets the search state — called when the search field is cleared.
+  void clear() => emit(SearchInitial());
 }

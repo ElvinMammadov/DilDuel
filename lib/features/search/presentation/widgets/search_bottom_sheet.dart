@@ -1,23 +1,16 @@
 part of search;
 
+// Delegates to the shared word_bottom_sheet so both Search and Bookmarks
+// can open the same detail sheet without a circular import.
 void showSearchBottomSheet(
   BuildContext context,
   Word searchWord,
   String locale, {
   VoidCallback? onBookmarkToggled,
-}) {
-  showModalBottomSheet<void>(
-    context: context,
-    builder: (BuildContext context) => _SearchBottomSheetScreen(
-      searchWord: searchWord,
-      locale: locale,
+}) =>
+    showWordBottomSheet(
+      context,
+      searchWord,
+      locale,
       onBookmarkToggled: onBookmarkToggled,
-    ),
-    useSafeArea: true,
-    isScrollControlled: true,
-    constraints: BoxConstraints(
-      maxHeight: MediaQuery.of(context).size.height * 0.5,
-      minHeight: MediaQuery.of(context).size.height * 0.3,
-    ),
-  );
-}
+    );

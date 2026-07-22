@@ -56,6 +56,13 @@ class BookmarksScreen extends StatelessWidget {
                   textSecondary: textSecondary,
                   primary: primary,
                   error: error,
+                  onTap: () => showWordBottomSheet(
+                    context,
+                    word,
+                    word.dicType == 'DeAz' ? 'de-DE' : 'az-AZ',
+                    onBookmarkToggled: () =>
+                        context.read<BookmarksBloc>().loadBookmarks(),
+                  ),
                   onRemoveWithUndo: () {
                     context.read<BookmarksBloc>().removeBookmark(word);
                     SnackbarUtils.showInfo(
@@ -160,6 +167,7 @@ class _BookmarkItem extends StatelessWidget {
   final Color textSecondary;
   final Color primary;
   final Color error;
+  final VoidCallback onTap;
   final VoidCallback onRemoveWithUndo;
 
   const _BookmarkItem({
@@ -170,6 +178,7 @@ class _BookmarkItem extends StatelessWidget {
     required this.textSecondary,
     required this.primary,
     required this.error,
+    required this.onTap,
     required this.onRemoveWithUndo,
   });
 
@@ -181,7 +190,8 @@ class _BookmarkItem extends StatelessWidget {
           background: Container(
             decoration: BoxDecoration(
               color: error.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
+              borderRadius:
+                  BorderRadius.circular(Dimensions.borderRadiusLarge),
             ),
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: Dimensions.padding16),
@@ -189,35 +199,44 @@ class _BookmarkItem extends StatelessWidget {
           ),
           direction: DismissDirection.endToStart,
           onDismissed: (_) => onRemoveWithUndo(),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
+          child: GestureDetector(
+            onTap: onTap,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
                 horizontal: Dimensions.padding16,
-                vertical: Dimensions.padding14),
-            decoration: BoxDecoration(
-              color: surface,
-              border: Border.all(color: border),
-              borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(word.key,
-                          style: AppTextStyles.wordSource(textPrimary)),
-                      const SizedBox(height: Dimensions.itemHeight3),
-                      Text(word.value,
-                          style: AppTextStyles.bodyMedium(textSecondary)),
-                    ],
+                vertical: Dimensions.padding14,
+              ),
+              decoration: BoxDecoration(
+                color: surface,
+                border: Border.all(color: border),
+                borderRadius:
+                    BorderRadius.circular(Dimensions.borderRadiusLarge),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(word.key,
+                            style: AppTextStyles.wordSource(textPrimary)),
+                        const SizedBox(height: Dimensions.itemHeight3),
+                        Text(
+                          word.value,
+                          style: AppTextStyles.bodyMedium(textSecondary),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: onRemoveWithUndo,
-                  child: Icon(Icons.bookmark,
-                      size: Dimensions.itemWidth20, color: primary),
-                ),
-              ],
+                  Icon(
+                    Icons.chevron_right,
+                    size: Dimensions.itemWidth18,
+                    color: textSecondary.withValues(alpha: 0.4),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

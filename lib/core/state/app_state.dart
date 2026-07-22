@@ -12,7 +12,7 @@ enum DictionaryType {
   static DictionaryType fromValue(int value) =>
       DictionaryType.values.firstWhere(
         (DictionaryType type) => type.value == value,
-        orElse: () => DictionaryType.azDe,
+        orElse: () => DictionaryType.deAz,
       );
 }
 

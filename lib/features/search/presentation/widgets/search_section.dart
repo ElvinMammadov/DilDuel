@@ -91,12 +91,19 @@ class _SearchSectionState extends State<SearchSection> {
           isListening: _isListening,
           onChanged: (String text) {
             setState(() => query = text);
-            context.read<SearchBloc>().search(text, dictionaryName);
+            if (text.trim().isEmpty) {
+              context.read<SearchBloc>().clear();
+            } else {
+              context.read<SearchBloc>().search(text, dictionaryName);
+            }
           },
-          onClear: () => setState(() {
-            _controller.clear();
-            query = '';
-          }),
+          onClear: () {
+            setState(() {
+              _controller.clear();
+              query = '';
+            });
+            context.read<SearchBloc>().clear();
+          },
           onMic: () => _startListening(dictionaryName),
         ),
       );

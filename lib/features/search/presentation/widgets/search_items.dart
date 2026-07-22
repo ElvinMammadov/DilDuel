@@ -103,42 +103,100 @@ class _WordCard extends StatelessWidget {
     required this.onTap,
   });
 
+  /// For DeAz words only — builds "der  Substantiv  Dative".
+  /// Returns null for AzDe because mainType there belongs to translations.
+  String? _typeLabel() {
+    if (word.dicType != 'DeAz') return null;
+    final List<String> parts = <String>[];
+    if (word.article != null) parts.add(word.article!);
+    if (word.mainType != null) parts.add(word.mainType!);
+    if (word.subType != null) parts.add(word.subType!);
+    return parts.isEmpty ? null : parts.join('  ');
+  }
+
+  Color _articleColor(String? article) =>
+      switch (article?.toLowerCase()) {
+        'der' => AppTheme.mainColor,
+        'die' => AppTheme.errorColor,
+        'das' => AppTheme.successColor,
+        _ => AppTheme.secondaryColor,
+      };
+
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: Dimensions.padding10),
-        child: GestureDetector(
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.padding16,
-                vertical: Dimensions.padding14),
-            decoration: BoxDecoration(
-              color: surface,
-              border: Border.all(color: border),
-              borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(word.key,
-                          style: AppTextStyles.wordSource(textPrimary)),
-                      const SizedBox(height: Dimensions.itemHeight3),
-                      Text(word.value,
-                          style: AppTextStyles.bodyMedium(textSecondary)),
-                    ],
-                  ),
+  Widget build(BuildContext context) {
+    final String? typeLabel = _typeLabel();
+    // Article drives the accent color; fall back to secondary.
+    final Color typeColor = _articleColor(word.article);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: Dimensions.padding10),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.padding16,
+            vertical: Dimensions.padding14,
+          ),
+          decoration: BoxDecoration(
+            color: surface,
+            border: Border.all(color: border),
+            borderRadius:
+                BorderRadius.circular(Dimensions.borderRadiusLarge),
+          ),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // ── Word  ·  Verb  ·  Intransitives Verb ──
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            word.key,
+                            style: AppTextStyles.wordSource(textPrimary),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (typeLabel != null) ...<Widget>[
+                          const SizedBox(width: Dimensions.itemWidth8),
+                          Flexible(
+                            child: Text(
+                              typeLabel,
+                              style:
+                                  AppTextStyles.bodySmall(typeColor),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: Dimensions.itemHeight3),
+                    // ── Translation ─────────────────────────────
+                    Text(
+                      word.value,
+                      style: AppTextStyles.bodyMedium(textSecondary),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                Icon(Icons.chevron_right,
-                    size: Dimensions.itemWidth18,
-                    color: textSecondary.withValues(alpha: 0.4)),
-              ],
-            ),
+              ),
+              const SizedBox(width: Dimensions.itemWidth8),
+              Icon(
+                Icons.chevron_right,
+                size: Dimensions.itemWidth18,
+                color: textSecondary.withValues(alpha: 0.4),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _EmptySearchState extends StatelessWidget {
@@ -229,3 +287,5 @@ class _ErrorSearchState extends StatelessWidget {
         ),
       );
 }
+
+

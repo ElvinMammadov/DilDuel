@@ -16,6 +16,7 @@ import 'package:injectable/injectable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';
 import 'package:flutter_dic/features/shared/widgets/word_bottom_sheet.dart';
+import 'package:flutter_dic/features/shared/widgets/word_type_badges.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';

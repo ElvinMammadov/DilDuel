@@ -14,7 +14,7 @@ class DBHelper implements WordLocalDataSource {
   static const String dbName = 'luget.db';
 
   /// Bump this when the asset DB schema changes so the file is re-copied.
-  static const int dbVersion = 2;
+  static const int dbVersion = 3;
 
   // ── table names ──────────────────────────────────────────────────────────
   static const String deAz = 'DeAz';

@@ -91,6 +91,19 @@
     "error": "Fehler beim Laden der Lesezeichen",
     "try_again": "Erneut versuchen"
   },
+  "word": {
+    "translation": "ÜBERSETZUNG",
+    "grammar": "GRAMMATIK",
+    "example": "BEISPIELE",
+    "short_example": "Kurzes Beispiel",
+    "sentence_example": "Satzbeispiel",
+    "genitiv": "Genitiv",
+    "plural": "Plural",
+    "imperfekt": "Imperfekt",
+    "perfekt": "Perfekt",
+    "komparativ": "Komparativ",
+    "superlativ": "Superlativ"
+  },
   "common": {
     "confirm": "Bestätigen",
     "cancel": "Abbrechen",

@@ -53,6 +53,7 @@ class SearchItems extends StatelessWidget {
                     border: border,
                     textPrimary: textPrimary,
                     textSecondary: textSecondary,
+                    isDark: isDark,
                     onTap: () => showSearchBottomSheet(
                       context,
                       word,
@@ -92,6 +93,7 @@ class _WordCard extends StatelessWidget {
   final Color border;
   final Color textPrimary;
   final Color textSecondary;
+  final bool isDark;
   final VoidCallback onTap;
 
   const _WordCard({
@@ -100,33 +102,16 @@ class _WordCard extends StatelessWidget {
     required this.border,
     required this.textPrimary,
     required this.textSecondary,
+    required this.isDark,
     required this.onTap,
   });
 
-  /// For DeAz words only — builds "der  Substantiv  Dative".
-  /// Returns null for AzDe because mainType there belongs to translations.
-  String? _typeLabel() {
-    if (word.dicType != 'DeAz') return null;
-    final List<String> parts = <String>[];
-    if (word.article != null) parts.add(word.article!);
-    if (word.mainType != null) parts.add(word.mainType!);
-    if (word.subType != null) parts.add(word.subType!);
-    return parts.isEmpty ? null : parts.join('  ');
-  }
-
-  Color _articleColor(String? article) =>
-      switch (article?.toLowerCase()) {
-        'der' => AppTheme.mainColor,
-        'die' => AppTheme.errorColor,
-        'das' => AppTheme.successColor,
-        _ => AppTheme.secondaryColor,
-      };
-
   @override
   Widget build(BuildContext context) {
-    final String? typeLabel = _typeLabel();
-    // Article drives the accent color; fall back to secondary.
-    final Color typeColor = _articleColor(word.article);
+    final bool hasTypeBadges = word.dicType == 'DeAz' &&
+        (word.article != null ||
+            word.mainType != null ||
+            word.subType != null);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: Dimensions.padding10),
@@ -149,31 +134,23 @@ class _WordCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // ── Word  ·  Verb  ·  Intransitives Verb ──
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: <Widget>[
-                        Flexible(
-                          child: Text(
-                            word.key,
-                            style: AppTextStyles.wordSource(textPrimary),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        if (typeLabel != null) ...<Widget>[
-                          const SizedBox(width: Dimensions.itemWidth8),
-                          Flexible(
-                            child: Text(
-                              typeLabel,
-                              style:
-                                  AppTextStyles.bodySmall(typeColor),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ],
+                    // ── Word title ─────────────────────────────
+                    Text(
+                      word.key,
+                      style: AppTextStyles.wordSource(textPrimary),
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    // ── Type badges ────────────────────────────
+                    if (hasTypeBadges) ...<Widget>[
+                      const SizedBox(height: Dimensions.itemHeight3),
+                      WordTypeBadges(
+                        word: word,
+                        isDark: isDark,
+                        textSecondary: textSecondary,
+                        border: border,
+                        showArticle: false,
+                      ),
+                    ],
                     const SizedBox(height: Dimensions.itemHeight3),
                     // ── Translation ─────────────────────────────
                     Text(

@@ -91,6 +91,19 @@
     "error": "Seçilmişləri yükləmək xətası",
     "try_again": "Yenidən cəhd et"
   },
+  "word": {
+    "translation": "TƏRCÜMƏ",
+    "grammar": "QRAMMATİKA",
+    "example": "NÜMUNƏ",
+    "short_example": "Qısa nümunə",
+    "sentence_example": "Cümlə nümunəsi",
+    "genitiv": "Genitiv",
+    "plural": "Plural",
+    "imperfekt": "İmperfekt",
+    "perfekt": "Perfekt",
+    "komparativ": "Komparativ",
+    "superlativ": "Superlativ"
+  },
   "common": {
     "confirm": "Təsdiq et",
     "cancel": "Ləğv et",

@@ -1,9 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
+import 'package:flutter_dic/core/utils/grammar_type_translator.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
+import 'package:flutter_dic/features/shared/widgets/word_type_badges.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 /// Opens the word detail bottom sheet from anywhere in the app.
@@ -228,16 +231,19 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                     ],
                   ),
 
-                  // ── Type line: article  mainType  subType ──
-                  if (_typeLabel(word) != null)
+                  // ── Type badges: article | mainType | subType ──
+                  if (word.dicType == 'DeAz' &&
+                      (word.article != null ||
+                          word.mainType != null ||
+                          word.subType != null))
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: Dimensions.padding4),
-                      child: Text(
-                        _typeLabel(word)!,
-                        style: AppTextStyles.bodySmall(
-                          _typeColor(word.article, primary, textSecondary),
-                        ),
+                          const EdgeInsets.only(top: Dimensions.padding8),
+                      child: WordTypeBadges(
+                        word: word,
+                        isDark: isDark,
+                        textSecondary: textSecondary,
+                        border: border,
                       ),
                     ),
 
@@ -245,7 +251,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
 
                   // ── Translation ────────────────────────────
                   _SheetSection(
-                    label: _isDeAz ? 'TƏRCÜMƏ' : 'ÜBERSETZUNG',
+                    label: 'word.translation'.tr(),
                     textSecondary: textSecondary,
                     border: border,
                   ),
@@ -280,7 +286,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                   if (word.hasGrammarForms) ...<Widget>[
                     const SizedBox(height: Dimensions.padding20),
                     _SheetSection(
-                      label: 'QRAMMATİKA',
+                      label: 'word.grammar'.tr(),
                       textSecondary: textSecondary,
                       border: border,
                     ),
@@ -298,7 +304,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                   if (hasExample || hasSentence) ...<Widget>[
                     const SizedBox(height: Dimensions.padding20),
                     _SheetSection(
-                      label: 'NÜMUNƏ',
+                      label: 'word.example'.tr(),
                       textSecondary: textSecondary,
                       border: border,
                     ),
@@ -326,22 +332,6 @@ class _WordBottomSheetState extends State<WordBottomSheet>
 
   bool _ok(String? v) => v != null && v.trim().isNotEmpty;
 
-  String? _typeLabel(Word w) {
-    if (w.dicType != 'DeAz') return null;
-    final List<String> parts = <String>[];
-    if (w.article != null) parts.add(w.article!);
-    if (w.mainType != null) parts.add(w.mainType!);
-    if (w.subType != null) parts.add(w.subType!);
-    return parts.isEmpty ? null : parts.join('  ');
-  }
-
-  Color _typeColor(String? article, Color primary, Color secondary) =>
-      switch (article?.toLowerCase()) {
-        'der' => AppTheme.mainColor,
-        'die' => AppTheme.errorColor,
-        'das' => AppTheme.successColor,
-        _ => secondary,
-      };
 
   static String _stripNum(String s) {
     final RegExpMatch? m = RegExp(r'^\d+\.\s*').firstMatch(s);
@@ -349,6 +339,8 @@ class _WordBottomSheetState extends State<WordBottomSheet>
   }
 
   List<(String?, String?, String)> _parseAzDeRows(Word w) {
+    final bool isAz = context.locale.languageCode == 'az';
+
     List<String> split(String? raw) => raw == null
         ? <String>[]
         : raw
@@ -366,12 +358,22 @@ class _WordBottomSheetState extends State<WordBottomSheet>
       translations.length,
       (int i) {
         final String translation = _stripNum(translations[i]);
-        final String? type =
+        final String? rawType =
             i < types.length && types[i].isNotEmpty ? types[i] : null;
-        final String? subtype = i < subtypes.length &&
+        final String? rawSubtype = i < subtypes.length &&
                 subtypes[i].isNotEmpty
             ? subtypes[i]
             : null;
+        final String? type = rawType == null
+            ? null
+            : isAz
+                ? GrammarTypeTranslator.mainType(rawType)
+                : rawType;
+        final String? subtype = rawSubtype == null
+            ? null
+            : isAz
+                ? GrammarTypeTranslator.subType(rawSubtype)
+                : rawSubtype;
         return (type, subtype, translation);
       },
     );
@@ -592,6 +594,7 @@ class _AzDeTranslationCard extends StatelessWidget {
   }
 }
 
+
 class _GrammarCard extends StatelessWidget {
   const _GrammarCard({
     required this.word,
@@ -613,12 +616,12 @@ class _GrammarCard extends StatelessWidget {
       if (v != null && v.trim().isNotEmpty) r.add((label, v.trim()));
     }
 
-    add('Genitiv', word.genitive);
-    add('Plural', word.plural);
-    add('Imperfekt', word.imperfekt);
-    add('Perfekt', word.perfekt);
-    add('Komparativ', word.comparative);
-    add('Superlativ', word.superlative);
+    add('word.genitiv'.tr(), word.genitive);
+    add('word.plural'.tr(), word.plural);
+    add('word.imperfekt'.tr(), word.imperfekt);
+    add('word.perfekt'.tr(), word.perfekt);
+    add('word.komparativ'.tr(), word.comparative);
+    add('word.superlativ'.tr(), word.superlative);
     return r;
   }
 
@@ -731,7 +734,7 @@ class _ExamplesCard extends StatelessWidget {
           if (example != null)
             _ExampleEntry(
               icon: Icons.short_text_rounded,
-              label: 'Qısa nümunə',
+              label: 'word.short_example'.tr(),
               text: example!.trim(),
               textPrimary: textPrimary,
               primary: primary,
@@ -741,7 +744,7 @@ class _ExamplesCard extends StatelessWidget {
           if (sentence != null)
             _ExampleEntry(
               icon: Icons.format_quote_rounded,
-              label: 'Cümlə nümunəsi',
+              label: 'word.sentence_example'.tr(),
               text: sentence!.trim(),
               textPrimary: textPrimary,
               primary: primary,

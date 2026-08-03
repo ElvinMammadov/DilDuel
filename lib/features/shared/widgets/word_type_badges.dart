@@ -7,8 +7,8 @@ import 'package:flutter_dic/core/utils/grammar_type_translator.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 
 /// Renders article + mainType + subType as a row of pill badges for a
-/// [Word] entry. Only shown for DeAz entries that have at least one
-/// of those fields set.
+/// [Word] entry. Shown for any entry that has at least one of those
+/// fields set (both DeAz and AzDe).
 ///
 /// Set [showArticle] to `false` in contexts where the article is already
 /// visible inside the word key text (e.g. search result cards).  The
@@ -47,9 +47,20 @@ class WordTypeBadges extends StatelessWidget {
         _ => Colors.transparent,
       };
 
+  /// Extracts the first clean entry from a potentially numbered, multi-line
+  /// DB value (e.g. `"1. Verb\n2. Adjektiv"` → `"Verb"`).
+  /// DeAz single-value strings pass through unchanged.
+  static String _firstEntry(String s) {
+    final String first = s
+        .split('\n')
+        .map((String l) => l.trim())
+        .firstWhere((String l) => l.isNotEmpty, orElse: () => s.trim());
+    final RegExpMatch? m = RegExp(r'^\d+\.\s*').firstMatch(first);
+    return m != null ? first.substring(m.end).trim() : first.trim();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (word.dicType != 'DeAz') return const SizedBox.shrink();
 
     final bool isAz = context.locale.languageCode == 'az';
     final List<Widget> badges = <Widget>[];
@@ -66,36 +77,42 @@ class WordTypeBadges extends StatelessWidget {
 
     // ── Main type badge ───────────────────────────────────────────────────
     if (word.mainType != null) {
-      final String label = isAz
-          ? GrammarTypeTranslator.mainType(word.mainType!)
-          : word.mainType!;
+      final String rawLabel = _firstEntry(word.mainType!);
+      if (rawLabel.isNotEmpty) {
+        final String label = isAz
+            ? GrammarTypeTranslator.mainType(rawLabel)
+            : rawLabel;
 
-      // When the article badge is hidden, apply the article gender colour to
-      // the mainType badge so gender information is not lost.
-      final bool colorByArticle = !showArticle && word.article != null;
-      badges.add(WordTypeBadge(
-        label: label,
-        bg: colorByArticle
-            ? _articleBgColor()
-            : (isDark ? AppTheme.primaryTintDark : AppTheme.chipBgLight),
-        textColor: colorByArticle ? _articleTextColor() : textSecondary,
-        borderColor: colorByArticle
-            ? _articleTextColor().withAlpha(60)
-            : null,
-      ));
+        // When the article badge is hidden, apply the article gender colour to
+        // the mainType badge so gender information is not lost.
+        final bool colorByArticle = !showArticle && word.article != null;
+        badges.add(WordTypeBadge(
+          label: label,
+          bg: colorByArticle
+              ? _articleBgColor()
+              : (isDark ? AppTheme.primaryTintDark : AppTheme.chipBgLight),
+          textColor: colorByArticle ? _articleTextColor() : textSecondary,
+          borderColor: colorByArticle
+              ? _articleTextColor().withAlpha(60)
+              : null,
+        ));
+      }
     }
 
     // ── Sub-type badge ────────────────────────────────────────────────────
     if (word.subType != null) {
-      final String label = isAz
-          ? GrammarTypeTranslator.subType(word.subType!)
-          : word.subType!;
-      badges.add(WordTypeBadge(
-        label: label,
-        bg: Colors.transparent,
-        textColor: textSecondary,
-        borderColor: border,
-      ));
+      final String rawLabel = _firstEntry(word.subType!);
+      if (rawLabel.isNotEmpty) {
+        final String label = isAz
+            ? GrammarTypeTranslator.subType(rawLabel)
+            : rawLabel;
+        badges.add(WordTypeBadge(
+          label: label,
+          bg: Colors.transparent,
+          textColor: textSecondary,
+          borderColor: border,
+        ));
+      }
     }
 
     if (badges.isEmpty) return const SizedBox.shrink();
@@ -131,4 +148,73 @@ class WordTypeBadge extends StatelessWidget {
         ),
         child: Text(label, style: AppTextStyles.labelMedium(textColor)),
       );
+}
+
+/// Shows up to [_max] translation strings as pill chips with an overflow
+/// count chip (`+N`) when there are more entries.
+///
+/// Used for AzDe cards in both Search and Bookmarks to render German
+/// translation previews consistently.
+class TranslationChips extends StatelessWidget {
+  const TranslationChips({
+    super.key,
+    required this.translations,
+    required this.isDark,
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.border,
+  });
+
+  final List<String> translations;
+  final bool isDark;
+  final Color textPrimary;
+  final Color textSecondary;
+  final Color border;
+
+  static const int _max = 3;
+
+  /// Parses a raw AzDe `value` string (e.g. `"1. gehen\n2. fahren"`)
+  /// into individual clean translation strings (`["gehen", "fahren"]`).
+  static List<String> parse(String raw) {
+    final RegExp numPrefix = RegExp(r'^\d+\.\s*');
+    return raw
+        .split('\n')
+        .map((String l) => l.trim())
+        .where((String l) => l.isNotEmpty)
+        .map((String l) {
+          final RegExpMatch? m = numPrefix.firstMatch(l);
+          return m != null ? l.substring(m.end).trim() : l;
+        })
+        .toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (translations.isEmpty) return const SizedBox.shrink();
+    final List<String> visible = translations.take(_max).toList();
+    final int overflow = translations.length - visible.length;
+    final Color chipBg =
+        isDark ? AppTheme.primaryTintDark : AppTheme.chipBgLight;
+
+    return Wrap(
+      spacing: 6,
+      runSpacing: 4,
+      children: <Widget>[
+        ...visible.map(
+          (String t) => WordTypeBadge(
+            label: t,
+            bg: chipBg,
+            textColor: textPrimary,
+          ),
+        ),
+        if (overflow > 0)
+          WordTypeBadge(
+            label: '+$overflow',
+            bg: Colors.transparent,
+            textColor: textSecondary,
+            borderColor: border,
+          ),
+      ],
+    );
+  }
 }

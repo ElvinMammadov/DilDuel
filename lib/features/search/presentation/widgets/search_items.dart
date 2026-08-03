@@ -106,9 +106,15 @@ class _WordCard extends StatelessWidget {
     required this.onTap,
   });
 
+  /// Parses `word.value` into individual stripped translation strings.
+  List<String> _translations() => TranslationChips.parse(word.value);
+
   @override
   Widget build(BuildContext context) {
-    final bool hasTypeBadges = word.dicType == 'DeAz' &&
+    final bool isAzDe = word.dicType == 'AzDe';
+    // Type badges are only meaningful at card level for DeAz, where one
+    // word has a single grammar type.  AzDe types vary per translation row.
+    final bool hasTypeBadges = !isAzDe &&
         (word.article != null ||
             word.mainType != null ||
             word.subType != null);
@@ -140,7 +146,7 @@ class _WordCard extends StatelessWidget {
                       style: AppTextStyles.wordSource(textPrimary),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // ── Type badges ────────────────────────────
+                    // ── DeAz: type badges ──────────────────────
                     if (hasTypeBadges) ...<Widget>[
                       const SizedBox(height: Dimensions.itemHeight3),
                       WordTypeBadges(
@@ -151,14 +157,24 @@ class _WordCard extends StatelessWidget {
                         showArticle: false,
                       ),
                     ],
-                    const SizedBox(height: Dimensions.itemHeight3),
-                    // ── Translation ─────────────────────────────
-                    Text(
-                      word.value,
-                      style: AppTextStyles.bodyMedium(textSecondary),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    const SizedBox(height: Dimensions.itemHeight6),
+                    // ── AzDe: translation chips ────────────────
+                    // ── DeAz: translation text ─────────────────
+                    if (isAzDe)
+                      TranslationChips(
+                        translations: _translations(),
+                        isDark: isDark,
+                        textPrimary: textPrimary,
+                        textSecondary: textSecondary,
+                        border: border,
+                      )
+                    else
+                      Text(
+                        word.value,
+                        style: AppTextStyles.bodyMedium(textSecondary),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                   ],
                 ),
               ),
@@ -175,6 +191,7 @@ class _WordCard extends StatelessWidget {
     );
   }
 }
+
 
 class _EmptySearchState extends StatelessWidget {
   final Color primary;
@@ -264,5 +281,3 @@ class _ErrorSearchState extends StatelessWidget {
         ),
       );
 }
-
-

@@ -10,6 +10,7 @@ import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/core/utils/snackbar_utils.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:flutter_dic/features/shared/widgets/word_bottom_sheet.dart';
+import 'package:flutter_dic/features/shared/widgets/word_type_badges.dart';
 import 'package:injectable/injectable.dart';
 
 part 'presentation/screens/bookmarks_screen.dart';

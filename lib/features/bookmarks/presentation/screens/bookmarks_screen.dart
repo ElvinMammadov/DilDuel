@@ -22,12 +22,6 @@ class BookmarksScreen extends StatelessWidget {
             final Color textSecondary = isDark
                 ? AppTheme.textSecondaryDark
                 : AppTheme.textSecondaryLight;
-            final Color surface =
-                isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-            final Color border =
-                isDark ? AppTheme.borderDark : AppTheme.borderLight;
-            final Color error =
-                isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
 
             if (state.bookmarks.isEmpty) {
               return _BookmarksEmptyState(
@@ -50,19 +44,6 @@ class BookmarksScreen extends StatelessWidget {
                 final Word word = state.bookmarks[index];
                 return _BookmarkItem(
                   word: word,
-                  surface: surface,
-                  border: border,
-                  textPrimary: textPrimary,
-                  textSecondary: textSecondary,
-                  primary: primary,
-                  error: error,
-                  onTap: () => showWordBottomSheet(
-                    context,
-                    word,
-                    word.dicType == 'DeAz' ? 'de-DE' : 'az-AZ',
-                    onBookmarkToggled: () =>
-                        context.read<BookmarksBloc>().loadBookmarks(),
-                  ),
                   onRemoveWithUndo: () {
                     context.read<BookmarksBloc>().removeBookmark(word);
                     SnackbarUtils.showInfo(
@@ -160,85 +141,119 @@ class _BookmarksEmptyState extends StatelessWidget {
 }
 
 class _BookmarkItem extends StatelessWidget {
-  final Word word;
-  final Color surface;
-  final Color border;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color primary;
-  final Color error;
-  final VoidCallback onTap;
-  final VoidCallback onRemoveWithUndo;
-
   const _BookmarkItem({
     required this.word,
-    required this.surface,
-    required this.border,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.primary,
-    required this.error,
-    required this.onTap,
     required this.onRemoveWithUndo,
   });
 
+  final Word word;
+  final VoidCallback onRemoveWithUndo;
+
+  /// Fetches the full [Word] (with grammar fields) from the dictionary table
+  /// then opens the shared bottom sheet.  Falls back to the stored bookmark
+  /// data if the lookup fails (e.g. the DB was replaced).
+  Future<void> _openDetails(BuildContext context) async {
+    final Word? fullWord =
+        await DBHelper.getWordByKey(word.key, word.dicType);
+    if (!context.mounted) return;
+    showWordBottomSheet(
+      context,
+      fullWord ?? word,
+      word.dicType == 'DeAz' ? 'de-DE' : 'az-AZ',
+      onBookmarkToggled: () =>
+          context.read<BookmarksBloc>().loadBookmarks(),
+    );
+  }
+
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: Dimensions.padding10),
-        child: Dismissible(
-          key: Key(word.key),
-          background: Container(
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color surface =
+        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final Color border =
+        isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final Color textPrimary =
+        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
+    final Color textSecondary =
+        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final Color error =
+        isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
+    final bool isAzDe = word.dicType == 'AzDe';
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: Dimensions.padding10),
+      child: Dismissible(
+        key: Key(word.key),
+        background: Container(
+          decoration: BoxDecoration(
+            color: error.withValues(alpha: 0.12),
+            borderRadius:
+                BorderRadius.circular(Dimensions.borderRadiusLarge),
+          ),
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: Dimensions.padding16),
+          child: Icon(Icons.delete_outline, color: error),
+        ),
+        direction: DismissDirection.endToStart,
+        onDismissed: (_) => onRemoveWithUndo(),
+        child: GestureDetector(
+          onTap: () => _openDetails(context),
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Dimensions.padding16,
+              vertical: Dimensions.padding14,
+            ),
             decoration: BoxDecoration(
-              color: error.withValues(alpha: 0.12),
+              color: surface,
+              border: Border.all(color: border),
               borderRadius:
                   BorderRadius.circular(Dimensions.borderRadiusLarge),
             ),
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: Dimensions.padding16),
-            child: Icon(Icons.delete_outline, color: error),
-          ),
-          direction: DismissDirection.endToStart,
-          onDismissed: (_) => onRemoveWithUndo(),
-          child: GestureDetector(
-            onTap: onTap,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.padding16,
-                vertical: Dimensions.padding14,
-              ),
-              decoration: BoxDecoration(
-                color: surface,
-                border: Border.all(color: border),
-                borderRadius:
-                    BorderRadius.circular(Dimensions.borderRadiusLarge),
-              ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(word.key,
-                            style: AppTextStyles.wordSource(textPrimary)),
-                        const SizedBox(height: Dimensions.itemHeight3),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // ── Word title ───────────────────────────
+                      Text(
+                        word.key,
+                        style: AppTextStyles.wordSource(textPrimary),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: Dimensions.itemHeight6),
+                      // ── AzDe: translation chips ──────────────
+                      // ── DeAz: translation text ───────────────
+                      if (isAzDe)
+                        TranslationChips(
+                          translations:
+                              TranslationChips.parse(word.value),
+                          isDark: isDark,
+                          textPrimary: textPrimary,
+                          textSecondary: textSecondary,
+                          border: border,
+                        )
+                      else
                         Text(
                           word.value,
                           style: AppTextStyles.bodyMedium(textSecondary),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
+                    ],
                   ),
-                  Icon(
-                    Icons.chevron_right,
-                    size: Dimensions.itemWidth18,
-                    color: textSecondary.withValues(alpha: 0.4),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(width: Dimensions.itemWidth8),
+                Icon(
+                  Icons.chevron_right,
+                  size: Dimensions.itemWidth18,
+                  color: textSecondary.withValues(alpha: 0.4),
+                ),
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 }

@@ -13,7 +13,9 @@ class GrammarTypeTranslator {
     'Adverb': 'zərf',
     'Artikel': 'artikl',
     'Konjunktion': 'bağlayıcı',
+    'Komparativ': 'sifətin müqaisə dərəcəsi',
     'Partikel': 'ədat',
+    'Plural': 'cəm',
     'Pronomen': 'əvəzlik',
     'Pronomen/Adjektiv': 'əvəzlik/sifət',
     // DB typo ("Prposition") and correct form both handled
@@ -21,6 +23,7 @@ class GrammarTypeTranslator {
     'Präposition': 'sözönü',
     'Substantiv': 'isim',
     'Substantiv (Plural)': 'isim (cəm)',
+    'Superlativ': 'sifətin üstünlük dərəcəsi',
     'Verb': 'fel',
     'Zahlwort': 'say',
   };
@@ -45,6 +48,13 @@ class GrammarTypeTranslator {
     'Dative': 'yönlük hal',
     'Dative / Akkusativ': 'yönlük hal / ittiham hal',
     'Genitiv': 'yiyəlik hal',
+    'Plural': 'cəm',
+    // Degree labels
+    'Komparativ': 'sifətin müqaisə dərəcəsi',
+    'Superlativ': 'sifətin üstünlük dərəcəsi',
+    // Tense labels (can appear in AzDe sub-type column)
+    'Imperfekt': 'imperfekt',
+    'Perfekt': 'perfekt',
   };
 
   /// Returns the Azerbaijani translation of [term] (main word-class label).

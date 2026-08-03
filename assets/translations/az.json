@@ -97,12 +97,12 @@
     "example": "NÜMUNƏ",
     "short_example": "Qısa nümunə",
     "sentence_example": "Cümlə nümunəsi",
-    "genitiv": "Genitiv",
-    "plural": "Plural",
+    "genitiv": "Yiyəlik hal",
+    "plural": "Cəm",
     "imperfekt": "İmperfekt",
     "perfekt": "Perfekt",
-    "komparativ": "Komparativ",
-    "superlativ": "Superlativ"
+    "komparativ": "Müqaisə dərəcəsi",
+    "superlativ": "Üstünlük dərəcəsi"
   },
   "common": {
     "confirm": "Təsdiq et",

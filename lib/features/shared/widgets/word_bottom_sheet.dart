@@ -232,7 +232,8 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                   ),
 
                   // ── Type badges: article | mainType | subType ──
-                  if (word.dicType == 'DeAz' &&
+                  // Only shown for DeAz — AzDe displays per-row badges instead.
+                  if (_isDeAz &&
                       (word.article != null ||
                           word.mainType != null ||
                           word.subType != null))
@@ -500,16 +501,10 @@ class _AzDeTranslationCard extends StatelessWidget {
   final Color primaryTint;
   final ValueChanged<String> onSpeak;
 
-  String _typePrefix(String? main, String? sub) {
-    final List<String> parts = <String>[];
-    if (main != null && main.isNotEmpty) parts.add(main);
-    if (sub != null && sub.isNotEmpty) parts.add(sub);
-    return parts.join(' · ');
-  }
-
   @override
   Widget build(BuildContext context) {
     if (rows.isEmpty) return const SizedBox.shrink();
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -524,7 +519,9 @@ class _AzDeTranslationCard extends StatelessWidget {
               final int i = e.$1;
               final (String? mainType, String? subType, String translation) =
                   e.$2;
-              final String prefix = _typePrefix(mainType, subType);
+              final bool hasType =
+                  (mainType != null && mainType.isNotEmpty) ||
+                  (subType != null && subType.isNotEmpty);
               return Column(
                 children: <Widget>[
                   Padding(
@@ -540,30 +537,48 @@ class _AzDeTranslationCard extends StatelessWidget {
                           width: 20,
                           child: Text(
                             '${i + 1}.',
-                            style:
-                                AppTextStyles.labelSmall(textSecondary),
+                            style: AppTextStyles.labelSmall(textSecondary),
                           ),
                         ),
-                        // Type + translation
+                        // Type badges + translation
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              if (prefix.isNotEmpty)
-                                Text(
-                                  prefix,
-                                  style: AppTextStyles.labelSmall(
-                                    textSecondary,
-                                  ),
+                              if (hasType)
+                                Wrap(
+                                  spacing: 6,
+                                  runSpacing: 4,
+                                  children: <Widget>[
+                                    if (mainType != null &&
+                                        mainType.isNotEmpty)
+                                      WordTypeBadge(
+                                        label: mainType,
+                                        bg: isDark
+                                            ? AppTheme.primaryTintDark
+                                            : AppTheme.chipBgLight,
+                                        textColor: textSecondary,
+                                      ),
+                                    if (subType != null &&
+                                        subType.isNotEmpty)
+                                      WordTypeBadge(
+                                        label: subType,
+                                        bg: Colors.transparent,
+                                        textColor: textSecondary,
+                                        borderColor: border,
+                                      ),
+                                  ],
                                 ),
+                              if (hasType)
+                                const SizedBox(height: Dimensions.itemHeight4),
                               Text(
                                 translation,
-                                style:
-                                    AppTextStyles.bodyLarge(textPrimary),
+                                style: AppTextStyles.bodyLarge(textPrimary),
                               ),
                             ],
                           ),
                         ),
+                        const SizedBox(width: Dimensions.itemWidth8),
                         // Speaker button for each German word
                         GestureDetector(
                           onTap: () => onSpeak(translation),

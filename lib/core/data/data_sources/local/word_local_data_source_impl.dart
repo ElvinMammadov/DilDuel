@@ -151,6 +151,39 @@ class DBHelper implements WordLocalDataSource {
     }).toList();
   }
 
+  /// Returns the full [Word] from the dictionary table for an exact key match.
+  ///
+  /// Falls back to `null` when the word is not found (e.g. the DB was updated
+  /// after the bookmark was saved).
+  static Future<Word?> getWordByKey(String key, String dicType) async {
+    final List<Map<String, Object?>> result = await _db!.query(
+      dicType,
+      where: 'UPPER(key) = ?',
+      whereArgs: <Object?>[key.toUpperCase()],
+      limit: 1,
+    );
+    if (result.isEmpty) return null;
+    final Map<String, Object?> row = result.first;
+    final bool isDeAz = dicType == deAz;
+    return Word(
+      key: row[colKey] as String? ?? '',
+      value: row[colValue] as String? ?? '',
+      dicType: dicType,
+      article: isDeAz ? row[colArticle] as String? : null,
+      gender: isDeAz ? row[colGender] as String? : null,
+      mainType: row[colMainType] as String?,
+      subType: row[colSubType] as String?,
+      genitive: isDeAz ? row[colGenitive] as String? : null,
+      plural: isDeAz ? row[colPlural] as String? : null,
+      imperfekt: isDeAz ? row[colImperfekt] as String? : null,
+      perfekt: isDeAz ? row[colPerfekt] as String? : null,
+      comparative: isDeAz ? row[colComparative] as String? : null,
+      superlative: isDeAz ? row[colSuperlative] as String? : null,
+      example: isDeAz ? row[colExample] as String? : null,
+      sentence: isDeAz ? row[colSentence] as String? : null,
+    );
+  }
+
   static Future<void> addBookmark(Word word) async {
     await _db!.insert(
       bookmark,

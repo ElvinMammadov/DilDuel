@@ -3,6 +3,7 @@ library quiz;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dic/core/components/app_segmented_control.dart';
 import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/error/failures.dart';

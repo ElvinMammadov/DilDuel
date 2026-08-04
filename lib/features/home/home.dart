@@ -21,16 +21,16 @@ class _HomeShellState extends State<HomeShell> {
 
   final List<Widget> _pages = const <Widget>[
     SearchScreen(),
-    BookmarksScreen(),
-    QuizScreen(),
     TrainingScreen(),
+    QuizScreen(),
+    BookmarksScreen(),
   ];
 
   void _onTabTapped(int index) {
     if (index == _currentIndex) return;
 
     // Refresh bookmarks when switching to the Bookmarks tab
-    if (index == 1) {
+    if (index == 3) {
       context.read<BookmarksBloc>().loadBookmarks();
     }
 
@@ -74,9 +74,9 @@ class _DesignedNavBar extends StatelessWidget {
     final List<({IconData icon, String label})> items =
         <({IconData icon, String label})>[
       (icon: Icons.search, label: 'app.search'.tr()),
-      (icon: Icons.favorite_border, label: 'app.bookmarks'.tr()),
-      (icon: Icons.school_outlined, label: 'app.quiz'.tr()),
       (icon: Icons.draw_outlined, label: 'app.training'.tr()),
+      (icon: Icons.school_outlined, label: 'app.quiz'.tr()),
+      (icon: Icons.favorite_border, label: 'app.bookmarks'.tr()),
     ];
 
     return Container(

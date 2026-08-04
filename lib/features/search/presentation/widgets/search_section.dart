@@ -141,11 +141,11 @@ class _PillSearchBar extends StatelessWidget {
     return Container(
       margin: EdgeInsets.zero,
       padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.padding16, vertical: Dimensions.padding10),
+          horizontal: Dimensions.padding16, vertical: Dimensions.padding12),
       decoration: BoxDecoration(
         color: surface,
         border: Border.all(color: border, width: 1.5),
-        borderRadius: BorderRadius.circular(Dimensions.borderRadiusPill),
+        borderRadius: BorderRadius.circular(Dimensions.borderRadius),
         boxShadow: isDark
             ? null
             : <BoxShadow>[
@@ -181,8 +181,8 @@ class _PillSearchBar extends StatelessWidget {
             GestureDetector(
               onTap: onClear,
               child: Container(
-                width: Dimensions.itemWidth26,
-                height: Dimensions.itemHeight26,
+                width: Dimensions.itemWidth24,
+                height: Dimensions.itemHeight24,
                 decoration:
                     BoxDecoration(color: chipBg, shape: BoxShape.circle),
                 child: Icon(Icons.close,
@@ -194,8 +194,8 @@ class _PillSearchBar extends StatelessWidget {
               onTap: onMic,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                width: Dimensions.itemWidth32,
-                height: Dimensions.itemHeight32,
+                width: Dimensions.itemWidth24,
+                height: Dimensions.itemHeight24,
                 decoration: BoxDecoration(
                   color: isListening
                       ? (isDark

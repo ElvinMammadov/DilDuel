@@ -14,15 +14,21 @@ class DBHelper implements WordLocalDataSource {
   static const String dbName = 'luget.db';
 
   /// Bump this when the asset DB schema changes so the file is re-copied.
-  static const int dbVersion = 3;
+  static const int dbVersion = 5;
 
   // ── table names ──────────────────────────────────────────────────────────
   static const String deAz = 'DeAz';
   static const String azDe = 'AzDe';
   static const String bookmark = 'bookmark';
   static const String quizResults = 'quiz_results';
+  static const String unknownWords = 'unknown_words';
+  static const String trainingProgress = 'training_progress';
+  static const String trainingLevelPosition =
+      'training_level_position';
 
   // ── shared columns ───────────────────────────────────────────────────────
+  static const String colId = 'id';
+  static const String colLevel = 'level';
   static const String colKey = 'key';
   static const String colValue = 'value';
   static const String colType = 'type';
@@ -54,6 +60,91 @@ class DBHelper implements WordLocalDataSource {
     ''');
   }
 
+  static Future<void> _createTrainingProgressTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS $trainingProgress(
+        id        INTEGER PRIMARY KEY AUTOINCREMENT,
+        word_id   TEXT    NOT NULL,
+        level     TEXT    NOT NULL,
+        correct   INTEGER NOT NULL DEFAULT 0,
+        incorrect INTEGER NOT NULL DEFAULT 0,
+        last_seen TEXT,
+        UNIQUE(word_id)
+      )
+    ''');
+  }
+
+  static Future<void> _createTrainingLevelPositionTable(
+    Database db,
+  ) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS $trainingLevelPosition(
+        level         TEXT PRIMARY KEY,
+        current_index INTEGER NOT NULL DEFAULT 0,
+        last_accessed TEXT
+      )
+    ''');
+  }
+
+  static Future<void> _createUnknownWordsTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS $unknownWords(
+        key   TEXT NOT NULL,
+        value TEXT NOT NULL,
+        date  DATETIME DEFAULT CURRENT_TIMESTAMP,
+        type  TEXT,
+        PRIMARY KEY (key, value)
+      )
+    ''');
+  }
+
+  static Future<void> _ensureTables(Database db) async {
+    await _createQuizResultsTable(db);
+    await _createUnknownWordsTable(db);
+    await _createTrainingProgressTable(db);
+    await _createTrainingLevelPositionTable(db);
+  }
+
+  // ── Training position helpers ─────────────────────────────────────────────
+
+  /// Returns the saved word index for [level], or 0 if never set.
+  static Future<int> getLevelPosition(String level) async {
+    final List<Map<String, Object?>> rows = await _db!.query(
+      trainingLevelPosition,
+      columns: <String>['current_index'],
+      where: 'level = ?',
+      whereArgs: <Object?>[level],
+      limit: 1,
+    );
+    if (rows.isEmpty) return 0;
+    return rows.first['current_index'] as int? ?? 0;
+  }
+
+  /// Persists [index] for [level] and updates the last-accessed timestamp.
+  static Future<void> saveLevelPosition(String level, int index) async {
+    await _db!.insert(
+      trainingLevelPosition,
+      <String, Object?>{
+        'level': level,
+        'current_index': index,
+        'last_accessed': DateTime.now().toIso8601String(),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  /// Returns the level that was accessed most recently, or null if none.
+  static Future<String?> getLastTrainingLevel() async {
+    final List<Map<String, Object?>> rows = await _db!.query(
+      trainingLevelPosition,
+      columns: <String>['level'],
+      orderBy: 'last_accessed DESC',
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    return rows.first['level'] as String?;
+  }
+
   /// Initialises the database, re-copying the asset file when the schema
   /// version has changed (detected via SQLite PRAGMA user_version).
   static Future<void> initDB() async {
@@ -82,13 +173,13 @@ class DBHelper implements WordLocalDataSource {
       dbPath,
       version: dbVersion,
       onCreate: (Database db, int version) async {
-        await _createQuizResultsTable(db);
+        await _ensureTables(db);
       },
       onUpgrade: (Database db, int oldVersion, int newVersion) async {
-        await _createQuizResultsTable(db);
+        await _ensureTables(db);
       },
       onOpen: (Database db) async {
-        await _createQuizResultsTable(db);
+        await _ensureTables(db);
       },
     );
   }
@@ -149,6 +240,47 @@ class DBHelper implements WordLocalDataSource {
         sentence: isDeAz ? row[colSentence] as String? : null,
       );
     }).toList();
+  }
+
+  /// Returns the total number of [Word]s in [deAz] for the given CEFR [level].
+  static Future<int> getWordCountByLevel(String level) async {
+    final List<Map<String, Object?>> result = await _db!.rawQuery(
+      'SELECT COUNT(*) AS cnt FROM $deAz WHERE $colLevel = ?',
+      <Object?>[level],
+    );
+    if (result.isEmpty) return 0;
+    final Object? v = result.first['cnt'];
+    return v is int ? v : 0;
+  }
+
+  /// Returns all [Word]s from [deAz] that have the given CEFR [level].
+  ///
+  /// The caller should shuffle the list when building a training session.
+  static Future<List<Word>> getWordsByLevel(String level) async {
+    final List<Map<String, Object?>> result = await _db!.query(
+      deAz,
+      where: '$colLevel = ?',
+      whereArgs: <Object?>[level],
+    );
+    return result
+        .map((Map<String, Object?> row) => Word(
+              key: row[colKey] as String? ?? '',
+              value: row[colValue] as String? ?? '',
+              dicType: deAz,
+              article: row[colArticle] as String?,
+              gender: row[colGender] as String?,
+              mainType: row[colMainType] as String?,
+              subType: row[colSubType] as String?,
+              genitive: row[colGenitive] as String?,
+              plural: row[colPlural] as String?,
+              imperfekt: row[colImperfekt] as String?,
+              perfekt: row[colPerfekt] as String?,
+              comparative: row[colComparative] as String?,
+              superlative: row[colSuperlative] as String?,
+              example: row[colExample] as String?,
+              sentence: row[colSentence] as String?,
+            ))
+        .toList();
   }
 
   /// Returns the full [Word] from the dictionary table for an exact key match.
@@ -246,6 +378,60 @@ class DBHelper implements WordLocalDataSource {
 
   static Future<void> clearBookmarks() async {
     await _db!.delete(bookmark);
+  }
+
+  // ── Unknown-word methods ──────────────────────────────────────────────────
+
+  static Future<void> addUnknownWord(Word word) async {
+    await _db!.insert(
+      unknownWords,
+      <String, Object?>{
+        colKey: word.key,
+        colValue: word.value,
+        colType: word.dicType,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<void> removeUnknownWord(Word word) async {
+    await _db!.delete(
+      unknownWords,
+      where: 'UPPER(key) = ? AND value = ?',
+      whereArgs: <Object?>[word.key.toUpperCase(), word.value],
+    );
+  }
+
+  static Future<bool> isUnknownWord(Word word) async {
+    final List<Map<String, Object?>> result = await _db!.query(
+      unknownWords,
+      where: 'UPPER(key) = ? AND value = ?',
+      whereArgs: <Object?>[word.key.toUpperCase(), word.value],
+    );
+    return result.isNotEmpty;
+  }
+
+  static Future<List<String>> getAllUnknownWords() async {
+    final List<Map<String, Object?>> result =
+        await _db!.query(unknownWords, orderBy: 'date DESC');
+    return result
+        .map((Map<String, Object?> row) => row[colKey] as String)
+        .toList();
+  }
+
+  static Future<Word?> getUnknownWord(String key) async {
+    final List<Map<String, Object?>> result = await _db!.query(
+      unknownWords,
+      where: 'UPPER(key) = ?',
+      whereArgs: <Object?>[key.toUpperCase()],
+    );
+    if (result.isEmpty) return null;
+    final Map<String, Object?> row = result.first;
+    return Word(
+      key: row[colKey] as String? ?? '',
+      value: row[colValue] as String? ?? '',
+      dicType: row[colType] as String? ?? '',
+    );
   }
 
   // ── Quiz methods ──────────────────────────────────────────────────────────

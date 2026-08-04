@@ -89,7 +89,11 @@
     "removed": "Seçilmişlərdən silindi",
     "undo": "Geri al",
     "error": "Seçilmişləri yükləmək xətası",
-    "try_again": "Yenidən cəhd et"
+    "try_again": "Yenidən cəhd et",
+    "unknown": "Bilinməyənlər",
+    "unknown_empty": "Bilinməyən söz yoxdur",
+    "unknown_empty_description": "Məşq zamanı bilmədiyiniz sözlər buraya əlavə olunacaq",
+    "unknown_removed": "Bilinməyənlərdən silindi"
   },
   "word": {
     "translation": "TƏRCÜMƏ",
@@ -99,8 +103,8 @@
     "sentence_example": "Cümlə nümunəsi",
     "genitiv": "Yiyəlik hal",
     "plural": "Cəm",
-    "imperfekt": "İmperfekt",
-    "perfekt": "Perfekt",
+    "imperfekt": "Imperfekt keçmiş zaman forması",
+    "perfekt": "Perfekt keçmiş zaman forması",
     "komparativ": "Müqaisə dərəcəsi",
     "superlativ": "Üstünlük dərəcəsi"
   },
@@ -112,5 +116,20 @@
     "something_wrong": "Nəsə səhv getdi",
     "yes": "Bəli",
     "no": "Xeyr"
+  },
+  "training": {
+    "title": "Söz Məşqi",
+    "choose_level": "Səviyyəni seçin",
+    "level": "Səviyyə",
+    "word_count": "{} / {}",
+    "no_words": "Bu səviyyə üçün söz tapılmadı",
+    "empty_title": "Səviyyəni seçin",
+    "empty_subtitle": "Məşq etmək üçün yuxarıdan bir səviyyə seçin",
+    "back": "Geri",
+    "next": "İrəli",
+    "bookmarked": "\"{}\" seçilmişlərə əlavə edildi",
+    "bookmark_removed": "\"{}\" seçilmişlərdən silindi",
+    "marked_unknown": "\"{}\" bilinməyənlərə əlavə edildi",
+    "unknown_removed": "\"{}\" bilinməyənlərdən silindi"
   }
 }

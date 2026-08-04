@@ -8,8 +8,9 @@ class BookmarksLoading extends BookmarksState {}
 
 class BookmarksLoaded extends BookmarksState {
   final List<Word> bookmarks;
+  final List<Word> unknownWords;
 
-  BookmarksLoaded(this.bookmarks);
+  BookmarksLoaded(this.bookmarks, {this.unknownWords = const <Word>[]});
 }
 
 class BookmarksError extends BookmarksState {

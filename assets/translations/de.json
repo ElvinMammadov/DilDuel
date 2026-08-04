@@ -89,7 +89,11 @@
     "removed": "Aus Lesezeichen entfernt",
     "undo": "Rückgängig",
     "error": "Fehler beim Laden der Lesezeichen",
-    "try_again": "Erneut versuchen"
+    "try_again": "Erneut versuchen",
+    "unknown": "Unbekannte",
+    "unknown_empty": "Keine unbekannten Wörter",
+    "unknown_empty_description": "Wörter, die Sie beim Training nicht kennen, werden hier angezeigt",
+    "unknown_removed": "Aus Unbekannte entfernt"
   },
   "word": {
     "translation": "ÜBERSETZUNG",
@@ -112,5 +116,20 @@
     "something_wrong": "Etwas ist schiefgelaufen",
     "yes": "Ja",
     "no": "Nein"
+  },
+  "training": {
+    "title": "Wortubung",
+    "choose_level": "Niveau wahlen",
+    "level": "Niveau",
+    "word_count": "{} / {}",
+    "no_words": "Keine Worter fur dieses Niveau gefunden",
+    "empty_title": "Niveau auswahlen",
+    "empty_subtitle": "Wahlen Sie unten ein Niveau aus, um zu uben",
+    "back": "Zuruck",
+    "next": "Weiter",
+    "bookmarked": "\"{}\" zu Lesezeichen hinzugefügt",
+    "bookmark_removed": "\"{}\" aus Lesezeichen entfernt",
+    "marked_unknown": "\"{}\" als unbekannt markiert",
+    "unknown_removed": "\"{}\" aus Unbekannte entfernt"
   }
 }

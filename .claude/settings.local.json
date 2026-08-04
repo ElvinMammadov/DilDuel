@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter pub:*)",
+      "Bash(dart run:*)",
+      "Bash(git -C /Users/elvinmammadov/StudioProjects/Dictionary status)",
+      "Bash(git -C /Users/elvinmammadov/StudioProjects/Dictionary diff HEAD)",
+      "Bash(git add:*)",
+      "Bash(git:*)"
+    ]
+  }
+}

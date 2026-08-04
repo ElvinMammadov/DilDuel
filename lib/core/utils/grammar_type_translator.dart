@@ -53,11 +53,33 @@ class GrammarTypeTranslator {
     'Komparativ': 'sifətin müqaisə dərəcəsi',
     'Superlativ': 'sifətin üstünlük dərəcəsi',
     // Tense labels (can appear in AzDe sub-type column)
-    'Imperfekt': 'imperfekt',
-    'Perfekt': 'perfekt',
+    'Imperfekt': 'Imperfekt keçmiş zaman forması',
+    'Perfekt': 'Perfekt keçmiş zaman forması',
   };
 
-  /// Returns the Azerbaijani translation of [term] (main word-class label).
+  // ── Gender translations ───────────────────────────────────────────────────
+
+  static const Map<String, String> _azGender = <String, String>{
+    // English (as stored in the Word entity)
+    'Masculine': 'Kişi',
+    'Feminine': 'Qadın',
+    'Neuter': 'Orta cins',
+    // German variants
+    'Maskulinum': 'Kişi',
+    'Femininum': 'Qadın',
+    'Neutrum': 'Orta cins',
+    'maskulin': 'Kişi',
+    'feminin': 'Qadın',
+    'neutral': 'Orta cins',
+    'männlich': 'Kişi',
+    'weiblich': 'Qadın',
+    'sächlich': 'Orta cins',
+  };
+
+  /// Returns the Azerbaijani translation of [term] (grammatical gender).
+  ///
+  /// Falls back to [term] unchanged when no mapping is found.
+  static String gender(String term) => _azGender[term.trim()] ?? term;
   ///
   /// Falls back to [term] unchanged when no mapping is found.
   static String mainType(String term) => _azMain[term.trim()] ?? term;

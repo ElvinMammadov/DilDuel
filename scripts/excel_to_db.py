@@ -1,140 +1,157 @@
 """
-Converts Dictionary_Last.xlsx into the luget.db SQLite asset.
+Rebuilds luget.db from two Excel source files + four CEFR-level files.
+
+Sources
+-------
+DeAz   →  ~/Desktop/german/final dics/Dictionary_Last.xlsx
+AzDe   →  ~/Desktop/german/final dics/az_de_full_dictionary.xlsx
+Levels →  ~/Desktop/german/final dics/levels/Dictionary_{A1,A2,B1,B2}.xlsx
+           Level | Id | Word | ... (same columns as DeAz + Level first)
 
 Tables produced
 ---------------
-DeAz        German → Azerbaijani (all grammatical columns)
-AzDe        Azerbaijani → German  (auto-generated from DeAz translations)
-bookmark    Empty; schema matches app expectations
-quiz_results  Empty; will also be recreated by onOpen, but included for
-              completeness
+DeAz             German → Azerbaijani  (+ id + level columns)
+AzDe             Azerbaijani → German  (+ id column, read directly from Excel)
+bookmark         Empty; schema matches app expectations
+quiz_results     Empty; recreated by onOpen as well
+training_progress  Empty; ready for the Training screen
 
-user_version is set to 3 so the app re-copies the asset on next launch.
-Remember to bump `dbVersion` in word_local_data_source_impl.dart to 3 as well.
+user_version = 5  →  bump dbVersion in word_local_data_source_impl.dart to 5.
 """
 
-import re
 import shutil
 import sqlite3
-from collections import defaultdict
 from pathlib import Path
 
 import openpyxl
 
-BASE = Path('/Users/elvinmammadov/StudioProjects/Dictionary')
-EXCEL = BASE / 'assets' / 'Dictionary_Last.xlsx'
-DB_OUT = BASE / 'assets' / 'luget.db'
-DB_BACKUP = DB_OUT.with_suffix('.db.bak')
-DB_VERSION = 3   # bump from 2 → 3 to force re-copy on existing installs
+BASE        = Path('/Users/elvinmammadov/StudioProjects/Dictionary')
+DESKTOP     = Path('/Users/elvinmammadov/Desktop/german/final dics')
+EXCEL_DEAZ  = DESKTOP / 'Dictionary_Last.xlsx'
+EXCEL_AZDE  = DESKTOP / 'az_de_full_dictionary.xlsx'
+LEVELS_DIR  = DESKTOP / 'levels'
+DB_OUT      = BASE / 'assets' / 'luget.db'
+DB_BACKUP   = DB_OUT.with_suffix('.db.bak')
+DB_VERSION  = 5   # bumped: level column + training_progress table added
 
-# ---------------------------------------------------------------------------
-# 1.  Load Excel → DeAz rows
-# ---------------------------------------------------------------------------
 
-print(f"Loading {EXCEL} …")
-wb = openpyxl.load_workbook(EXCEL, read_only=True, data_only=True)
-ws = wb.active
-
-headers = [c.value for c in next(ws.iter_rows(min_row=1, max_row=1))]
-print(f"  Headers: {headers}")
-
-# Expected column order (0-indexed after Id column is skipped):
-# Id | Word | Article | Gender | MainType | SubType | Translation |
-# Genitive | Plural | Imperfekt | Perfekt | Comparative | Superlative | Sentence
-COL = {name: idx for idx, name in enumerate(headers)}
-
-deaz_rows: list[dict] = []
-
-def _val(row, col_name: str):
-    """Return stripped string or None for empty/missing cells."""
-    v = row[COL[col_name]]
+def _val(row: tuple, col: dict, name: str) -> str | None:
+    """Return stripped cell value or None for missing / empty cells."""
+    idx = col.get(name)
+    if idx is None or idx >= len(row):
+        return None
+    v = row[idx]
     if v is None:
         return None
     s = str(v).strip()
     return s if s else None
 
-for row in ws.iter_rows(min_row=2, values_only=True):
-    word = _val(row, 'Word')
-    translation = _val(row, 'Translation')
+
+# ---------------------------------------------------------------------------
+# 0.  Build id → level mapping from all four level Excel files
+# ---------------------------------------------------------------------------
+
+print("Loading CEFR level mappings ...")
+id_to_level: dict[str, str] = {}
+
+for level_name in ('A1', 'A2', 'B1', 'B2'):
+    path = LEVELS_DIR / f'Dictionary_{level_name}.xlsx'
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    ws = wb.active
+    headers = list(next(ws.iter_rows(min_row=1, max_row=1, values_only=True)))
+    col = {h: i for i, h in enumerate(headers)}
+    count = 0
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        word_id = _val(row, col, 'Id')
+        if word_id:
+            id_to_level[word_id] = level_name
+            count += 1
+    wb.close()
+    print(f"  {level_name}: {count} words")
+
+print(f"  Total mapped IDs: {len(id_to_level)}")
+
+
+# ---------------------------------------------------------------------------
+# 1.  Load DeAz from Dictionary_Last.xlsx  (+ attach level)
+# ---------------------------------------------------------------------------
+
+print(f"\nLoading DeAz from {EXCEL_DEAZ} ...")
+wb1 = openpyxl.load_workbook(EXCEL_DEAZ, read_only=True, data_only=True)
+ws1 = wb1.active
+headers1 = list(next(ws1.iter_rows(min_row=1, max_row=1, values_only=True)))
+print(f"  Headers: {headers1}")
+COL1 = {name: idx for idx, name in enumerate(headers1)}
+
+deaz_rows: list[dict] = []
+unlevelled = 0
+for row in ws1.iter_rows(min_row=2, values_only=True):
+    word        = _val(row, COL1, 'Word')
+    translation = _val(row, COL1, 'Translation')
     if not word or not translation:
         continue
+    word_id = _val(row, COL1, 'Id')
+    level   = id_to_level.get(word_id or '', 'B2')   # default unclassified → B2
+    if word_id not in id_to_level:
+        unlevelled += 1
     deaz_rows.append({
+        'id':          word_id,
+        'level':       level,
         'key':         word,
         'value':       translation,
-        'article':     _val(row, 'Article'),
-        'gender':      _val(row, 'Gender'),
-        'main_type':   _val(row, 'MainType'),
-        'sub_type':    _val(row, 'SubType'),
-        'genitive':    _val(row, 'Genitive'),
-        'plural':      _val(row, 'Plural'),
-        'imperfekt':   _val(row, 'Imperfekt'),
-        'perfekt':     _val(row, 'Perfekt'),
-        'comparative': _val(row, 'Comparative'),
-        'superlative': _val(row, 'Superlative'),
-        'example':     None,          # column not present in this Excel
-        'sentence':    _val(row, 'Sentence'),
+        'article':     _val(row, COL1, 'Article'),
+        'gender':      _val(row, COL1, 'Gender'),
+        'main_type':   _val(row, COL1, 'MainType'),
+        'sub_type':    _val(row, COL1, 'SubType'),
+        'genitive':    _val(row, COL1, 'Genitive'),
+        'plural':      _val(row, COL1, 'Plural'),
+        'imperfekt':   _val(row, COL1, 'Imperfekt'),
+        'perfekt':     _val(row, COL1, 'Perfekt'),
+        'comparative': _val(row, COL1, 'Comparative'),
+        'superlative': _val(row, COL1, 'Superlative'),
+        'example':     None,
+        'sentence':    _val(row, COL1, 'Sentence'),
     })
 
-wb.close()
-print(f"  DeAz rows read: {len(deaz_rows)}")
+wb1.close()
+print(f"  DeAz rows loaded   : {len(deaz_rows)}")
+print(f"  Rows defaulted B2  : {unlevelled}")
+
+# Level distribution summary
+from collections import Counter
+dist = Counter(r['level'] for r in deaz_rows)
+for lvl in ('A1', 'A2', 'B1', 'B2'):
+    print(f"    {lvl}: {dist[lvl]}")
+
 
 # ---------------------------------------------------------------------------
-# 2.  Generate AzDe rows from DeAz translations
-#
-# For every DeAz entry the Translation field contains numbered items like
-#   "1. ilanbalığı\n2. başqa söz"
-# Each individual Azerbaijani word becomes an AzDe key. If the same
-# Azerbaijani word appears across multiple DeAz entries it gets multiple
-# German translations merged in one AzDe row.
+# 2.  Load AzDe directly from az_de_full_dictionary.xlsx
 # ---------------------------------------------------------------------------
 
-NUM_RE = re.compile(r'^\d+\.\s*')   # leading "N. " prefix
-
-
-def strip_num(s: str) -> str:
-    return NUM_RE.sub('', s).strip()
-
-
-# az_word → ordered list of (german_word, main_type, sub_type)
-az_map: dict[str, list[tuple[str, str | None, str | None]]] = defaultdict(list)
-
-for row in deaz_rows:
-    german = row['key']
-    mt = row['main_type']
-    st = row['sub_type']
-    if not row['value']:
-        continue
-    for line in row['value'].split('\n'):
-        line = line.strip()
-        # Only process lines that start with a number prefix (e.g. "1. …")
-        if not re.match(r'^\d+\.', line):
-            continue
-        az_word = strip_num(line)
-        if az_word:
-            az_map[az_word].append((german, mt, st))
-
-print(f"  Unique AzDe keys generated: {len(az_map)}")
+print(f"\nLoading AzDe from {EXCEL_AZDE} ...")
+wb2 = openpyxl.load_workbook(EXCEL_AZDE, read_only=True, data_only=True)
+ws2 = wb2.active
+headers2 = list(next(ws2.iter_rows(min_row=1, max_row=1, values_only=True)))
+print(f"  Headers: {headers2}")
+COL2 = {name: idx for idx, name in enumerate(headers2)}
 
 azde_rows: list[dict] = []
-for az_word, entries in az_map.items():
-    values, types, subtypes = [], [], []
-    has_sub = False
-    for n, (german, mt, st) in enumerate(entries, 1):
-        values.append(f"{n}. {german}")
-        types.append(f"{n}. {mt}" if mt else f"{n}. ")
-        if st:
-            subtypes.append(f"{n}. {st}")
-            has_sub = True
-        else:
-            subtypes.append('')
+for row in ws2.iter_rows(min_row=2, values_only=True):
+    word        = _val(row, COL2, 'Word')
+    translation = _val(row, COL2, 'Translation')
+    if not word or not translation:
+        continue
     azde_rows.append({
-        'key':       az_word,
-        'value':     '\n'.join(values),
-        'main_type': '\n'.join(types) if types else None,
-        'sub_type':  '\n'.join(s for s in subtypes if s) if has_sub else None,
+        'id':        _val(row, COL2, 'Id'),
+        'key':       word,
+        'value':     translation,
+        'main_type': _val(row, COL2, 'MainType'),
+        'sub_type':  _val(row, COL2, 'SubType'),
     })
 
-print(f"  AzDe rows built: {len(azde_rows)}")
+wb2.close()
+print(f"  AzDe rows loaded: {len(azde_rows)}")
+
 
 # ---------------------------------------------------------------------------
 # 3.  Write SQLite database
@@ -142,19 +159,18 @@ print(f"  AzDe rows built: {len(azde_rows)}")
 
 if DB_OUT.exists():
     shutil.copy2(DB_OUT, DB_BACKUP)
-    print(f"\nBacked up existing DB → {DB_BACKUP}")
-
-if DB_OUT.exists():
+    print(f"\nBacked up existing DB -> {DB_BACKUP}")
     DB_OUT.unlink()
 
 conn = sqlite3.connect(DB_OUT)
-cur = conn.cursor()
+cur  = conn.cursor()
 
-# Set schema version so the app knows to re-copy on first launch after update
 cur.execute(f"PRAGMA user_version = {DB_VERSION}")
 
 cur.executescript("""
 CREATE TABLE DeAz (
+    id          TEXT,
+    level       TEXT,
     key         TEXT,
     value       TEXT,
     article     TEXT,
@@ -171,12 +187,18 @@ CREATE TABLE DeAz (
     sentence    TEXT
 );
 
+CREATE INDEX idx_deaz_level ON DeAz(level);
+CREATE INDEX idx_deaz_key   ON DeAz(key);
+
 CREATE TABLE AzDe (
+    id        TEXT,
     key       TEXT,
     value     TEXT,
     main_type TEXT,
     sub_type  TEXT
 );
+
+CREATE INDEX idx_azde_key ON AzDe(key);
 
 CREATE TABLE bookmark (
     key   VARCHAR(100),
@@ -192,24 +214,34 @@ CREATE TABLE quiz_results (
     totalQuestions INTEGER NOT NULL,
     dateTime       TEXT    NOT NULL
 );
+
+CREATE TABLE training_progress (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    word_id     TEXT    NOT NULL,
+    level       TEXT    NOT NULL,
+    correct     INTEGER NOT NULL DEFAULT 0,
+    incorrect   INTEGER NOT NULL DEFAULT 0,
+    last_seen   TEXT,
+    UNIQUE(word_id)
+);
 """)
 
 cur.executemany(
     """INSERT INTO DeAz
-       (key, value, article, gender, main_type, sub_type,
-        genitive, plural, imperfekt, perfekt, comparative, superlative,
-        example, sentence)
+         (id, level, key, value, article, gender, main_type, sub_type,
+          genitive, plural, imperfekt, perfekt, comparative, superlative,
+          example, sentence)
        VALUES
-       (:key, :value, :article, :gender, :main_type, :sub_type,
-        :genitive, :plural, :imperfekt, :perfekt, :comparative, :superlative,
-        :example, :sentence)""",
+         (:id, :level, :key, :value, :article, :gender, :main_type, :sub_type,
+          :genitive, :plural, :imperfekt, :perfekt, :comparative, :superlative,
+          :example, :sentence)""",
     deaz_rows,
 )
 print(f"\nInserted {cur.rowcount} rows into DeAz")
 
 cur.executemany(
-    """INSERT INTO AzDe (key, value, main_type, sub_type)
-       VALUES (:key, :value, :main_type, :sub_type)""",
+    """INSERT INTO AzDe (id, key, value, main_type, sub_type)
+       VALUES (:id, :key, :value, :main_type, :sub_type)""",
     azde_rows,
 )
 print(f"Inserted {cur.rowcount} rows into AzDe")
@@ -217,14 +249,22 @@ print(f"Inserted {cur.rowcount} rows into AzDe")
 conn.commit()
 
 # Verify
+print("\n--- Verification ---")
 cur.execute("SELECT COUNT(*) FROM DeAz")
-print(f"\nVerification — DeAz rows : {cur.fetchone()[0]}")
+print(f"DeAz total        : {cur.fetchone()[0]}")
+for lvl in ('A1', 'A2', 'B1', 'B2'):
+    cur.execute("SELECT COUNT(*) FROM DeAz WHERE level = ?", (lvl,))
+    print(f"  level={lvl}        : {cur.fetchone()[0]}")
 cur.execute("SELECT COUNT(*) FROM AzDe")
-print(f"Verification — AzDe rows : {cur.fetchone()[0]}")
+print(f"AzDe total        : {cur.fetchone()[0]}")
 cur.execute("PRAGMA user_version")
-print(f"Verification — user_version: {cur.fetchone()[0]}")
+print(f"user_version      : {cur.fetchone()[0]}")
+
+cur.execute("SELECT id, level, key, value FROM DeAz LIMIT 3")
+print("\nDeAz sample:")
+for r in cur.fetchall():
+    print(f"  {r}")
 
 conn.close()
-print(f"\n✓ New database written to {DB_OUT}")
-print(  "  Remember to bump dbVersion to 3 in word_local_data_source_impl.dart")
-
+print(f"\nDatabase written to {DB_OUT}")
+print("  Bump dbVersion to 5 in word_local_data_source_impl.dart")

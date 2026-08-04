@@ -43,7 +43,7 @@ class TrainingCubit extends Cubit<TrainingState> {
   }
 
   Future<void> _doLoad(String level, {required int startIndex}) async {
-    emit(TrainingLoading());
+    emit(TrainingLoading(level: level));
     try {
       final List<Word> words = await DBHelper.getWordsByLevel(level);
       if (words.isEmpty) {

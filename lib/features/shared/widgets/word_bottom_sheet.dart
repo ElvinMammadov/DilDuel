@@ -4,6 +4,7 @@ import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
+import 'package:flutter_dic/core/utils/grammar_de_labels.dart';
 import 'package:flutter_dic/core/utils/grammar_type_translator.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:flutter_dic/features/shared/widgets/word_type_badges.dart';
@@ -192,13 +193,40 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+
+                  // ── Article chip (DeAz only) ───────────────
+                  if (_isDeAz && _ok(word.article)) ...<Widget>[
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Dimensions.padding10,
+                        vertical: Dimensions.padding3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: _articleColor(word.article, isDark)
+                            .withAlpha(28),
+                        borderRadius: BorderRadius.circular(
+                          Dimensions.borderRadiusPill,
+                        ),
+                      ),
+                      child: Text(
+                        word.article!,
+                        style: AppTextStyles.labelMedium(
+                          _articleColor(word.article, isDark),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: Dimensions.itemHeight6),
+                  ],
+
                   // ── Word + action buttons ──────────────────
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
                         child: Text(
-                          word.key,
+                          _isDeAz
+                              ? _bareWord(word.key, word.article)
+                              : word.key,
                           style: AppTextStyles.wordSource(
                             textPrimary,
                             size: 28,
@@ -231,22 +259,14 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                     ],
                   ),
 
-                  // ── Type badges: article | mainType | subType ──
-                  // Only shown for DeAz — AzDe displays per-row badges instead.
-                  if (_isDeAz &&
-                      (word.article != null ||
-                          word.mainType != null ||
-                          word.subType != null))
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: Dimensions.padding8),
-                      child: WordTypeBadges(
-                        word: word,
-                        isDark: isDark,
-                        textSecondary: textSecondary,
-                        border: border,
-                      ),
+                  // ── Grammar type line (DeAz only) ─────────
+                  if (_isDeAz && _ok(word.mainType)) ...<Widget>[
+                    const SizedBox(height: Dimensions.itemHeight4),
+                    Text(
+                      _typeLabel(context),
+                      style: AppTextStyles.bodySmall(textSecondary),
                     ),
+                  ],
 
                   const SizedBox(height: Dimensions.padding20),
 
@@ -332,6 +352,42 @@ class _WordBottomSheetState extends State<WordBottomSheet>
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   bool _ok(String? v) => v != null && v.trim().isNotEmpty;
+
+  /// Builds the grammar-type text line shown below the word heading,
+  /// mirroring the Training card's [_typeLabel] with AZ parentheticals.
+  String _typeLabel(BuildContext context) {
+    final Word word = widget.word;
+    final bool isAz = context.locale.languageCode == 'az';
+    final StringBuffer b = StringBuffer();
+
+    if (_ok(word.mainType)) {
+      final String raw = word.mainType!;
+      b.write(raw);
+      if (isAz) {
+        final String az = GrammarTypeTranslator.mainType(raw);
+        if (az != raw) b.write(' ($az)');
+      }
+    }
+    if (_ok(word.gender)) {
+      b.write(' · ');
+      final String raw = word.gender!;
+      b.write(raw);
+      if (isAz) {
+        final String az = GrammarTypeTranslator.gender(raw);
+        if (az != raw) b.write(' ($az)');
+      }
+    }
+    if (_ok(word.subType)) {
+      b.write(' · ');
+      final String raw = word.subType!;
+      b.write(raw);
+      if (isAz) {
+        final String az = GrammarTypeTranslator.subType(raw);
+        if (az != raw) b.write(' ($az)');
+      }
+    }
+    return b.toString();
+  }
 
 
   static String _stripNum(String s) {
@@ -625,25 +681,33 @@ class _GrammarCard extends StatelessWidget {
   final Color border;
   final Color cardBg;
 
-  List<(String, String)> get _rows {
-    final List<(String, String)> r = <(String, String)>[];
-    void add(String label, String? v) {
-      if (v != null && v.trim().isNotEmpty) r.add((label, v.trim()));
+  /// Each row: (German label, optional AZ tooltip, value).
+  /// German labels come from [GrammarDeLabels]; AZ translations from [az.json].
+  List<(String, String?, String)> _buildRows(BuildContext context) {
+    final bool isAz = context.locale.languageCode == 'az';
+    final List<(String, String?, String)> r = <(String, String?, String)>[];
+    void add(String deLabel, String key, String? v) {
+      if (v != null && v.trim().isNotEmpty) {
+        r.add((deLabel, isAz ? key.tr() : null, v.trim()));
+      }
     }
 
-    add('word.genitiv'.tr(), word.genitive);
-    add('word.plural'.tr(), word.plural);
-    add('word.imperfekt'.tr(), word.imperfekt);
-    add('word.perfekt'.tr(), word.perfekt);
-    add('word.komparativ'.tr(), word.comparative);
-    add('word.superlativ'.tr(), word.superlative);
+    add(GrammarDeLabels.genitiv, 'word.genitiv', word.genitive);
+    add(GrammarDeLabels.plural, 'word.plural', word.plural);
+    add(GrammarDeLabels.imperfekt, 'word.imperfekt', word.imperfekt);
+    add(GrammarDeLabels.perfekt, 'word.perfekt', word.perfekt);
+    add(GrammarDeLabels.komparativ, 'word.komparativ', word.comparative);
+    add(GrammarDeLabels.superlativ, 'word.superlativ', word.superlative);
     return r;
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<(String, String)> rows = _rows;
+    final List<(String, String?, String)> rows = _buildRows(context);
     if (rows.isEmpty) return const SizedBox.shrink();
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color infoColor =
+        isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
     return Container(
       decoration: BoxDecoration(
         color: cardBg,
@@ -653,14 +717,18 @@ class _GrammarCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: rows.indexed
-            .map(((int, (String, String)) e) => _GrammarRow(
-                  label: e.$2.$1,
-                  value: e.$2.$2,
-                  textPrimary: textPrimary,
-                  textSecondary: textSecondary,
-                  showDivider: e.$1 < rows.length - 1,
-                  border: border,
-                ))
+            .map(
+              ((int, (String, String?, String)) e) => _GrammarRow(
+                label: e.$2.$1,
+                azHint: e.$2.$2,
+                value: e.$2.$3,
+                textPrimary: textPrimary,
+                textSecondary: textSecondary,
+                showDivider: e.$1 < rows.length - 1,
+                border: border,
+                infoColor: infoColor,
+              ),
+            )
             .toList(),
       ),
     );
@@ -670,19 +738,23 @@ class _GrammarCard extends StatelessWidget {
 class _GrammarRow extends StatelessWidget {
   const _GrammarRow({
     required this.label,
+    this.azHint,
     required this.value,
     required this.textPrimary,
     required this.textSecondary,
     required this.showDivider,
     required this.border,
+    required this.infoColor,
   });
 
   final String label;
+  final String? azHint;
   final String value;
   final Color textPrimary;
   final Color textSecondary;
   final bool showDivider;
   final Color border;
+  final Color infoColor;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -697,9 +769,31 @@ class _GrammarRow extends StatelessWidget {
               children: <Widget>[
                 SizedBox(
                   width: 96,
-                  child: Text(
-                    label,
-                    style: AppTextStyles.labelMedium(textSecondary),
+                  child: Text.rich(
+                    TextSpan(
+                      text: label,
+                      style: AppTextStyles.labelMedium(textSecondary),
+                      children: azHint != null
+                          ? <InlineSpan>[
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.top,
+                                child: Tooltip(
+                                  message: azHint!,
+                                  triggerMode: TooltipTriggerMode.tap,
+                                  showDuration: const Duration(seconds: 4),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 2),
+                                    child: Icon(
+                                      Icons.info_outline_rounded,
+                                      size: 10,
+                                      color: infoColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]
+                          : null,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -748,8 +842,6 @@ class _ExamplesCard extends StatelessWidget {
         children: <Widget>[
           if (example != null)
             _ExampleEntry(
-              icon: Icons.short_text_rounded,
-              label: 'word.short_example'.tr(),
               text: example!.trim(),
               textPrimary: textPrimary,
               primary: primary,
@@ -758,8 +850,6 @@ class _ExamplesCard extends StatelessWidget {
             ),
           if (sentence != null)
             _ExampleEntry(
-              icon: Icons.format_quote_rounded,
-              label: 'word.sentence_example'.tr(),
               text: sentence!.trim(),
               textPrimary: textPrimary,
               primary: primary,
@@ -774,8 +864,6 @@ class _ExamplesCard extends StatelessWidget {
 
 class _ExampleEntry extends StatelessWidget {
   const _ExampleEntry({
-    required this.icon,
-    required this.label,
     required this.text,
     required this.textPrimary,
     required this.primary,
@@ -783,8 +871,6 @@ class _ExampleEntry extends StatelessWidget {
     required this.border,
   });
 
-  final IconData icon;
-  final String label;
   final String text;
   final Color textPrimary;
   final Color primary;
@@ -797,23 +883,51 @@ class _ExampleEntry extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(Dimensions.padding14),
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Icon(icon, size: 13, color: primary),
-                    const SizedBox(width: 4),
-                    Text(label, style: AppTextStyles.labelSmall(primary)),
-                  ],
+                Icon(Icons.format_quote_rounded, size: 14, color: primary),
+                const SizedBox(width: Dimensions.itemWidth8),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: AppTextStyles.bodySmall(textPrimary),
+                  ),
                 ),
-                const SizedBox(height: Dimensions.itemHeight6),
-                Text(text, style: AppTextStyles.bodySmall(textPrimary)),
               ],
             ),
           ),
           if (showDivider) Divider(height: 1, color: border),
         ],
       );
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Article colour + bare-word helpers (mirrors training_word_card.dart)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Article colours follow the standard German grammar colour convention.
+Color _articleColor(String? article, bool isDark) {
+  switch (article?.toLowerCase()) {
+    case 'der':
+      return isDark ? const Color(0xFF82B1FF) : const Color(0xFF1565C0);
+    case 'die':
+      return isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
+    case 'das':
+      return isDark ? AppTheme.successColorDark : AppTheme.successColor;
+    default:
+      return isDark
+          ? AppTheme.textSecondaryDark
+          : AppTheme.textSecondaryLight;
+  }
+}
+
+/// Strips the leading article prefix from [key] so only the bare noun
+/// is displayed (e.g. "der Mann" → "Mann").
+String _bareWord(String key, String? article) {
+  if (article == null || article.isEmpty) return key;
+  final String prefix = '$article ';
+  return key.startsWith(prefix) ? key.substring(prefix.length) : key;
 }
 

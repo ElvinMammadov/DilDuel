@@ -112,12 +112,6 @@ class _WordCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isAzDe = word.dicType == 'AzDe';
-    // Type badges are only meaningful at card level for DeAz, where one
-    // word has a single grammar type.  AzDe types vary per translation row.
-    final bool hasTypeBadges = !isAzDe &&
-        (word.article != null ||
-            word.mainType != null ||
-            word.subType != null);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: Dimensions.padding10),
@@ -146,20 +140,8 @@ class _WordCard extends StatelessWidget {
                       style: AppTextStyles.wordSource(textPrimary),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // ── DeAz: type badges ──────────────────────
-                    if (hasTypeBadges) ...<Widget>[
-                      const SizedBox(height: Dimensions.itemHeight3),
-                      WordTypeBadges(
-                        word: word,
-                        isDark: isDark,
-                        textSecondary: textSecondary,
-                        border: border,
-                        showArticle: false,
-                      ),
-                    ],
                     const SizedBox(height: Dimensions.itemHeight6),
-                    // ── AzDe: translation chips ────────────────
-                    // ── DeAz: translation text ─────────────────
+                    // ── Translation ────────────────────────────
                     if (isAzDe)
                       TranslationChips(
                         translations: _translations(),

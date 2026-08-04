@@ -4,7 +4,13 @@ abstract class TrainingState {}
 
 class TrainingInitial extends TrainingState {}
 
-class TrainingLoading extends TrainingState {}
+class TrainingLoading extends TrainingState {
+  /// The level being loaded, if known. Kept so the UI can avoid flashing
+  /// back to the "choose level" placeholder while words are fetched.
+  final String? level;
+
+  TrainingLoading({this.level});
+}
 
 class TrainingReady extends TrainingState {
   final List<Word> words;

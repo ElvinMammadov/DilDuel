@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "503985897884",
+    "firebase_url": "https://feedsample-2cc28.firebaseio.com",
+    "project_id": "feedsample-2cc28",
+    "storage_bucket": "feedsample-2cc28.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:503985897884:android:ca2d742cf58dc2570fc859",
+        "android_client_info": {
+          "package_name": "com.Dictionary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "503985897884-4tjlkmauv8gp175tokrudb3orjiodinh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Dictionary",
+            "certificate_hash": "600bfce037ea60bf13722c72f8fe8d1bb1a13c91"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_spMwFwfwr5jytlbb8oYzvbte6k06PV4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "503985897884-5s6f4smbgdlqbm5aikd94kovcdmej4d5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.dilduel.app",
+                "app_store_id": "6810854404"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

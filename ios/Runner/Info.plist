@@ -49,5 +49,28 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>GIDClientID</key>
+	<string>503985897884-5s6f4smbgdlqbm5aikd94kovcdmej4d5.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<!-- Google Sign-In callback scheme (REVERSED_CLIENT_ID) -->
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.503985897884-5s6f4smbgdlqbm5aikd94kovcdmej4d5</string>
+			</array>
+		</dict>
+		<!-- App bundle ID scheme (deep links / Sign in with Apple) -->
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.example.dilduel.app</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

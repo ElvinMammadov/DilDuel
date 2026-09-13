@@ -1,0 +1,26 @@
+library auth;
+
+import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
+import 'package:flutter_dic/core/theme/app_text_styles.dart';
+import 'package:flutter_dic/core/theme/app_theme.dart';
+import 'package:flutter_dic/core/utils/dimensions.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:injectable/injectable.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+part 'domain/auth_user.dart';
+part 'domain/auth_repository.dart';
+part 'data/firebase_auth_repository.dart';
+part 'presentation/bloc/auth_state.dart';
+part 'presentation/bloc/auth_cubit.dart';
+part 'presentation/screens/sign_in_screen.dart';
+part 'presentation/screens/register_screen.dart';

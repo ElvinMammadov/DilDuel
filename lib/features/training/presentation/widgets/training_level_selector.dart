@@ -68,7 +68,8 @@ class _LevelSelector extends StatelessWidget {
           final TrainingCubit cubit = ctx.read<TrainingCubit>();
 
           return <PopupMenuEntry<String>>[
-            for (int i = 0; i < _levels.length; i++) ...<PopupMenuEntry<String>>[
+            for (int i = 0; i < _levels.length; i++) ...<PopupMenuEntry<String>
+            >[
               PopupMenuItem<String>(
                 value: _levels[i],
                 padding: const EdgeInsets.symmetric(

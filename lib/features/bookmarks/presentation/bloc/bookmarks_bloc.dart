@@ -2,30 +2,30 @@ part of bookmarks;
 
 @injectable
 class BookmarksBloc extends Cubit<BookmarksState> {
-  BookmarksBloc() : super(BookmarksInitial());
+  BookmarksBloc(this._repository) : super(BookmarksInitial());
+
+  final BookmarkRepository _repository;
 
   Future<void> loadBookmarks() async {
     emit(BookmarksLoading());
     try {
-      // Fetch both key lists in parallel.
       final List<List<String>> keyLists = await Future.wait(<Future<List<String>>>[
-        DBHelper.getAllBookmarks(),
-        DBHelper.getAllUnknownWords(),
+        _repository.getAllBookmarks(),
+        _repository.getAllUnknownWords(),
       ]);
 
       final List<String> bookmarkKeys = keyLists[0];
       final List<String> unknownKeys = keyLists[1];
 
-      // Resolve full Word objects (sequential per list — DB is single-file).
       final List<Word> bookmarks = <Word>[];
       for (final String key in bookmarkKeys) {
-        final Word? word = await DBHelper.getBookmark(key);
+        final Word? word = await _repository.getBookmark(key);
         if (word != null) bookmarks.add(word);
       }
 
       final List<Word> unknownWords = <Word>[];
       for (final String key in unknownKeys) {
-        final Word? word = await DBHelper.getUnknownWord(key);
+        final Word? word = await _repository.getUnknownWord(key);
         if (word != null) unknownWords.add(word);
       }
 
@@ -37,7 +37,7 @@ class BookmarksBloc extends Cubit<BookmarksState> {
 
   Future<void> addBookmark(Word word) async {
     try {
-      await DBHelper.addBookmark(word);
+      await _repository.addBookmark(word);
       await loadBookmarks();
     } catch (e) {
       emit(BookmarksError(e.toString()));
@@ -46,7 +46,7 @@ class BookmarksBloc extends Cubit<BookmarksState> {
 
   Future<void> removeBookmark(Word word) async {
     try {
-      await DBHelper.removeBookmark(word);
+      await _repository.removeBookmark(word);
       await loadBookmarks();
     } catch (e) {
       emit(BookmarksError(e.toString()));
@@ -55,7 +55,7 @@ class BookmarksBloc extends Cubit<BookmarksState> {
 
   Future<void> addUnknownWord(Word word) async {
     try {
-      await DBHelper.addUnknownWord(word);
+      await _repository.addUnknownWord(word);
       await loadBookmarks();
     } catch (e) {
       emit(BookmarksError(e.toString()));
@@ -64,7 +64,7 @@ class BookmarksBloc extends Cubit<BookmarksState> {
 
   Future<void> removeUnknownWord(Word word) async {
     try {
-      await DBHelper.removeUnknownWord(word);
+      await _repository.removeUnknownWord(word);
       await loadBookmarks();
     } catch (e) {
       emit(BookmarksError(e.toString()));

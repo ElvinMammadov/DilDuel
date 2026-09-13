@@ -5,7 +5,7 @@ class TrainingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocProvider<TrainingCubit>(
-        create: (_) => TrainingCubit()..init(),
+        create: (_) => sl<TrainingCubit>()..init(),
         child: const _TrainingView(),
       );
 }

@@ -7,6 +7,7 @@ import 'package:flutter_dic/core/state/theme_state.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
+import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 

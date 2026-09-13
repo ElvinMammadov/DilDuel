@@ -10,13 +10,22 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   late Future<PackageInfo> _packageInfo;
 
-  // TODO: replace with real auth state once sign-in is implemented
-  static const bool _isSignedIn = false;
-
   @override
   void initState() {
     super.initState();
     _packageInfo = PackageInfo.fromPlatform();
+  }
+
+  void _openSignIn() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const SignInScreen(),
+      ),
+    );
+  }
+
+  Future<void> _signOut() async {
+    await context.read<AuthCubit>().signOut();
   }
 
   void _showLanguageBottomSheet() {
@@ -64,74 +73,83 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         children: <Widget>[
           // Profile card
-          _SettingsCard(
-            border: border,
-            surface: surface,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                Dimensions.padding20,
-                Dimensions.padding24,
-                Dimensions.padding20,
-                Dimensions.padding24,
-              ),
-              child: Column(
-                children: <Widget>[
-                  CircleAvatar(
-                    radius: Dimensions.itemHeight36,
-                    backgroundColor: _isSignedIn ? primary : primaryTint,
-                    child: Icon(
-                      Icons.person,
-                      size: Dimensions.itemWidth28,
-                      color: _isSignedIn ? Colors.white : primary,
-                    ),
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (BuildContext ctx, AuthState authState) {
+              final bool isSignedIn = authState is AuthAuthenticated;
+              final AuthUser? user = switch (authState) {
+                AuthAuthenticated(:final user) => user,
+                _ => null,
+              };
+
+              return _SettingsCard(
+                border: border,
+                surface: surface,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    Dimensions.padding20,
+                    Dimensions.padding24,
+                    Dimensions.padding20,
+                    Dimensions.padding24,
                   ),
-                  const SizedBox(height: Dimensions.itemHeight10),
-                  if (_isSignedIn) ...<Widget>[
-                    Text(
-                      'settings.profile.name'.tr(),
-                      style: AppTextStyles.titleMedium(textPrimary),
-                    ),
-                    const SizedBox(height: Dimensions.itemHeight2),
-                    Text(
-                      'settings.profile.email'.tr(),
-                      style: AppTextStyles.bodySmall(textSecondary),
-                    ),
-                  ] else ...<Widget>[
-                    Text(
-                      'settings.profile.guest'.tr(),
-                      style: AppTextStyles.titleMedium(textPrimary),
-                    ),
-                    const SizedBox(height: Dimensions.itemHeight2),
-                    Text(
-                      'settings.profile.guest_hint'.tr(),
-                      style: AppTextStyles.bodyMedium(textSecondary)
-                          .copyWith(fontSize: 13),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                  const SizedBox(height: Dimensions.itemHeight14),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.padding22,
-                          vertical: Dimensions.padding10),
-                      decoration: BoxDecoration(
-                        color: primary,
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.borderRadiusPill),
+                  child: Column(
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: Dimensions.itemHeight36,
+                        backgroundColor: isSignedIn ? primary : primaryTint,
+                        child: Icon(
+                          Icons.person,
+                          size: Dimensions.itemWidth28,
+                          color: isSignedIn ? Colors.white : primary,
+                        ),
                       ),
-                      child: Text(
-                        _isSignedIn
-                            ? 'settings.profile.edit'.tr()
-                            : 'settings.sign_in'.tr(),
-                        style: AppTextStyles.labelMedium(Colors.white),
-                      ),
-                    ),
+                      const SizedBox(height: Dimensions.itemHeight10),
+                      if (isSignedIn) ...<Widget>[
+                        Text(
+                          user?.displayName ?? 'settings.profile.name'.tr(),
+                          style: AppTextStyles.titleMedium(textPrimary),
+                        ),
+                        const SizedBox(height: Dimensions.itemHeight2),
+                        Text(
+                          user?.email ?? '',
+                          style: AppTextStyles.bodySmall(textSecondary),
+                        ),
+                      ] else ...<Widget>[
+                        Text(
+                          'settings.profile.guest'.tr(),
+                          style: AppTextStyles.titleMedium(textPrimary),
+                        ),
+                        const SizedBox(height: Dimensions.itemHeight2),
+                        Text(
+                          'settings.profile.guest_hint'.tr(),
+                          style: AppTextStyles.bodyMedium(textSecondary)
+                              .copyWith(fontSize: 13),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                      const SizedBox(height: Dimensions.itemHeight14),
+                      if (!isSignedIn)
+                        GestureDetector(
+                          onTap: _openSignIn,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: Dimensions.padding22,
+                                vertical: Dimensions.padding10),
+                            decoration: BoxDecoration(
+                              color: primary,
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.borderRadiusPill),
+                            ),
+                            child: Text(
+                              'settings.sign_in'.tr(),
+                              style: AppTextStyles.labelMedium(Colors.white),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
           const SizedBox(height: Dimensions.itemHeight14),
 
@@ -227,25 +245,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
 
           // Logout — only shown when signed in
-          if (_isSignedIn) ...<Widget>[
-            const SizedBox(height: Dimensions.itemHeight14),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: Dimensions.padding15),
-                decoration: BoxDecoration(
-                  color: errorTint,
-                  borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-                ),
-                child: Text(
-                  'settings.logout'.tr(),
-                  style: AppTextStyles.titleSmall(error),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ],
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (BuildContext ctx, AuthState authState) {
+              if (authState is! AuthAuthenticated) return const SizedBox.shrink();
+              return Column(
+                children: <Widget>[
+                  const SizedBox(height: Dimensions.itemHeight14),
+                  AppElevatedButton(
+                    text: 'settings.logout'.tr(),
+                    onPressed: _signOut,
+                    width: double.infinity,
+                    backgroundColor: errorTint,
+                    textColor: error,
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );

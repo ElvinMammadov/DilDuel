@@ -2,9 +2,9 @@ part of training;
 
 /// Cubit that manages the training session lifecycle.
 ///
-/// All progress is stored in the [DBHelper.trainingLevelPosition] table so
-/// every level's position is persisted independently and the DB is the single
-/// source of truth — no SharedPreferences are used.
+/// Progress (per-level word index) is stored via [TrainingProgressRepository],
+/// which writes to local SQLite and syncs to Firestore when signed in.
+@injectable
 class TrainingCubit extends Cubit<TrainingState> {
   static const List<String> _allLevels = <String>['A1', 'A2', 'B1', 'B2'];
 
@@ -14,23 +14,23 @@ class TrainingCubit extends Cubit<TrainingState> {
   /// Total word count for every level (populated on [init]).
   final Map<String, int> levelTotals = <String, int>{};
 
-  TrainingCubit() : super(TrainingInitial());
+  TrainingCubit(this._progressRepository) : super(TrainingInitial());
+
+  final TrainingProgressRepository _progressRepository;
 
   /// Loads per-level stats from the DB and restores the last active session.
   Future<void> init() async {
-    // Load saved positions and word counts for every level in parallel.
     await Future.wait(
       _allLevels.map((String l) async {
-        savedIndices[l] = await DBHelper.getLevelPosition(l);
+        savedIndices[l] = await _progressRepository.getLevelPosition(l);
         levelTotals[l] = await DBHelper.getWordCountByLevel(l);
       }),
     );
 
-    // Rebuild the dropdown with fresh stats.
     emit(TrainingInitial());
 
-    // Restore the most recently active level.
-    final String? lastLevel = await DBHelper.getLastTrainingLevel();
+    final String? lastLevel =
+        await _progressRepository.getLastTrainingLevel();
     if (lastLevel != null) {
       await _doLoad(lastLevel, startIndex: savedIndices[lastLevel] ?? 0);
     }
@@ -80,6 +80,6 @@ class TrainingCubit extends Cubit<TrainingState> {
 
   Future<void> _persist(String level, int index) async {
     savedIndices[level] = index;
-    await DBHelper.saveLevelPosition(level, index);
+    await _progressRepository.saveLevelPosition(level, index);
   }
 }

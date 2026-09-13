@@ -6,7 +6,13 @@
       "Bash(git -C /Users/elvinmammadov/StudioProjects/Dictionary status)",
       "Bash(git -C /Users/elvinmammadov/StudioProjects/Dictionary diff HEAD)",
       "Bash(git add:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "Read(//Users/elvinmammadov/.android/**)",
+      "Bash(keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android)",
+      "Bash(flutter logs *)",
+      "Bash(flutter devices *)",
+      "Bash(cat *)",
+      "Bash(python3 *)"
     ]
   }
 }

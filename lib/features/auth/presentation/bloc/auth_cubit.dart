@@ -1,6 +1,6 @@
 part of auth;
 
-@injectable
+@lazySingleton
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this._authRepository) : super(const AuthInitial());
 
@@ -52,6 +52,14 @@ class AuthCubit extends Cubit<AuthState> {
       await _authRepository.signInWithApple();
     } on SignInCancelledException {
       emit(const AuthUnauthenticated());
+    } on SignInWithAppleAuthorizationException catch (e) {
+      // User dismissed the sheet — not an error worth surfacing.
+      if (e.code == AuthorizationErrorCode.canceled) {
+        emit(const AuthUnauthenticated());
+      } else {
+        log('Apple sign-in error: $e', name: 'AuthCubit');
+        emit(AuthError(e.message));
+      }
     } on fb.FirebaseAuthException catch (e) {
       emit(AuthError(_mapFirebaseError(e)));
     } catch (e) {

@@ -4,7 +4,13 @@ part of auth;
 class FirebaseAuthRepository implements AuthRepository {
   FirebaseAuthRepository()
       : _auth = fb.FirebaseAuth.instance,
-        _googleSignIn = GoogleSignIn();
+        // serverClientId (web OAuth 2.0 client ID) is required by
+        // google_sign_in_android 6.x (Credential Manager API).
+        _googleSignIn = GoogleSignIn(
+          serverClientId:
+              '503985897884-4tjlkmauv8gp175tokrudb3orjiodinh'
+              '.apps.googleusercontent.com',
+        );
 
   final fb.FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;

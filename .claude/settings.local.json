@@ -17,7 +17,9 @@
       "Bash(firebase projects:list)",
       "Bash(firebase deploy *)",
       "Bash(fvm dart *)",
-      "Bash(fvm flutter *)"
+      "Bash(fvm flutter *)",
+      "Bash(grep -v \"^Analyzing\\\\|^$\\\\|info •\")",
+      "Bash(grep -v \"^Analyzing\\\\|^$\")"
     ]
   }
 }

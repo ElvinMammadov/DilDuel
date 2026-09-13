@@ -89,10 +89,11 @@ class DBHelper implements WordLocalDataSource {
   static Future<void> _createUnknownWordsTable(Database db) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS $unknownWords(
-        key   TEXT NOT NULL,
-        value TEXT NOT NULL,
-        date  DATETIME DEFAULT CURRENT_TIMESTAMP,
-        type  TEXT,
+        key     TEXT NOT NULL,
+        value   TEXT NOT NULL,
+        date    DATETIME DEFAULT CURRENT_TIMESTAMP,
+        type    TEXT,
+        word_id INTEGER,
         PRIMARY KEY (key, value)
       )
     ''');
@@ -103,6 +104,21 @@ class DBHelper implements WordLocalDataSource {
     await _createUnknownWordsTable(db);
     await _createTrainingProgressTable(db);
     await _createTrainingLevelPositionTable(db);
+    await _migrateAddWordId(db);
+  }
+
+  /// Adds `word_id` to existing `bookmark` and `unknown_words` tables.
+  ///
+  /// SQLite does not support `ALTER TABLE ADD COLUMN IF NOT EXISTS`, so
+  /// we catch the [DatabaseException] thrown when the column already exists.
+  static Future<void> _migrateAddWordId(Database db) async {
+    for (final String table in <String>[bookmark, unknownWords]) {
+      try {
+        await db.execute('ALTER TABLE $table ADD COLUMN word_id INTEGER');
+      } on DatabaseException catch (_) {
+        // Column already exists — nothing to do.
+      }
+    }
   }
 
   // ── Training position helpers ─────────────────────────────────────────────
@@ -223,6 +239,7 @@ class DBHelper implements WordLocalDataSource {
     return result.map((Map<String, Object?> row) {
       final bool isDeAz = dicType == deAz;
       return Word(
+        id: row[colId] as int?,
         key: row[colKey] as String? ?? '',
         value: row[colValue] as String? ?? '',
         dicType: dicType,
@@ -298,6 +315,7 @@ class DBHelper implements WordLocalDataSource {
     final Map<String, Object?> row = result.first;
     final bool isDeAz = dicType == deAz;
     return Word(
+      id: row[colId] as int?,
       key: row[colKey] as String? ?? '',
       value: row[colValue] as String? ?? '',
       dicType: dicType,
@@ -323,6 +341,7 @@ class DBHelper implements WordLocalDataSource {
         colKey: word.key,
         colValue: word.value,
         colType: word.dicType,
+        'word_id': word.id,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -370,6 +389,7 @@ class DBHelper implements WordLocalDataSource {
     if (result.isEmpty) return null;
     final Map<String, Object?> row = result.first;
     return Word(
+      id: row['word_id'] as int?,
       key: row[colKey] as String? ?? '',
       value: row[colValue] as String? ?? '',
       dicType: row[colType] as String? ?? '',
@@ -389,6 +409,7 @@ class DBHelper implements WordLocalDataSource {
         colKey: word.key,
         colValue: word.value,
         colType: word.dicType,
+        'word_id': word.id,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -428,6 +449,7 @@ class DBHelper implements WordLocalDataSource {
     if (result.isEmpty) return null;
     final Map<String, Object?> row = result.first;
     return Word(
+      id: row['word_id'] as int?,
       key: row[colKey] as String? ?? '',
       value: row[colValue] as String? ?? '',
       dicType: row[colType] as String? ?? '',

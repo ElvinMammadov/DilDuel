@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 /// entries and are `null` for AzDe entries.
 class Word extends Equatable {
   const Word({
+    this.id,
     this.key = '',
     this.value = '',
     this.dicType = '',
@@ -23,6 +24,12 @@ class Word extends Equatable {
     this.example,
     this.sentence,
   });
+
+  /// The word's primary key in the dictionary SQLite table.
+  ///
+  /// `null` when the word was loaded from a derived source such as the
+  /// bookmark table (which stores only key/value/type).
+  final int? id;
 
   final String key;
   final String value;
@@ -93,6 +100,7 @@ class Word extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
+        id,
         key,
         value,
         dicType,

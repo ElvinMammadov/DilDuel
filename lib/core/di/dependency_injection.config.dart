@@ -29,13 +29,18 @@ import '../data/data_sources/local/word_local_data_source.dart' as _i94;
 import '../data/data_sources/local/word_local_data_source_impl.dart' as _i816;
 import '../data/repositories/bookmark_repository.dart' as _i807;
 import '../data/repositories/local/local_bookmark_repository.dart' as _i817;
+import '../data/repositories/local/local_quiz_result_repository.dart' as _i36;
 import '../data/repositories/local/local_training_progress_repository.dart'
     as _i45;
+import '../data/repositories/quiz_result_repository.dart' as _i662;
 import '../data/repositories/remote/firestore_bookmark_repository.dart'
     as _i957;
+import '../data/repositories/remote/firestore_quiz_result_repository.dart'
+    as _i843;
 import '../data/repositories/remote/firestore_training_progress_repository.dart'
     as _i63;
 import '../data/repositories/sync_bookmark_repository.dart' as _i709;
+import '../data/repositories/sync_quiz_result_repository.dart' as _i551;
 import '../data/repositories/sync_training_progress_repository.dart' as _i311;
 import '../data/repositories/training_progress_repository.dart' as _i871;
 import '../state/app_cubit.dart' as _i901;
@@ -61,6 +66,8 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i817.LocalBookmarkRepository>(
         () => _i817.LocalBookmarkRepository());
+    gh.lazySingleton<_i36.LocalQuizResultRepository>(
+        () => _i36.LocalQuizResultRepository());
     gh.lazySingleton<_i45.LocalTrainingProgressRepository>(
         () => _i45.LocalTrainingProgressRepository());
     gh.lazySingleton<_i430.AuthRepository>(
@@ -72,6 +79,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i655.ThemeCubit(gh<_i460.SharedPreferences>()));
     gh.lazySingleton<_i957.FirestoreBookmarkRepository>(
         () => _i957.FirestoreBookmarkRepository(gh<_i430.AuthRepository>()));
+    gh.lazySingleton<_i843.FirestoreQuizResultRepository>(
+        () => _i843.FirestoreQuizResultRepository(gh<_i430.AuthRepository>()));
     gh.lazySingleton<_i63.FirestoreTrainingProgressRepository>(() =>
         _i63.FirestoreTrainingProgressRepository(gh<_i430.AuthRepository>()));
     gh.lazySingleton<_i430.AuthCubit>(
@@ -84,8 +93,16 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.factory<_i406.TrainingCubit>(
         () => _i406.TrainingCubit(gh<_i871.TrainingProgressRepository>()));
-    gh.factory<_i381.QuizBloc>(
-        () => _i381.QuizBloc(repository: gh<_i613.QuizRepository>()));
+    gh.lazySingleton<_i662.QuizResultRepository>(
+        () => _i551.SyncQuizResultRepository(
+              gh<_i36.LocalQuizResultRepository>(),
+              gh<_i843.FirestoreQuizResultRepository>(),
+              gh<_i430.AuthRepository>(),
+            ));
+    gh.factory<_i381.QuizBloc>(() => _i381.QuizBloc(
+          repository: gh<_i613.QuizRepository>(),
+          quizResultRepository: gh<_i662.QuizResultRepository>(),
+        ));
     gh.lazySingleton<_i6.WordRepository>(() => _i11.WordRepositoryImpl(
         localDataSource: gh<_i94.WordLocalDataSource>()));
     gh.factory<_i1023.SearchWord>(

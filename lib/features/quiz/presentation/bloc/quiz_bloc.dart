@@ -5,10 +5,17 @@ part of quiz;
 class QuizBloc extends Cubit<QuizState> {
   /// Repository for fetching quiz words
   final QuizRepository repository;
+
+  /// Repository for persisting and syncing quiz results
+  final QuizResultRepository quizResultRepository;
+
   String? _currentDicType;
 
   /// Creates a new [QuizBloc] instance
-  QuizBloc({required this.repository}) : super(QuizInitial());
+  QuizBloc({
+    required this.repository,
+    required this.quizResultRepository,
+  }) : super(QuizInitial());
 
   /// Starts a new quiz session with the given dictionary type
   ///
@@ -52,7 +59,7 @@ class QuizBloc extends Cubit<QuizState> {
         totalQuestions: currentState.words.length,
         dateTime: DateTime.now(),
       );
-      await DBHelper.insertQuizResult(result);
+      await quizResultRepository.insertQuizResult(result);
 
       emit(QuizComplete(
         totalQuestions: currentState.words.length,

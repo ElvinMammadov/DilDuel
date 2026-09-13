@@ -12,7 +12,12 @@
       "Bash(flutter logs *)",
       "Bash(flutter devices *)",
       "Bash(cat *)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(firebase --version)",
+      "Bash(firebase projects:list)",
+      "Bash(firebase deploy *)",
+      "Bash(fvm dart *)",
+      "Bash(fvm flutter *)"
     ]
   }
 }

@@ -143,8 +143,9 @@ class _ResultsTabState extends State<ResultsTab> {
   }
 
   void _loadData() {
-    _statisticsFuture = DBHelper.getQuizStatistics();
-    _resultsFuture = DBHelper.getQuizResults();
+    final QuizResultRepository repo = GetIt.I<QuizResultRepository>();
+    _statisticsFuture = repo.getQuizStatistics();
+    _resultsFuture = repo.getQuizResults();
   }
 
   @override

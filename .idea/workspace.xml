@@ -8,55 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5b72a69-eaa0-46c0-ab09-4ecdf05fd290" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.fvmrc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/app/google-services.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Runner/GoogleService-Info.plist" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/core/data/repositories/bookmark_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/core/data/repositories/local/local_bookmark_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/core/data/repositories/local/local_training_progress_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/core/data/repositories/remote/firestore_bookmark_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/core/data/repositories/remote/firestore_training_progress_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/core/data/repositories/sync_bookmark_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/core/data/repositories/sync_training_progress_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/core/data/repositories/training_progress_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/auth.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/data/firebase_auth_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/domain/auth_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/domain/auth_user.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/bloc/auth_cubit.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/bloc/auth_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/screens/register_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/screens/sign_in_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/firebase_options.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.claude/settings.local.json" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/settings.local.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/config.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/Test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/core/di/dependency_injection.config.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/di/dependency_injection.config.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/bookmarks/bookmarks.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/bookmarks/bookmarks.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/bookmarks/presentation/bloc/bookmarks_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/bookmarks/presentation/bloc/bookmarks_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/settings/presentation/settings_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/settings/presentation/settings_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/settings/settings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/settings/settings.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/training/presentation/bloc/training_cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/training/presentation/bloc/training_cubit.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/training/presentation/training_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/training/presentation/training_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/training/presentation/widgets/training_level_selector.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/training/presentation/widgets/training_level_selector.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/training/training.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/training/training.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/mains/dev/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mains/dev/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/mains/prod/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mains/prod/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_package/test/test_package_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test_package/test/test_package_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,6 +104,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "copilot.chat.legacySessionMetadata.migrated": "true",
+    "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "dev",
     "io.flutter.project.isFirstOpen": "true",
     "io.flutter.reload.alreadyRun": "true",

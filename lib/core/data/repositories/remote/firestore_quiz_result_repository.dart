@@ -5,6 +5,7 @@ import 'package:flutter_dic/core/data/repositories/quiz_result_repository.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/quiz/domain/models/quiz_result.dart';
 import 'package:injectable/injectable.dart';
+import 'package:uuid/uuid.dart';
 
 /// Quiz-result repository backed by Cloud Firestore.
 ///
@@ -26,10 +27,18 @@ class FirestoreQuizResultRepository implements QuizResultRepository {
   CollectionReference<Map<String, dynamic>> _results(String uid) =>
       _firestore.collection('users/$uid/quizResults');
 
+  /// UUID v5 namespace for quiz result IDs — arbitrary but fixed.
+  static const String _namespace =
+      '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
+
   /// Stable doc-id derived from the quiz datetime (colons replaced so the
   /// string is safe across all Firestore client versions).
   String _docId(QuizResult result) =>
       result.dateTime.toIso8601String().replaceAll(':', '-');
+
+  /// Deterministic UUID v5 derived from the result's datetime string.
+  String _resultId(QuizResult result) =>
+      const Uuid().v5(_namespace, _docId(result));
 
   @override
   Future<void> insertQuizResult(QuizResult result) async {
@@ -37,6 +46,7 @@ class FirestoreQuizResultRepository implements QuizResultRepository {
     if (uid == null) return;
     try {
       await _results(uid).doc(_docId(result)).set(<String, dynamic>{
+        'id': _resultId(result),
         'score': result.score,
         'totalQuestions': result.totalQuestions,
         'dateTime': result.dateTime.toIso8601String(),

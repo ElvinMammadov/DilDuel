@@ -36,6 +36,7 @@ dependencies:
   cloud_firestore: ^5.4.4
   google_sign_in: ^6.2.1
   sign_in_with_apple: ^6.1.2
+  uuid: ^4.6.0
 
 dev_dependencies:
   flutter_test:

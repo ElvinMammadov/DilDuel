@@ -5,6 +5,7 @@ import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:injectable/injectable.dart';
+import 'package:uuid/uuid.dart';
 
 /// Bookmark repository backed by Cloud Firestore.
 ///
@@ -21,11 +22,24 @@ class FirestoreBookmarkRepository implements BookmarkRepository {
   final AuthRepository _authRepository;
   final FirebaseFirestore _firestore;
 
+  /// UUID v5 namespace for bookmark IDs — arbitrary but fixed.
+  static const String _namespace =
+      '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
+
   String? get _uid => _authRepository.currentUser?.uid;
 
   /// Stable doc-id that survives key case differences.
   String _docId(Word word) =>
       '${word.key.toUpperCase()}_${word.dicType}';
+
+  /// Deterministic UUID v5 derived from the word's doc-id.
+  ///
+  /// Because UUID v5 is name-based (SHA-1), the same word always
+  /// produces the same UUID on every device — so the id is stable
+  /// across devices and safe to use as a foreign key in any future
+  /// database.
+  String _bookmarkId(Word word) =>
+      const Uuid().v5(_namespace, _docId(word));
 
   CollectionReference<Map<String, dynamic>> _bookmarks(String uid) =>
       _firestore.collection('users/$uid/bookmarks');
@@ -41,6 +55,7 @@ class FirestoreBookmarkRepository implements BookmarkRepository {
     if (uid == null) return;
     try {
       await _bookmarks(uid).doc(_docId(word)).set(<String, dynamic>{
+        'id': _bookmarkId(word),
         'key': word.key,
         'value': word.value,
         'dicType': word.dicType,
@@ -122,6 +137,7 @@ class FirestoreBookmarkRepository implements BookmarkRepository {
     if (uid == null) return;
     try {
       await _unknownWords(uid).doc(_docId(word)).set(<String, dynamic>{
+        'id': _bookmarkId(word),
         'key': word.key,
         'value': word.value,
         'dicType': word.dicType,

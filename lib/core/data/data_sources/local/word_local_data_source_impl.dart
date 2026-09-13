@@ -462,4 +462,22 @@ class DBHelper implements WordLocalDataSource {
           (results[0]['averageScore'] as double?)?.toStringAsFixed(1) ?? '0.0',
     };
   }
+
+  // ── User data lifecycle ───────────────────────────────────────────────────
+
+  /// Deletes all user-specific rows from every synced table.
+  ///
+  /// Call this on sign-out so that the next user to sign in on the same
+  /// device starts with a clean local state and their own data is pulled
+  /// from Firestore during the sign-in merge.
+  ///
+  /// The read-only dictionary tables (DeAz, AzDe) and the per-word
+  /// training_progress table are intentionally left untouched.
+  static Future<void> clearUserData() async {
+    final Database db = _db!;
+    await db.delete(bookmark);
+    await db.delete(unknownWords);
+    await db.delete(trainingLevelPosition);
+    await db.delete(quizResults);
+  }
 }

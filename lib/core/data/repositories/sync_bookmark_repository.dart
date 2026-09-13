@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
 import 'package:flutter_dic/core/data/repositories/local/local_bookmark_repository.dart';
 import 'package:flutter_dic/core/data/repositories/remote/firestore_bookmark_repository.dart';
@@ -39,6 +40,17 @@ class SyncBookmarkRepository implements BookmarkRepository {
     if (user != null) {
       // Non-blocking merge: don't await so the listener returns quickly.
       unawaited(_mergeOnSignIn(user.uid));
+    } else {
+      // Clear local user data on sign-out so the next user starts clean.
+      unawaited(_clearLocalOnSignOut());
+    }
+  }
+
+  Future<void> _clearLocalOnSignOut() async {
+    try {
+      await DBHelper.clearUserData();
+    } catch (e) {
+      log('Clear local data error: $e', name: 'SyncBookmarkRepository');
     }
   }
 

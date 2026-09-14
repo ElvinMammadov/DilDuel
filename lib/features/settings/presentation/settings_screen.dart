@@ -161,9 +161,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icons.language_outlined,
               iconColor: primary,
               title: 'settings.language'.tr(),
-              subtitle: context.locale.languageCode == 'az'
-                  ? 'Azərbaycan dili'
-                  : 'German',
+              subtitle: 'settings.language_name'.tr(),
               textPrimary: textPrimary,
               textSecondary: textSecondary,
               onTap: _showLanguageBottomSheet,
@@ -199,8 +197,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Divider(height: 1, color: border),
                 _FaqItem(
                   question: 'settings.faq.dictionary_usage'.tr(),
-                  answer: 'Axtar bölməsində sözü yazın '
-                      'və ya mikrofon düyməsi ilə səsli axtarış edin.',
+                  answer: 'settings.faq.dictionary_usage_answer'.tr(),
                   textPrimary: textPrimary,
                   textSecondary: textSecondary,
                   border: border,
@@ -208,8 +205,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 _FaqItem(
                   question: 'settings.faq.quiz_usage'.tr(),
-                  answer: 'Hər testdə 10 sual olur. '
-                      'Düzgün cavabları seçərək xalınızı artırın.',
+                  answer: 'settings.faq.quiz_usage_answer'.tr(),
                   textPrimary: textPrimary,
                   textSecondary: textSecondary,
                   border: border,

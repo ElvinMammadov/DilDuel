@@ -25,10 +25,15 @@
       "guest": "Qonaq",
       "guest_hint": "Profil məlumatlarına giriş üçün daxil olun"
     },
+    "language_name": "Azərbaycan dili",
+    "language_azerbaijani": "Azərbaycan dili",
+    "language_german": "Alman dili",
     "faq": {
       "title": "Tez-tez soruşulan suallar",
       "dictionary_usage": "Lüğətdən necə istifadə etməli?",
-      "quiz_usage": "Test necə işləyir?"
+      "dictionary_usage_answer": "Axtar bölməsində sözü yazın və ya mikrofon düyməsi ilə səsli axtarış edin.",
+      "quiz_usage": "Test necə işləyir?",
+      "quiz_usage_answer": "Hər testdə 10 sual olur. Düzgün cavabları seçərək xalınızı artırın."
     },
     "logout": "Çıxış"
   },
@@ -116,6 +121,48 @@
     "something_wrong": "Nəsə səhv getdi",
     "yes": "Bəli",
     "no": "Xeyr"
+  },
+  "auth": {
+    "or_divider": "və ya",
+    "sign_in": {
+      "title": "Xoş gəldiniz",
+      "subtitle": "Hesabınıza daxil olun",
+      "email_label": "E-poçt",
+      "password_label": "Şifrə",
+      "forgot_password": "Şifrəni unutdunuz?",
+      "button": "Daxil ol",
+      "google_button": "Google ilə daxil ol",
+      "apple_button": "Apple ilə daxil ol",
+      "no_account": "Hesabınız yoxdur?",
+      "register_link": "Qeydiyyat",
+      "reset_sent": "Şifrə bərpası linki e-poçtunuza göndərildi",
+      "enter_email_first": "Əvvəlcə e-poçt ünvanınızı daxil edin"
+    },
+    "register": {
+      "title": "Hesab yaradın",
+      "subtitle": "DilDuel-ə qoşulun",
+      "name_label": "Ad Soyad",
+      "name_hint": "Adınız Soyadınız",
+      "email_label": "E-poçt",
+      "password_label": "Şifrə",
+      "confirm_label": "Şifrəni təsdiqlə",
+      "password_hint": "Şifrə ən az 6 simvol olmalıdır",
+      "button": "Qeydiyyatdan keç",
+      "google_button": "Google ilə davam et",
+      "apple_button": "Apple ilə davam et",
+      "has_account": "Artıq hesabınız var?",
+      "sign_in_link": "Daxil olun"
+    },
+    "validation": {
+      "email_required": "E-poçt ünvanı tələb olunur",
+      "email_invalid": "Düzgün e-poçt ünvanı daxil edin",
+      "password_required": "Şifrə tələb olunur",
+      "password_min_length": "Şifrə ən az 6 simvol olmalıdır",
+      "name_required": "Ad Soyad tələb olunur",
+      "name_full_required": "Lütfən ad və soyadınızı daxil edin",
+      "confirm_required": "Şifrəni təsdiqləyin",
+      "passwords_mismatch": "Şifrələr uyğun gəlmir"
+    }
   },
   "training": {
     "title": "Söz Məşqi",

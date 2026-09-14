@@ -25,10 +25,15 @@
       "guest": "Gast",
       "guest_hint": "Melden Sie sich an, um auf Ihre Profildaten zuzugreifen"
     },
+    "language_name": "Deutsch",
+    "language_azerbaijani": "Aserbaidschanisch",
+    "language_german": "Deutsch",
     "faq": {
       "title": "Häufig gestellte Fragen",
       "dictionary_usage": "Wie benutze ich das Wörterbuch?",
-      "quiz_usage": "Wie funktioniert das Quiz?"
+      "dictionary_usage_answer": "Geben Sie ein Wort in der Suchleiste ein oder nutzen Sie die Spracheingabe mit dem Mikrofon.",
+      "quiz_usage": "Wie funktioniert das Quiz?",
+      "quiz_usage_answer": "Jedes Quiz hat 10 Fragen. Wählen Sie die richtigen Antworten, um Punkte zu sammeln."
     },
     "logout": "Abmelden"
   },
@@ -117,15 +122,57 @@
     "yes": "Ja",
     "no": "Nein"
   },
+  "auth": {
+    "or_divider": "oder",
+    "sign_in": {
+      "title": "Willkommen",
+      "subtitle": "Melden Sie sich an",
+      "email_label": "E-Mail",
+      "password_label": "Passwort",
+      "forgot_password": "Passwort vergessen?",
+      "button": "Anmelden",
+      "google_button": "Mit Google anmelden",
+      "apple_button": "Mit Apple anmelden",
+      "no_account": "Noch kein Konto?",
+      "register_link": "Registrieren",
+      "reset_sent": "Link zum Zurücksetzen des Passworts wurde gesendet",
+      "enter_email_first": "Bitte geben Sie zuerst Ihre E-Mail-Adresse ein"
+    },
+    "register": {
+      "title": "Konto erstellen",
+      "subtitle": "Treten Sie DilDuel bei",
+      "name_label": "Vor- und Nachname",
+      "name_hint": "Ihr Vor- und Nachname",
+      "email_label": "E-Mail",
+      "password_label": "Passwort",
+      "confirm_label": "Passwort bestätigen",
+      "password_hint": "Passwort muss mindestens 6 Zeichen lang sein",
+      "button": "Registrieren",
+      "google_button": "Mit Google fortfahren",
+      "apple_button": "Mit Apple fortfahren",
+      "has_account": "Haben Sie bereits ein Konto?",
+      "sign_in_link": "Anmelden"
+    },
+    "validation": {
+      "email_required": "E-Mail-Adresse ist erforderlich",
+      "email_invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "password_required": "Passwort ist erforderlich",
+      "password_min_length": "Passwort muss mindestens 6 Zeichen lang sein",
+      "name_required": "Vor- und Nachname ist erforderlich",
+      "name_full_required": "Bitte geben Sie Vor- und Nachname ein",
+      "confirm_required": "Bitte bestätigen Sie Ihr Passwort",
+      "passwords_mismatch": "Passwörter stimmen nicht überein"
+    }
+  },
   "training": {
-    "title": "Wortubung",
-    "choose_level": "Niveau wahlen",
+    "title": "Wortübung",
+    "choose_level": "Niveau wählen",
     "level": "Niveau",
     "word_count": "{} / {}",
-    "no_words": "Keine Worter fur dieses Niveau gefunden",
-    "empty_title": "Niveau auswahlen",
-    "empty_subtitle": "Wahlen Sie unten ein Niveau aus, um zu uben",
-    "back": "Zuruck",
+    "no_words": "Keine Wörter für dieses Niveau gefunden",
+    "empty_title": "Niveau auswählen",
+    "empty_subtitle": "Wählen Sie ein Niveau aus, um zu üben",
+    "back": "Zurück",
     "next": "Weiter",
     "bookmarked": "\"{}\" zu Lesezeichen hinzugefügt",
     "bookmark_removed": "\"{}\" aus Lesezeichen entfernt",

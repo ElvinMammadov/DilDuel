@@ -37,28 +37,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String? confirmErr;
 
     if (_nameCtrl.text.trim().isEmpty) {
-      nameErr = 'Ad Soyad tələb olunur';
+      nameErr = 'auth.validation.name_required'.tr();
     } else if (_nameCtrl.text.trim().split(' ').length < 2) {
-      nameErr = 'Lütfən ad və soyadınızı daxil edin';
+      nameErr = 'auth.validation.name_full_required'.tr();
     }
 
     final String email = _emailCtrl.text.trim();
     if (email.isEmpty) {
-      emailErr = 'E-poçt ünvanı tələb olunur';
+      emailErr = 'auth.validation.email_required'.tr();
     } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
-      emailErr = 'Düzgün e-poçt ünvanı daxil edin';
+      emailErr = 'auth.validation.email_invalid'.tr();
     }
 
     if (_passwordCtrl.text.isEmpty) {
-      passErr = 'Şifrə tələb olunur';
+      passErr = 'auth.validation.password_required'.tr();
     } else if (_passwordCtrl.text.length < 6) {
-      passErr = 'Şifrə ən az 6 simvol olmalıdır';
+      passErr = 'auth.validation.password_min_length'.tr();
     }
 
     if (_confirmCtrl.text.isEmpty) {
-      confirmErr = 'Şifrəni təsdiqləyin';
+      confirmErr = 'auth.validation.confirm_required'.tr();
     } else if (_confirmCtrl.text != _passwordCtrl.text) {
-      confirmErr = 'Şifrələr uyğun gəlmir';
+      confirmErr = 'auth.validation.passwords_mismatch'.tr();
     }
 
     setState(() {
@@ -189,11 +189,11 @@ class _RegisterView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Hesab yaradın',
+                            'auth.register.title'.tr(),
                             style: AppTextStyles.titleMedium(textPrimary),
                           ),
                           Text(
-                            'DilDuel-ə qoşulun',
+                            'auth.register.subtitle'.tr(),
                             style: AppTextStyles.bodySmall(textSecondary),
                           ),
                         ],
@@ -205,8 +205,8 @@ class _RegisterView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Name field ───────────────────────────────────────────────
               _AuthTextField(
-                label: 'Ad Soyad',
-                hint: 'Adınız Soyadınız',
+                label: 'auth.register.name_label'.tr(),
+                hint: 'auth.register.name_hint'.tr(),
                 controller: state._nameCtrl,
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
@@ -216,7 +216,7 @@ class _RegisterView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight14),
               // ── Email field ──────────────────────────────────────────────
               _AuthTextField(
-                label: 'E-poçt',
+                label: 'auth.register.email_label'.tr(),
                 hint: 'example@mail.com',
                 controller: state._emailCtrl,
                 keyboardType: TextInputType.emailAddress,
@@ -227,7 +227,7 @@ class _RegisterView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight14),
               // ── Password field ───────────────────────────────────────────
               _AuthTextField(
-                label: 'Şifrə',
+                label: 'auth.register.password_label'.tr(),
                 hint: '••••••••',
                 controller: state._passwordCtrl,
                 obscureText: !state._showPassword,
@@ -248,7 +248,7 @@ class _RegisterView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight14),
               // ── Confirm password ─────────────────────────────────────────
               _AuthTextField(
-                label: 'Şifrəni təsdiqlə',
+                label: 'auth.register.confirm_label'.tr(),
                 hint: '••••••••',
                 controller: state._confirmCtrl,
                 obscureText: !state._showConfirm,
@@ -278,7 +278,7 @@ class _RegisterView extends StatelessWidget {
                   ),
                   const SizedBox(width: Dimensions.itemWidth4),
                   Text(
-                    'Şifrə ən az 6 simvol olmalıdır',
+                    'auth.register.password_hint'.tr(),
                     style: AppTextStyles.bodySmall(
                       textSecondary.withValues(alpha: 0.6),
                     ),
@@ -290,7 +290,7 @@ class _RegisterView extends StatelessWidget {
               BlocBuilder<AuthCubit, AuthState>(
                 builder: (BuildContext ctx, AuthState authState) =>
                     AppElevatedButton(
-                      text: 'Qeydiyyatdan keç',
+                      text: 'auth.register.button'.tr(),
                       isLoading: authState is AuthLoading,
                       onPressed: state._submit,
                       width: double.infinity,
@@ -302,7 +302,7 @@ class _RegisterView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight20),
               // ── Social buttons ───────────────────────────────────────────
               _SocialButton(
-                label: 'Google ilə davam et',
+                label: 'auth.register.google_button'.tr(),
                 logo: const _GoogleLogo(size: 20),
                 border: border,
                 textPrimary: textPrimary,
@@ -311,7 +311,7 @@ class _RegisterView extends StatelessWidget {
               if (Platform.isIOS) ...<Widget>[
                 const SizedBox(height: Dimensions.itemHeight12),
                 _SocialButton(
-                  label: 'Apple ilə davam et',
+                  label: 'auth.register.apple_button'.tr(),
                   logo: Icon(Icons.apple, size: 22, color: textPrimary),
                   border: border,
                   textPrimary: textPrimary,
@@ -321,8 +321,8 @@ class _RegisterView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight30),
               // ── Sign-in link ─────────────────────────────────────────────
               _BottomNavRow(
-                question: 'Artıq hesabınız var?',
-                actionLabel: 'Daxil olun',
+                question: 'auth.register.has_account'.tr(),
+                actionLabel: 'auth.register.sign_in_link'.tr(),
                 textSecondary: textSecondary,
                 primary: primary,
                 onTap: () => Navigator.of(context).pop(),

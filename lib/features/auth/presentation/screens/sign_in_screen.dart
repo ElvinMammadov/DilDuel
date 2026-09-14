@@ -30,13 +30,13 @@ class _SignInScreenState extends State<SignInScreen> {
 
     final String email = _emailCtrl.text.trim();
     if (email.isEmpty) {
-      emailErr = 'E-poçt ünvanı tələb olunur';
+      emailErr = 'auth.validation.email_required'.tr();
     } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
-      emailErr = 'Düzgün e-poçt ünvanı daxil edin';
+      emailErr = 'auth.validation.email_invalid'.tr();
     }
 
     if (_passwordCtrl.text.isEmpty) {
-      passErr = 'Şifrə tələb olunur';
+      passErr = 'auth.validation.password_required'.tr();
     }
 
     setState(() {
@@ -59,8 +59,8 @@ class _SignInScreenState extends State<SignInScreen> {
     final String email = _emailCtrl.text.trim();
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Əvvəlcə e-poçt ünvanınızı daxil edin'),
+        SnackBar(
+          content: Text('auth.sign_in.enter_email_first'.tr()),
         ),
       );
       return;
@@ -88,9 +88,8 @@ class _SignInScreenState extends State<SignInScreen> {
           }
           if (state is AuthPasswordResetSent) {
             ScaffoldMessenger.of(ctx).showSnackBar(
-              const SnackBar(
-                content:
-                    Text('Şifrə bərpası linki e-poçtunuza göndərildi'),
+              SnackBar(
+                content: Text('auth.sign_in.reset_sent'.tr()),
                 backgroundColor: AppTheme.successColor,
               ),
             );
@@ -195,20 +194,20 @@ class _SignInView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Heading ─────────────────────────────────────────────────
               Text(
-                'Xoş gəldiniz',
+                'auth.sign_in.title'.tr(),
                 style: AppTextStyles.titleLarge(textPrimary),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: Dimensions.itemHeight5),
               Text(
-                'Hesabınıza daxil olun',
+                'auth.sign_in.subtitle'.tr(),
                 style: AppTextStyles.bodyMedium(textSecondary),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: Dimensions.itemHeight30),
               // ── Email field ──────────────────────────────────────────────
               _AuthTextField(
-                label: 'E-poçt',
+                label: 'auth.sign_in.email_label'.tr(),
                 hint: 'example@mail.com',
                 controller: state._emailCtrl,
                 keyboardType: TextInputType.emailAddress,
@@ -219,7 +218,7 @@ class _SignInView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight16),
               // ── Password field ───────────────────────────────────────────
               _AuthTextField(
-                label: 'Şifrə',
+                label: 'auth.sign_in.password_label'.tr(),
                 hint: '••••••••',
                 controller: state._passwordCtrl,
                 obscureText: !state._showPassword,
@@ -245,7 +244,7 @@ class _SignInView extends StatelessWidget {
                 child: GestureDetector(
                   onTap: state._forgotPassword,
                   child: Text(
-                    'Şifrəni unutdunuz?',
+                    'auth.sign_in.forgot_password'.tr(),
                     style: AppTextStyles.bodySmall(primary)
                         .copyWith(fontWeight: FontWeight.w600),
                   ),
@@ -256,7 +255,7 @@ class _SignInView extends StatelessWidget {
               BlocBuilder<AuthCubit, AuthState>(
                 builder: (BuildContext ctx, AuthState authState) =>
                     AppElevatedButton(
-                      text: 'Daxil ol',
+                      text: 'auth.sign_in.button'.tr(),
                       isLoading: authState is AuthLoading,
                       onPressed: state._submit,
                       width: double.infinity,
@@ -269,7 +268,7 @@ class _SignInView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight20),
               // ── Social buttons ───────────────────────────────────────────
               _SocialButton(
-                label: 'Google ilə daxil ol',
+                label: 'auth.sign_in.google_button'.tr(),
                 logo: const _GoogleLogo(size: 20),
                 border: border,
                 textPrimary: textPrimary,
@@ -278,7 +277,7 @@ class _SignInView extends StatelessWidget {
               if (Platform.isIOS) ...<Widget>[
                 const SizedBox(height: Dimensions.itemHeight12),
                 _SocialButton(
-                  label: 'Apple ilə daxil ol',
+                  label: 'auth.sign_in.apple_button'.tr(),
                   logo: Icon(Icons.apple, size: 22, color: textPrimary),
                   border: border,
                   textPrimary: textPrimary,
@@ -288,8 +287,8 @@ class _SignInView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight30),
               // ── Register link ────────────────────────────────────────────
               _BottomNavRow(
-                question: 'Hesabınız yoxdur?',
-                actionLabel: 'Qeydiyyat',
+                question: 'auth.sign_in.no_account'.tr(),
+                actionLabel: 'auth.sign_in.register_link'.tr(),
                 textSecondary: textSecondary,
                 primary: primary,
                 onTap: state._openRegister,
@@ -423,7 +422,7 @@ class _OrDivider extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
                 horizontal: Dimensions.padding12),
             child: Text(
-              'və ya',
+              'auth.or_divider'.tr(),
               style: AppTextStyles.bodySmall(textSecondary),
             ),
           ),

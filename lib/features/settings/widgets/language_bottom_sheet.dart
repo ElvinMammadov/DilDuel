@@ -32,7 +32,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
                 Icons.language,
                 color: AppTheme.mainColor,
               ),
-              title: const Text('Azerbaijani'),
+              title: Text('settings.language_azerbaijani'.tr()),
               trailing: _selectedLanguage == 'az'
                   ? const Icon(Icons.check, color: AppTheme.mainColor)
                   : null,
@@ -47,7 +47,7 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
                 Icons.language,
                 color: AppTheme.mainColor,
               ),
-              title: const Text('German'),
+              title: Text('settings.language_german'.tr()),
               trailing: _selectedLanguage == 'de'
                   ? const Icon(Icons.check, color: AppTheme.mainColor)
                   : null,

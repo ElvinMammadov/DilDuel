@@ -93,7 +93,7 @@ class DBHelper implements WordLocalDataSource {
         value   TEXT NOT NULL,
         date    DATETIME DEFAULT CURRENT_TIMESTAMP,
         type    TEXT,
-        word_id INTEGER,
+        word_id TEXT,
         PRIMARY KEY (key, value)
       )
     ''');
@@ -114,7 +114,7 @@ class DBHelper implements WordLocalDataSource {
   static Future<void> _migrateAddWordId(Database db) async {
     for (final String table in <String>[bookmark, unknownWords]) {
       try {
-        await db.execute('ALTER TABLE $table ADD COLUMN word_id INTEGER');
+        await db.execute('ALTER TABLE $table ADD COLUMN word_id TEXT');
       } on DatabaseException catch (_) {
         // Column already exists — nothing to do.
       }
@@ -239,7 +239,7 @@ class DBHelper implements WordLocalDataSource {
     return result.map((Map<String, Object?> row) {
       final bool isDeAz = dicType == deAz;
       return Word(
-        id: int.tryParse(row[colId]?.toString() ?? ''),
+        id: row[colId] as String?,
         key: row[colKey] as String? ?? '',
         value: row[colValue] as String? ?? '',
         dicType: dicType,
@@ -281,7 +281,7 @@ class DBHelper implements WordLocalDataSource {
     );
     return result
         .map((Map<String, Object?> row) => Word(
-              id: int.tryParse(row[colId]?.toString() ?? ''),
+              id: row[colId] as String?,
               key: row[colKey] as String? ?? '',
               value: row[colValue] as String? ?? '',
               dicType: deAz,
@@ -316,7 +316,7 @@ class DBHelper implements WordLocalDataSource {
     final Map<String, Object?> row = result.first;
     final bool isDeAz = dicType == deAz;
     return Word(
-      id: int.tryParse(row[colId]?.toString() ?? ''),
+      id: row[colId] as String?,
       key: row[colKey] as String? ?? '',
       value: row[colValue] as String? ?? '',
       dicType: dicType,
@@ -390,7 +390,7 @@ class DBHelper implements WordLocalDataSource {
     if (result.isEmpty) return null;
     final Map<String, Object?> row = result.first;
     return Word(
-      id: row['word_id'] as int?,
+      id: row['word_id'] as String?,
       key: row[colKey] as String? ?? '',
       value: row[colValue] as String? ?? '',
       dicType: row[colType] as String? ?? '',
@@ -450,7 +450,7 @@ class DBHelper implements WordLocalDataSource {
     if (result.isEmpty) return null;
     final Map<String, Object?> row = result.first;
     return Word(
-      id: row['word_id'] as int?,
+      id: row['word_id'] as String?,
       key: row[colKey] as String? ?? '',
       value: row[colValue] as String? ?? '',
       dicType: row[colType] as String? ?? '',

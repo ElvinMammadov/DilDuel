@@ -235,7 +235,7 @@ class FirestoreBookmarkRepository implements BookmarkRepository {
   }
 
   Word _wordFromData(Map<String, dynamic> data) => Word(
-        id: data['wordId'] as int?,
+        id: data['wordId'] as String?,
         key: data['key'] as String? ?? '',
         value: data['value'] as String? ?? '',
         dicType: data['dicType'] as String? ?? '',

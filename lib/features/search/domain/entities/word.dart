@@ -27,9 +27,9 @@ class Word extends Equatable {
 
   /// The word's primary key in the dictionary SQLite table.
   ///
-  /// `null` when the word was loaded from a derived source such as the
-  /// bookmark table (which stores only key/value/type).
-  final int? id;
+  /// Stored as TEXT in the asset DB (e.g. `DEAZ-000001`). `null` when the
+  /// word was loaded from a derived source such as the bookmark table.
+  final String? id;
 
   final String key;
   final String value;

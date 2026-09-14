@@ -22,7 +22,9 @@ Color _levelBg(String level, bool isDark) {
     case 'A1':
       return isDark ? AppTheme.successTintDark : AppTheme.successTint;
     case 'A2':
-      return isDark ? AppTheme.accentColorDark.withValues(alpha: 0.18) : AppTheme.warningTint;
+      return isDark
+          ? AppTheme.accentColorDark.withValues(alpha: 0.18)
+          : AppTheme.warningTint;
     case 'B1':
       return isDark ? AppTheme.errorTintDark : AppTheme.errorTint;
     case 'B2':

@@ -88,7 +88,8 @@ class FirestoreBookmarkRepository implements BookmarkRepository {
       final QuerySnapshot<Map<String, dynamic>> snap =
           await _bookmarks(uid).orderBy('savedAt', descending: true).get();
       return snap.docs
-          .map((d) => d.data()['key'] as String? ?? '')
+          .map((QueryDocumentSnapshot<Map<String, dynamic>> d) =>
+              d.data()['key'] as String? ?? '')
           .toList();
     } catch (e) {
       log('Firestore getAllBookmarks error: $e',
@@ -170,7 +171,8 @@ class FirestoreBookmarkRepository implements BookmarkRepository {
       final QuerySnapshot<Map<String, dynamic>> snap =
           await _unknownWords(uid).orderBy('savedAt', descending: true).get();
       return snap.docs
-          .map((d) => d.data()['key'] as String? ?? '')
+          .map((QueryDocumentSnapshot<Map<String, dynamic>> d) =>
+              d.data()['key'] as String? ?? '')
           .toList();
     } catch (e) {
       log('Firestore getAllUnknownWords error: $e',
@@ -205,7 +207,10 @@ class FirestoreBookmarkRepository implements BookmarkRepository {
     try {
       final QuerySnapshot<Map<String, dynamic>> snap =
           await _bookmarks(uid).get();
-      return snap.docs.map((d) => _wordFromData(d.data())).toList();
+      return snap.docs
+          .map((QueryDocumentSnapshot<Map<String, dynamic>> d) =>
+              _wordFromData(d.data()))
+          .toList();
     } catch (e) {
       log('Firestore getAllRemoteBookmarkWords error: $e',
           name: 'FirestoreBookmarkRepository');
@@ -218,7 +223,10 @@ class FirestoreBookmarkRepository implements BookmarkRepository {
     try {
       final QuerySnapshot<Map<String, dynamic>> snap =
           await _unknownWords(uid).get();
-      return snap.docs.map((d) => _wordFromData(d.data())).toList();
+      return snap.docs
+          .map((QueryDocumentSnapshot<Map<String, dynamic>> d) =>
+              _wordFromData(d.data()))
+          .toList();
     } catch (e) {
       log('Firestore getAllRemoteUnknownWordRecords error: $e',
           name: 'FirestoreBookmarkRepository');

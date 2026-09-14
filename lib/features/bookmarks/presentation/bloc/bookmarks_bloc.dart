@@ -9,10 +9,12 @@ class BookmarksBloc extends Cubit<BookmarksState> {
   Future<void> loadBookmarks() async {
     emit(BookmarksLoading());
     try {
-      final List<List<String>> keyLists = await Future.wait(<Future<List<String>>>[
-        _repository.getAllBookmarks(),
-        _repository.getAllUnknownWords(),
-      ]);
+      final List<List<String>> keyLists = await Future.wait(
+        <Future<List<String>>>[
+          _repository.getAllBookmarks(),
+          _repository.getAllUnknownWords(),
+        ],
+      );
 
       final List<String> bookmarkKeys = keyLists[0];
       final List<String> unknownKeys = keyLists[1];

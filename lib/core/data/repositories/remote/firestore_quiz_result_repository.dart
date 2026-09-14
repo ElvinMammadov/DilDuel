@@ -65,7 +65,10 @@ class FirestoreQuizResultRepository implements QuizResultRepository {
     try {
       final QuerySnapshot<Map<String, dynamic>> snap =
           await _results(uid).orderBy('takenAt', descending: true).get();
-      return snap.docs.map((d) => _fromData(d.data())).toList();
+      return snap.docs
+          .map((QueryDocumentSnapshot<Map<String, dynamic>> d) =>
+              _fromData(d.data()))
+          .toList();
     } catch (e) {
       log('Firestore getQuizResults error: $e',
           name: 'FirestoreQuizResultRepository');
@@ -83,7 +86,10 @@ class FirestoreQuizResultRepository implements QuizResultRepository {
     try {
       final QuerySnapshot<Map<String, dynamic>> snap =
           await _results(uid).get();
-      return snap.docs.map((d) => _fromData(d.data())).toList();
+      return snap.docs
+          .map((QueryDocumentSnapshot<Map<String, dynamic>> d) =>
+              _fromData(d.data()))
+          .toList();
     } catch (e) {
       log('Firestore getAllRemoteResults error: $e',
           name: 'FirestoreQuizResultRepository');

@@ -7,7 +7,6 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';

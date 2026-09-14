@@ -19,7 +19,9 @@
       "Bash(fvm dart *)",
       "Bash(fvm flutter *)",
       "Bash(grep -v \"^Analyzing\\\\|^$\\\\|info •\")",
-      "Bash(grep -v \"^Analyzing\\\\|^$\")"
+      "Bash(grep -v \"^Analyzing\\\\|^$\")",
+      "Bash(/Users/elvinmammadov/flutter/bin/dart analyze *)",
+      "Bash(/Users/elvinmammadov/fvm/versions/3.35.7/bin/dart analyze *)"
     ]
   }
 }

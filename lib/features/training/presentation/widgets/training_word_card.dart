@@ -119,22 +119,21 @@ class _CardContentState extends State<_CardContent> {
     final BookmarkRepository repo = sl<BookmarkRepository>();
     if (_isBookmarked) {
       await repo.removeBookmark(widget.word);
-      if (mounted) {
-        setState(() => _isBookmarked = false);
-        SnackbarUtils.showInfo(
-          context,
-          message: 'training.bookmark_removed'.tr(args: [widget.word.key]),
-        );
-      }
+      if (!context.mounted) return;
+      setState(() => _isBookmarked = false);
+      SnackbarUtils.showInfo(
+        context,
+        message: 'training.bookmark_removed'
+            .tr(args: <String>[widget.word.key]),
+      );
     } else {
       await repo.addBookmark(widget.word);
-      if (mounted) {
-        setState(() => _isBookmarked = true);
-        SnackbarUtils.showSuccess(
-          context,
-          message: 'training.bookmarked'.tr(args: [widget.word.key]),
-        );
-      }
+      if (!context.mounted) return;
+      setState(() => _isBookmarked = true);
+      SnackbarUtils.showSuccess(
+        context,
+        message: 'training.bookmarked'.tr(args: <String>[widget.word.key]),
+      );
     }
   }
 
@@ -142,22 +141,22 @@ class _CardContentState extends State<_CardContent> {
     final BookmarkRepository repo = sl<BookmarkRepository>();
     if (_isUnknown) {
       await repo.removeUnknownWord(widget.word);
-      if (mounted) {
-        setState(() => _isUnknown = false);
-        SnackbarUtils.showInfo(
-          context,
-          message: 'training.unknown_removed'.tr(args: [widget.word.key]),
-        );
-      }
+      if (!context.mounted) return;
+      setState(() => _isUnknown = false);
+      SnackbarUtils.showInfo(
+        context,
+        message: 'training.unknown_removed'
+            .tr(args: <String>[widget.word.key]),
+      );
     } else {
       await repo.addUnknownWord(widget.word);
-      if (mounted) {
-        setState(() => _isUnknown = true);
-        SnackbarUtils.showSuccess(
-          context,
-          message: 'training.marked_unknown'.tr(args: [widget.word.key]),
-        );
-      }
+      if (!context.mounted) return;
+      setState(() => _isUnknown = true);
+      SnackbarUtils.showSuccess(
+        context,
+        message: 'training.marked_unknown'
+            .tr(args: <String>[widget.word.key]),
+      );
     }
   }
 

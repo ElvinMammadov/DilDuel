@@ -15,5 +15,5 @@ class AuthUser extends Equatable {
   final String? photoUrl;
 
   @override
-  List<Object?> get props => [uid, email, displayName, photoUrl];
+  List<Object?> get props => <Object?>[uid, email, displayName, photoUrl];
 }

@@ -47,10 +47,10 @@ class SyncQuizResultRepository implements QuizResultRepository {
       final List<QuizResult> localResults = await _local.getQuizResults();
 
       final Set<String> localKeys = localResults
-          .map((r) => r.dateTime.toIso8601String())
+          .map((QuizResult r) => r.dateTime.toIso8601String())
           .toSet();
       final Set<String> remoteKeys = remoteResults
-          .map((r) => r.dateTime.toIso8601String())
+          .map((QuizResult r) => r.dateTime.toIso8601String())
           .toSet();
 
       // Pull remote results that are missing locally.

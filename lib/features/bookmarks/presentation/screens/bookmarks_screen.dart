@@ -198,8 +198,8 @@ class _UnknownTab extends StatelessWidget {
           }
           if (state is BookmarksLoaded) {
             final bool isDark = Theme.of(context).brightness == Brightness.dark;
-            final Color primary = AppTheme.warningColor;
-            final Color primaryTint = AppTheme.warningTint;
+            const Color primary = AppTheme.warningColor;
+            const Color primaryTint = AppTheme.warningTint;
             final Color textPrimary =
                 isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
             final Color textSecondary = isDark

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_logger/easy_logger.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dic/firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ import 'package:injectable/injectable.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  EasyLocalization.logger.enableBuildModes = [];
+  EasyLocalization.logger.enableBuildModes = <BuildMode>[];
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

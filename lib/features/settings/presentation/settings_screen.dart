@@ -77,7 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             builder: (BuildContext ctx, AuthState authState) {
               final bool isSignedIn = authState is AuthAuthenticated;
               final AuthUser? user = switch (authState) {
-                AuthAuthenticated(:final user) => user,
+                AuthAuthenticated(:final AuthUser user) => user,
                 _ => null,
               };
 
@@ -247,7 +247,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // Logout — only shown when signed in
           BlocBuilder<AuthCubit, AuthState>(
             builder: (BuildContext ctx, AuthState authState) {
-              if (authState is! AuthAuthenticated) return const SizedBox.shrink();
+              if (authState is! AuthAuthenticated) {
+                return const SizedBox.shrink();
+              }
               return Column(
                 children: <Widget>[
                   const SizedBox(height: Dimensions.itemHeight14),

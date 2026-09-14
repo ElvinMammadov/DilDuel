@@ -116,8 +116,9 @@ class _CardContentState extends State<_CardContent> {
   }
 
   Future<void> _toggleBookmark(BuildContext context) async {
+    final BookmarkRepository repo = sl<BookmarkRepository>();
     if (_isBookmarked) {
-      await DBHelper.removeBookmark(widget.word);
+      await repo.removeBookmark(widget.word);
       if (mounted) {
         setState(() => _isBookmarked = false);
         SnackbarUtils.showInfo(
@@ -126,7 +127,7 @@ class _CardContentState extends State<_CardContent> {
         );
       }
     } else {
-      await DBHelper.addBookmark(widget.word);
+      await repo.addBookmark(widget.word);
       if (mounted) {
         setState(() => _isBookmarked = true);
         SnackbarUtils.showSuccess(
@@ -138,8 +139,9 @@ class _CardContentState extends State<_CardContent> {
   }
 
   Future<void> _toggleUnknown(BuildContext context) async {
+    final BookmarkRepository repo = sl<BookmarkRepository>();
     if (_isUnknown) {
-      await DBHelper.removeUnknownWord(widget.word);
+      await repo.removeUnknownWord(widget.word);
       if (mounted) {
         setState(() => _isUnknown = false);
         SnackbarUtils.showInfo(
@@ -148,7 +150,7 @@ class _CardContentState extends State<_CardContent> {
         );
       }
     } else {
-      await DBHelper.addUnknownWord(widget.word);
+      await repo.addUnknownWord(widget.word);
       if (mounted) {
         setState(() => _isUnknown = true);
         SnackbarUtils.showSuccess(

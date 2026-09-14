@@ -281,6 +281,7 @@ class DBHelper implements WordLocalDataSource {
     );
     return result
         .map((Map<String, Object?> row) => Word(
+              id: row[colId] as int?,
               key: row[colKey] as String? ?? '',
               value: row[colValue] as String? ?? '',
               dicType: deAz,

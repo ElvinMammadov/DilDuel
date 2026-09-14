@@ -84,9 +84,9 @@ class _DesignedNavBar extends StatelessWidget {
         color: surface,
         border: Border(top: BorderSide(color: border)),
       ),
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 8,
-        bottom: MediaQuery.of(context).padding.bottom + 8,
+        bottom: 16,
         left: 6,
         right: 6,
       ),

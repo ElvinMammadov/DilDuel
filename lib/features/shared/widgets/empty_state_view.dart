@@ -5,24 +5,20 @@ import 'package:flutter_dic/core/utils/dimensions.dart';
 
 /// A reusable empty / placeholder state widget.
 ///
-/// Shows a tinted circle with an [icon] inside, followed by a [title] and an
-/// optional [description]. Uses [Spacer] widgets to position the content at a
-/// consistent vertical position regardless of description length — the icon
-/// always lands at roughly 40 % from the top of the available space.
+/// The icon circle is always centered in the available space. The [title] and
+/// optional [description] hang directly below the circle with a fixed gap, so
+/// varying text length never shifts the icon's vertical position.
 ///
-/// **Must be placed inside a height-constrained parent** such as [Expanded] or
-/// a [SizedBox] with a fixed height. Using it in an unconstrained context
-/// (e.g., a plain [Column] with `mainAxisSize: min`) will throw a layout error
-/// because [Spacer] requires bounded height.
+/// Works in any height-constrained parent — [Expanded], [SizedBox], or a full
+/// screen. Avoid placing it inside an unconstrained column.
 class EmptyStateView extends StatelessWidget {
   /// Icon drawn inside the tinted circle.
   final IconData icon;
 
-  /// Primary color used for the icon and (when [tintColor] is omitted) derived
-  /// as a low-opacity overlay on the surface.
+  /// Foreground color for the icon.
   final Color color;
 
-  /// Background tint of the circle. Defaults to a light variant of [color].
+  /// Background tint of the circle. Falls back to the theme primary tint.
   final Color? tintColor;
 
   /// Bold heading below the circle.
@@ -40,6 +36,10 @@ class EmptyStateView extends StatelessWidget {
     this.description,
   });
 
+  static const double _circleSize = Dimensions.itemHeight72;
+  static const double _iconSize = Dimensions.itemWidth36;
+  static const double _circleRadius = _circleSize / 2;
+
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -47,50 +47,61 @@ class EmptyStateView extends StatelessWidget {
         isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
     final Color textSecondary =
         isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color circleBg = tintColor ??
-        (isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint);
+    final Color circleBg =
+        tintColor ?? (isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint);
 
-    // Spacer(flex: 2) above + Spacer(flex: 3) below anchors the icon at the
-    // same relative position (40 % from top) regardless of description length,
-    // so switching between tabs with different-length descriptions never shifts
-    // the icon vertically.
-    return Column(
-      children: <Widget>[
-        const Spacer(flex: 2),
-        Container(
-          width: Dimensions.itemHeight72,
-          height: Dimensions.itemHeight72,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: circleBg,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, size: Dimensions.itemWidth36, color: color),
-        ),
-        const SizedBox(height: Dimensions.itemHeight16),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.padding32),
-          child: Text(
-            title,
-            style: AppTextStyles.titleMedium(textPrimary),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        if (description != null) ...<Widget>[
-          const SizedBox(height: Dimensions.itemHeight6),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.padding32),
-            child: Text(
-              description!,
-              style: AppTextStyles.bodyMedium(textSecondary),
-              textAlign: TextAlign.center,
+    return LayoutBuilder(
+      builder: (BuildContext ctx, BoxConstraints constraints) {
+        final double centerY = constraints.maxHeight / 2;
+
+        return Stack(
+          children: <Widget>[
+            // ── Icon circle — always at true vertical center ──────────
+            Positioned(
+              top: centerY - _circleRadius,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  width: _circleSize,
+                  height: _circleSize,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: circleBg,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, size: _iconSize, color: color),
+                ),
+              ),
             ),
-          ),
-        ],
-        const Spacer(flex: 3),
-      ],
+
+            // ── Text block — hangs below the circle ───────────────────
+            Positioned(
+              top: centerY + _circleRadius + Dimensions.itemHeight16,
+              left: Dimensions.padding32,
+              right: Dimensions.padding32,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    title,
+                    style: AppTextStyles.titleMedium(textPrimary),
+                    textAlign: TextAlign.center,
+                  ),
+                  if (description != null) ...<Widget>[
+                    const SizedBox(height: Dimensions.itemHeight6),
+                    Text(
+                      description!,
+                      style: AppTextStyles.bodyMedium(textSecondary),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -81,7 +81,7 @@
     "no_results": "Keine Ergebnisse gefunden",
     "empty": {
       "title": "Suche beginnen",
-      "description": "Geben Sie ein Wort ein oder tippen Sie auf das Mikrofon"
+      "description": "Geben Sie das gesuchte Wort in das Suchfeld oben ein"
     },
     "error": {
       "title": "Suche fehlgeschlagen",

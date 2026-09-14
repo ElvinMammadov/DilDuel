@@ -45,12 +45,13 @@ class _TrainingView extends StatelessWidget {
       );
 
   Widget _buildBody(BuildContext context, TrainingState state) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     if (state is TrainingLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
     if (state is TrainingError) {
-      final bool isDark = Theme.of(context).brightness == Brightness.dark;
       return Center(
         child: Text(
           state.message,
@@ -73,6 +74,12 @@ class _TrainingView extends StatelessWidget {
       );
     }
 
-    return const _TrainingEmptyState();
+    return EmptyStateView(
+      icon: Icons.menu_book_rounded,
+      color: isDark ? AppTheme.mainColorDark : AppTheme.mainColor,
+      tintColor: isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint,
+      title: 'training.empty_title'.tr(),
+      description: 'training.empty_subtitle'.tr(),
+    );
   }
 }

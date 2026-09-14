@@ -140,12 +140,10 @@ class _BookmarksTab extends StatelessWidget {
                 : AppTheme.textSecondaryLight;
 
             if (state.bookmarks.isEmpty) {
-              return _BookmarksEmptyState(
+              return EmptyStateView(
                 icon: Icons.bookmark_outline,
-                primary: primary,
-                primaryTint: primaryTint,
-                textPrimary: textPrimary,
-                textSecondary: textSecondary,
+                color: primary,
+                tintColor: primaryTint,
                 title: 'bookmarks.empty'.tr(),
                 description: 'bookmarks.empty_description'.tr(),
               );
@@ -207,12 +205,10 @@ class _UnknownTab extends StatelessWidget {
                 : AppTheme.textSecondaryLight;
 
             if (state.unknownWords.isEmpty) {
-              return _BookmarksEmptyState(
+              return EmptyStateView(
                 icon: Icons.help_outline,
-                primary: primary,
-                primaryTint: primaryTint,
-                textPrimary: textPrimary,
-                textSecondary: textSecondary,
+                color: primary,
+                tintColor: primaryTint,
                 title: 'bookmarks.unknown_empty'.tr(),
                 description: 'bookmarks.unknown_empty_description'.tr(),
               );
@@ -248,57 +244,6 @@ class _UnknownTab extends StatelessWidget {
           }
           return Center(child: Text('common.something_wrong'.tr()));
         },
-      );
-}
-
-// ── Shared empty state ──────────────────────────────────────────────────────
-
-class _BookmarksEmptyState extends StatelessWidget {
-  final IconData icon;
-  final Color primary;
-  final Color primaryTint;
-  final Color textPrimary;
-  final Color textSecondary;
-  final String title;
-  final String description;
-
-  const _BookmarksEmptyState({
-    required this.icon,
-    required this.primary,
-    required this.primaryTint,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.title,
-    required this.description,
-  });
-
-  @override
-  Widget build(BuildContext context) => Center(
-        child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: Dimensions.padding30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: Dimensions.itemHeight72,
-                height: Dimensions.itemHeight72,
-                decoration: BoxDecoration(
-                    color: primaryTint, shape: BoxShape.circle),
-                child:
-                    Icon(icon, size: Dimensions.itemHeight30, color: primary),
-              ),
-              const SizedBox(height: Dimensions.itemHeight14),
-              Text(title, style: AppTextStyles.titleMedium(textPrimary)),
-              const SizedBox(height: Dimensions.itemHeight6),
-              Text(
-                description,
-                style: AppTextStyles.bodyMedium(textSecondary),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
       );
 }
 

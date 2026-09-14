@@ -15,6 +15,7 @@ import 'package:flutter_dic/features/bookmarks/bookmarks.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';
+import 'package:flutter_dic/features/shared/widgets/empty_state_view.dart';
 import 'package:flutter_dic/features/shared/widgets/word_bottom_sheet.dart';
 import 'package:flutter_dic/features/shared/widgets/word_type_badges.dart';
 

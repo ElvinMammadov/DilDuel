@@ -17,6 +17,7 @@ class SearchItems extends StatelessWidget {
           final Color textSecondary =
               isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
           final Color surface =
+
               isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
           final Color border =
               isDark ? AppTheme.borderDark : AppTheme.borderLight;
@@ -29,59 +30,61 @@ class SearchItems extends StatelessWidget {
 
           if (state is SearchLoaded) {
             if (state.words.isEmpty) {
-              return _EmptySearchState(
-                primary: primary,
-                primaryTint: primaryTint,
-                textPrimary: textPrimary,
-                textSecondary: textSecondary,
+              return EmptyStateView(
+                icon: Icons.search,
+                color: primary,
+                tintColor: primaryTint,
+                title: 'search.empty.title'.tr(),
+                description: 'search.empty.description'.tr(),
               );
             }
-                return Expanded(
-                  child: ListView.builder(
+                return ListView.builder(
                     padding: const EdgeInsets.fromLTRB(
                       Dimensions.padding20,
                       Dimensions.padding4,
                       Dimensions.padding20,
                       Dimensions.padding20,
                     ),
-                itemCount: state.words.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Word word = state.words[index];
-                  return _WordCard(
-                    word: word,
-                    surface: surface,
-                    border: border,
-                    textPrimary: textPrimary,
-                    textSecondary: textSecondary,
-                    isDark: isDark,
-                    onTap: () => showSearchBottomSheet(
-                      context,
-                      word,
-                      appState.dictionaryType == DictionaryType.azDe
-                          ? 'az-AZ'
-                          : 'de-DE',
-                      onBookmarkToggled: () =>
-                          context.read<BookmarksBloc>().loadBookmarks(),
-                    ),
+                    itemCount: state.words.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final Word word = state.words[index];
+                      return _WordCard(
+                        word: word,
+                        surface: surface,
+                        border: border,
+                        textPrimary: textPrimary,
+                        textSecondary: textSecondary,
+                        isDark: isDark,
+                        onTap: () => showSearchBottomSheet(
+                          context,
+                          word,
+                          appState.dictionaryType == DictionaryType.azDe
+                              ? 'az-AZ'
+                              : 'de-DE',
+                          onBookmarkToggled: () =>
+                              context.read<BookmarksBloc>().loadBookmarks(),
+                        ),
+                      );
+                    },
                   );
-                },
-              ),
-            );
           }
 
           if (state is SearchError) {
-            return _ErrorSearchState(
-              primary: primary,
-              textPrimary: textPrimary,
-              textSecondary: textSecondary,
+            return EmptyStateView(
+              icon: Icons.error_outline,
+              color: AppTheme.errorColor,
+              tintColor: AppTheme.errorTint,
+              title: 'search.error.title'.tr(),
+              description: 'search.error.description'.tr(),
             );
           }
 
-          return _EmptySearchState(
-            primary: primary,
-            primaryTint: primaryTint,
-            textPrimary: textPrimary,
-            textSecondary: textSecondary,
+          return EmptyStateView(
+            icon: Icons.search,
+            color: primary,
+            tintColor: primaryTint,
+            title: 'search.empty.title'.tr(),
+            description: 'search.empty.description'.tr(),
           );
         },
       );
@@ -172,94 +175,4 @@ class _WordCard extends StatelessWidget {
       ),
     );
   }
-}
-
-
-class _EmptySearchState extends StatelessWidget {
-  final Color primary;
-  final Color primaryTint;
-  final Color textPrimary;
-  final Color textSecondary;
-
-  const _EmptySearchState({
-    required this.primary,
-    required this.primaryTint,
-    required this.textPrimary,
-    required this.textSecondary,
-  });
-
-  @override
-  Widget build(BuildContext context) => Expanded(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.padding24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: Dimensions.itemWidth64,
-                  height: Dimensions.itemHeight64,
-                  decoration:
-                      BoxDecoration(color: primaryTint, shape: BoxShape.circle),
-                  child: Icon(Icons.search,
-                      size: Dimensions.itemWidth26, color: primary),
-                ),
-                const SizedBox(height: Dimensions.itemHeight14),
-                Text('search.empty.title'.tr(),
-                    style: AppTextStyles.titleMedium(textPrimary)),
-                const SizedBox(height: Dimensions.itemHeight6),
-                Text(
-                  'search.empty.description'.tr(),
-                  style: AppTextStyles.bodyMedium(textSecondary),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-}
-
-class _ErrorSearchState extends StatelessWidget {
-  final Color primary;
-  final Color textPrimary;
-  final Color textSecondary;
-
-  const _ErrorSearchState({
-    required this.primary,
-    required this.textPrimary,
-    required this.textSecondary,
-  });
-
-  @override
-  Widget build(BuildContext context) => Expanded(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.padding24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: Dimensions.itemWidth64,
-                  height: Dimensions.itemHeight64,
-                  decoration: const BoxDecoration(
-                      color: AppTheme.errorTint, shape: BoxShape.circle),
-                  child: const Icon(Icons.error_outline,
-                      size: Dimensions.itemWidth26,
-                      color: AppTheme.errorColor),
-                ),
-                const SizedBox(height: Dimensions.itemHeight14),
-                Text('search.error.title'.tr(),
-                    style: AppTextStyles.titleMedium(textPrimary)),
-                const SizedBox(height: Dimensions.itemHeight6),
-                Text('search.error.description'.tr(),
-                    style: AppTextStyles.bodyMedium(textSecondary),
-                    textAlign: TextAlign.center),
-              ],
-            ),
-          ),
-        ),
-      );
 }

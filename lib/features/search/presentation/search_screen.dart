@@ -9,7 +9,7 @@ class SearchScreen extends StatelessWidget {
         child: const Column(
           children: <Widget>[
             SearchSection(),
-            SearchItems(),
+            Expanded(child: SearchItems()),
           ],
         ),
       );

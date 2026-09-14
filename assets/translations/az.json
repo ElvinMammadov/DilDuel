@@ -81,7 +81,7 @@
     "no_results": "Nəticə tapılmadı",
     "empty": {
       "title": "Söz axtarmağa başlayın",
-      "description": "Tərcümə etmək istədiyiniz sözü yazın və ya mikrofon düyməsinə basın"
+      "description": "Tərcümə etmək istədiyiniz sözü yuxarıdakı axtarış sahəsinə yazın"
     },
     "error": {
       "title": "Axtarış alınmadı",

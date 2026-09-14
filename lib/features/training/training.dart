@@ -16,13 +16,13 @@ import 'package:flutter_dic/core/utils/snackbar_utils.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';
+import 'package:flutter_dic/features/shared/widgets/empty_state_view.dart';
 
 // State & logic
 part 'presentation/bloc/training_state.dart';
 part 'presentation/bloc/training_cubit.dart';
 
 // Widgets
-part 'presentation/widgets/training_empty_state.dart';
 part 'presentation/widgets/training_level_selector.dart';
 part 'presentation/widgets/training_word_card.dart';
 part 'presentation/widgets/training_nav_buttons.dart';

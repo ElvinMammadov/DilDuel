@@ -239,7 +239,7 @@ class DBHelper implements WordLocalDataSource {
     return result.map((Map<String, Object?> row) {
       final bool isDeAz = dicType == deAz;
       return Word(
-        id: row[colId] as int?,
+        id: int.tryParse(row[colId]?.toString() ?? ''),
         key: row[colKey] as String? ?? '',
         value: row[colValue] as String? ?? '',
         dicType: dicType,
@@ -281,7 +281,7 @@ class DBHelper implements WordLocalDataSource {
     );
     return result
         .map((Map<String, Object?> row) => Word(
-              id: row[colId] as int?,
+              id: int.tryParse(row[colId]?.toString() ?? ''),
               key: row[colKey] as String? ?? '',
               value: row[colValue] as String? ?? '',
               dicType: deAz,
@@ -316,7 +316,7 @@ class DBHelper implements WordLocalDataSource {
     final Map<String, Object?> row = result.first;
     final bool isDeAz = dicType == deAz;
     return Word(
-      id: row[colId] as int?,
+      id: int.tryParse(row[colId]?.toString() ?? ''),
       key: row[colKey] as String? ?? '',
       value: row[colValue] as String? ?? '',
       dicType: dicType,

@@ -90,25 +90,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
-      listener: (BuildContext ctx, AuthState state) {
-        if (state is AuthAuthenticated) {
-          Navigator.of(ctx).popUntil((Route<dynamic> r) => r.isFirst);
-        }
-        if (state is AuthError) {
-          ScaffoldMessenger.of(ctx).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: AppTheme.errorColor,
-            ),
-          );
-          ctx.read<AuthCubit>().clearError();
-        }
-      },
-      child: const _RegisterView(),
-    );
-  }
+  Widget build(BuildContext context) =>
+      BlocListener<AuthCubit, AuthState>(
+        listener: (BuildContext ctx, AuthState state) {
+          if (state is AuthAuthenticated) {
+            Navigator.of(ctx).popUntil((Route<dynamic> r) => r.isFirst);
+          }
+          if (state is AuthError) {
+            ScaffoldMessenger.of(ctx).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: AppTheme.errorColor,
+              ),
+            );
+            ctx.read<AuthCubit>().clearError();
+          }
+        },
+        child: const _RegisterView(),
+      );
 }
 
 class _RegisterView extends StatelessWidget {
@@ -289,14 +288,13 @@ class _RegisterView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Register button ──────────────────────────────────────────
               BlocBuilder<AuthCubit, AuthState>(
-                builder: (BuildContext ctx, AuthState authState) {
-                  return AppElevatedButton(
-                    text: 'Qeydiyyatdan keç',
-                    isLoading: authState is AuthLoading,
-                    onPressed: state._submit,
-                    width: double.infinity,
-                  );
-                },
+                builder: (BuildContext ctx, AuthState authState) =>
+                    AppElevatedButton(
+                      text: 'Qeydiyyatdan keç',
+                      isLoading: authState is AuthLoading,
+                      onPressed: state._submit,
+                      width: double.infinity,
+                    ),
               ),
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Divider ──────────────────────────────────────────────────

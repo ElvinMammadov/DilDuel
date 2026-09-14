@@ -80,35 +80,34 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
-      listener: (BuildContext ctx, AuthState state) {
-        if (state is AuthAuthenticated) {
-          Navigator.of(ctx).popUntil((Route<dynamic> r) => r.isFirst);
-        }
-        if (state is AuthPasswordResetSent) {
-          ScaffoldMessenger.of(ctx).showSnackBar(
-            const SnackBar(
-              content:
-                  Text('Şifrə bərpası linki e-poçtunuza göndərildi'),
-              backgroundColor: AppTheme.successColor,
-            ),
-          );
-        }
-        if (state is AuthError) {
-          ScaffoldMessenger.of(ctx).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: AppTheme.errorColor,
-            ),
-          );
-          // Reset to unauthenticated so the error can fire again.
-          ctx.read<AuthCubit>().clearError();
-        }
-      },
-      child: const _SignInView(),
-    );
-  }
+  Widget build(BuildContext context) =>
+      BlocListener<AuthCubit, AuthState>(
+        listener: (BuildContext ctx, AuthState state) {
+          if (state is AuthAuthenticated) {
+            Navigator.of(ctx).popUntil((Route<dynamic> r) => r.isFirst);
+          }
+          if (state is AuthPasswordResetSent) {
+            ScaffoldMessenger.of(ctx).showSnackBar(
+              const SnackBar(
+                content:
+                    Text('Şifrə bərpası linki e-poçtunuza göndərildi'),
+                backgroundColor: AppTheme.successColor,
+              ),
+            );
+          }
+          if (state is AuthError) {
+            ScaffoldMessenger.of(ctx).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: AppTheme.errorColor,
+              ),
+            );
+            // Reset to unauthenticated so the error can fire again.
+            ctx.read<AuthCubit>().clearError();
+          }
+        },
+        child: const _SignInView(),
+      );
 }
 
 class _SignInView extends StatelessWidget {
@@ -162,9 +161,10 @@ class _SignInView extends StatelessWidget {
                     gradient: LinearGradient(
                       colors: <Color>[
                         primary,
-                        isDark
-                            ? const Color(0xFF6B5CE7)
-                            : const Color(0xFF7C6AEE),
+                        if (isDark)
+                          const Color(0xFF6B5CE7)
+                        else
+                          const Color(0xFF7C6AEE),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -254,14 +254,13 @@ class _SignInView extends StatelessWidget {
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Sign-in button ───────────────────────────────────────────
               BlocBuilder<AuthCubit, AuthState>(
-                builder: (BuildContext ctx, AuthState authState) {
-                  return AppElevatedButton(
-                    text: 'Daxil ol',
-                    isLoading: authState is AuthLoading,
-                    onPressed: state._submit,
-                    width: double.infinity,
-                  );
-                },
+                builder: (BuildContext ctx, AuthState authState) =>
+                    AppElevatedButton(
+                      text: 'Daxil ol',
+                      isLoading: authState is AuthLoading,
+                      onPressed: state._submit,
+                      width: double.infinity,
+                    ),
               ),
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Divider ──────────────────────────────────────────────────
@@ -303,7 +302,7 @@ class _SignInView extends StatelessWidget {
   }
 }
 
-// ── Shared private widgets ────────────────────────────────────────────────────
+// ── Shared private widgets ──────────────────────────────────────────────────
 
 class _AuthTextField extends StatelessWidget {
   const _AuthTextField({
@@ -417,22 +416,20 @@ class _OrDivider extends StatelessWidget {
   final Color border;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(child: Divider(color: border, thickness: 1)),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.padding12),
-          child: Text(
-            'və ya',
-            style: AppTextStyles.bodySmall(textSecondary),
+  Widget build(BuildContext context) => Row(
+        children: <Widget>[
+          Expanded(child: Divider(color: border, thickness: 1)),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.padding12),
+            child: Text(
+              'və ya',
+              style: AppTextStyles.bodySmall(textSecondary),
+            ),
           ),
-        ),
-        Expanded(child: Divider(color: border, thickness: 1)),
-      ],
-    );
-  }
+          Expanded(child: Divider(color: border, thickness: 1)),
+        ],
+      );
 }
 
 class _SocialButton extends StatelessWidget {
@@ -507,27 +504,25 @@ class _BottomNavRow extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          question,
-          style: AppTextStyles.bodyMedium(textSecondary),
-        ),
-        const SizedBox(width: Dimensions.itemWidth5),
-        GestureDetector(
-          onTap: onTap,
-          child: Text(
-            actionLabel,
-            style: AppTextStyles.bodyMedium(primary).copyWith(
-              fontWeight: FontWeight.w700,
+  Widget build(BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            question,
+            style: AppTextStyles.bodyMedium(textSecondary),
+          ),
+          const SizedBox(width: Dimensions.itemWidth5),
+          GestureDetector(
+            onTap: onTap,
+            child: Text(
+              actionLabel,
+              style: AppTextStyles.bodyMedium(primary).copyWith(
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }
 
 /// Minimal inline Google 'G' logo.
@@ -537,12 +532,10 @@ class _GoogleLogo extends StatelessWidget {
   final double size;
 
   @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: Size(size, size),
-      painter: _GoogleLogoPainter(),
-    );
-  }
+  Widget build(BuildContext context) => CustomPaint(
+        size: Size(size, size),
+        painter: _GoogleLogoPainter(),
+      );
 }
 
 class _GoogleLogoPainter extends CustomPainter {

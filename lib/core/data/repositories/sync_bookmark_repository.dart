@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
 import 'package:flutter_dic/core/data/repositories/local/local_bookmark_repository.dart';
 import 'package:flutter_dic/core/data/repositories/remote/firestore_bookmark_repository.dart';
@@ -15,50 +14,30 @@ import 'package:injectable/injectable.dart';
 /// **Writes** go to local SQLite immediately; Firestore is updated in the
 /// background (non-blocking) whenever the user is signed in.
 ///
-/// On sign-in, performs a bidirectional merge so bookmarks from other devices
-/// appear locally and any locally-saved items are pushed to the cloud.
+/// [mergeOnSignIn] performs a bidirectional merge so bookmarks from other
+/// devices appear locally and any locally-saved items are pushed to the
+/// cloud. It is called by [AuthCubit], which awaits it before emitting
+/// [AuthAuthenticated] so UI state (e.g. cached Cubits) can safely reload
+/// from local storage afterwards without racing the merge.
 @LazySingleton(as: BookmarkRepository)
 class SyncBookmarkRepository implements BookmarkRepository {
   SyncBookmarkRepository(
     this._local,
     this._remote,
     this._authRepository,
-  ) {
-    _authSub = _authRepository.authStateChanges.listen(_onAuthChanged);
-  }
+  );
 
   final LocalBookmarkRepository _local;
   final FirestoreBookmarkRepository _remote;
   final AuthRepository _authRepository;
-  late final StreamSubscription<AuthUser?> _authSub;
 
   bool get _isSignedIn => _authRepository.currentUser != null;
-
-  // ── Auth listener ─────────────────────────────────────────────────────────
-
-  void _onAuthChanged(AuthUser? user) {
-    if (user != null) {
-      // Non-blocking merge: don't await so the listener returns quickly.
-      unawaited(_mergeOnSignIn(user.uid));
-    } else {
-      // Clear local user data on sign-out so the next user starts clean.
-      unawaited(_clearLocalOnSignOut());
-    }
-  }
-
-  Future<void> _clearLocalOnSignOut() async {
-    try {
-      await DBHelper.clearUserData();
-    } catch (e) {
-      log('Clear local data error: $e', name: 'SyncBookmarkRepository');
-    }
-  }
 
   /// Bidirectional merge called once per sign-in.
   ///
   /// 1. Pull remote items that are missing locally.
   /// 2. Push local items that are missing in Firestore.
-  Future<void> _mergeOnSignIn(String uid) async {
+  Future<void> mergeOnSignIn(String uid) async {
     try {
       await _pullRemoteToLocal(uid);
       await _pushLocalToRemote();
@@ -148,6 +127,4 @@ class SyncBookmarkRepository implements BookmarkRepository {
 
   @override
   Future<Word?> getUnknownWord(String key) => _local.getUnknownWord(key);
-
-  void dispose() => _authSub.cancel();
 }

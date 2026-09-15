@@ -80,8 +80,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocListener<AuthCubit, AuthState>(
+  Widget build(BuildContext context) => BlocListener<AuthCubit, AuthState>(
         listener: (BuildContext ctx, AuthState state) {
           if (state is AuthAuthenticated) {
             Navigator.of(ctx).popUntil((Route<dynamic> r) => r.isFirst);
@@ -105,7 +104,10 @@ class _SignInScreenState extends State<SignInScreen> {
             ctx.read<AuthCubit>().clearError();
           }
         },
-        child: const _SignInView(),
+        // Not const: _SignInView reads mutable state via
+        // findAncestorStateOfType, so it must rebuild on setState.
+        // ignore: prefer_const_constructors
+        child: _SignInView(),
       );
 }
 
@@ -118,16 +120,14 @@ class _SignInView extends StatelessWidget {
         context.findAncestorStateOfType<_SignInScreenState>()!;
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final Color primary =
-        isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
     final Color bg =
         isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight;
     final Color textPrimary =
         isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
     final Color textSecondary =
         isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color border =
-        isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
 
     return Scaffold(
       backgroundColor: bg,
@@ -208,7 +208,7 @@ class _SignInView extends StatelessWidget {
               // ── Email field ──────────────────────────────────────────────
               _AuthTextField(
                 label: 'auth.sign_in.email_label'.tr(),
-                hint: 'example@mail.com',
+                hint: 'auth.sign_in.email_hint'.tr(),
                 controller: state._emailCtrl,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
@@ -255,16 +255,15 @@ class _SignInView extends StatelessWidget {
               BlocBuilder<AuthCubit, AuthState>(
                 builder: (BuildContext ctx, AuthState authState) =>
                     AppElevatedButton(
-                      text: 'auth.sign_in.button'.tr(),
-                      isLoading: authState is AuthLoading,
-                      onPressed: state._submit,
-                      width: double.infinity,
-                    ),
+                  text: 'auth.sign_in.button'.tr(),
+                  isLoading: authState is AuthLoading,
+                  onPressed: state._submit,
+                  width: double.infinity,
+                ),
               ),
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Divider ──────────────────────────────────────────────────
-              _OrDivider(
-                  textSecondary: textSecondary, border: border),
+              _OrDivider(textSecondary: textSecondary, border: border),
               const SizedBox(height: Dimensions.itemHeight20),
               // ── Social buttons ───────────────────────────────────────────
               _SocialButton(
@@ -331,16 +330,13 @@ class _AuthTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color primary =
-        isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
     final Color textPrimary =
         isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
     final Color textSecondary =
         isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color surface =
-        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border =
-        isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
     final Color errorColor =
         isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
 
@@ -373,28 +369,23 @@ class _AuthTextField extends StatelessWidget {
             filled: true,
             fillColor: surface,
             border: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(Dimensions.borderRadius),
+              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
               borderSide: BorderSide(color: border),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(Dimensions.borderRadius),
+              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
               borderSide: BorderSide(color: border),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(Dimensions.borderRadius),
+              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
               borderSide: BorderSide(color: primary, width: 1.5),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(Dimensions.borderRadius),
+              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
               borderSide: BorderSide(color: errorColor),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(Dimensions.borderRadius),
+              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
               borderSide: BorderSide(color: errorColor, width: 1.5),
             ),
             contentPadding: const EdgeInsets.symmetric(
@@ -419,8 +410,8 @@ class _OrDivider extends StatelessWidget {
         children: <Widget>[
           Expanded(child: Divider(color: border, thickness: 1)),
           Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.padding12),
+            padding:
+                const EdgeInsets.symmetric(horizontal: Dimensions.padding12),
             child: Text(
               'auth.or_divider'.tr(),
               style: AppTextStyles.bodySmall(textSecondary),
@@ -449,8 +440,7 @@ class _SocialButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color surface =
-        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
 
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (BuildContext ctx, AuthState state) {
@@ -544,14 +534,10 @@ class _GoogleLogoPainter extends CustomPainter {
     final Offset c = Offset(r, r);
     final double stroke = size.width * 0.13;
 
-    _arc(canvas, c, r - stroke / 2, stroke, -15, 110,
-        const Color(0xFF4285F4));
-    _arc(canvas, c, r - stroke / 2, stroke, 95, 95,
-        const Color(0xFFEA4335));
-    _arc(canvas, c, r - stroke / 2, stroke, 190, 70,
-        const Color(0xFFFBBC05));
-    _arc(canvas, c, r - stroke / 2, stroke, 260, 100,
-        const Color(0xFF34A853));
+    _arc(canvas, c, r - stroke / 2, stroke, -15, 110, const Color(0xFF4285F4));
+    _arc(canvas, c, r - stroke / 2, stroke, 95, 95, const Color(0xFFEA4335));
+    _arc(canvas, c, r - stroke / 2, stroke, 190, 70, const Color(0xFFFBBC05));
+    _arc(canvas, c, r - stroke / 2, stroke, 260, 100, const Color(0xFF34A853));
 
     final Paint bar = Paint()
       ..color = const Color(0xFF4285F4)

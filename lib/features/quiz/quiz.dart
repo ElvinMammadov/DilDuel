@@ -12,6 +12,7 @@ import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
+import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/quiz/domain/entities/quiz_word.dart';
 import 'package:flutter_dic/features/quiz/domain/models/quiz_result.dart';
 import 'package:flutter_dic/features/quiz/domain/repositories/quiz_repository.dart';

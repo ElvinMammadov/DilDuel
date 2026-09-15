@@ -21,6 +21,18 @@
             "package_name": "com.Dictionary",
             "certificate_hash": "600bfce037ea60bf13722c72f8fe8d1bb1a13c91"
           }
+        },
+        {
+          "client_id": "503985897884-8qnn5aulhvv9jmqkd5k9p63q17d70ssa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Dictionary",
+            "certificate_hash": "074a26129742bf885e5715728b32cf3d9d33484c"
+          }
+        },
+        {
+          "client_id": "503985897884-57qsl94s8pg6jbacl5175gcth5s0kbs8.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -31,6 +43,10 @@
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
+            {
+              "client_id": "503985897884-57qsl94s8pg6jbacl5175gcth5s0kbs8.apps.googleusercontent.com",
+              "client_type": 3
+            },
             {
               "client_id": "503985897884-5s6f4smbgdlqbm5aikd94kovcdmej4d5.apps.googleusercontent.com",
               "client_type": 2,

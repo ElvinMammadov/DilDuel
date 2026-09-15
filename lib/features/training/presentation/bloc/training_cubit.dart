@@ -29,8 +29,7 @@ class TrainingCubit extends Cubit<TrainingState> {
 
     emit(TrainingInitial());
 
-    final String? lastLevel =
-        await _progressRepository.getLastTrainingLevel();
+    final String? lastLevel = await _progressRepository.getLastTrainingLevel();
     if (lastLevel != null) {
       await _doLoad(lastLevel, startIndex: savedIndices[lastLevel] ?? 0);
     }
@@ -81,5 +80,17 @@ class TrainingCubit extends Cubit<TrainingState> {
   Future<void> _persist(String level, int index) async {
     savedIndices[level] = index;
     await _progressRepository.saveLevelPosition(level, index);
+  }
+
+  /// Clears the in-memory progress cache and reloads it from storage.
+  ///
+  /// Call this on sign-out: without it, [savedIndices] and [levelTotals]
+  /// keep holding the previous user's progress even after the underlying
+  /// DB rows have been cleared, since this cubit lives for the app's
+  /// entire lifetime inside the Training tab.
+  Future<void> reset() async {
+    savedIndices.clear();
+    levelTotals.clear();
+    await init();
   }
 }

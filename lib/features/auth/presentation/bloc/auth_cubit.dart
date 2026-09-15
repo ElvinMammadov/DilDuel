@@ -2,16 +2,28 @@ part of auth;
 
 @lazySingleton
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit(this._authRepository) : super(const AuthInitial());
+  AuthCubit(
+    this._authRepository,
+    this._bookmarkRepository,
+    this._quizResultRepository,
+    this._trainingProgressRepository,
+  ) : super(const AuthInitial());
 
   final AuthRepository _authRepository;
+  final BookmarkRepository _bookmarkRepository;
+  final QuizResultRepository _quizResultRepository;
+  final TrainingProgressRepository _trainingProgressRepository;
   StreamSubscription<AuthUser?>? _authSub;
 
   /// Subscribes to Firebase auth-state changes. Call once at app start.
   void init() {
     _authSub = _authRepository.authStateChanges.listen(
-      (AuthUser? user) {
+      (AuthUser? user) async {
         if (user != null) {
+          // Await the sign-in merge before emitting AuthAuthenticated so
+          // that any listener reacting to this state (e.g. reloading
+          // cached training/quiz Cubits) reads already-synced local data.
+          await _syncOnSignIn(user.uid);
           emit(AuthAuthenticated(user));
         } else {
           emit(const AuthUnauthenticated());
@@ -22,6 +34,22 @@ class AuthCubit extends Cubit<AuthState> {
         emit(const AuthUnauthenticated());
       },
     );
+  }
+
+  /// Merges remote data into local storage for the three synced data
+  /// types. The repositories are registered as their abstract interfaces,
+  /// so the sync-specific merge method is reached via the concrete type.
+  Future<void> _syncOnSignIn(String uid) async {
+    try {
+      await Future.wait(<Future<void>>[
+        (_bookmarkRepository as SyncBookmarkRepository).mergeOnSignIn(uid),
+        (_quizResultRepository as SyncQuizResultRepository).mergeOnSignIn(uid),
+        (_trainingProgressRepository as SyncTrainingProgressRepository)
+            .mergeOnSignIn(uid),
+      ]);
+    } catch (e) {
+      log('Sign-in sync error: $e', name: 'AuthCubit');
+    }
   }
 
   bool get isSignedIn => state is AuthAuthenticated;
@@ -123,6 +151,10 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signOut() async {
     try {
       await _authRepository.signOut();
+      // Clear local data before emitting AuthUnauthenticated so that any
+      // listener reacting to the state change (e.g. resetting cached
+      // training/quiz state) sees an already-empty database.
+      await DBHelper.clearUserData();
     } catch (e) {
       log('Sign-out error: $e', name: 'AuthCubit');
     } finally {

@@ -14,33 +14,27 @@ import 'package:injectable/injectable.dart';
 /// **Writes** go to SQLite immediately; Firestore is updated in the
 /// background whenever the user is signed in.
 ///
-/// On sign-in, performs a bidirectional merge:
+/// [mergeOnSignIn] performs a bidirectional merge:
 /// - Remote results missing locally are pulled into SQLite.
 /// - Local results missing in Firestore are pushed to the cloud.
+///
+/// It is called by [AuthCubit], which awaits it before emitting
+/// [AuthAuthenticated] so UI state reloads without racing the merge.
 @LazySingleton(as: QuizResultRepository)
 class SyncQuizResultRepository implements QuizResultRepository {
   SyncQuizResultRepository(
     this._local,
     this._remote,
     this._authRepository,
-  ) {
-    _authSub = _authRepository.authStateChanges.listen(_onAuthChanged);
-  }
+  );
 
   final LocalQuizResultRepository _local;
   final FirestoreQuizResultRepository _remote;
   final AuthRepository _authRepository;
-  late final StreamSubscription<AuthUser?> _authSub;
 
   bool get _isSignedIn => _authRepository.currentUser != null;
 
-  void _onAuthChanged(AuthUser? user) {
-    if (user != null) {
-      unawaited(_mergeOnSignIn(user.uid));
-    }
-  }
-
-  Future<void> _mergeOnSignIn(String uid) async {
+  Future<void> mergeOnSignIn(String uid) async {
     try {
       final List<QuizResult> remoteResults =
           await _remote.getAllRemoteResults(uid);
@@ -67,8 +61,7 @@ class SyncQuizResultRepository implements QuizResultRepository {
         }
       }
     } catch (e) {
-      log('QuizResult sync merge error: $e',
-          name: 'SyncQuizResultRepository');
+      log('QuizResult sync merge error: $e', name: 'SyncQuizResultRepository');
     }
   }
 
@@ -92,6 +85,4 @@ class SyncQuizResultRepository implements QuizResultRepository {
   @override
   Future<Map<String, dynamic>> getQuizStatistics() =>
       _local.getQuizStatistics();
-
-  void dispose() => _authSub.cancel();
 }

@@ -6,7 +6,26 @@ class TrainingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider<TrainingCubit>(
         create: (_) => sl<TrainingCubit>()..init(),
-        child: const _TrainingView(),
+        child: BlocListener<AuthCubit, AuthState>(
+          listenWhen: (AuthState previous, AuthState current) =>
+              (previous is AuthAuthenticated &&
+                  current is AuthUnauthenticated) ||
+              (previous is AuthUnauthenticated && current is AuthAuthenticated),
+          listener: (BuildContext context, AuthState state) {
+            final TrainingCubit cubit = context.read<TrainingCubit>();
+            if (state is AuthUnauthenticated) {
+              // Sign-out: local data was already cleared, so reset the
+              // in-memory cache and reload (will come back empty).
+              cubit.reset();
+            } else if (state is AuthAuthenticated) {
+              // Sign-in: the sign-in merge has already completed by the
+              // time this state is emitted, so reload to pick up the
+              // signed-in user's own synced progress.
+              cubit.init();
+            }
+          },
+          child: const _TrainingView(),
+        ),
       );
 }
 
@@ -56,9 +75,7 @@ class _TrainingView extends StatelessWidget {
         child: Text(
           state.message,
           style: AppTextStyles.bodyMedium(
-            isDark
-                ? AppTheme.textSecondaryDark
-                : AppTheme.textSecondaryLight,
+            isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight,
           ),
           textAlign: TextAlign.center,
         ),

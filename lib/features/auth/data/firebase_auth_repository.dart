@@ -7,8 +7,7 @@ class FirebaseAuthRepository implements AuthRepository {
         // serverClientId (web OAuth 2.0 client ID) is required by
         // google_sign_in_android 6.x (Credential Manager API).
         _googleSignIn = GoogleSignIn(
-          serverClientId:
-              '503985897884-4tjlkmauv8gp175tokrudb3orjiodinh'
+          serverClientId: '503985897884-57qsl94s8pg6jbacl5175gcth5s0kbs8'
               '.apps.googleusercontent.com',
         );
 
@@ -41,6 +40,7 @@ class FirebaseAuthRepository implements AuthRepository {
         await _auth.signInWithCredential(credential);
     final fb.User? user = result.user;
     if (user == null) throw const SignInFailedException();
+    await _upsertUserEmail(user);
     return _toAuthUser(user)!;
   }
 
@@ -77,6 +77,7 @@ class FirebaseAuthRepository implements AuthRepository {
       await user.reload();
     }
 
+    await _upsertUserEmail(user);
     return _toAuthUser(_auth.currentUser)!;
   }
 
@@ -87,13 +88,13 @@ class FirebaseAuthRepository implements AuthRepository {
     String email,
     String password,
   ) async {
-    final fb.UserCredential result =
-        await _auth.signInWithEmailAndPassword(
+    final fb.UserCredential result = await _auth.signInWithEmailAndPassword(
       email: email.trim(),
       password: password,
     );
     final fb.User? user = result.user;
     if (user == null) throw const SignInFailedException();
+    await _upsertUserEmail(user);
     return _toAuthUser(user)!;
   }
 
@@ -103,8 +104,7 @@ class FirebaseAuthRepository implements AuthRepository {
     String password,
     String displayName,
   ) async {
-    final fb.UserCredential result =
-        await _auth.createUserWithEmailAndPassword(
+    final fb.UserCredential result = await _auth.createUserWithEmailAndPassword(
       email: email.trim(),
       password: password,
     );
@@ -113,6 +113,7 @@ class FirebaseAuthRepository implements AuthRepository {
 
     await user.updateDisplayName(displayName.trim());
     await user.reload();
+    await _upsertUserEmail(user);
     return _toAuthUser(_auth.currentUser)!;
   }
 
@@ -131,6 +132,16 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
+
+  /// Writes the user's email to `users/{uid}` so the account is identifiable
+  /// when browsing the Firestore console.
+  Future<void> _upsertUserEmail(fb.User user) async {
+    if (user.email == null) return;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .set(<String, Object?>{'email': user.email}, SetOptions(merge: true));
+  }
 
   AuthUser? _toAuthUser(fb.User? user) {
     if (user == null) return null;

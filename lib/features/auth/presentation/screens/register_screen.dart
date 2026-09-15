@@ -90,8 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocListener<AuthCubit, AuthState>(
+  Widget build(BuildContext context) => BlocListener<AuthCubit, AuthState>(
         listener: (BuildContext ctx, AuthState state) {
           if (state is AuthAuthenticated) {
             Navigator.of(ctx).popUntil((Route<dynamic> r) => r.isFirst);
@@ -106,7 +105,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ctx.read<AuthCubit>().clearError();
           }
         },
-        child: const _RegisterView(),
+        // Not const: _RegisterView reads mutable state via
+        // findAncestorStateOfType, so it must rebuild on setState.
+        // ignore: prefer_const_constructors
+        child: _RegisterView(),
       );
 }
 
@@ -119,8 +121,7 @@ class _RegisterView extends StatelessWidget {
         context.findAncestorStateOfType<_RegisterScreenState>()!;
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final Color primary =
-        isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
     final Color primaryTint =
         isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
     final Color bg =
@@ -129,8 +130,7 @@ class _RegisterView extends StatelessWidget {
         isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
     final Color textSecondary =
         isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color border =
-        isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
 
     return Scaffold(
       backgroundColor: bg,
@@ -159,8 +159,7 @@ class _RegisterView extends StatelessWidget {
                 padding: const EdgeInsets.all(Dimensions.padding16),
                 decoration: BoxDecoration(
                   color: primaryTint,
-                  borderRadius:
-                      BorderRadius.circular(Dimensions.borderRadius),
+                  borderRadius: BorderRadius.circular(Dimensions.borderRadius),
                 ),
                 child: Row(
                   children: <Widget>[
@@ -217,7 +216,7 @@ class _RegisterView extends StatelessWidget {
               // ── Email field ──────────────────────────────────────────────
               _AuthTextField(
                 label: 'auth.register.email_label'.tr(),
-                hint: 'example@mail.com',
+                hint: 'auth.register.email_hint'.tr(),
                 controller: state._emailCtrl,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
@@ -290,11 +289,11 @@ class _RegisterView extends StatelessWidget {
               BlocBuilder<AuthCubit, AuthState>(
                 builder: (BuildContext ctx, AuthState authState) =>
                     AppElevatedButton(
-                      text: 'auth.register.button'.tr(),
-                      isLoading: authState is AuthLoading,
-                      onPressed: state._submit,
-                      width: double.infinity,
-                    ),
+                  text: 'auth.register.button'.tr(),
+                  isLoading: authState is AuthLoading,
+                  onPressed: state._submit,
+                  width: double.infinity,
+                ),
               ),
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Divider ──────────────────────────────────────────────────

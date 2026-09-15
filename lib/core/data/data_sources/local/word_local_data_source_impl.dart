@@ -23,8 +23,7 @@ class DBHelper implements WordLocalDataSource {
   static const String quizResults = 'quiz_results';
   static const String unknownWords = 'unknown_words';
   static const String trainingProgress = 'training_progress';
-  static const String trainingLevelPosition =
-      'training_level_position';
+  static const String trainingLevelPosition = 'training_level_position';
 
   // ── shared columns ───────────────────────────────────────────────────────
   static const String colId = 'id';
@@ -494,13 +493,14 @@ class DBHelper implements WordLocalDataSource {
   /// device starts with a clean local state and their own data is pulled
   /// from Firestore during the sign-in merge.
   ///
-  /// The read-only dictionary tables (DeAz, AzDe) and the per-word
-  /// training_progress table are intentionally left untouched.
+  /// The read-only dictionary tables (DeAz, AzDe) are shared assets and
+  /// are intentionally left untouched.
   static Future<void> clearUserData() async {
     final Database db = _db!;
     await db.delete(bookmark);
     await db.delete(unknownWords);
     await db.delete(trainingLevelPosition);
     await db.delete(quizResults);
+    await db.delete(trainingProgress);
   }
 }

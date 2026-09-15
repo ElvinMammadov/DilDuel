@@ -13,6 +13,7 @@ import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/core/utils/grammar_de_labels.dart';
 import 'package:flutter_dic/core/utils/grammar_type_translator.dart';
 import 'package:flutter_dic/core/utils/snackbar_utils.dart';
+import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';

@@ -83,8 +83,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i843.FirestoreQuizResultRepository(gh<_i430.AuthRepository>()));
     gh.lazySingleton<_i63.FirestoreTrainingProgressRepository>(() =>
         _i63.FirestoreTrainingProgressRepository(gh<_i430.AuthRepository>()));
-    gh.lazySingleton<_i430.AuthCubit>(
-        () => _i430.AuthCubit(gh<_i430.AuthRepository>()));
     gh.lazySingleton<_i871.TrainingProgressRepository>(
         () => _i311.SyncTrainingProgressRepository(
               gh<_i45.LocalTrainingProgressRepository>(),
@@ -115,6 +113,12 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i957.FirestoreBookmarkRepository>(),
               gh<_i430.AuthRepository>(),
             ));
+    gh.lazySingleton<_i430.AuthCubit>(() => _i430.AuthCubit(
+          gh<_i430.AuthRepository>(),
+          gh<_i807.BookmarkRepository>(),
+          gh<_i662.QuizResultRepository>(),
+          gh<_i871.TrainingProgressRepository>(),
+        ));
     gh.factory<_i1027.BookmarksBloc>(
         () => _i1027.BookmarksBloc(gh<_i807.BookmarkRepository>()));
     return this;

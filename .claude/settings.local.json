@@ -21,7 +21,19 @@
       "Bash(grep -v \"^Analyzing\\\\|^$\\\\|info •\")",
       "Bash(grep -v \"^Analyzing\\\\|^$\")",
       "Bash(/Users/elvinmammadov/flutter/bin/dart analyze *)",
-      "Bash(/Users/elvinmammadov/fvm/versions/3.35.7/bin/dart analyze *)"
+      "Bash(/Users/elvinmammadov/fvm/versions/3.35.7/bin/dart analyze *)",
+      "Bash(sqlite3 *)",
+      "Bash(dart analyze *)",
+      "Bash(flutter analyze *)",
+      "Read(//usr/local/bin/**)",
+      "Read(//Users/elvinmammadov/fvm/default/bin/**)",
+      "Read(//Users/elvinmammadov/**)",
+      "Bash(/Users/elvinmammadov/fvm/versions/3.35.7/bin/flutter analyze *)",
+      "Bash(xargs grep -l -i \"forgot\\\\|password_reset\\\\|reset_pass\")",
+      "Bash(xargs grep -l \"BottomNavigationBar\\\\|NavigationBar\\\\|BottomTabBar\\\\|bottomNavigation\\\\|TabBar\")",
+      "Bash(java -version)",
+      "Bash(/usr/libexec/java_home -V)",
+      "Bash(flutter doctor *)"
     ]
   }
 }

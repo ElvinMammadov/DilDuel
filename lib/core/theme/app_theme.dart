@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/theme/bottom_sheet_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
@@ -93,6 +94,25 @@ class AppTheme {
       color: mainColor,
       linearTrackColor: borderLight,
     ),
+    extensions: const <ThemeExtension<dynamic>>[
+      AppColors(
+        primary: mainColor,
+        primaryTint: primaryTint,
+        accent: accentColor,
+        surface: surfaceLight,
+        headerBg: headerBgLight,
+        textPrimary: textPrimaryLight,
+        textSecondary: textSecondaryLight,
+        border: borderLight,
+        chipBg: chipBgLight,
+        success: successColor,
+        successTint: successTint,
+        warning: warningColor,
+        warningTint: warningTint,
+        error: errorColor,
+        errorTint: errorTint,
+      ),
+    ],
     useMaterial3: true,
   );
 
@@ -143,6 +163,25 @@ class AppTheme {
       color: mainColorDark,
       linearTrackColor: borderDark,
     ),
+    extensions: const <ThemeExtension<dynamic>>[
+      AppColors(
+        primary: mainColorDark,
+        primaryTint: primaryTintDark,
+        accent: accentColorDark,
+        surface: surfaceDark,
+        headerBg: headerBgDark,
+        textPrimary: textPrimaryDark,
+        textSecondary: textSecondaryDark,
+        border: borderDark,
+        chipBg: borderDark,
+        success: successColorDark,
+        successTint: successTintDark,
+        warning: warningColor,
+        warningTint: warningTint,
+        error: errorColorDark,
+        errorTint: errorTintDark,
+      ),
+    ],
     useMaterial3: true,
   );
 }

@@ -40,23 +40,17 @@ class _QuizQuestionState extends State<QuizQuestion> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint =
-        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color success =
-        isDark ? AppTheme.successColorDark : AppTheme.successColor;
-    final Color successTint =
-        isDark ? AppTheme.successTintDark : AppTheme.successTint;
-    final Color error = isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
-    final Color errorTint =
-        isDark ? AppTheme.errorTintDark : AppTheme.errorTint;
+    final AppColors colors = AppColors.of(context);
+    final Color primary = colors.primary;
+    final Color primaryTint = colors.primaryTint;
+    final Color textPrimary = colors.textPrimary;
+    final Color textSecondary = colors.textSecondary;
+    final Color surface = colors.surface;
+    final Color border = colors.border;
+    final Color success = colors.success;
+    final Color successTint = colors.successTint;
+    final Color error = colors.error;
+    final Color errorTint = colors.errorTint;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

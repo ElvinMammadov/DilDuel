@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dic/core/theme/app_theme.dart';
+import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 
 class AppCard extends StatelessWidget {
@@ -26,7 +26,7 @@ class AppCard extends StatelessWidget {
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(Dimensions.itemHeight8),
             ),
-        color: backgroundColor ?? AppTheme.surfaceLight,
+        color: backgroundColor ?? AppColors.of(context).surface,
         borderOnForeground: true,
         child: Padding(
           padding: padding ?? const EdgeInsets.all(Dimensions.padding16),

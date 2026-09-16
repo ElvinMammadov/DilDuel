@@ -2,35 +2,35 @@ part of training;
 
 // ── Level colour helpers ───────────────────────────────────────────────────
 
-Color _levelFg(String level, bool isDark) {
+Color _levelFg(String level, AppColors colors) {
   switch (level) {
     case 'A1':
-      return isDark ? AppTheme.successColorDark : AppTheme.successColor;
+      return colors.success;
     case 'A2':
-      return isDark ? AppTheme.accentColorDark : AppTheme.accentColor;
+      return colors.accent;
     case 'B1':
-      return AppTheme.warningColor;
+      return colors.warning;
     case 'B2':
-      return isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+      return colors.primary;
     default:
-      return isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+      return colors.primary;
   }
 }
 
-Color _levelBg(String level, bool isDark) {
+Color _levelBg(String level, AppColors colors, bool isDark) {
   switch (level) {
     case 'A1':
-      return isDark ? AppTheme.successTintDark : AppTheme.successTint;
+      return colors.successTint;
     case 'A2':
       return isDark
-          ? AppTheme.accentColorDark.withValues(alpha: 0.18)
-          : AppTheme.warningTint;
+          ? colors.accent.withValues(alpha: 0.18)
+          : colors.warningTint;
     case 'B1':
-      return isDark ? AppTheme.errorTintDark : AppTheme.errorTint;
+      return colors.errorTint;
     case 'B2':
-      return isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+      return colors.primaryTint;
     default:
-      return isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+      return colors.primaryTint;
   }
 }
 
@@ -45,11 +45,7 @@ class _LevelSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final AppColors colors = AppColors.of(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -60,13 +56,7 @@ class _LevelSelector extends StatelessWidget {
         onSelected: (String level) =>
             context.read<TrainingCubit>().loadLevel(level),
         itemsBuilder: (BuildContext ctx) {
-          final bool dark = Theme.of(ctx).brightness == Brightness.dark;
-          final Color tp =
-              dark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-          final Color ts =
-              dark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-          final Color bd =
-              dark ? AppTheme.borderDark : AppTheme.borderLight;
+          final AppColors ctxColors = AppColors.of(ctx);
           final TrainingCubit cubit = ctx.read<TrainingCubit>();
 
           return <PopupMenuEntry<String>>[
@@ -78,33 +68,32 @@ class _LevelSelector extends StatelessWidget {
                   horizontal: Dimensions.padding16,
                   vertical: Dimensions.padding8,
                 ),
-                child: _menuItem(_levels[i], tp, ts, dark, cubit),
+                child: _menuItem(_levels[i], ctxColors, cubit),
               ),
               if (i < _levels.length - 1)
-                PopupMenuDivider(height: 1, color: bd),
+                PopupMenuDivider(height: 1, color: ctxColors.border),
             ],
           ];
         },
-        child: _buildSelectedRow(textPrimary, textSecondary, isDark),
+        child: _buildSelectedRow(colors),
       ),
     );
   }
 
-  Widget _buildSelectedRow(
-    Color textPrimary,
-    Color textSecondary,
-    bool isDark,
-  ) {
+  Widget _buildSelectedRow(AppColors colors) {
     if (selectedLevel == null) {
       return Row(
         children: <Widget>[
           Expanded(
             child: Text(
               'training.choose_level'.tr(),
-              style: AppTextStyles.bodyLarge(textSecondary),
+              style: AppTextStyles.bodyLarge(colors.textSecondary),
             ),
           ),
-          Icon(Icons.keyboard_arrow_down_rounded, color: textSecondary),
+          Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: colors.textSecondary,
+          ),
         ],
       );
     }
@@ -113,36 +102,33 @@ class _LevelSelector extends StatelessWidget {
       children: <Widget>[
         Text(
           'training.level'.tr(),
-          style: AppTextStyles.titleSmall(textPrimary),
+          style: AppTextStyles.titleSmall(colors.textPrimary),
         ),
         const SizedBox(width: Dimensions.itemWidth12),
-        _LevelBadge(level: selectedLevel!, isDark: isDark),
+        _LevelBadge(level: selectedLevel!),
         const Spacer(),
-        Icon(Icons.keyboard_arrow_down_rounded, color: textSecondary),
+        Icon(
+          Icons.keyboard_arrow_down_rounded,
+          color: colors.textSecondary,
+        ),
       ],
     );
   }
 
-  Widget _menuItem(
-    String level,
-    Color textColor,
-    Color textSecondary,
-    bool isDark,
-    TrainingCubit cubit,
-  ) =>
+  Widget _menuItem(String level, AppColors colors, TrainingCubit cubit) =>
       Row(
         children: <Widget>[
           Text(
             'training.level'.tr(),
-            style: AppTextStyles.bodyLarge(textColor),
+            style: AppTextStyles.bodyLarge(colors.textPrimary),
           ),
           const SizedBox(width: Dimensions.itemWidth12),
-          _LevelBadge(level: level, isDark: isDark),
+          _LevelBadge(level: level),
           const Spacer(),
           _LevelProgress(
             level: level,
             cubit: cubit,
-            textColor: textSecondary,
+            textColor: colors.textSecondary,
             compact: false,
           ),
         ],
@@ -180,10 +166,8 @@ class _LevelProgress extends StatelessWidget {
 
     // Full: mini bar + counter
     final double pct = (saved + 1) / total;
-    final Color fg = _levelFg(
-      level,
-      Theme.of(context).brightness == Brightness.dark,
-    );
+    final AppColors colors = AppColors.of(context);
+    final Color fg = _levelFg(level, colors);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -211,22 +195,25 @@ class _LevelProgress extends StatelessWidget {
 
 class _LevelBadge extends StatelessWidget {
   final String level;
-  final bool isDark;
 
-  const _LevelBadge({required this.level, required this.isDark});
+  const _LevelBadge({required this.level});
 
   @override
-  Widget build(BuildContext context) => Container(
-        width: Dimensions.itemWidth40,
-        height: Dimensions.itemHeight26,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: _levelBg(level, isDark),
-          borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-        ),
-        child: Text(
-          level,
-          style: AppTextStyles.labelMedium(_levelFg(level, isDark)),
-        ),
-      );
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      width: Dimensions.itemWidth40,
+      height: Dimensions.itemHeight26,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: _levelBg(level, colors, isDark),
+        borderRadius: BorderRadius.circular(Dimensions.borderRadius),
+      ),
+      child: Text(
+        level,
+        style: AppTextStyles.labelMedium(_levelFg(level, colors)),
+      ),
+    );
+  }
 }

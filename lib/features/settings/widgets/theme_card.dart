@@ -13,14 +13,7 @@ class ThemeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocBuilder<ThemeCubit, ThemeState>(
         builder: (BuildContext context, ThemeState state) {
-          final bool isDark = Theme.of(context).brightness == Brightness.dark;
-          final Color primary =
-              isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-          final Color textPrimary =
-              isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-          final Color textSecondary =
-              isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-
+          final AppColors colors = AppColors.of(context);
           final String themeText;
           switch (state.themeType) {
             case ThemeType.light:
@@ -33,11 +26,9 @@ class ThemeCard extends StatelessWidget {
 
           return _SettingsRow(
             icon: Icons.palette_outlined,
-            iconColor: primary,
+            iconColor: colors.primary,
             title: 'settings.theme'.tr(),
             subtitle: themeText,
-            textPrimary: textPrimary,
-            textSecondary: textSecondary,
             onTap: () => _showThemeBottomSheet(context),
           );
         },

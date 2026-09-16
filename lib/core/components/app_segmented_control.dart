@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
-import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 
 /// A full-width segmented control that syncs with a [DefaultTabController].
@@ -37,15 +37,8 @@ class _AppSegmentedControlState extends State<AppSegmentedControl> {
   @override
   Widget build(BuildContext context) {
     final int selected = _tabController?.index ?? 0;
+    final AppColors colors = AppColors.of(context);
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color trackBg =
-        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color thumb = isDark ? AppTheme.borderDark : AppTheme.chipBgLight;
-    final Color activeText =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
 
     const double inset = Dimensions.padding4;
     const Duration dur = Duration(milliseconds: 200);
@@ -58,9 +51,9 @@ class _AppSegmentedControlState extends State<AppSegmentedControl> {
       child: Container(
         padding: const EdgeInsets.all(inset),
         decoration: BoxDecoration(
-          color: trackBg,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-          border: Border.all(color: border),
+          border: Border.all(color: colors.border),
         ),
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -80,7 +73,7 @@ class _AppSegmentedControlState extends State<AppSegmentedControl> {
                     width: thumbW,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: thumb,
+                        color: colors.chipBg,
                         borderRadius: BorderRadius.circular(
                           Dimensions.borderRadius - 2,
                         ),
@@ -124,7 +117,9 @@ class _AppSegmentedControlState extends State<AppSegmentedControl> {
                             child: Text(
                               widget.labels[i],
                               style: AppTextStyles.titleSmall(
-                                i == selected ? activeText : textSecondary,
+                                i == selected
+                                    ? colors.textPrimary
+                                    : colors.textSecondary,
                               ),
                             ),
                           ),

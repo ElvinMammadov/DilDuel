@@ -89,7 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
             ScaffoldMessenger.of(ctx).showSnackBar(
               SnackBar(
                 content: Text('auth.sign_in.reset_sent'.tr()),
-                backgroundColor: AppTheme.successColor,
+                backgroundColor: AppColors.of(ctx).success,
               ),
             );
           }
@@ -97,7 +97,7 @@ class _SignInScreenState extends State<SignInScreen> {
             ScaffoldMessenger.of(ctx).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: AppTheme.errorColor,
+                backgroundColor: AppColors.of(ctx).error,
               ),
             );
             // Reset to unauthenticated so the error can fire again.
@@ -118,16 +118,9 @@ class _SignInView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _SignInScreenState state =
         context.findAncestorStateOfType<_SignInScreenState>()!;
+    final AppColors colors = AppColors.of(context);
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color bg =
-        isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final Color bg = Theme.of(context).scaffoldBackgroundColor;
 
     return Scaffold(
       backgroundColor: bg,
@@ -136,7 +129,7 @@ class _SignInView extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded,
-              size: Dimensions.itemHeight20, color: textPrimary),
+              size: Dimensions.itemHeight20, color: colors.textPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -159,7 +152,7 @@ class _SignInView extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: <Color>[
-                        primary,
+                        colors.primary,
                         if (isDark)
                           const Color(0xFF6B5CE7)
                         else
@@ -172,7 +165,7 @@ class _SignInView extends StatelessWidget {
                         BorderRadius.circular(Dimensions.borderRadiusLarge),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: primary.withValues(alpha: 0.30),
+                        color: colors.primary.withValues(alpha: 0.30),
                         blurRadius: 20,
                         offset: const Offset(0, 8),
                       ),
@@ -195,13 +188,13 @@ class _SignInView extends StatelessWidget {
               // ── Heading ─────────────────────────────────────────────────
               Text(
                 'auth.sign_in.title'.tr(),
-                style: AppTextStyles.titleLarge(textPrimary),
+                style: AppTextStyles.titleLarge(colors.textPrimary),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: Dimensions.itemHeight5),
               Text(
                 'auth.sign_in.subtitle'.tr(),
-                style: AppTextStyles.bodyMedium(textSecondary),
+                style: AppTextStyles.bodyMedium(colors.textSecondary),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: Dimensions.itemHeight30),
@@ -232,7 +225,7 @@ class _SignInView extends StatelessWidget {
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
                     size: Dimensions.itemHeight20,
-                    color: textSecondary,
+                    color: colors.textSecondary,
                   ),
                   onPressed: state.togglePasswordVisibility,
                 ),
@@ -245,7 +238,7 @@ class _SignInView extends StatelessWidget {
                   onTap: state._forgotPassword,
                   child: Text(
                     'auth.sign_in.forgot_password'.tr(),
-                    style: AppTextStyles.bodySmall(primary)
+                    style: AppTextStyles.bodySmall(colors.primary)
                         .copyWith(fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -263,14 +256,12 @@ class _SignInView extends StatelessWidget {
               ),
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Divider ──────────────────────────────────────────────────
-              _OrDivider(textSecondary: textSecondary, border: border),
+              const _OrDivider(),
               const SizedBox(height: Dimensions.itemHeight20),
               // ── Social buttons ───────────────────────────────────────────
               _SocialButton(
                 label: 'auth.sign_in.google_button'.tr(),
                 logo: const _GoogleLogo(size: 20),
-                border: border,
-                textPrimary: textPrimary,
                 onTap: () => context.read<AuthCubit>().signInWithGoogle(),
               ),
               if (Platform.isIOS) ...<Widget>[
@@ -278,9 +269,8 @@ class _SignInView extends StatelessWidget {
                 _SocialButton(
                   label: 'auth.sign_in.apple_button'.tr(),
                   logo: Icon(Icons.apple,
-                      size: Dimensions.itemHeight22, color: textPrimary),
-                  border: border,
-                  textPrimary: textPrimary,
+                      size: Dimensions.itemHeight22,
+                      color: colors.textPrimary),
                   onTap: () => context.read<AuthCubit>().signInWithApple(),
                 ),
               ],
@@ -289,8 +279,6 @@ class _SignInView extends StatelessWidget {
               _BottomNavRow(
                 question: 'auth.sign_in.no_account'.tr(),
                 actionLabel: 'auth.sign_in.register_link'.tr(),
-                textSecondary: textSecondary,
-                primary: primary,
                 onTap: state._openRegister,
               ),
             ],
@@ -330,23 +318,14 @@ class _AuthTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color errorColor =
-        isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
+    final AppColors colors = AppColors.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           label,
-          style: AppTextStyles.labelMedium(textSecondary),
+          style: AppTextStyles.labelMedium(colors.textSecondary),
         ),
         const SizedBox(height: Dimensions.itemHeight6),
         TextField(
@@ -355,39 +334,39 @@ class _AuthTextField extends StatelessWidget {
           keyboardType: keyboardType,
           textInputAction: textInputAction,
           onSubmitted: onSubmitted,
-          style: AppTextStyles.bodyLarge(textPrimary),
+          style: AppTextStyles.bodyLarge(colors.textPrimary),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: AppTextStyles.bodyLarge(
-              textSecondary.withValues(alpha: 0.5),
+              colors.textSecondary.withValues(alpha: 0.5),
             ),
             prefixIcon: prefixIcon != null
-                ? Icon(prefixIcon, size: 20, color: textSecondary)
+                ? Icon(prefixIcon, size: 20, color: colors.textSecondary)
                 : null,
             suffixIcon: suffixIcon,
             errorText: errorText,
-            errorStyle: AppTextStyles.bodySmall(errorColor),
+            errorStyle: AppTextStyles.bodySmall(colors.error),
             filled: true,
-            fillColor: surface,
+            fillColor: colors.surface,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-              borderSide: BorderSide(color: border),
+              borderSide: BorderSide(color: colors.border),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-              borderSide: BorderSide(color: border),
+              borderSide: BorderSide(color: colors.border),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-              borderSide: BorderSide(color: primary, width: 1.5),
+              borderSide: BorderSide(color: colors.primary, width: 1.5),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-              borderSide: BorderSide(color: errorColor),
+              borderSide: BorderSide(color: colors.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-              borderSide: BorderSide(color: errorColor, width: 1.5),
+              borderSide: BorderSide(color: colors.error, width: 1.5),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: Dimensions.padding16,
@@ -401,48 +380,42 @@ class _AuthTextField extends StatelessWidget {
 }
 
 class _OrDivider extends StatelessWidget {
-  const _OrDivider({required this.textSecondary, required this.border});
-
-  final Color textSecondary;
-  final Color border;
+  const _OrDivider();
 
   @override
-  Widget build(BuildContext context) => Row(
-        children: <Widget>[
-          Expanded(child: Divider(color: border, thickness: 1)),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: Dimensions.padding12),
-            child: Text(
-              'auth.or_divider'.tr(),
-              style: AppTextStyles.bodySmall(textSecondary),
-            ),
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return Row(
+      children: <Widget>[
+        Expanded(child: Divider(color: colors.border, thickness: 1)),
+        Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: Dimensions.padding12),
+          child: Text(
+            'auth.or_divider'.tr(),
+            style: AppTextStyles.bodySmall(colors.textSecondary),
           ),
-          Expanded(child: Divider(color: border, thickness: 1)),
-        ],
-      );
+        ),
+        Expanded(child: Divider(color: colors.border, thickness: 1)),
+      ],
+    );
+  }
 }
 
 class _SocialButton extends StatelessWidget {
   const _SocialButton({
     required this.label,
     required this.logo,
-    required this.border,
-    required this.textPrimary,
     required this.onTap,
   });
 
   final String label;
   final Widget logo;
-  final Color border;
-  final Color textPrimary;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-
+    final AppColors colors = AppColors.of(context);
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (BuildContext ctx, AuthState state) {
         final bool loading = state is AuthLoading;
@@ -451,24 +424,26 @@ class _SocialButton extends StatelessWidget {
           child: AnimatedOpacity(
             opacity: loading ? 0.5 : 1.0,
             duration: const Duration(milliseconds: 150),
-            child: Container(
-              height: Dimensions.itemHeight50,
+            child: DecoratedBox(
               decoration: BoxDecoration(
-                color: surface,
-                border: Border.all(color: border),
+                color: colors.surface,
+                border: Border.all(color: colors.border),
                 borderRadius:
                     BorderRadius.circular(Dimensions.borderRadiusPill),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  logo,
-                  const SizedBox(width: Dimensions.itemWidth12),
-                  Text(
-                    label,
-                    style: AppTextStyles.titleSmall(textPrimary),
-                  ),
-                ],
+              child: SizedBox(
+                height: Dimensions.itemHeight50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    logo,
+                    const SizedBox(width: Dimensions.itemWidth12),
+                    Text(
+                      label,
+                      style: AppTextStyles.titleSmall(colors.textPrimary),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -482,37 +457,33 @@ class _BottomNavRow extends StatelessWidget {
   const _BottomNavRow({
     required this.question,
     required this.actionLabel,
-    required this.textSecondary,
-    required this.primary,
     required this.onTap,
   });
 
   final String question;
   final String actionLabel;
-  final Color textSecondary;
-  final Color primary;
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            question,
-            style: AppTextStyles.bodyMedium(textSecondary),
-          ),
-          const SizedBox(width: Dimensions.itemWidth5),
-          GestureDetector(
-            onTap: onTap,
-            child: Text(
-              actionLabel,
-              style: AppTextStyles.bodyMedium(primary).copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(question, style: AppTextStyles.bodyMedium(colors.textSecondary)),
+        const SizedBox(width: Dimensions.itemWidth5),
+        GestureDetector(
+          onTap: onTap,
+          child: Text(
+            actionLabel,
+            style: AppTextStyles.bodyMedium(colors.primary).copyWith(
+              fontWeight: FontWeight.w700,
             ),
           ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 }
 
 /// Minimal inline Google 'G' logo.

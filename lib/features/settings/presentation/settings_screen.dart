@@ -42,21 +42,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
-    final bool isDark = theme.brightness == Brightness.dark;
-    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint =
-        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color error = isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
-    final Color errorTint =
-        isDark ? AppTheme.errorTintDark : AppTheme.errorTint;
+    final AppColors colors = AppColors.of(context);
 
     return Scaffold(
       appBar: DilDuelAppBar(
@@ -80,10 +66,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 AuthAuthenticated(:final AuthUser user) => user,
                 _ => null,
               };
+              final AppColors ctxColors = AppColors.of(ctx);
 
               return _SettingsCard(
-                border: border,
-                surface: surface,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
                     Dimensions.padding20,
@@ -95,34 +80,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children: <Widget>[
                       CircleAvatar(
                         radius: Dimensions.itemHeight36,
-                        backgroundColor: isSignedIn ? primary : primaryTint,
+                        backgroundColor: isSignedIn
+                            ? ctxColors.primary
+                            : ctxColors.primaryTint,
                         child: Icon(
                           Icons.person,
                           size: Dimensions.itemWidth28,
-                          color: isSignedIn ? Colors.white : primary,
+                          color:
+                              isSignedIn ? Colors.white : ctxColors.primary,
                         ),
                       ),
                       const SizedBox(height: Dimensions.itemHeight10),
                       if (isSignedIn) ...<Widget>[
                         Text(
                           user?.displayName ?? 'settings.profile.name'.tr(),
-                          style: AppTextStyles.titleMedium(textPrimary),
+                          style: AppTextStyles.titleMedium(
+                            ctxColors.textPrimary,
+                          ),
                         ),
                         const SizedBox(height: Dimensions.itemHeight2),
                         Text(
                           user?.email ?? '',
-                          style: AppTextStyles.bodySmall(textSecondary),
+                          style: AppTextStyles.bodySmall(
+                            ctxColors.textSecondary,
+                          ),
                         ),
                       ] else ...<Widget>[
                         Text(
                           'settings.profile.guest'.tr(),
-                          style: AppTextStyles.titleMedium(textPrimary),
+                          style: AppTextStyles.titleMedium(
+                            ctxColors.textPrimary,
+                          ),
                         ),
                         const SizedBox(height: Dimensions.itemHeight2),
                         Text(
                           'settings.profile.guest_hint'.tr(),
-                          style: AppTextStyles.bodyMedium(textSecondary)
-                              .copyWith(fontSize: 13),
+                          style: AppTextStyles.bodyMedium(
+                            ctxColors.textSecondary,
+                          ).copyWith(fontSize: 13),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -135,7 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 horizontal: Dimensions.padding22,
                                 vertical: Dimensions.padding10),
                             decoration: BoxDecoration(
-                              color: primary,
+                              color: ctxColors.primary,
                               borderRadius: BorderRadius.circular(
                                   Dimensions.borderRadiusPill),
                             ),
@@ -155,32 +150,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           // Language
           _SettingsCard(
-            border: border,
-            surface: surface,
             child: _SettingsRow(
               icon: Icons.language_outlined,
-              iconColor: primary,
+              iconColor: colors.primary,
               title: 'settings.language'.tr(),
               subtitle: 'settings.language_name'.tr(),
-              textPrimary: textPrimary,
-              textSecondary: textSecondary,
               onTap: _showLanguageBottomSheet,
             ),
           ),
           const SizedBox(height: Dimensions.padding8),
 
           // Theme
-          _SettingsCard(
-            border: border,
-            surface: surface,
-            child: const ThemeCard(),
-          ),
+          const _SettingsCard(child: ThemeCard()),
           const SizedBox(height: Dimensions.padding8),
 
           // FAQ
           _SettingsCard(
-            border: border,
-            surface: surface,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -192,23 +177,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Dimensions.padding14,
                   ),
                   child: Text('settings.faq.title'.tr(),
-                      style: AppTextStyles.titleMedium(textPrimary)),
+                      style: AppTextStyles.titleMedium(colors.textPrimary)),
                 ),
-                Divider(height: 1, color: border),
+                Divider(height: 1, color: colors.border),
                 _FaqItem(
                   question: 'settings.faq.dictionary_usage'.tr(),
                   answer: 'settings.faq.dictionary_usage_answer'.tr(),
-                  textPrimary: textPrimary,
-                  textSecondary: textSecondary,
-                  border: border,
                   showDivider: true,
                 ),
                 _FaqItem(
                   question: 'settings.faq.quiz_usage'.tr(),
                   answer: 'settings.faq.quiz_usage_answer'.tr(),
-                  textPrimary: textPrimary,
-                  textSecondary: textSecondary,
-                  border: border,
                   showDivider: false,
                 ),
               ],
@@ -218,8 +197,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           // About
           _SettingsCard(
-            border: border,
-            surface: surface,
             child: FutureBuilder<PackageInfo>(
               future: _packageInfo,
               builder:
@@ -228,11 +205,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     snapshot.hasData ? snapshot.data!.version : '...';
                 return _SettingsRow(
                   icon: Icons.info_outline,
-                  iconColor: primary,
+                  iconColor: AppColors.of(context).primary,
                   title: 'settings.about'.tr(),
                   subtitle: 'settings.version'.tr(args: <String>[version]),
-                  textPrimary: textPrimary,
-                  textSecondary: textSecondary,
                   showChevron: false,
                   onTap: () {},
                 );
@@ -246,6 +221,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               if (authState is! AuthAuthenticated) {
                 return const SizedBox.shrink();
               }
+              final AppColors ctxColors = AppColors.of(ctx);
               return Column(
                 children: <Widget>[
                   const SizedBox(height: Dimensions.itemHeight14),
@@ -253,8 +229,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     text: 'settings.logout'.tr(),
                     onPressed: _signOut,
                     width: double.infinity,
-                    backgroundColor: errorTint,
-                    textColor: error,
+                    backgroundColor: ctxColors.errorTint,
+                    textColor: ctxColors.error,
                   ),
                 ],
               );
@@ -268,21 +244,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
 class _SettingsCard extends StatelessWidget {
   final Widget child;
-  final Color border;
-  final Color surface;
 
-  const _SettingsCard(
-      {required this.child, required this.border, required this.surface});
+  const _SettingsCard({required this.child});
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: surface,
-          border: Border.all(color: border),
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
-        ),
-        child: child,
-      );
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        border: Border.all(color: colors.border),
+        borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
+      ),
+      child: child,
+    );
+  }
 }
 
 class _SettingsRow extends StatelessWidget {
@@ -290,8 +266,6 @@ class _SettingsRow extends StatelessWidget {
   final Color? iconColor;
   final String title;
   final String subtitle;
-  final Color textPrimary;
-  final Color textSecondary;
   final VoidCallback? onTap;
   final bool showChevron;
 
@@ -300,61 +274,56 @@ class _SettingsRow extends StatelessWidget {
     this.iconColor,
     required this.title,
     required this.subtitle,
-    required this.textPrimary,
-    required this.textSecondary,
     this.onTap,
     this.showChevron = true,
   });
 
   @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.padding16,
-              vertical: Dimensions.padding14),
-          child: Row(
-            children: <Widget>[
-              if (icon != null) ...<Widget>[
-                Icon(icon, size: Dimensions.itemWidth20, color: iconColor),
-                const SizedBox(width: Dimensions.itemWidth12),
-              ],
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(title,
-                        style: AppTextStyles.titleSmall(textPrimary)),
-                    Text(subtitle,
-                        style: AppTextStyles.bodySmall(textSecondary)),
-                  ],
-                ),
-              ),
-              if (showChevron)
-                Icon(Icons.chevron_right,
-                    size: Dimensions.itemWidth16,
-                    color: textSecondary.withValues(alpha: 0.4)),
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.padding16,
+            vertical: Dimensions.padding14),
+        child: Row(
+          children: <Widget>[
+            if (icon != null) ...<Widget>[
+              Icon(icon, size: Dimensions.itemWidth20, color: iconColor),
+              const SizedBox(width: Dimensions.itemWidth12),
             ],
-          ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(title,
+                      style: AppTextStyles.titleSmall(colors.textPrimary)),
+                  Text(subtitle,
+                      style: AppTextStyles.bodySmall(colors.textSecondary)),
+                ],
+              ),
+            ),
+            if (showChevron)
+              Icon(Icons.chevron_right,
+                  size: Dimensions.itemWidth16,
+                  color: colors.textSecondary.withValues(alpha: 0.4)),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _FaqItem extends StatefulWidget {
   final String question;
   final String answer;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color border;
   final bool showDivider;
 
   const _FaqItem({
     required this.question,
     required this.answer,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.border,
     required this.showDivider,
   });
 
@@ -366,43 +335,48 @@ class _FaqItemState extends State<_FaqItem> {
   bool _open = false;
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: <Widget>[
-          InkWell(
-            onTap: () => setState(() => _open = !_open),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.padding16,
-                  vertical: Dimensions.padding14),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                      child: Text(widget.question,
-                          style: AppTextStyles.bodyMedium(widget.textPrimary))),
-                  AnimatedRotation(
-                    duration: const Duration(milliseconds: 200),
-                    turns: _open ? 0.5 : 0,
-                    child: Icon(Icons.keyboard_arrow_down,
-                        size: Dimensions.itemWidth18,
-                        color: widget.textSecondary),
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return Column(
+      children: <Widget>[
+        InkWell(
+          onTap: () => setState(() => _open = !_open),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.padding16,
+                vertical: Dimensions.padding14),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                    child: Text(widget.question,
+                        style: AppTextStyles.bodyMedium(colors.textPrimary))),
+                AnimatedRotation(
+                  duration: const Duration(milliseconds: 200),
+                  turns: _open ? 0.5 : 0,
+                  child: Icon(
+                    Icons.keyboard_arrow_down,
+                    size: Dimensions.itemWidth18,
+                    color: colors.textSecondary,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          if (_open)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                Dimensions.padding16,
-                0,
-                Dimensions.padding16,
-                Dimensions.padding14,
-              ),
-              child: Text(widget.answer,
-                  style: AppTextStyles.bodyMedium(widget.textSecondary)
-                      .copyWith(height: 1.5, fontSize: 13)),
+        ),
+        if (_open)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              Dimensions.padding16,
+              0,
+              Dimensions.padding16,
+              Dimensions.padding14,
             ),
-          if (widget.showDivider) Divider(height: 1, color: widget.border),
-        ],
-      );
+            child: Text(widget.answer,
+                style: AppTextStyles.bodyMedium(colors.textSecondary)
+                    .copyWith(height: 1.5, fontSize: 13)),
+          ),
+        if (widget.showDivider) Divider(height: 1, color: colors.border),
+      ],
+    );
+  }
 }

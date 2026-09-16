@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
-import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 
 /// A reusable empty / placeholder state widget.
@@ -42,13 +42,8 @@ class EmptyStateView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color circleBg =
-        tintColor ?? (isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint);
+    final AppColors colors = AppColors.of(context);
+    final Color circleBg = tintColor ?? colors.primaryTint;
 
     return LayoutBuilder(
       builder: (BuildContext ctx, BoxConstraints constraints) {
@@ -85,14 +80,14 @@ class EmptyStateView extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     title,
-                    style: AppTextStyles.titleMedium(textPrimary),
+                    style: AppTextStyles.titleMedium(colors.textPrimary),
                     textAlign: TextAlign.center,
                   ),
                   if (description != null) ...<Widget>[
                     const SizedBox(height: Dimensions.itemHeight6),
                     Text(
                       description!,
-                      style: AppTextStyles.bodyMedium(textSecondary),
+                      style: AppTextStyles.bodyMedium(colors.textSecondary),
                       textAlign: TextAlign.center,
                     ),
                   ],

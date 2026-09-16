@@ -64,8 +64,6 @@ class _TrainingView extends StatelessWidget {
       );
 
   Widget _buildBody(BuildContext context, TrainingState state) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-
     if (state is TrainingLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -75,7 +73,7 @@ class _TrainingView extends StatelessWidget {
         child: Text(
           state.message,
           style: AppTextStyles.bodyMedium(
-            isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight,
+            AppColors.of(context).textSecondary,
           ),
           textAlign: TextAlign.center,
         ),
@@ -91,10 +89,11 @@ class _TrainingView extends StatelessWidget {
       );
     }
 
+    final AppColors colors = AppColors.of(context);
     return EmptyStateView(
       icon: Icons.menu_book_rounded,
-      color: isDark ? AppTheme.mainColorDark : AppTheme.mainColor,
-      tintColor: isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint,
+      color: colors.primary,
+      tintColor: colors.primaryTint,
       title: 'training.empty_title'.tr(),
       description: 'training.empty_subtitle'.tr(),
     );

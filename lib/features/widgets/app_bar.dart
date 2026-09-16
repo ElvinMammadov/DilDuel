@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/state/app_state.dart';
+import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
-import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 
 class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -23,24 +23,15 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final AppState appState = context.watch<AppCubit>().state;
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppColors colors = AppColors.of(context);
     final bool isAzDe = appState.dictionaryType == DictionaryType.azDe;
-    final Color primary =
-        isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color surface =
-        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
 
     return AppBar(
       elevation: 0,
       titleSpacing: 0,
       leading: showBackButton
           ? IconButton(
-              icon: Icon(Icons.arrow_back, color: textPrimary),
+              icon: Icon(Icons.arrow_back, color: colors.textPrimary),
               onPressed: onBackPressed ?? () => Navigator.pop(context),
             )
           : null,
@@ -49,69 +40,70 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
             left: showBackButton ? 0 : Dimensions.padding20),
         child: Text(
           showBackButton ? (title ?? '') : 'Dil Duel',
-          style: AppTextStyles.titleLarge(textPrimary),
+          style: AppTextStyles.titleLarge(colors.textPrimary),
         ),
       ),
       actions: showProfileButton
           ? <Widget>[
-              // Direction switcher pill — shows active source → target
               GestureDetector(
-                onTap: () =>
-                    context.read<AppCubit>().toggleDictionaryType(),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Dimensions.padding12,
-                    vertical: Dimensions.padding8,
-                  ),
+                onTap: () => context.read<AppCubit>().toggleDictionaryType(),
+                child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: surface,
-                    border: Border.all(color: border),
+                    color: colors.surface,
+                    border: Border.all(color: colors.border),
                     borderRadius: BorderRadius.circular(
                         Dimensions.borderRadiusPill),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      // Source language (active / bold)
-                      Text(
-                        isAzDe ? 'Az' : 'De',
-                        style: AppTextStyles.labelMedium(primary),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.itemWidth6,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Dimensions.padding12,
+                      vertical: Dimensions.padding8,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          isAzDe ? 'Az' : 'De',
+                          style: AppTextStyles.labelMedium(colors.primary),
                         ),
-                        child: Icon(
-                          Icons.arrow_forward_rounded,
-                          size: Dimensions.itemWidth14,
-                          color: primary,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Dimensions.itemWidth6,
+                          ),
+                          child: Icon(
+                            Icons.arrow_forward_rounded,
+                            size: Dimensions.itemWidth14,
+                            color: colors.primary,
+                          ),
                         ),
-                      ),
-                      // Target language (dimmed)
-                      Text(
-                        isAzDe ? 'De' : 'Az',
-                        style: AppTextStyles.labelMedium(textSecondary),
-                      ),
-                    ],
+                        Text(
+                          isAzDe ? 'De' : 'Az',
+                          style:
+                              AppTextStyles.labelMedium(colors.textSecondary),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
               const SizedBox(width: Dimensions.itemWidth8),
-              // Settings icon button
               GestureDetector(
-                onTap: () =>
-                    Navigator.pushNamed(context, '/settings'),
-                child: Container(
+                onTap: () => Navigator.pushNamed(context, '/settings'),
+                child: SizedBox(
                   width: Dimensions.itemWidth34,
                   height: Dimensions.itemHeight34,
-                  decoration: BoxDecoration(
-                    color: surface,
-                    border: Border.all(color: border),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(Icons.settings_outlined,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: colors.surface,
+                      border: Border.all(color: colors.border),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.settings_outlined,
                       size: Dimensions.itemWidth16,
-                      color: textSecondary),
+                      color: colors.textSecondary,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(width: Dimensions.itemWidth20),

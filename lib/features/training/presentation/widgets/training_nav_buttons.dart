@@ -7,15 +7,11 @@ class _TrainingNavButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color primary =
-        isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color border =
-        isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color surface =
-        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color disabledText =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final AppColors colors = AppColors.of(context);
+    final Color primary = colors.primary;
+    final Color border = colors.border;
+    final Color surface = colors.surface;
+    final Color disabledText = colors.textSecondary;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(

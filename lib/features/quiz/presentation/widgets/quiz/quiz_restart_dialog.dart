@@ -23,7 +23,7 @@ class QuizRestartDialog extends StatelessWidget {
               Navigator.pop(context);
             },
             style: TextButton.styleFrom(
-              foregroundColor: AppTheme.errorColor,
+              foregroundColor: AppColors.of(context).error,
             ),
             child: Text('quiz.restart'.tr()),
           ),

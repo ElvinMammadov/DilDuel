@@ -18,7 +18,7 @@ class QuizErrorView extends StatelessWidget {
             Text(
               'Error: $message',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppTheme.errorColor,
+                    color: AppColors.of(context).error,
                   ),
               textAlign: TextAlign.center,
             ),

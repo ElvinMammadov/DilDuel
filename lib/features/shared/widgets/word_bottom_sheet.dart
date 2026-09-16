@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';
+import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
-import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/core/utils/grammar_de_labels.dart';
 import 'package:flutter_dic/core/utils/grammar_type_translator.dart';
@@ -139,29 +139,18 @@ class _WordBottomSheetState extends State<WordBottomSheet>
 
   @override
   Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color primary =
-        isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint =
-        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color border =
-        isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color surface =
-        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
     final Color cardBg =
-        isDark ? AppTheme.headerBgDark : AppTheme.backgroundLight;
+        isDark ? colors.headerBg : Theme.of(context).scaffoldBackgroundColor;
 
     final Word word = widget.word;
     final bool hasSentence = _ok(word.sentence);
     final bool hasExample = _ok(word.example);
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: surface,
+        color: colors.surface,
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(Dimensions.borderRadiusSheet),
         ),
@@ -171,13 +160,15 @@ class _WordBottomSheetState extends State<WordBottomSheet>
           // ── Drag handle ──────────────────────────────────────
           const SizedBox(height: Dimensions.padding12),
           Center(
-            child: Container(
+            child: SizedBox(
               width: Dimensions.itemWidth40,
               height: Dimensions.itemHeight4,
-              decoration: BoxDecoration(
-                color: border,
-                borderRadius:
-                    BorderRadius.circular(Dimensions.borderRadiusPill),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colors.border,
+                  borderRadius:
+                      BorderRadius.circular(Dimensions.borderRadiusPill),
+                ),
               ),
             ),
           ),
@@ -199,22 +190,24 @@ class _WordBottomSheetState extends State<WordBottomSheet>
 
                   // ── Article chip (DeAz only) ───────────────
                   if (_isDeAz && _ok(word.article)) ...<Widget>[
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.padding10,
-                        vertical: Dimensions.padding3,
-                      ),
+                    DecoratedBox(
                       decoration: BoxDecoration(
-                        color: _articleColor(word.article, isDark)
+                        color: _articleColor(word.article, colors, isDark)
                             .withAlpha(28),
                         borderRadius: BorderRadius.circular(
                           Dimensions.borderRadiusPill,
                         ),
                       ),
-                      child: Text(
-                        word.article!,
-                        style: AppTextStyles.labelMedium(
-                          _articleColor(word.article, isDark),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.padding10,
+                          vertical: Dimensions.padding3,
+                        ),
+                        child: Text(
+                          word.article!,
+                          style: AppTextStyles.labelMedium(
+                            _articleColor(word.article, colors, isDark),
+                          ),
                         ),
                       ),
                     ),
@@ -231,7 +224,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                               ? _bareWord(word.key, word.article)
                               : word.key,
                           style: AppTextStyles.wordSource(
-                            textPrimary,
+                            colors.textPrimary,
                             size: 28,
                           ),
                         ),
@@ -241,8 +234,6 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                         _SpeakButton(
                           controller: _speakController,
                           isSpeaking: _isSpeaking,
-                          primary: primary,
-                          primaryTint: primaryTint,
                           onTap: _speak,
                         ),
                       if (_isDeAz)
@@ -252,11 +243,11 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                             ? Icons.bookmark
                             : Icons.bookmark_outline,
                         color: _isBookmarked
-                            ? AppTheme.accentColor
-                            : primary,
+                            ? colors.accent
+                            : colors.primary,
                         background: _isBookmarked
-                            ? AppTheme.warningTint
-                            : primaryTint,
+                            ? colors.warningTint
+                            : colors.primaryTint,
                         onTap: _toggleBookmark,
                       ),
                     ],
@@ -267,80 +258,57 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                     const SizedBox(height: Dimensions.itemHeight4),
                     Text(
                       _typeLabel(context),
-                      style: AppTextStyles.bodySmall(textSecondary),
+                      style: AppTextStyles.bodySmall(colors.textSecondary),
                     ),
                   ],
 
                   const SizedBox(height: Dimensions.padding20),
 
                   // ── Translation ────────────────────────────
-                  _SheetSection(
-                    label: 'word.translation'.tr(),
-                    textSecondary: textSecondary,
-                    border: border,
-                  ),
+                  _SheetSection(label: 'word.translation'.tr()),
                   const SizedBox(height: Dimensions.padding10),
                   if (_isDeAz)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(Dimensions.padding14),
+                    DecoratedBox(
                       decoration: BoxDecoration(
                         color: cardBg,
                         borderRadius:
                             BorderRadius.circular(Dimensions.borderRadius),
                       ),
-                      child: Text(
-                        word.value,
-                        style: AppTextStyles.bodyLarge(textPrimary),
+                      child: Padding(
+                        padding: const EdgeInsets.all(Dimensions.padding14),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            word.value,
+                            style:
+                                AppTextStyles.bodyLarge(colors.textPrimary),
+                          ),
+                        ),
                       ),
                     )
                   else
                     _AzDeTranslationCard(
                       rows: _parseAzDeRows(word),
-                      textPrimary: textPrimary,
-                      textSecondary: textSecondary,
-                      border: border,
                       cardBg: cardBg,
-                      primary: primary,
-                      primaryTint: primaryTint,
                       onSpeak: _speakText,
                     ),
 
                   // ── Grammar ────────────────────────────────
                   if (word.hasGrammarForms) ...<Widget>[
                     const SizedBox(height: Dimensions.padding20),
-                    _SheetSection(
-                      label: 'word.grammar'.tr(),
-                      textSecondary: textSecondary,
-                      border: border,
-                    ),
+                    _SheetSection(label: 'word.grammar'.tr()),
                     const SizedBox(height: Dimensions.padding10),
-                    _GrammarCard(
-                      word: word,
-                      textPrimary: textPrimary,
-                      textSecondary: textSecondary,
-                      border: border,
-                      cardBg: cardBg,
-                    ),
+                    _GrammarCard(word: word, cardBg: cardBg),
                   ],
 
                   // ── Examples ───────────────────────────────
                   if (hasExample || hasSentence) ...<Widget>[
                     const SizedBox(height: Dimensions.padding20),
-                    _SheetSection(
-                      label: 'word.example'.tr(),
-                      textSecondary: textSecondary,
-                      border: border,
-                    ),
+                    _SheetSection(label: 'word.example'.tr()),
                     const SizedBox(height: Dimensions.padding10),
                     _ExamplesCard(
                       example: hasExample ? word.example : null,
                       sentence: hasSentence ? word.sentence : null,
-                      textPrimary: textPrimary,
-                      textSecondary: textSecondary,
-                      primary: primary,
-                      primaryTint: primaryTint,
-                      border: border,
                     ),
                   ],
                 ],
@@ -445,26 +413,23 @@ class _WordBottomSheetState extends State<WordBottomSheet>
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _SheetSection extends StatelessWidget {
-  const _SheetSection({
-    required this.label,
-    required this.textSecondary,
-    required this.border,
-  });
+  const _SheetSection({required this.label});
 
   final String label;
-  final Color textSecondary;
-  final Color border;
 
   @override
-  Widget build(BuildContext context) => Row(
-        children: <Widget>[
-          Text(label, style: AppTextStyles.labelSmall(textSecondary)),
-          const SizedBox(width: Dimensions.itemWidth8),
-          Expanded(
-            child: Divider(color: border, height: 1, thickness: 1),
-          ),
-        ],
-      );
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return Row(
+      children: <Widget>[
+        Text(label, style: AppTextStyles.labelSmall(colors.textSecondary)),
+        const SizedBox(width: Dimensions.itemWidth8),
+        Expanded(
+          child: Divider(color: colors.border, height: 1, thickness: 1),
+        ),
+      ],
+    );
+  }
 }
 
 class _CircleButton extends StatelessWidget {
@@ -497,32 +462,31 @@ class _SpeakButton extends StatelessWidget {
   const _SpeakButton({
     required this.controller,
     required this.isSpeaking,
-    required this.primary,
-    required this.primaryTint,
     required this.onTap,
   });
 
   final AnimationController controller;
   final bool isSpeaking;
-  final Color primary;
-  final Color primaryTint;
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-        onTap: onTap,
-        child: AnimatedBuilder(
-          animation: controller,
-          builder: (BuildContext ctx, Widget? _) {
-            final double scale =
-                isSpeaking ? 1.0 + controller.value * 0.1 : 1.0;
-            return Transform.scale(
-              scale: scale,
-              child: Container(
-                width: Dimensions.itemWidth44,
-                height: Dimensions.itemHeight44,
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedBuilder(
+        animation: controller,
+        builder: (BuildContext ctx, Widget? _) {
+          final double scale =
+              isSpeaking ? 1.0 + controller.value * 0.1 : 1.0;
+          return Transform.scale(
+            scale: scale,
+            child: SizedBox(
+              width: Dimensions.itemWidth44,
+              height: Dimensions.itemHeight44,
+              child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: isSpeaking ? primary : primaryTint,
+                  color: isSpeaking ? colors.primary : colors.primaryTint,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -530,139 +494,137 @@ class _SpeakButton extends StatelessWidget {
                       ? Icons.stop_rounded
                       : Icons.volume_up_outlined,
                   size: Dimensions.itemHeight20,
-                  color: isSpeaking ? Colors.white : primary,
+                  color: isSpeaking ? Colors.white : colors.primary,
                 ),
               ),
-            );
-          },
-        ),
-      );
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
 class _AzDeTranslationCard extends StatelessWidget {
   const _AzDeTranslationCard({
     required this.rows,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.border,
     required this.cardBg,
-    required this.primary,
-    required this.primaryTint,
     required this.onSpeak,
   });
 
   final List<(String?, String?, String)> rows;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color border;
   final Color cardBg;
-  final Color primary;
-  final Color primaryTint;
   final ValueChanged<String> onSpeak;
 
   @override
   Widget build(BuildContext context) {
     if (rows.isEmpty) return const SizedBox.shrink();
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      width: double.infinity,
+    final AppColors colors = AppColors.of(context);
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-        border: Border.all(color: border),
+        border: Border.all(color: colors.border),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: rows.indexed
-            .map(((int, (String?, String?, String)) e) {
-              final int i = e.$1;
-              final (String? mainType, String? subType, String translation) =
-                  e.$2;
-              final bool hasType =
-                  (mainType != null && mainType.isNotEmpty) ||
-                  (subType != null && subType.isNotEmpty);
-              return Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.padding14,
-                      vertical: Dimensions.padding10,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        // Index number
-                        SizedBox(
-                          width: Dimensions.itemWidth20,
-                          child: Text(
-                            '${i + 1}.',
-                            style: AppTextStyles.labelSmall(textSecondary),
-                          ),
-                        ),
-                        // Type badges + translation
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              if (hasType)
-                                Wrap(
-                                  spacing: 6,
-                                  runSpacing: 4,
-                                  children: <Widget>[
-                                    if (mainType != null &&
-                                        mainType.isNotEmpty)
-                                      WordTypeBadge(
-                                        label: mainType,
-                                        bg: isDark
-                                            ? AppTheme.primaryTintDark
-                                            : AppTheme.chipBgLight,
-                                        textColor: textSecondary,
-                                      ),
-                                    if (subType != null &&
-                                        subType.isNotEmpty)
-                                      WordTypeBadge(
-                                        label: subType,
-                                        bg: Colors.transparent,
-                                        textColor: textSecondary,
-                                        borderColor: border,
-                                      ),
-                                  ],
-                                ),
-                              if (hasType)
-                                const SizedBox(height: Dimensions.itemHeight4),
-                              Text(
-                                translation,
-                                style: AppTextStyles.bodyLarge(textPrimary),
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: rows.indexed
+              .map(((int, (String?, String?, String)) e) {
+                final int i = e.$1;
+                final (String? mainType, String? subType, String translation) =
+                    e.$2;
+                final bool hasType =
+                    (mainType != null && mainType.isNotEmpty) ||
+                    (subType != null && subType.isNotEmpty);
+                return Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Dimensions.padding14,
+                        vertical: Dimensions.padding10,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            width: Dimensions.itemWidth20,
+                            child: Text(
+                              '${i + 1}.',
+                              style: AppTextStyles.labelSmall(
+                                colors.textSecondary,
                               ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: Dimensions.itemWidth8),
-                        // Speaker button for each German word
-                        GestureDetector(
-                          onTap: () => onSpeak(translation),
-                          child: Container(
-                            width: Dimensions.itemWidth32,
-                            height: Dimensions.itemHeight32,
-                            decoration: BoxDecoration(
-                              color: primaryTint,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Icons.volume_up_outlined,
-                              size: Dimensions.itemHeight15,
-                              color: primary,
                             ),
                           ),
-                        ),
-                      ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                if (hasType)
+                                  Wrap(
+                                    spacing: 6,
+                                    runSpacing: 4,
+                                    children: <Widget>[
+                                      if (mainType != null &&
+                                          mainType.isNotEmpty)
+                                        WordTypeBadge(
+                                          label: mainType,
+                                          bg: colors.chipBg,
+                                          textColor: colors.textSecondary,
+                                        ),
+                                      if (subType != null &&
+                                          subType.isNotEmpty)
+                                        WordTypeBadge(
+                                          label: subType,
+                                          bg: Colors.transparent,
+                                          textColor: colors.textSecondary,
+                                          borderColor: colors.border,
+                                        ),
+                                    ],
+                                  ),
+                                if (hasType)
+                                  const SizedBox(
+                                    height: Dimensions.itemHeight4,
+                                  ),
+                                Text(
+                                  translation,
+                                  style: AppTextStyles.bodyLarge(
+                                    colors.textPrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: Dimensions.itemWidth8),
+                          GestureDetector(
+                            onTap: () => onSpeak(translation),
+                            child: SizedBox(
+                              width: Dimensions.itemWidth32,
+                              height: Dimensions.itemHeight32,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: colors.primaryTint,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.volume_up_outlined,
+                                  size: Dimensions.itemHeight15,
+                                  color: colors.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  if (i < rows.length - 1) Divider(height: 1, color: border),
-                ],
-              );
-            })
-            .toList(),
+                    if (i < rows.length - 1)
+                      Divider(height: 1, color: colors.border),
+                  ],
+                );
+              })
+              .toList(),
+        ),
       ),
     );
   }
@@ -670,22 +632,12 @@ class _AzDeTranslationCard extends StatelessWidget {
 
 
 class _GrammarCard extends StatelessWidget {
-  const _GrammarCard({
-    required this.word,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.border,
-    required this.cardBg,
-  });
+  const _GrammarCard({required this.word, required this.cardBg});
 
   final Word word;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color border;
   final Color cardBg;
 
   /// Each row: (German label, optional AZ tooltip, value).
-  /// German labels come from [GrammarDeLabels]; AZ translations from [az.json].
   List<(String, String?, String)> _buildRows(BuildContext context) {
     final bool isAz = context.locale.languageCode == 'az';
     final List<(String, String?, String)> r = <(String, String?, String)>[];
@@ -708,14 +660,12 @@ class _GrammarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<(String, String?, String)> rows = _buildRows(context);
     if (rows.isEmpty) return const SizedBox.shrink();
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color infoColor =
-        isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    return Container(
+    final AppColors colors = AppColors.of(context);
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-        border: Border.all(color: border),
+        border: Border.all(color: colors.border),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -725,11 +675,7 @@ class _GrammarCard extends StatelessWidget {
                 label: e.$2.$1,
                 azHint: e.$2.$2,
                 value: e.$2.$3,
-                textPrimary: textPrimary,
-                textSecondary: textSecondary,
                 showDivider: e.$1 < rows.length - 1,
-                border: border,
-                infoColor: infoColor,
               ),
             )
             .toList(),
@@ -743,103 +689,86 @@ class _GrammarRow extends StatelessWidget {
     required this.label,
     this.azHint,
     required this.value,
-    required this.textPrimary,
-    required this.textSecondary,
     required this.showDivider,
-    required this.border,
-    required this.infoColor,
   });
 
   final String label;
   final String? azHint;
   final String value;
-  final Color textPrimary;
-  final Color textSecondary;
   final bool showDivider;
-  final Color border;
-  final Color infoColor;
-
-  @override
-  Widget build(BuildContext context) => Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.padding14,
-              vertical: Dimensions.padding10,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  width: 96,
-                  child: Text.rich(
-                    TextSpan(
-                      text: label,
-                      style: AppTextStyles.labelMedium(textSecondary),
-                      children: azHint != null
-                          ? <InlineSpan>[
-                              WidgetSpan(
-                                alignment: PlaceholderAlignment.top,
-                                child: Tooltip(
-                                  message: azHint!,
-                                  triggerMode: TooltipTriggerMode.tap,
-                                  showDuration: const Duration(seconds: 4),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: Dimensions.padding2,
-                                    ),
-                                    child: Icon(
-                                      Icons.info_outline_rounded,
-                                      size: Dimensions.itemHeight10,
-                                      color: infoColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]
-                          : null,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    value,
-                    style: AppTextStyles.bodyMedium(textPrimary),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (showDivider) Divider(height: 1, color: border),
-        ],
-      );
-}
-
-class _ExamplesCard extends StatelessWidget {
-  const _ExamplesCard({
-    required this.example,
-    required this.sentence,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.primary,
-    required this.primaryTint,
-    required this.border,
-  });
-
-  final String? example;
-  final String? sentence;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color primary;
-  final Color primaryTint;
-  final Color border;
 
   @override
   Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.padding14,
+            vertical: Dimensions.padding10,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                width: 96,
+                child: Text.rich(
+                  TextSpan(
+                    text: label,
+                    style: AppTextStyles.labelMedium(colors.textSecondary),
+                    children: azHint != null
+                        ? <InlineSpan>[
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.top,
+                              child: Tooltip(
+                                message: azHint!,
+                                triggerMode: TooltipTriggerMode.tap,
+                                showDuration: const Duration(seconds: 4),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: Dimensions.padding2,
+                                  ),
+                                  child: Icon(
+                                    Icons.info_outline_rounded,
+                                    size: Dimensions.itemHeight10,
+                                    color: colors.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                        : null,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  value,
+                  style: AppTextStyles.bodyMedium(colors.textPrimary),
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (showDivider) Divider(height: 1, color: colors.border),
+      ],
+    );
+  }
+}
+
+class _ExamplesCard extends StatelessWidget {
+  const _ExamplesCard({required this.example, required this.sentence});
+
+  final String? example;
+  final String? sentence;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
     final bool bothPresent = example != null && sentence != null;
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: primaryTint,
+        color: colors.primaryTint,
         borderRadius: BorderRadius.circular(Dimensions.borderRadius),
       ),
       child: Column(
@@ -848,19 +777,10 @@ class _ExamplesCard extends StatelessWidget {
           if (example != null)
             _ExampleEntry(
               text: example!.trim(),
-              textPrimary: textPrimary,
-              primary: primary,
               showDivider: bothPresent,
-              border: border,
             ),
           if (sentence != null)
-            _ExampleEntry(
-              text: sentence!.trim(),
-              textPrimary: textPrimary,
-              primary: primary,
-              showDivider: false,
-              border: border,
-            ),
+            _ExampleEntry(text: sentence!.trim(), showDivider: false),
         ],
       ),
     );
@@ -868,44 +788,41 @@ class _ExamplesCard extends StatelessWidget {
 }
 
 class _ExampleEntry extends StatelessWidget {
-  const _ExampleEntry({
-    required this.text,
-    required this.textPrimary,
-    required this.primary,
-    required this.showDivider,
-    required this.border,
-  });
+  const _ExampleEntry({required this.text, required this.showDivider});
 
   final String text;
-  final Color textPrimary;
-  final Color primary;
   final bool showDivider;
-  final Color border;
 
   @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(Dimensions.padding14),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Icon(Icons.format_quote_rounded,
-                    size: Dimensions.itemHeight14, color: primary),
-                const SizedBox(width: Dimensions.itemWidth8),
-                Expanded(
-                  child: Text(
-                    text,
-                    style: AppTextStyles.bodySmall(textPrimary),
-                  ),
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(Dimensions.padding14),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Icon(
+                Icons.format_quote_rounded,
+                size: Dimensions.itemHeight14,
+                color: colors.primary,
+              ),
+              const SizedBox(width: Dimensions.itemWidth8),
+              Expanded(
+                child: Text(
+                  text,
+                  style: AppTextStyles.bodySmall(colors.textPrimary),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          if (showDivider) Divider(height: 1, color: border),
-        ],
-      );
+        ),
+        if (showDivider) Divider(height: 1, color: colors.border),
+      ],
+    );
+  }
 }
 
 
@@ -914,18 +831,16 @@ class _ExampleEntry extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Article colours follow the standard German grammar colour convention.
-Color _articleColor(String? article, bool isDark) {
+Color _articleColor(String? article, AppColors colors, bool isDark) {
   switch (article?.toLowerCase()) {
     case 'der':
       return isDark ? const Color(0xFF82B1FF) : const Color(0xFF1565C0);
     case 'die':
-      return isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
+      return colors.error;
     case 'das':
-      return isDark ? AppTheme.successColorDark : AppTheme.successColor;
+      return colors.success;
     default:
-      return isDark
-          ? AppTheme.textSecondaryDark
-          : AppTheme.textSecondaryLight;
+      return colors.textSecondary;
   }
 }
 

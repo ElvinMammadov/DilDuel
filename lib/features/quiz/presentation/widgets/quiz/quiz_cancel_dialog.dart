@@ -23,7 +23,7 @@ class QuizCancelDialog extends StatelessWidget {
               Navigator.pop(context);
             },
             style: TextButton.styleFrom(
-              foregroundColor: AppTheme.errorColor,
+              foregroundColor: AppColors.of(context).error,
             ),
             child: Text('common.yes'.tr()),
           ),

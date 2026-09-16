@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
-import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/core/utils/grammar_type_translator.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
@@ -18,34 +18,14 @@ class WordTypeBadges extends StatelessWidget {
   const WordTypeBadges({
     super.key,
     required this.word,
-    required this.isDark,
-    required this.textSecondary,
-    required this.border,
     this.showArticle = true,
   });
 
   final Word word;
-  final bool isDark;
-  final Color textSecondary;
-  final Color border;
 
   /// Whether to render a standalone article badge ([der] / [die] / [das]).
   /// Pass `false` when the article is already part of the displayed word key.
   final bool showArticle;
-
-  Color _articleTextColor() => switch (word.article?.toLowerCase()) {
-        'der' => isDark ? AppTheme.mainColorDark : AppTheme.mainColor,
-        'die' => isDark ? AppTheme.errorColorDark : AppTheme.errorColor,
-        'das' => isDark ? AppTheme.successColorDark : AppTheme.successColor,
-        _ => textSecondary,
-      };
-
-  Color _articleBgColor() => switch (word.article?.toLowerCase()) {
-        'der' => isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint,
-        'die' => isDark ? AppTheme.errorTintDark : AppTheme.errorTint,
-        'das' => isDark ? AppTheme.successTintDark : AppTheme.successTint,
-        _ => Colors.transparent,
-      };
 
   /// Extracts the first clean entry from a potentially numbered, multi-line
   /// DB value (e.g. `"1. Verb\n2. Adjektiv"` → `"Verb"`).
@@ -59,19 +39,37 @@ class WordTypeBadges extends StatelessWidget {
     return m != null ? first.substring(m.end).trim() : first.trim();
   }
 
+  Color _articleTextColor(AppColors colors) =>
+      switch (word.article?.toLowerCase()) {
+        'der' => colors.primary,
+        'die' => colors.error,
+        'das' => colors.success,
+        _ => colors.textSecondary,
+      };
+
+  Color _articleBgColor(AppColors colors) =>
+      switch (word.article?.toLowerCase()) {
+        'der' => colors.primaryTint,
+        'die' => colors.errorTint,
+        'das' => colors.successTint,
+        _ => Colors.transparent,
+      };
+
   @override
   Widget build(BuildContext context) {
-
+    final AppColors colors = AppColors.of(context);
     final bool isAz = context.locale.languageCode == 'az';
     final List<Widget> badges = <Widget>[];
 
     // ── Article badge (bottom-sheet / detail views only) ──────────────────
     if (showArticle && word.article != null) {
+      final Color articleText = _articleTextColor(colors);
+      final Color articleBg = _articleBgColor(colors);
       badges.add(WordTypeBadge(
         label: word.article!,
-        bg: _articleBgColor(),
-        textColor: _articleTextColor(),
-        borderColor: _articleTextColor().withAlpha(60),
+        bg: articleBg,
+        textColor: articleText,
+        borderColor: articleText.withAlpha(60),
       ));
     }
 
@@ -79,22 +77,19 @@ class WordTypeBadges extends StatelessWidget {
     if (word.mainType != null) {
       final String rawLabel = _firstEntry(word.mainType!);
       if (rawLabel.isNotEmpty) {
-        final String label = isAz
-            ? GrammarTypeTranslator.mainType(rawLabel)
-            : rawLabel;
+        final String label =
+            isAz ? GrammarTypeTranslator.mainType(rawLabel) : rawLabel;
 
         // When the article badge is hidden, apply the article gender colour to
         // the mainType badge so gender information is not lost.
         final bool colorByArticle = !showArticle && word.article != null;
+        final Color articleText = _articleTextColor(colors);
+        final Color articleBg = _articleBgColor(colors);
         badges.add(WordTypeBadge(
           label: label,
-          bg: colorByArticle
-              ? _articleBgColor()
-              : (isDark ? AppTheme.primaryTintDark : AppTheme.chipBgLight),
-          textColor: colorByArticle ? _articleTextColor() : textSecondary,
-          borderColor: colorByArticle
-              ? _articleTextColor().withAlpha(60)
-              : null,
+          bg: colorByArticle ? articleBg : colors.chipBg,
+          textColor: colorByArticle ? articleText : colors.textSecondary,
+          borderColor: colorByArticle ? articleText.withAlpha(60) : null,
         ));
       }
     }
@@ -103,14 +98,13 @@ class WordTypeBadges extends StatelessWidget {
     if (word.subType != null) {
       final String rawLabel = _firstEntry(word.subType!);
       if (rawLabel.isNotEmpty) {
-        final String label = isAz
-            ? GrammarTypeTranslator.subType(rawLabel)
-            : rawLabel;
+        final String label =
+            isAz ? GrammarTypeTranslator.subType(rawLabel) : rawLabel;
         badges.add(WordTypeBadge(
           label: label,
           bg: Colors.transparent,
-          textColor: textSecondary,
-          borderColor: border,
+          textColor: colors.textSecondary,
+          borderColor: colors.border,
         ));
       }
     }
@@ -159,20 +153,9 @@ class WordTypeBadge extends StatelessWidget {
 /// Used for AzDe cards in both Search and Bookmarks to render German
 /// translation previews consistently.
 class TranslationChips extends StatelessWidget {
-  const TranslationChips({
-    super.key,
-    required this.translations,
-    required this.isDark,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.border,
-  });
+  const TranslationChips({super.key, required this.translations});
 
   final List<String> translations;
-  final bool isDark;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color border;
 
   static const int _max = 3;
 
@@ -194,10 +177,9 @@ class TranslationChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (translations.isEmpty) return const SizedBox.shrink();
+    final AppColors colors = AppColors.of(context);
     final List<String> visible = translations.take(_max).toList();
     final int overflow = translations.length - visible.length;
-    final Color chipBg =
-        isDark ? AppTheme.primaryTintDark : AppTheme.chipBgLight;
 
     return Wrap(
       spacing: 6,
@@ -206,16 +188,16 @@ class TranslationChips extends StatelessWidget {
         ...visible.map(
           (String t) => WordTypeBadge(
             label: t,
-            bg: chipBg,
-            textColor: textPrimary,
+            bg: colors.chipBg,
+            textColor: colors.textPrimary,
           ),
         ),
         if (overflow > 0)
           WordTypeBadge(
             label: '+$overflow',
             bg: Colors.transparent,
-            textColor: textSecondary,
-            borderColor: border,
+            textColor: colors.textSecondary,
+            borderColor: colors.border,
           ),
       ],
     );

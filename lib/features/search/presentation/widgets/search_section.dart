@@ -5,27 +5,27 @@ class SearchSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<AppCubit, AppState>(
-      builder: (BuildContext context, AppState appState) {
-        final String dictionaryName =
-            context.read<AppCubit>().getDictionaryName();
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Dimensions.padding8,
-            horizontal: Dimensions.padding16,
-          ),
-          child: _PillSearchBar(
-            onChanged: (String text) {
-              if (text.trim().isEmpty) {
-                context.read<SearchBloc>().clear();
-              } else {
-                context.read<SearchBloc>().search(text, dictionaryName);
-              }
-            },
-            onClear: () => context.read<SearchBloc>().clear(),
-          ),
-        );
-      },
-    );
+        builder: (BuildContext context, AppState appState) {
+          final String dictionaryName =
+              context.read<AppCubit>().getDictionaryName();
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: Dimensions.padding8,
+              horizontal: Dimensions.padding16,
+            ),
+            child: _PillSearchBar(
+              onChanged: (String text) {
+                if (text.trim().isEmpty) {
+                  context.read<SearchBloc>().clear();
+                } else {
+                  context.read<SearchBloc>().search(text, dictionaryName);
+                }
+              },
+              onClear: () => context.read<SearchBloc>().clear(),
+            ),
+          );
+        },
+      );
 }
 
 class _PillSearchBar extends StatefulWidget {
@@ -53,22 +53,13 @@ class _PillSearchBarState extends State<_PillSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color chipBg = isDark ? AppTheme.borderDark : AppTheme.chipBgLight;
 
-    return Container(
-      margin: EdgeInsets.zero,
-      padding: const EdgeInsets.symmetric(
-        horizontal: Dimensions.padding16,
-        vertical: Dimensions.padding12,
-      ),
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: surface,
-        border: Border.all(color: border, width: 1.5),
+        color: colors.surface,
+        border: Border.all(color: colors.border, width: 1.5),
         borderRadius: BorderRadius.circular(Dimensions.borderRadius),
         boxShadow: isDark
             ? null
@@ -80,9 +71,15 @@ class _PillSearchBarState extends State<_PillSearchBar> {
                 ),
               ],
       ),
-      child: Row(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.padding16,
+          vertical: Dimensions.padding12,
+        ),
+        child: Row(
         children: <Widget>[
-          Icon(Icons.search, size: Dimensions.itemWidth18, color: textSecondary),
+          Icon(Icons.search,
+              size: Dimensions.itemWidth18, color: colors.textSecondary),
           const SizedBox(width: Dimensions.itemWidth8),
           Expanded(
             child: TextField(
@@ -91,12 +88,10 @@ class _PillSearchBarState extends State<_PillSearchBar> {
                 setState(() => _isTyping = text.isNotEmpty);
                 widget.onChanged(text);
               },
-              style: AppTextStyles.bodyLarge(
-                isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight,
-              ),
+              style: AppTextStyles.bodyLarge(colors.textPrimary),
               decoration: InputDecoration(
                 hintText: 'search.placeholder'.tr(),
-                hintStyle: AppTextStyles.bodyLarge(textSecondary),
+                hintStyle: AppTextStyles.bodyLarge(colors.textSecondary),
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
@@ -110,18 +105,24 @@ class _PillSearchBarState extends State<_PillSearchBar> {
                 setState(() => _isTyping = false);
                 widget.onClear();
               },
-              child: Container(
+              child: SizedBox(
                 width: Dimensions.itemWidth24,
                 height: Dimensions.itemHeight24,
-                decoration: BoxDecoration(color: chipBg, shape: BoxShape.circle),
-                child: Icon(
-                  Icons.close,
-                  size: Dimensions.itemWidth12,
-                  color: textSecondary,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: colors.chipBg,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    size: Dimensions.itemWidth12,
+                    color: colors.textSecondary,
+                  ),
                 ),
               ),
             ),
         ],
+        ),
       ),
     );
   }

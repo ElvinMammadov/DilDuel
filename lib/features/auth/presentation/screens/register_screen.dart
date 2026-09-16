@@ -99,7 +99,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ScaffoldMessenger.of(ctx).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: AppTheme.errorColor,
+                backgroundColor: AppColors.of(ctx).error,
               ),
             );
             ctx.read<AuthCubit>().clearError();
@@ -119,18 +119,8 @@ class _RegisterView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _RegisterScreenState state =
         context.findAncestorStateOfType<_RegisterScreenState>()!;
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint =
-        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color bg =
-        isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final AppColors colors = AppColors.of(context);
+    final Color bg = Theme.of(context).scaffoldBackgroundColor;
 
     return Scaffold(
       backgroundColor: bg,
@@ -139,7 +129,7 @@ class _RegisterView extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded,
-              size: Dimensions.itemHeight20, color: textPrimary),
+              size: Dimensions.itemHeight20, color: colors.textPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -155,50 +145,57 @@ class _RegisterView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               // ── Heading ─────────────────────────────────────────────────
-              Container(
-                padding: const EdgeInsets.all(Dimensions.padding16),
+              DecoratedBox(
                 decoration: BoxDecoration(
-                  color: primaryTint,
+                  color: colors.primaryTint,
                   borderRadius: BorderRadius.circular(Dimensions.borderRadius),
                 ),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: Dimensions.itemWidth40,
-                      height: Dimensions.itemHeight40,
-                      decoration: BoxDecoration(
-                        color: primary,
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.borderRadius),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'D',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(Dimensions.padding16),
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: Dimensions.itemWidth40,
+                        height: Dimensions.itemHeight40,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: colors.primary,
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.borderRadius),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'D',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: Dimensions.itemWidth12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'auth.register.title'.tr(),
-                            style: AppTextStyles.titleMedium(textPrimary),
-                          ),
-                          Text(
-                            'auth.register.subtitle'.tr(),
-                            style: AppTextStyles.bodySmall(textSecondary),
-                          ),
-                        ],
+                      const SizedBox(width: Dimensions.itemWidth12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'auth.register.title'.tr(),
+                              style: AppTextStyles.titleMedium(
+                                colors.textPrimary,
+                              ),
+                            ),
+                            Text(
+                              'auth.register.subtitle'.tr(),
+                              style:
+                                  AppTextStyles.bodySmall(colors.textSecondary),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: Dimensions.itemHeight24),
@@ -239,7 +236,7 @@ class _RegisterView extends StatelessWidget {
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
                     size: Dimensions.itemHeight20,
-                    color: textSecondary,
+                    color: colors.textSecondary,
                   ),
                   onPressed: state.togglePasswordVisibility,
                 ),
@@ -261,7 +258,7 @@ class _RegisterView extends StatelessWidget {
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
                     size: Dimensions.itemHeight20,
-                    color: textSecondary,
+                    color: colors.textSecondary,
                   ),
                   onPressed: state.toggleConfirmVisibility,
                 ),
@@ -273,13 +270,13 @@ class _RegisterView extends StatelessWidget {
                   Icon(
                     Icons.info_outline,
                     size: 13,
-                    color: textSecondary.withValues(alpha: 0.6),
+                    color: colors.textSecondary.withValues(alpha: 0.6),
                   ),
                   const SizedBox(width: Dimensions.itemWidth4),
                   Text(
                     'auth.register.password_hint'.tr(),
                     style: AppTextStyles.bodySmall(
-                      textSecondary.withValues(alpha: 0.6),
+                      colors.textSecondary.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -297,14 +294,12 @@ class _RegisterView extends StatelessWidget {
               ),
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Divider ──────────────────────────────────────────────────
-              _OrDivider(textSecondary: textSecondary, border: border),
+              const _OrDivider(),
               const SizedBox(height: Dimensions.itemHeight20),
               // ── Social buttons ───────────────────────────────────────────
               _SocialButton(
                 label: 'auth.register.google_button'.tr(),
                 logo: const _GoogleLogo(size: 20),
-                border: border,
-                textPrimary: textPrimary,
                 onTap: () => context.read<AuthCubit>().signInWithGoogle(),
               ),
               if (Platform.isIOS) ...<Widget>[
@@ -312,9 +307,8 @@ class _RegisterView extends StatelessWidget {
                 _SocialButton(
                   label: 'auth.register.apple_button'.tr(),
                   logo: Icon(Icons.apple,
-                      size: Dimensions.itemHeight22, color: textPrimary),
-                  border: border,
-                  textPrimary: textPrimary,
+                      size: Dimensions.itemHeight22,
+                      color: colors.textPrimary),
                   onTap: () => context.read<AuthCubit>().signInWithApple(),
                 ),
               ],
@@ -323,8 +317,6 @@ class _RegisterView extends StatelessWidget {
               _BottomNavRow(
                 question: 'auth.register.has_account'.tr(),
                 actionLabel: 'auth.register.sign_in_link'.tr(),
-                textSecondary: textSecondary,
-                primary: primary,
                 onTap: () => Navigator.of(context).pop(),
               ),
             ],

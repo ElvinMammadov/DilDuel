@@ -12,14 +12,11 @@ class QuizResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint =
-        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final AppColors colors = AppColors.of(context);
+    final Color primary = colors.primary;
+    final Color primaryTint = colors.primaryTint;
+    final Color textPrimary = colors.textPrimary;
+    final Color textSecondary = colors.textSecondary;
 
     final int correctAnswers = state.score;
     final int totalQuestions = state.totalQuestions;

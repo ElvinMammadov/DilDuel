@@ -26,11 +26,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final AppColors colors = AppColors.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,12 +40,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
           child: AppDropdown<String>(
             onSelected: (String key) => setState(() => _selected = key),
             itemsBuilder: (BuildContext ctx) {
-              final bool dark =
-                  Theme.of(ctx).brightness == Brightness.dark;
-              final Color tp =
-                  dark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-              final Color bd =
-                  dark ? AppTheme.borderDark : AppTheme.borderLight;
+              final AppColors ctxColors = AppColors.of(ctx);
 
               return <PopupMenuEntry<String>>[
                 for (int i = 0; i < _categories.length; i++)
@@ -65,18 +56,20 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                           Icon(
                             _iconFor(_categories[i]),
                             size: Dimensions.itemWidth20,
-                            color: tp,
+                            color: ctxColors.textPrimary,
                           ),
                           const SizedBox(width: Dimensions.itemWidth12),
                           Text(
                             _labelFor(_categories[i]),
-                            style: AppTextStyles.bodyLarge(tp),
+                            style: AppTextStyles.bodyLarge(
+                              ctxColors.textPrimary,
+                            ),
                           ),
                         ],
                       ),
                     ),
                     if (i < _categories.length - 1)
-                      PopupMenuDivider(height: 1, color: bd),
+                      PopupMenuDivider(height: 1, color: ctxColors.border),
                   ],
               ];
             },
@@ -85,18 +78,18 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                 Icon(
                   _iconFor(_selected),
                   size: Dimensions.itemWidth20,
-                  color: textPrimary,
+                  color: colors.textPrimary,
                 ),
                 const SizedBox(width: Dimensions.itemWidth8),
                 Expanded(
                   child: Text(
                     _labelFor(_selected),
-                    style: AppTextStyles.bodyLarge(textPrimary),
+                    style: AppTextStyles.bodyLarge(colors.textPrimary),
                   ),
                 ),
                 Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: textSecondary,
+                  color: colors.textSecondary,
                 ),
               ],
             ),
@@ -128,17 +121,13 @@ class _BookmarksTab extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (state is BookmarksLoaded) {
-            final bool isDark = Theme.of(context).brightness == Brightness.dark;
-            final Color primary =
-                isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-            final Color primaryTint =
-                isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
+            final AppColors colors = AppColors.of(context);
 
             if (state.bookmarks.isEmpty) {
               return EmptyStateView(
                 icon: Icons.bookmark_outline,
-                color: primary,
-                tintColor: primaryTint,
+                color: colors.primary,
+                tintColor: colors.primaryTint,
                 title: 'bookmarks.empty'.tr(),
                 description: 'bookmarks.empty_description'.tr(),
               );
@@ -190,14 +179,13 @@ class _UnknownTab extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (state is BookmarksLoaded) {
-            const Color primary = AppTheme.warningColor;
-            const Color primaryTint = AppTheme.warningTint;
+            final AppColors colors = AppColors.of(context);
 
             if (state.unknownWords.isEmpty) {
               return EmptyStateView(
                 icon: Icons.help_outline,
-                color: primary,
-                tintColor: primaryTint,
+                color: colors.warning,
+                tintColor: colors.warningTint,
                 title: 'bookmarks.unknown_empty'.tr(),
                 description: 'bookmarks.unknown_empty_description'.tr(),
               );
@@ -248,8 +236,9 @@ class _BookmarksErrorView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Icon(Icons.error_outline,
-                size: Dimensions.itemHeight64, color: AppTheme.errorColor),
+            Icon(Icons.error_outline,
+                size: Dimensions.itemHeight64,
+                color: AppColors.of(context).error),
             const SizedBox(height: Dimensions.itemHeight16),
             Text('bookmarks.error'.tr(),
                 style: Theme.of(context).textTheme.titleLarge),
@@ -293,17 +282,7 @@ class _BookmarkItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color surface =
-        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border =
-        isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
-    final Color error =
-        isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
+    final AppColors colors = AppColors.of(context);
     final bool isAzDe = word.dicType == 'AzDe';
 
     return Padding(
@@ -312,13 +291,13 @@ class _BookmarkItem extends StatelessWidget {
         key: Key(word.key),
         background: Container(
           decoration: BoxDecoration(
-            color: error.withValues(alpha: 0.12),
+            color: colors.error.withValues(alpha: 0.12),
             borderRadius:
                 BorderRadius.circular(Dimensions.borderRadiusLarge),
           ),
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: Dimensions.padding16),
-          child: Icon(Icons.delete_outline, color: error),
+          child: Icon(Icons.delete_outline, color: colors.error),
         ),
         direction: DismissDirection.endToStart,
         onDismissed: (_) => onRemoveWithUndo(),
@@ -330,8 +309,8 @@ class _BookmarkItem extends StatelessWidget {
               vertical: Dimensions.padding14,
             ),
             decoration: BoxDecoration(
-              color: surface,
-              border: Border.all(color: border),
+              color: colors.surface,
+              border: Border.all(color: colors.border),
               borderRadius:
                   BorderRadius.circular(Dimensions.borderRadiusLarge),
             ),
@@ -343,23 +322,18 @@ class _BookmarkItem extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         word.key,
-                        style: AppTextStyles.wordSource(textPrimary),
+                        style: AppTextStyles.wordSource(colors.textPrimary),
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: Dimensions.itemHeight6),
                       if (isAzDe)
                         TranslationChips(
-                          translations:
-                              TranslationChips.parse(word.value),
-                          isDark: isDark,
-                          textPrimary: textPrimary,
-                          textSecondary: textSecondary,
-                          border: border,
+                          translations: TranslationChips.parse(word.value),
                         )
                       else
                         Text(
                           word.value,
-                          style: AppTextStyles.bodyMedium(textSecondary),
+                          style: AppTextStyles.bodyMedium(colors.textSecondary),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -370,7 +344,7 @@ class _BookmarkItem extends StatelessWidget {
                 Icon(
                   Icons.chevron_right,
                   size: Dimensions.itemWidth18,
-                  color: textSecondary.withValues(alpha: 0.4),
+                  color: colors.textSecondary.withValues(alpha: 0.4),
                 ),
               ],
             ),

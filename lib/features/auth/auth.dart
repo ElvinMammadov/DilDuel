@@ -18,8 +18,8 @@ import 'package:flutter_dic/core/data/repositories/sync_bookmark_repository.dart
 import 'package:flutter_dic/core/data/repositories/sync_quiz_result_repository.dart';
 import 'package:flutter_dic/core/data/repositories/sync_training_progress_repository.dart';
 import 'package:flutter_dic/core/data/repositories/training_progress_repository.dart';
+import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
-import 'package:flutter_dic/core/theme/app_theme.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';

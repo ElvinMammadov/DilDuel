@@ -34,13 +34,12 @@ class QuizInProgressView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color surface = isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color error = isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
+    final AppColors colors = AppColors.of(context);
+    final Color primary = colors.primary;
+    final Color textPrimary = colors.textPrimary;
+    final Color surface = colors.surface;
+    final Color border = colors.border;
+    final Color error = colors.error;
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dic/core/theme/app_theme.dart';
+import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 
 class AppOutlinedButton extends StatelessWidget {
@@ -20,7 +20,7 @@ class AppOutlinedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color color = borderColor ?? AppTheme.mainColor;
+    final Color color = borderColor ?? AppColors.of(context).primary;
 
     return SizedBox(
       width: width,

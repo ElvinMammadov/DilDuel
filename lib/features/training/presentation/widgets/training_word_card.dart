@@ -1,18 +1,16 @@
 part of training;
 
 /// Article colours follow the standard German grammar colour convention.
-Color _articleColor(String? article, bool isDark) {
+Color _articleColor(String? article, AppColors colors, bool isDark) {
   switch (article?.toLowerCase()) {
     case 'der':
       return isDark ? const Color(0xFF82B1FF) : const Color(0xFF1565C0);
     case 'die':
-      return isDark ? AppTheme.errorColorDark : AppTheme.errorColor;
+      return colors.error;
     case 'das':
-      return isDark ? AppTheme.successColorDark : AppTheme.successColor;
+      return colors.success;
     default:
-      return isDark
-          ? AppTheme.textSecondaryDark
-          : AppTheme.textSecondaryLight;
+      return colors.textSecondary;
   }
 }
 
@@ -23,25 +21,16 @@ class _TrainingWordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color surface =
-        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border =
-        isDark ? AppTheme.borderDark : AppTheme.borderLight;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final AppColors colors = AppColors.of(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Dimensions.padding20),
-      child: Container(
-        width: double.infinity,
+      child: DecoratedBox(
         decoration: BoxDecoration(
-          color: surface,
+          color: colors.surface,
           borderRadius:
               BorderRadius.circular(Dimensions.borderRadiusLarge),
-          border: Border.all(color: border),
+          border: Border.all(color: colors.border),
         ),
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 220),
@@ -59,10 +48,6 @@ class _TrainingWordCard extends StatelessWidget {
           child: _CardContent(
             key: ValueKey<int>(state.currentIndex),
             word: state.currentWord,
-            isDark: isDark,
-            textPrimary: textPrimary,
-            textSecondary: textSecondary,
-            border: border,
           ),
         ),
       ),
@@ -74,18 +59,10 @@ class _TrainingWordCard extends StatelessWidget {
 
 class _CardContent extends StatefulWidget {
   final Word word;
-  final bool isDark;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color border;
 
   const _CardContent({
     super.key,
     required this.word,
-    required this.isDark,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.border,
   });
 
   @override
@@ -222,17 +199,16 @@ class _CardContentState extends State<_CardContent> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = widget.isDark;
-    final Color textPrimary = widget.textPrimary;
-    final Color textSecondary = widget.textSecondary;
-    final Color border = widget.border;
+    final AppColors colors = AppColors.of(context);
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color textPrimary = colors.textPrimary;
+    final Color textSecondary = colors.textSecondary;
+    final Color border = colors.border;
     final Color cardBg =
-        isDark ? AppTheme.headerBgDark : AppTheme.backgroundLight;
-    final Color primary =
-        isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint =
-        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color chipBg = isDark ? AppTheme.borderDark : AppTheme.chipBgLight;
+        isDark ? colors.headerBg : Theme.of(context).scaffoldBackgroundColor;
+    final Color primary = colors.primary;
+    final Color primaryTint = colors.primaryTint;
+    final Color chipBg = colors.chipBg;
 
     final List<(String, String?, String)> grammar = _grammarRows(context);
     final bool hasGrammar = grammar.isNotEmpty;
@@ -259,8 +235,11 @@ class _CardContentState extends State<_CardContent> {
                           vertical: Dimensions.padding3,
                         ),
                         decoration: BoxDecoration(
-                          color: _articleColor(widget.word.article, isDark)
-                              .withAlpha(28),
+                          color: _articleColor(
+                            widget.word.article,
+                            colors,
+                            isDark,
+                          ).withAlpha(28),
                           borderRadius: BorderRadius.circular(
                             Dimensions.borderRadiusPill,
                           ),
@@ -268,7 +247,7 @@ class _CardContentState extends State<_CardContent> {
                         child: Text(
                           widget.word.article!,
                           style: AppTextStyles.labelMedium(
-                            _articleColor(widget.word.article, isDark),
+                            _articleColor(widget.word.article, colors, isDark),
                           ),
                         ),
                       ),
@@ -309,8 +288,8 @@ class _CardContentState extends State<_CardContent> {
                     icon: _isUnknown
                         ? Icons.help
                         : Icons.help_outline,
-                    activeColor: AppTheme.warningColor,
-                    activeBg: AppTheme.warningTint,
+                    activeColor: colors.warning,
+                    activeBg: colors.warningTint,
                     inactiveBg: chipBg,
                     inactiveColor: textSecondary,
                     isActive: _isUnknown,
@@ -337,27 +316,13 @@ class _CardContentState extends State<_CardContent> {
                   ),
                   if (hasGrammar) ...<Widget>[
                     const SizedBox(height: Dimensions.itemHeight16),
-                    _SectionHeader(
-                      label: 'word.grammar'.tr(),
-                      textSecondary: textSecondary,
-                      border: border,
-                    ),
+                    _SectionHeader(label: 'word.grammar'.tr()),
                     const SizedBox(height: Dimensions.itemHeight8),
-                    _GrammarTable(
-                      rows: grammar,
-                      textPrimary: textPrimary,
-                      textSecondary: textSecondary,
-                      border: border,
-                      cardBg: cardBg,
-                    ),
+                    _GrammarTable(rows: grammar, cardBg: cardBg),
                   ],
                   if (hasSentence) ...<Widget>[
                     const SizedBox(height: Dimensions.itemHeight16),
-                    _SectionHeader(
-                      label: 'word.example'.tr(),
-                      textSecondary: textSecondary,
-                      border: border,
-                    ),
+                    _SectionHeader(label: 'word.example'.tr()),
                     const SizedBox(height: Dimensions.itemHeight8),
                     Container(
                       width: double.infinity,
@@ -442,47 +407,39 @@ class _ActionButton extends StatelessWidget {
 
 class _SectionHeader extends StatelessWidget {
   final String label;
-  final Color textSecondary;
-  final Color border;
 
-  const _SectionHeader({
-    required this.label,
-    required this.textSecondary,
-    required this.border,
-  });
+  const _SectionHeader({required this.label});
 
   @override
-  Widget build(BuildContext context) => Row(
-        children: <Widget>[
-          Text(label, style: AppTextStyles.labelSmall(textSecondary)),
-          const SizedBox(width: Dimensions.itemWidth8),
-          Expanded(child: Divider(color: border, height: 1, thickness: 1)),
-        ],
-      );
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return Row(
+      children: <Widget>[
+        Text(label, style: AppTextStyles.labelSmall(colors.textSecondary)),
+        const SizedBox(width: Dimensions.itemWidth8),
+        Expanded(child: Divider(color: colors.border, height: 1, thickness: 1)),
+      ],
+    );
+  }
 }
 
 class _GrammarTable extends StatelessWidget {
   /// Each row: (German label, optional AZ tooltip, value).
   final List<(String, String?, String)> rows;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color border;
   final Color cardBg;
 
   const _GrammarTable({
     required this.rows,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.border,
     required this.cardBg,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark =
-        Theme.of(context).brightness == Brightness.dark;
-    final Color infoColor =
-        isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
+    final AppColors colors = AppColors.of(context);
+    final Color textPrimary = colors.textPrimary;
+    final Color textSecondary = colors.textSecondary;
+    final Color border = colors.border;
+    final Color infoColor = colors.primary;
 
     return Container(
         decoration: BoxDecoration(

@@ -8,12 +8,10 @@ class _MetricChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color primary = isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
-    final Color primaryTint =
-        isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final AppColors colors = AppColors.of(context);
+    final Color primary = colors.primary;
+    final Color primaryTint = colors.primaryTint;
+    final Color textSecondary = colors.textSecondary;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -44,11 +42,9 @@ class _ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final AppColors colors = AppColors.of(context);
+    final Color textPrimary = colors.textPrimary;
+    final Color textSecondary = colors.textSecondary;
 
     final String date = DateFormat('MMM d, y HH:mm').format(result.dateTime);
     final double percentageValue = (result.score / result.totalQuestions) * 100;
@@ -97,12 +93,14 @@ class _ResultCard extends StatelessWidget {
                 vertical: Dimensions.padding8,
               ),
               decoration: BoxDecoration(
-                color: _scoreBg(percentageValue),
+                color: _scoreBg(percentageValue, colors),
                 borderRadius: BorderRadius.circular(Dimensions.borderRadius),
               ),
               child: Text(
                 '$percentage%',
-                style: AppTextStyles.labelLarge(_scoreColor(percentageValue)),
+                style: AppTextStyles.labelLarge(
+                  _scoreColor(percentageValue, colors),
+                ),
               ),
             ),
           ],
@@ -112,16 +110,16 @@ class _ResultCard extends StatelessWidget {
   }
 }
 
-Color _scoreColor(double pct) {
-  if (pct >= 70) return AppTheme.successColor;
-  if (pct >= 40) return AppTheme.warningColor;
-  return AppTheme.errorColor;
+Color _scoreColor(double pct, AppColors colors) {
+  if (pct >= 70) return colors.success;
+  if (pct >= 40) return colors.warning;
+  return colors.error;
 }
 
-Color _scoreBg(double pct) {
-  if (pct >= 70) return AppTheme.successTint;
-  if (pct >= 40) return AppTheme.warningTint;
-  return AppTheme.errorTint;
+Color _scoreBg(double pct, AppColors colors) {
+  if (pct >= 70) return colors.successTint;
+  if (pct >= 40) return colors.warningTint;
+  return colors.errorTint;
 }
 
 class ResultsTab extends StatefulWidget {
@@ -149,11 +147,9 @@ class _ResultsTabState extends State<ResultsTab> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color textPrimary =
-        isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondaryLight;
+    final AppColors colors = AppColors.of(context);
+    final Color textPrimary = colors.textPrimary;
+    final Color textSecondary = colors.textSecondary;
 
     return BlocListener<AuthCubit, AuthState>(
       listenWhen: (AuthState previous, AuthState current) =>

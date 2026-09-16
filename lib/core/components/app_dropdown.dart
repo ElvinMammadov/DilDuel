@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dic/core/theme/app_theme.dart';
+import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 
 /// A styled dropdown button that opens a [PopupMenu] anchored to its
@@ -37,18 +37,15 @@ class _AppDropdownState<T> extends State<AppDropdown<T>> {
     final Offset offset = box.localToGlobal(Offset.zero);
     final Size size = box.size;
     final Size screenSize = MediaQuery.of(context).size;
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color surface =
-        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final AppColors colors = AppColors.of(context);
 
     final T? result = await showMenu<T>(
       context: context,
-      color: surface,
+      color: colors.surface,
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-        side: BorderSide(color: border),
+        side: BorderSide(color: colors.border),
       ),
       position: RelativeRect.fromLTRB(
         offset.dx,
@@ -70,25 +67,24 @@ class _AppDropdownState<T> extends State<AppDropdown<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color surface =
-        isDark ? AppTheme.surfaceDark : AppTheme.surfaceLight;
-    final Color border = isDark ? AppTheme.borderDark : AppTheme.borderLight;
+    final AppColors colors = AppColors.of(context);
 
     return GestureDetector(
       onTap: _openMenu,
-      child: Container(
+      child: DecoratedBox(
         key: _anchorKey,
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.padding16,
-          vertical: Dimensions.padding12,
-        ),
         decoration: BoxDecoration(
-          color: surface,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-          border: Border.all(color: border),
+          border: Border.all(color: colors.border),
         ),
-        child: widget.child,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.padding16,
+            vertical: Dimensions.padding12,
+          ),
+          child: widget.child,
+        ),
       ),
     );
   }

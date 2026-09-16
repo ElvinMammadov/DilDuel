@@ -17,7 +17,9 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(BuildContext context) {
+    final Color primary = AppColors.of(context).primary;
+    return Padding(
         padding: const EdgeInsets.all(Dimensions.padding16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -28,13 +30,10 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
             ),
             const SizedBox(height: Dimensions.itemHeight24),
             ListTile(
-              leading: const Icon(
-                Icons.language,
-                color: AppTheme.mainColor,
-              ),
+              leading: Icon(Icons.language, color: primary),
               title: Text('settings.language_azerbaijani'.tr()),
               trailing: _selectedLanguage == 'az'
-                  ? const Icon(Icons.check, color: AppTheme.mainColor)
+                  ? Icon(Icons.check, color: primary)
                   : null,
               onTap: () {
                 setState(() {
@@ -43,13 +42,10 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
               },
             ),
             ListTile(
-              leading: const Icon(
-                Icons.language,
-                color: AppTheme.mainColor,
-              ),
+              leading: Icon(Icons.language, color: primary),
               title: Text('settings.language_german'.tr()),
               trailing: _selectedLanguage == 'de'
-                  ? const Icon(Icons.check, color: AppTheme.mainColor)
+                  ? Icon(Icons.check, color: primary)
                   : null,
               onTap: () {
                 setState(() {
@@ -70,4 +66,5 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
           ],
         ),
       );
+  }
 }

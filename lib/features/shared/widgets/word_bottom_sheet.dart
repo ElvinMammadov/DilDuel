@@ -172,8 +172,8 @@ class _WordBottomSheetState extends State<WordBottomSheet>
           const SizedBox(height: Dimensions.padding12),
           Center(
             child: Container(
-              width: 40,
-              height: 4,
+              width: Dimensions.itemWidth40,
+              height: Dimensions.itemHeight4,
               decoration: BoxDecoration(
                 color: border,
                 borderRadius:
@@ -484,11 +484,11 @@ class _CircleButton extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
         onTap: onTap,
         child: Container(
-          width: 44,
-          height: 44,
+          width: Dimensions.itemWidth44,
+          height: Dimensions.itemHeight44,
           decoration:
               BoxDecoration(color: background, shape: BoxShape.circle),
-          child: Icon(icon, size: 20, color: color),
+          child: Icon(icon, size: Dimensions.itemHeight20, color: color),
         ),
       );
 }
@@ -519,8 +519,8 @@ class _SpeakButton extends StatelessWidget {
             return Transform.scale(
               scale: scale,
               child: Container(
-                width: 44,
-                height: 44,
+                width: Dimensions.itemWidth44,
+                height: Dimensions.itemHeight44,
                 decoration: BoxDecoration(
                   color: isSpeaking ? primary : primaryTint,
                   shape: BoxShape.circle,
@@ -529,7 +529,7 @@ class _SpeakButton extends StatelessWidget {
                   isSpeaking
                       ? Icons.stop_rounded
                       : Icons.volume_up_outlined,
-                  size: 20,
+                  size: Dimensions.itemHeight20,
                   color: isSpeaking ? Colors.white : primary,
                 ),
               ),
@@ -593,7 +593,7 @@ class _AzDeTranslationCard extends StatelessWidget {
                       children: <Widget>[
                         // Index number
                         SizedBox(
-                          width: 20,
+                          width: Dimensions.itemWidth20,
                           child: Text(
                             '${i + 1}.',
                             style: AppTextStyles.labelSmall(textSecondary),
@@ -642,15 +642,15 @@ class _AzDeTranslationCard extends StatelessWidget {
                         GestureDetector(
                           onTap: () => onSpeak(translation),
                           child: Container(
-                            width: 32,
-                            height: 32,
+                            width: Dimensions.itemWidth32,
+                            height: Dimensions.itemHeight32,
                             decoration: BoxDecoration(
                               color: primaryTint,
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               Icons.volume_up_outlined,
-                              size: 15,
+                              size: Dimensions.itemHeight15,
                               color: primary,
                             ),
                           ),
@@ -785,10 +785,12 @@ class _GrammarRow extends StatelessWidget {
                                   triggerMode: TooltipTriggerMode.tap,
                                   showDuration: const Duration(seconds: 4),
                                   child: Padding(
-                                    padding: const EdgeInsets.only(left: 2),
+                                    padding: const EdgeInsets.only(
+                                      left: Dimensions.padding2,
+                                    ),
                                     child: Icon(
                                       Icons.info_outline_rounded,
-                                      size: 10,
+                                      size: Dimensions.itemHeight10,
                                       color: infoColor,
                                     ),
                                   ),
@@ -889,7 +891,8 @@ class _ExampleEntry extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Icon(Icons.format_quote_rounded, size: 14, color: primary),
+                Icon(Icons.format_quote_rounded,
+                    size: Dimensions.itemHeight14, color: primary),
                 const SizedBox(width: Dimensions.itemWidth8),
                 Expanded(
                   child: Text(

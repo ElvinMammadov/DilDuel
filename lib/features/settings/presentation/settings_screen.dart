@@ -167,7 +167,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: _showLanguageBottomSheet,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Dimensions.padding8),
 
           // Theme
           _SettingsCard(
@@ -175,7 +175,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             surface: surface,
             child: const ThemeCard(),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Dimensions.padding8),
 
           // FAQ
           _SettingsCard(
@@ -214,7 +214,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Dimensions.padding8),
 
           // About
           _SettingsCard(

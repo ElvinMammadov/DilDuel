@@ -372,7 +372,7 @@ class _CardContentState extends State<_CardContent> {
                         children: <Widget>[
                           Icon(
                             Icons.format_quote_rounded,
-                            size: 14,
+                            size: Dimensions.itemHeight14,
                             color: primary,
                           ),
                           const SizedBox(width: Dimensions.itemWidth8),
@@ -526,11 +526,11 @@ class _GrammarTable extends StatelessWidget {
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.only(
-                                                  left: 2,
+                                                  left: Dimensions.padding2,
                                                 ),
                                                 child: Icon(
                                                   Icons.info_outline_rounded,
-                                                  size: 10,
+                                                  size: Dimensions.itemHeight10,
                                                   color: infoColor,
                                                 ),
                                               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
+import 'package:flutter_dic/core/utils/dimensions.dart';
 
 class SnackbarUtils {
   static void showSuccess(
@@ -15,7 +16,7 @@ class SnackbarUtils {
             Icons.check_circle_outline,
             color: Colors.white,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: Dimensions.padding8),
           Expanded(
             child: Text(message),
           ),
@@ -47,7 +48,7 @@ class SnackbarUtils {
             Icons.error_outline,
             color: Colors.white,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: Dimensions.padding8),
           Expanded(
             child: Text(message),
           ),
@@ -79,7 +80,7 @@ class SnackbarUtils {
             Icons.info_outline,
             color: Colors.white,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: Dimensions.padding8),
           Expanded(
             child: Text(message),
           ),

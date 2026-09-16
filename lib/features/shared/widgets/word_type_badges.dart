@@ -137,7 +137,10 @@ class WordTypeBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.padding10,
+          vertical: Dimensions.padding4,
+        ),
         decoration: BoxDecoration(
           color: bg,
           borderRadius:

@@ -4,8 +4,7 @@ class SearchSection extends StatelessWidget {
   const SearchSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AppCubit, AppState>(
+  Widget build(BuildContext context) => BlocBuilder<AppCubit, AppState>(
       builder: (BuildContext context, AppState appState) {
         final String dictionaryName =
             context.read<AppCubit>().getDictionaryName();
@@ -27,7 +26,6 @@ class SearchSection extends StatelessWidget {
         );
       },
     );
-  }
 }
 
 class _PillSearchBar extends StatefulWidget {

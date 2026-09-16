@@ -115,13 +115,13 @@ class _NavButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             if (!filled) ...<Widget>[
-              Icon(icon, size: 18, color: fg),
+              Icon(icon, size: Dimensions.itemHeight18, color: fg),
               const SizedBox(width: Dimensions.itemWidth6),
             ],
             Text(label, style: AppTextStyles.labelLarge(fg)),
             if (filled) ...<Widget>[
               const SizedBox(width: Dimensions.itemWidth6),
-              Icon(icon, size: 18, color: fg),
+              Icon(icon, size: Dimensions.itemHeight18, color: fg),
             ],
           ],
         ),
@@ -160,7 +160,7 @@ class _TrainingProgressBar extends StatelessWidget {
               builder: (BuildContext ctx, double v, Widget? _) =>
                   LinearProgressIndicator(
                 value: v,
-                minHeight: 6,
+                minHeight: Dimensions.itemHeight6,
                 backgroundColor: border.a < 0.32
                     ? border.withValues(alpha: 0.32)
                     : border,
@@ -168,7 +168,7 @@ class _TrainingProgressBar extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: Dimensions.padding4),
           Text(
             '${current + 1} / $total',
             style: AppTextStyles.caption(primary),

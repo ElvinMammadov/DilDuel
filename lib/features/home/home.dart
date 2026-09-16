@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/theme/app_theme.dart';
+import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';
 import 'package:flutter_dic/features/search/search.dart';
 import 'package:flutter_dic/features/quiz/quiz.dart';
@@ -85,10 +86,10 @@ class _DesignedNavBar extends StatelessWidget {
         border: Border(top: BorderSide(color: border)),
       ),
       padding: const EdgeInsets.only(
-        top: 8,
-        bottom: 16,
-        left: 6,
-        right: 6,
+        top: Dimensions.padding8,
+        bottom: Dimensions.padding20,
+        left: Dimensions.padding6,
+        right: Dimensions.padding6,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -99,20 +100,23 @@ class _DesignedNavBar extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.padding14,
+                vertical: Dimensions.padding6,
+              ),
               decoration: BoxDecoration(
                 color: active ? primaryTint : Colors.transparent,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(Dimensions.padding16),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Icon(
                     active ? _filledIcon(items[i].icon) : items[i].icon,
-                    size: 20,
+                    size: Dimensions.itemHeight20,
                     color: active ? primary : textSecondary,
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: Dimensions.padding3),
                   Text(
                     items[i].label,
                     style: AppTextStyles.labelSmall(

@@ -189,14 +189,14 @@ class _LevelProgress extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         Text(label, style: AppTextStyles.caption(textColor)),
-        const SizedBox(height: 3),
+        const SizedBox(height: Dimensions.padding3),
         SizedBox(
           width: 72,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(3),
             child: LinearProgressIndicator(
               value: pct,
-              minHeight: 4,
+              minHeight: Dimensions.itemHeight4,
               backgroundColor: textColor.withValues(alpha: 0.18),
               valueColor: AlwaysStoppedAnimation<Color>(fg),
             ),
@@ -217,8 +217,8 @@ class _LevelBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: 40,
-        height: 26,
+        width: Dimensions.itemWidth40,
+        height: Dimensions.itemHeight26,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: _levelBg(level, isDark),

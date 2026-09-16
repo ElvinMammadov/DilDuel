@@ -133,11 +133,6 @@ class _BookmarksTab extends StatelessWidget {
                 isDark ? AppTheme.mainColorDark : AppTheme.mainColor;
             final Color primaryTint =
                 isDark ? AppTheme.primaryTintDark : AppTheme.primaryTint;
-            final Color textPrimary =
-                isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-            final Color textSecondary = isDark
-                ? AppTheme.textSecondaryDark
-                : AppTheme.textSecondaryLight;
 
             if (state.bookmarks.isEmpty) {
               return EmptyStateView(
@@ -195,14 +190,8 @@ class _UnknownTab extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (state is BookmarksLoaded) {
-            final bool isDark = Theme.of(context).brightness == Brightness.dark;
             const Color primary = AppTheme.warningColor;
             const Color primaryTint = AppTheme.warningTint;
-            final Color textPrimary =
-                isDark ? AppTheme.textPrimaryDark : AppTheme.textPrimaryLight;
-            final Color textSecondary = isDark
-                ? AppTheme.textSecondaryDark
-                : AppTheme.textSecondaryLight;
 
             if (state.unknownWords.isEmpty) {
               return EmptyStateView(

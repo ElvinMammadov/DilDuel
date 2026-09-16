@@ -136,7 +136,7 @@ class _SignInView extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded,
-              size: 20, color: textPrimary),
+              size: Dimensions.itemHeight20, color: textPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -154,8 +154,8 @@ class _SignInView extends StatelessWidget {
               // ── Brand mark ──────────────────────────────────────────────
               Center(
                 child: Container(
-                  width: 64,
-                  height: 64,
+                  width: Dimensions.itemWidth64,
+                  height: Dimensions.itemHeight64,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: <Color>[
@@ -231,7 +231,7 @@ class _SignInView extends StatelessWidget {
                     state._showPassword
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
-                    size: 20,
+                    size: Dimensions.itemHeight20,
                     color: textSecondary,
                   ),
                   onPressed: state.togglePasswordVisibility,
@@ -277,7 +277,8 @@ class _SignInView extends StatelessWidget {
                 const SizedBox(height: Dimensions.itemHeight12),
                 _SocialButton(
                   label: 'auth.sign_in.apple_button'.tr(),
-                  logo: Icon(Icons.apple, size: 22, color: textPrimary),
+                  logo: Icon(Icons.apple,
+                      size: Dimensions.itemHeight22, color: textPrimary),
                   border: border,
                   textPrimary: textPrimary,
                   onTap: () => context.read<AuthCubit>().signInWithApple(),

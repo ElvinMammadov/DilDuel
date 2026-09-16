@@ -139,7 +139,7 @@ class _RegisterView extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded,
-              size: 20, color: textPrimary),
+              size: Dimensions.itemHeight20, color: textPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -164,8 +164,8 @@ class _RegisterView extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: Dimensions.itemWidth40,
+                      height: Dimensions.itemHeight40,
                       decoration: BoxDecoration(
                         color: primary,
                         borderRadius:
@@ -238,7 +238,7 @@ class _RegisterView extends StatelessWidget {
                     state._showPassword
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
-                    size: 20,
+                    size: Dimensions.itemHeight20,
                     color: textSecondary,
                   ),
                   onPressed: state.togglePasswordVisibility,
@@ -260,7 +260,7 @@ class _RegisterView extends StatelessWidget {
                     state._showConfirm
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
-                    size: 20,
+                    size: Dimensions.itemHeight20,
                     color: textSecondary,
                   ),
                   onPressed: state.toggleConfirmVisibility,
@@ -311,7 +311,8 @@ class _RegisterView extends StatelessWidget {
                 const SizedBox(height: Dimensions.itemHeight12),
                 _SocialButton(
                   label: 'auth.register.apple_button'.tr(),
-                  logo: Icon(Icons.apple, size: 22, color: textPrimary),
+                  logo: Icon(Icons.apple,
+                      size: Dimensions.itemHeight22, color: textPrimary),
                   border: border,
                   textPrimary: textPrimary,
                   onTap: () => context.read<AuthCubit>().signInWithApple(),

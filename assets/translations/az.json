@@ -75,7 +75,7 @@
     "confirm_cancel": "Testi ləğv etmək istədiyinizə əminsiniz?",
     "yes": "Bəli",
     "no": "Xeyr",
-    "question": "Sual {}/{}",
+    "question": "Sual {} / {}",
     "try_again": "Yenidən cəhd et",
     "error": "Xəta: {}",
     "finished": "Test tamamlandı!",

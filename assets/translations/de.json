@@ -46,11 +46,11 @@
       "bookmarks_usage": "Wie speichere ich ein Wort?",
       "bookmarks_usage_answer": "Tippen Sie auf das Lesezeichen-Symbol im Wort-Detailfenster oder auf der Trainingskarte, um das Wort zu speichern. Alle gespeicherten Wörter sind im Lesezeichen-Bereich zu finden.",
       "unknown_words": "Was ist die Liste der unbekannten Wörter?",
-      "unknown_words_answer": "Tippen Sie beim Training auf das Fragezeichen-Symbol, um ein Wort als unbekannt zu markieren. Diese Wörter erscheinen in der Auswahl „Unbekannte" im Lesezeichen-Bereich.",
+      "unknown_words_answer": "Tippen Sie beim Training auf das Fragezeichen-Symbol, um ein Wort als unbekannt zu markieren. Diese Wörter erscheinen in der Auswahl „Unbekannte“ im Lesezeichen-Bereich.",
       "quiz_usage": "Wie funktioniert das Quiz?",
       "quiz_usage_answer": "Jedes Quiz hat 10 Fragen mit je vier Antwortmöglichkeiten. Die richtige Antwort wird grün, eine falsche Auswahl rot markiert. Nach Abschluss sehen Sie Ihre Gesamtpunktzahl.",
       "quiz_results": "Wo finde ich meine Quiz-Ergebnisse?",
-      "quiz_results_answer": "Tippen Sie im Quiz-Bereich auf die Registerkarte „Ergebnisse", um Ihre bisherigen Quizze und die durchschnittliche Punktzahl zu sehen.",
+      "quiz_results_answer": "Tippen Sie im Quiz-Bereich auf die Registerkarte „Ergebnisse“, um Ihre bisherigen Quizze und die durchschnittliche Punktzahl zu sehen.",
       "sign_in_benefits": "Was sind die Vorteile des Anmeldens?",
       "sign_in_benefits_answer": "Nach der Anmeldung werden Ihr Trainingsfortschritt und Ihre Quizergebnisse über die Cloud synchronisiert. So bleiben Ihre Daten auch nach einem Gerätewechsel erhalten."
     },

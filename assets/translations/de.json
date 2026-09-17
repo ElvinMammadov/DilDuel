@@ -111,7 +111,11 @@
     "imperfekt": "Imperfekt",
     "perfekt": "Perfekt",
     "komparativ": "Komparativ",
-    "superlativ": "Superlativ"
+    "superlativ": "Superlativ",
+    "saved": "Zu Lesezeichen hinzugefügt",
+    "removed": "Aus Lesezeichen entfernt",
+    "marked_unknown": "Als unbekannt markiert",
+    "unknown_removed": "Aus Unbekannte entfernt"
   },
   "common": {
     "confirm": "Bestätigen",
@@ -137,7 +141,8 @@
       "no_account": "Noch kein Konto?",
       "register_link": "Registrieren",
       "reset_sent": "Link zum Zurücksetzen des Passworts wurde gesendet",
-      "enter_email_first": "Bitte geben Sie zuerst Ihre E-Mail-Adresse ein"
+      "enter_email_first": "Bitte geben Sie zuerst Ihre E-Mail-Adresse ein",
+      "success": "Sie haben sich erfolgreich angemeldet"
     },
     "register": {
       "title": "Konto erstellen",

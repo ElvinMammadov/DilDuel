@@ -28,8 +28,7 @@ class _TrainingWordCard extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: colors.surface,
-          borderRadius:
-              BorderRadius.circular(Dimensions.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
           border: Border.all(color: colors.border),
         ),
         child: AnimatedSwitcher(
@@ -94,45 +93,52 @@ class _CardContentState extends State<_CardContent> {
 
   Future<void> _toggleBookmark(BuildContext context) async {
     final BookmarkRepository repo = sl<BookmarkRepository>();
+    final String label = _bareWord(widget.word.key, widget.word.article);
     if (_isBookmarked) {
       await repo.removeBookmark(widget.word);
       if (!context.mounted) return;
       setState(() => _isBookmarked = false);
-      SnackbarUtils.showInfo(
+      AppSnackbar.show(
         context,
-        message: 'training.bookmark_removed'
-            .tr(args: <String>[widget.word.key]),
+        type: SnackbarType.info,
+        title: label,
+        subtitle: 'word.removed'.tr(),
       );
     } else {
       await repo.addBookmark(widget.word);
       if (!context.mounted) return;
       setState(() => _isBookmarked = true);
-      SnackbarUtils.showSuccess(
+      AppSnackbar.show(
         context,
-        message: 'training.bookmarked'.tr(args: <String>[widget.word.key]),
+        type: SnackbarType.success,
+        title: label,
+        subtitle: 'word.saved'.tr(),
       );
     }
   }
 
   Future<void> _toggleUnknown(BuildContext context) async {
     final BookmarkRepository repo = sl<BookmarkRepository>();
+    final String label = _bareWord(widget.word.key, widget.word.article);
     if (_isUnknown) {
       await repo.removeUnknownWord(widget.word);
       if (!context.mounted) return;
       setState(() => _isUnknown = false);
-      SnackbarUtils.showInfo(
+      AppSnackbar.show(
         context,
-        message: 'training.unknown_removed'
-            .tr(args: <String>[widget.word.key]),
+        type: SnackbarType.info,
+        title: label,
+        subtitle: 'word.unknown_removed'.tr(),
       );
     } else {
       await repo.addUnknownWord(widget.word);
       if (!context.mounted) return;
       setState(() => _isUnknown = true);
-      SnackbarUtils.showSuccess(
+      AppSnackbar.show(
         context,
-        message: 'training.marked_unknown'
-            .tr(args: <String>[widget.word.key]),
+        type: SnackbarType.success,
+        title: label,
+        subtitle: 'word.marked_unknown'.tr(),
       );
     }
   }
@@ -273,9 +279,8 @@ class _CardContentState extends State<_CardContent> {
               Row(
                 children: <Widget>[
                   _ActionButton(
-                    icon: _isBookmarked
-                        ? Icons.bookmark
-                        : Icons.bookmark_border,
+                    icon:
+                        _isBookmarked ? Icons.bookmark : Icons.bookmark_border,
                     activeColor: primary,
                     activeBg: primaryTint,
                     inactiveBg: chipBg,
@@ -285,9 +290,7 @@ class _CardContentState extends State<_CardContent> {
                   ),
                   const SizedBox(width: Dimensions.itemWidth8),
                   _ActionButton(
-                    icon: _isUnknown
-                        ? Icons.help
-                        : Icons.help_outline,
+                    icon: _isUnknown ? Icons.help : Icons.help_outline,
                     activeColor: colors.warning,
                     activeBg: colors.warningTint,
                     inactiveBg: chipBg,
@@ -442,77 +445,74 @@ class _GrammarTable extends StatelessWidget {
     final Color infoColor = colors.primary;
 
     return Container(
-        decoration: BoxDecoration(
-          color: cardBg,
-          borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-          border: Border.all(color: border),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: rows.indexed
-              .map(((int, (String, String?, String)) e) => Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.padding14,
-                          vertical: Dimensions.padding10,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              width: 88,
-                              child: Text.rich(
-                                TextSpan(
-                                  text: e.$2.$1,
-                                  style: AppTextStyles.labelMedium(
-                                    textSecondary,
-                                  ),
-                                  children: e.$2.$2 != null
-                                      ? <InlineSpan>[
-                                          WidgetSpan(
-                                            alignment:
-                                                PlaceholderAlignment.top,
-                                            child: Tooltip(
-                                              message: e.$2.$2!,
-                                              triggerMode:
-                                                  TooltipTriggerMode.tap,
-                                              showDuration: const Duration(
-                                                seconds: 4,
+      decoration: BoxDecoration(
+        color: cardBg,
+        borderRadius: BorderRadius.circular(Dimensions.borderRadius),
+        border: Border.all(color: border),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: rows.indexed
+            .map(((int, (String, String?, String)) e) => Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Dimensions.padding14,
+                        vertical: Dimensions.padding10,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 88,
+                            child: Text.rich(
+                              TextSpan(
+                                text: e.$2.$1,
+                                style: AppTextStyles.labelMedium(
+                                  textSecondary,
+                                ),
+                                children: e.$2.$2 != null
+                                    ? <InlineSpan>[
+                                        WidgetSpan(
+                                          alignment: PlaceholderAlignment.top,
+                                          child: Tooltip(
+                                            message: e.$2.$2!,
+                                            triggerMode: TooltipTriggerMode.tap,
+                                            showDuration: const Duration(
+                                              seconds: 4,
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: Dimensions.padding2,
                                               ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.only(
-                                                  left: Dimensions.padding2,
-                                                ),
-                                                child: Icon(
-                                                  Icons.info_outline_rounded,
-                                                  size: Dimensions.itemHeight10,
-                                                  color: infoColor,
-                                                ),
+                                              child: Icon(
+                                                Icons.info_outline_rounded,
+                                                size: Dimensions.itemHeight10,
+                                                color: infoColor,
                                               ),
                                             ),
                                           ),
-                                        ]
-                                      : null,
-                                ),
+                                        ),
+                                      ]
+                                    : null,
                               ),
                             ),
-                            Expanded(
-                              child: Text(
-                                e.$2.$3,
-                                style: AppTextStyles.bodyMedium(textPrimary),
-                              ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              e.$2.$3,
+                              style: AppTextStyles.bodyMedium(textPrimary),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      if (e.$1 < rows.length - 1)
-                        Divider(height: 1, color: border),
-                    ],
-                  ))
-              .toList(),
-        ),
-      );
+                    ),
+                    if (e.$1 < rows.length - 1)
+                      Divider(height: 1, color: border),
+                  ],
+                ))
+            .toList(),
+      ),
+    );
   }
 }

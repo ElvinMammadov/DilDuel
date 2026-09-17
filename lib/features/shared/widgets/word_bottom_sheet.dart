@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dic/core/components/app_snackbar.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';
@@ -110,6 +111,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
   }
 
   Future<void> _toggleBookmark() async {
+    final bool adding = !_isBookmarked;
     try {
       final BookmarkRepository repo = sl<BookmarkRepository>();
       if (_isBookmarked) {
@@ -120,11 +122,20 @@ class _WordBottomSheetState extends State<WordBottomSheet>
       if (mounted) {
         setState(() => _isBookmarked = !_isBookmarked);
         widget.onBookmarkToggled?.call();
+        final String label = _bareWord(widget.word.key, widget.word.article);
+        AppSnackbar.show(
+          context,
+          type: adding ? SnackbarType.success : SnackbarType.info,
+          title: label,
+          subtitle: adding ? 'word.saved'.tr() : 'word.removed'.tr(),
+        );
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to update bookmark')),
+        AppSnackbar.show(
+          context,
+          type: SnackbarType.error,
+          title: 'common.something_wrong'.tr(),
         );
       }
     }
@@ -187,7 +198,6 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-
                   // ── Article chip (DeAz only) ───────────────
                   if (_isDeAz && _ok(word.article)) ...<Widget>[
                     DecoratedBox(
@@ -236,15 +246,12 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                           isSpeaking: _isSpeaking,
                           onTap: _speak,
                         ),
-                      if (_isDeAz)
-                        const SizedBox(width: Dimensions.itemWidth8),
+                      if (_isDeAz) const SizedBox(width: Dimensions.itemWidth8),
                       _CircleButton(
                         icon: _isBookmarked
                             ? Icons.bookmark
                             : Icons.bookmark_outline,
-                        color: _isBookmarked
-                            ? colors.accent
-                            : colors.primary,
+                        color: _isBookmarked ? colors.accent : colors.primary,
                         background: _isBookmarked
                             ? colors.warningTint
                             : colors.primaryTint,
@@ -280,8 +287,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                           width: double.infinity,
                           child: Text(
                             word.value,
-                            style:
-                                AppTextStyles.bodyLarge(colors.textPrimary),
+                            style: AppTextStyles.bodyLarge(colors.textPrimary),
                           ),
                         ),
                       ),
@@ -360,7 +366,6 @@ class _WordBottomSheetState extends State<WordBottomSheet>
     return b.toString();
   }
 
-
   static String _stripNum(String s) {
     final RegExpMatch? m = RegExp(r'^\d+\.\s*').firstMatch(s);
     return m != null ? s.substring(m.end).trim() : s.trim();
@@ -379,8 +384,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
 
     final List<String> translations = split(w.value);
     final List<String> types = split(w.mainType).map(_stripNum).toList();
-    final List<String> subtypes =
-        split(w.subType).map(_stripNum).toList();
+    final List<String> subtypes = split(w.subType).map(_stripNum).toList();
 
     return List<(String?, String?, String)>.generate(
       translations.length,
@@ -388,10 +392,8 @@ class _WordBottomSheetState extends State<WordBottomSheet>
         final String translation = _stripNum(translations[i]);
         final String? rawType =
             i < types.length && types[i].isNotEmpty ? types[i] : null;
-        final String? rawSubtype = i < subtypes.length &&
-                subtypes[i].isNotEmpty
-            ? subtypes[i]
-            : null;
+        final String? rawSubtype =
+            i < subtypes.length && subtypes[i].isNotEmpty ? subtypes[i] : null;
         final String? type = rawType == null
             ? null
             : isAz
@@ -451,8 +453,7 @@ class _CircleButton extends StatelessWidget {
         child: Container(
           width: Dimensions.itemWidth44,
           height: Dimensions.itemHeight44,
-          decoration:
-              BoxDecoration(color: background, shape: BoxShape.circle),
+          decoration: BoxDecoration(color: background, shape: BoxShape.circle),
           child: Icon(icon, size: Dimensions.itemHeight20, color: color),
         ),
       );
@@ -477,8 +478,7 @@ class _SpeakButton extends StatelessWidget {
       child: AnimatedBuilder(
         animation: controller,
         builder: (BuildContext ctx, Widget? _) {
-          final double scale =
-              isSpeaking ? 1.0 + controller.value * 0.1 : 1.0;
+          final double scale = isSpeaking ? 1.0 + controller.value * 0.1 : 1.0;
           return Transform.scale(
             scale: scale,
             child: SizedBox(
@@ -490,9 +490,7 @@ class _SpeakButton extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  isSpeaking
-                      ? Icons.stop_rounded
-                      : Icons.volume_up_outlined,
+                  isSpeaking ? Icons.stop_rounded : Icons.volume_up_outlined,
                   size: Dimensions.itemHeight20,
                   color: isSpeaking ? Colors.white : colors.primary,
                 ),
@@ -530,106 +528,100 @@ class _AzDeTranslationCard extends StatelessWidget {
         width: double.infinity,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: rows.indexed
-              .map(((int, (String?, String?, String)) e) {
-                final int i = e.$1;
-                final (String? mainType, String? subType, String translation) =
-                    e.$2;
-                final bool hasType =
-                    (mainType != null && mainType.isNotEmpty) ||
-                    (subType != null && subType.isNotEmpty);
-                return Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.padding14,
-                        vertical: Dimensions.padding10,
+          children: rows.indexed.map(((int, (String?, String?, String)) e) {
+            final int i = e.$1;
+            final (String? mainType, String? subType, String translation) =
+                e.$2;
+            final bool hasType = (mainType != null && mainType.isNotEmpty) ||
+                (subType != null && subType.isNotEmpty);
+            return Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Dimensions.padding14,
+                    vertical: Dimensions.padding10,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        width: Dimensions.itemWidth20,
+                        child: Text(
+                          '${i + 1}.',
+                          style: AppTextStyles.labelSmall(
+                            colors.textSecondary,
+                          ),
+                        ),
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(
-                            width: Dimensions.itemWidth20,
-                            child: Text(
-                              '${i + 1}.',
-                              style: AppTextStyles.labelSmall(
-                                colors.textSecondary,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            if (hasType)
+                              Wrap(
+                                spacing: 6,
+                                runSpacing: 4,
+                                children: <Widget>[
+                                  if (mainType != null && mainType.isNotEmpty)
+                                    WordTypeBadge(
+                                      label: mainType,
+                                      bg: colors.chipBg,
+                                      textColor: colors.textSecondary,
+                                    ),
+                                  if (subType != null && subType.isNotEmpty)
+                                    WordTypeBadge(
+                                      label: subType,
+                                      bg: Colors.transparent,
+                                      textColor: colors.textSecondary,
+                                      borderColor: colors.border,
+                                    ),
+                                ],
+                              ),
+                            if (hasType)
+                              const SizedBox(
+                                height: Dimensions.itemHeight4,
+                              ),
+                            Text(
+                              translation,
+                              style: AppTextStyles.bodyLarge(
+                                colors.textPrimary,
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                if (hasType)
-                                  Wrap(
-                                    spacing: 6,
-                                    runSpacing: 4,
-                                    children: <Widget>[
-                                      if (mainType != null &&
-                                          mainType.isNotEmpty)
-                                        WordTypeBadge(
-                                          label: mainType,
-                                          bg: colors.chipBg,
-                                          textColor: colors.textSecondary,
-                                        ),
-                                      if (subType != null &&
-                                          subType.isNotEmpty)
-                                        WordTypeBadge(
-                                          label: subType,
-                                          bg: Colors.transparent,
-                                          textColor: colors.textSecondary,
-                                          borderColor: colors.border,
-                                        ),
-                                    ],
-                                  ),
-                                if (hasType)
-                                  const SizedBox(
-                                    height: Dimensions.itemHeight4,
-                                  ),
-                                Text(
-                                  translation,
-                                  style: AppTextStyles.bodyLarge(
-                                    colors.textPrimary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: Dimensions.itemWidth8),
-                          GestureDetector(
-                            onTap: () => onSpeak(translation),
-                            child: SizedBox(
-                              width: Dimensions.itemWidth32,
-                              height: Dimensions.itemHeight32,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: colors.primaryTint,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.volume_up_outlined,
-                                  size: Dimensions.itemHeight15,
-                                  color: colors.primary,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    if (i < rows.length - 1)
-                      Divider(height: 1, color: colors.border),
-                  ],
-                );
-              })
-              .toList(),
+                      const SizedBox(width: Dimensions.itemWidth8),
+                      GestureDetector(
+                        onTap: () => onSpeak(translation),
+                        child: SizedBox(
+                          width: Dimensions.itemWidth32,
+                          height: Dimensions.itemHeight32,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: colors.primaryTint,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.volume_up_outlined,
+                              size: Dimensions.itemHeight15,
+                              color: colors.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (i < rows.length - 1)
+                  Divider(height: 1, color: colors.border),
+              ],
+            );
+          }).toList(),
         ),
       ),
     );
   }
 }
-
 
 class _GrammarCard extends StatelessWidget {
   const _GrammarCard({required this.word, required this.cardBg});
@@ -825,7 +817,6 @@ class _ExampleEntry extends StatelessWidget {
   }
 }
 
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Article colour + bare-word helpers (mirrors training_word_card.dart)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -851,4 +842,3 @@ String _bareWord(String key, String? article) {
   final String prefix = '$article ';
   return key.startsWith(prefix) ? key.substring(prefix.length) : key;
 }
-

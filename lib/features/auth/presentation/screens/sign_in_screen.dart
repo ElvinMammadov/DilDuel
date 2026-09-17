@@ -58,10 +58,10 @@ class _SignInScreenState extends State<SignInScreen> {
   void _forgotPassword() {
     final String email = _emailCtrl.text.trim();
     if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('auth.sign_in.enter_email_first'.tr()),
-        ),
+      AppSnackbar.show(
+        context,
+        type: SnackbarType.warning,
+        title: 'auth.sign_in.enter_email_first'.tr(),
       );
       return;
     }
@@ -83,22 +83,31 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) => BlocListener<AuthCubit, AuthState>(
         listener: (BuildContext ctx, AuthState state) {
           if (state is AuthAuthenticated) {
-            Navigator.of(ctx).popUntil((Route<dynamic> r) => r.isFirst);
+            final NavigatorState navigator = Navigator.of(ctx);
+            final OverlayState? overlay = navigator.overlay;
+            navigator.popUntil((Route<dynamic> r) => r.isFirst);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (overlay != null && overlay.mounted) {
+                AppSnackbar.showOnOverlay(
+                  overlay,
+                  type: SnackbarType.success,
+                  title: 'auth.sign_in.success'.tr(),
+                );
+              }
+            });
           }
           if (state is AuthPasswordResetSent) {
-            ScaffoldMessenger.of(ctx).showSnackBar(
-              SnackBar(
-                content: Text('auth.sign_in.reset_sent'.tr()),
-                backgroundColor: AppColors.of(ctx).success,
-              ),
+            AppSnackbar.show(
+              ctx,
+              type: SnackbarType.success,
+              title: 'auth.sign_in.reset_sent'.tr(),
             );
           }
           if (state is AuthError) {
-            ScaffoldMessenger.of(ctx).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: AppColors.of(ctx).error,
-              ),
+            AppSnackbar.show(
+              ctx,
+              type: SnackbarType.error,
+              title: state.message,
             );
             // Reset to unauthenticated so the error can fire again.
             ctx.read<AuthCubit>().clearError();
@@ -269,8 +278,7 @@ class _SignInView extends StatelessWidget {
                 _SocialButton(
                   label: 'auth.sign_in.apple_button'.tr(),
                   logo: Icon(Icons.apple,
-                      size: Dimensions.itemHeight22,
-                      color: colors.textPrimary),
+                      size: Dimensions.itemHeight22, color: colors.textPrimary),
                   onTap: () => context.read<AuthCubit>().signInWithApple(),
                 ),
               ],
@@ -389,8 +397,7 @@ class _OrDivider extends StatelessWidget {
       children: <Widget>[
         Expanded(child: Divider(color: colors.border, thickness: 1)),
         Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: Dimensions.padding12),
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.padding12),
           child: Text(
             'auth.or_divider'.tr(),
             style: AppTextStyles.bodySmall(colors.textSecondary),

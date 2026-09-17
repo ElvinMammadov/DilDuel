@@ -111,7 +111,11 @@
     "imperfekt": "Imperfekt keçmiş zaman forması",
     "perfekt": "Perfekt keçmiş zaman forması",
     "komparativ": "Müqaisə dərəcəsi",
-    "superlativ": "Üstünlük dərəcəsi"
+    "superlativ": "Üstünlük dərəcəsi",
+    "saved": "Seçilmişlərə əlavə edildi",
+    "removed": "Seçilmişlərdən silindi",
+    "marked_unknown": "Bilinməyənlərə əlavə edildi",
+    "unknown_removed": "Bilinməyənlərdən silindi"
   },
   "common": {
     "confirm": "Təsdiq et",
@@ -137,7 +141,8 @@
       "no_account": "Hesabınız yoxdur?",
       "register_link": "Qeydiyyat",
       "reset_sent": "Şifrə bərpası linki e-poçtunuza göndərildi",
-      "enter_email_first": "Əvvəlcə e-poçt ünvanınızı daxil edin"
+      "enter_email_first": "Əvvəlcə e-poçt ünvanınızı daxil edin",
+      "success": "Hesabınıza uğurla daxil oldunuz"
     },
     "register": {
       "title": "Hesab yaradın",

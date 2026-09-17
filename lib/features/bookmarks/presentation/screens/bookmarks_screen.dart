@@ -43,34 +43,35 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
               final AppColors ctxColors = AppColors.of(ctx);
 
               return <PopupMenuEntry<String>>[
-                for (int i = 0; i < _categories.length; i++)
-                  ...<PopupMenuEntry<String>>[
-                    PopupMenuItem<String>(
-                      value: _categories[i],
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.padding16,
-                        vertical: Dimensions.padding8,
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            _iconFor(_categories[i]),
-                            size: Dimensions.itemWidth20,
-                            color: ctxColors.textPrimary,
-                          ),
-                          const SizedBox(width: Dimensions.itemWidth12),
-                          Text(
-                            _labelFor(_categories[i]),
-                            style: AppTextStyles.bodyLarge(
-                              ctxColors.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
+                for (int i = 0;
+                    i < _categories.length;
+                    i++) ...<PopupMenuEntry<String>>[
+                  PopupMenuItem<String>(
+                    value: _categories[i],
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Dimensions.padding16,
+                      vertical: Dimensions.padding8,
                     ),
-                    if (i < _categories.length - 1)
-                      PopupMenuDivider(height: 1, color: ctxColors.border),
-                  ],
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          _iconFor(_categories[i]),
+                          size: Dimensions.itemWidth20,
+                          color: ctxColors.textPrimary,
+                        ),
+                        const SizedBox(width: Dimensions.itemWidth12),
+                        Text(
+                          _labelFor(_categories[i]),
+                          style: AppTextStyles.bodyLarge(
+                            ctxColors.textPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (i < _categories.length - 1)
+                    PopupMenuDivider(height: 1, color: ctxColors.border),
+                ],
               ];
             },
             child: Row(
@@ -106,7 +107,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     );
   }
 }
-
 
 // ── Bookmarks tab ───────────────────────────────────────────────────────────
 
@@ -145,13 +145,22 @@ class _BookmarksTab extends StatelessWidget {
                 return _BookmarkItem(
                   word: word,
                   onRemoveWithUndo: () {
+                    final String? article = word.article;
+                    final String bare = article != null &&
+                            word.key.startsWith('$article ')
+                        ? word.key.substring(article.length + 1)
+                        : word.key;
                     context.read<BookmarksBloc>().removeBookmark(word);
-                    SnackbarUtils.showInfo(
+                    AppSnackbar.show(
                       context,
-                      message: 'bookmarks.removed'.tr(),
-                      actionLabel: 'bookmarks.undo'.tr(),
-                      onActionPressed: () =>
-                          context.read<BookmarksBloc>().addBookmark(word),
+                      type: SnackbarType.info,
+                      title: bare,
+                      subtitle: 'bookmarks.removed'.tr(),
+                      action: SnackbarAction(
+                        label: 'bookmarks.undo'.tr(),
+                        onPressed: () =>
+                            context.read<BookmarksBloc>().addBookmark(word),
+                      ),
                     );
                   },
                 );
@@ -203,13 +212,22 @@ class _UnknownTab extends StatelessWidget {
                 return _BookmarkItem(
                   word: word,
                   onRemoveWithUndo: () {
+                    final String? article = word.article;
+                    final String bare = article != null &&
+                            word.key.startsWith('$article ')
+                        ? word.key.substring(article.length + 1)
+                        : word.key;
                     context.read<BookmarksBloc>().removeUnknownWord(word);
-                    SnackbarUtils.showInfo(
+                    AppSnackbar.show(
                       context,
-                      message: 'bookmarks.unknown_removed'.tr(),
-                      actionLabel: 'bookmarks.undo'.tr(),
-                      onActionPressed: () =>
-                          context.read<BookmarksBloc>().addUnknownWord(word),
+                      type: SnackbarType.info,
+                      title: bare,
+                      subtitle: 'bookmarks.unknown_removed'.tr(),
+                      action: SnackbarAction(
+                        label: 'bookmarks.undo'.tr(),
+                        onPressed: () =>
+                            context.read<BookmarksBloc>().addUnknownWord(word),
+                      ),
                     );
                   },
                 );
@@ -243,12 +261,10 @@ class _BookmarksErrorView extends StatelessWidget {
             Text('bookmarks.error'.tr(),
                 style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: Dimensions.itemHeight8),
-            Text(state.message,
-                style: Theme.of(context).textTheme.bodyMedium),
+            Text(state.message, style: Theme.of(context).textTheme.bodyMedium),
             const SizedBox(height: Dimensions.itemHeight16),
             ElevatedButton(
-              onPressed: () =>
-                  context.read<BookmarksBloc>().loadBookmarks(),
+              onPressed: () => context.read<BookmarksBloc>().loadBookmarks(),
               child: Text('bookmarks.try_again'.tr()),
             ),
           ],
@@ -268,15 +284,13 @@ class _BookmarkItem extends StatelessWidget {
   final VoidCallback onRemoveWithUndo;
 
   Future<void> _openDetails(BuildContext context) async {
-    final Word? fullWord =
-        await DBHelper.getWordByKey(word.key, word.dicType);
+    final Word? fullWord = await DBHelper.getWordByKey(word.key, word.dicType);
     if (!context.mounted) return;
     showWordBottomSheet(
       context,
       fullWord ?? word,
       word.dicType == 'DeAz' ? 'de-DE' : 'az-AZ',
-      onBookmarkToggled: () =>
-          context.read<BookmarksBloc>().loadBookmarks(),
+      onBookmarkToggled: () => context.read<BookmarksBloc>().loadBookmarks(),
     );
   }
 
@@ -292,8 +306,7 @@ class _BookmarkItem extends StatelessWidget {
         background: Container(
           decoration: BoxDecoration(
             color: colors.error.withValues(alpha: 0.12),
-            borderRadius:
-                BorderRadius.circular(Dimensions.borderRadiusLarge),
+            borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
           ),
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: Dimensions.padding16),
@@ -311,8 +324,7 @@ class _BookmarkItem extends StatelessWidget {
             decoration: BoxDecoration(
               color: colors.surface,
               border: Border.all(color: colors.border),
-              borderRadius:
-                  BorderRadius.circular(Dimensions.borderRadiusLarge),
+              borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
             ),
             child: Row(
               children: <Widget>[
@@ -354,5 +366,3 @@ class _BookmarkItem extends StatelessWidget {
     );
   }
 }
-
-

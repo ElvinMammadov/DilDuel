@@ -23,6 +23,7 @@ class Dimensions {
   static const double itemHeight32 = 32.0;
   static const double itemHeight34 = 34.0;
   static const double itemHeight36 = 36.0;
+  static const double itemHeight38 = 38.0;
   static const double itemHeight40 = 40.0;
   static const double itemHeight44 = 44.0;
   static const double itemHeight46 = 46.0;
@@ -57,6 +58,7 @@ class Dimensions {
   static const double itemWidth32 = 32.0;
   static const double itemWidth34 = 34.0;
   static const double itemWidth36 = 36.0;
+  static const double itemWidth38 = 38.0;
   static const double itemWidth40 = 40.0;
   static const double itemWidth44 = 44.0;
   static const double itemWidth46 = 46.0;

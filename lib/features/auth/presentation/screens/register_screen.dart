@@ -96,11 +96,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Navigator.of(ctx).popUntil((Route<dynamic> r) => r.isFirst);
           }
           if (state is AuthError) {
-            ScaffoldMessenger.of(ctx).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: AppColors.of(ctx).error,
-              ),
+            AppSnackbar.show(
+              ctx,
+              type: SnackbarType.error,
+              title: state.message,
             );
             ctx.read<AuthCubit>().clearError();
           }
@@ -307,8 +306,7 @@ class _RegisterView extends StatelessWidget {
                 _SocialButton(
                   label: 'auth.register.apple_button'.tr(),
                   logo: Icon(Icons.apple,
-                      size: Dimensions.itemHeight22,
-                      color: colors.textPrimary),
+                      size: Dimensions.itemHeight22, color: colors.textPrimary),
                   onTap: () => context.read<AuthCubit>().signInWithApple(),
                 ),
               ],

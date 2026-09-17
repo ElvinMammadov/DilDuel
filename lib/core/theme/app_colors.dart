@@ -17,6 +17,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.warningTint,
     required this.error,
     required this.errorTint,
+    required this.info,
+    required this.infoTint,
   });
 
   final Color primary;
@@ -34,6 +36,8 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color warningTint;
   final Color error;
   final Color errorTint;
+  final Color info;
+  final Color infoTint;
 
   static AppColors of(BuildContext context) =>
       Theme.of(context).extension<AppColors>()!;
@@ -55,6 +59,8 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? warningTint,
     Color? error,
     Color? errorTint,
+    Color? info,
+    Color? infoTint,
   }) =>
       AppColors(
         primary: primary ?? this.primary,
@@ -72,6 +78,8 @@ class AppColors extends ThemeExtension<AppColors> {
         warningTint: warningTint ?? this.warningTint,
         error: error ?? this.error,
         errorTint: errorTint ?? this.errorTint,
+        info: info ?? this.info,
+        infoTint: infoTint ?? this.infoTint,
       );
 
   @override
@@ -93,6 +101,8 @@ class AppColors extends ThemeExtension<AppColors> {
       warningTint: Color.lerp(warningTint, other.warningTint, t)!,
       error: Color.lerp(error, other.error, t)!,
       errorTint: Color.lerp(errorTint, other.errorTint, t)!,
+      info: Color.lerp(info, other.info, t)!,
+      infoTint: Color.lerp(infoTint, other.infoTint, t)!,
     );
   }
 }

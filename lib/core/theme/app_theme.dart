@@ -23,7 +23,7 @@ class AppTheme {
 
   static const Color successColor = Color(0xFF1FA97E);
   static const Color successTint = Color(0xFFE6F6EF);
-  static const Color warningColor = Color(0xFFFFB74D);
+  static const Color warningColor = Color(0xFFB96400);
   static const Color warningTint = Color(0xFFFFF3E0);
   static const Color errorColor = Color(0xFFD63C41);
   static const Color errorTint = Color(0xFFFBE9EA);
@@ -44,6 +44,8 @@ class AppTheme {
 
   static const Color successColorDark = Color(0xFF4ADE9A);
   static const Color successTintDark = Color(0x294ADE9A);
+  static const Color warningColorDark = Color(0xFFFFB74D);
+  static const Color warningTintDark = Color(0x24FFB74D);
   static const Color errorColorDark = Color(0xFFFF7A7D);
   static const Color errorTintDark = Color(0x24FF7A7D);
 
@@ -111,6 +113,8 @@ class AppTheme {
         warningTint: warningTint,
         error: errorColor,
         errorTint: errorTint,
+        info: mainColor,
+        infoTint: primaryTint,
       ),
     ],
     useMaterial3: true,
@@ -176,10 +180,12 @@ class AppTheme {
         chipBg: borderDark,
         success: successColorDark,
         successTint: successTintDark,
-        warning: warningColor,
-        warningTint: warningTint,
+        warning: warningColorDark,
+        warningTint: warningTintDark,
         error: errorColorDark,
         errorTint: errorTintDark,
+        info: mainColorDark,
+        infoTint: primaryTintDark,
       ),
     ],
     useMaterial3: true,

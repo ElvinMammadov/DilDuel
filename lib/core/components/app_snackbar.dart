@@ -264,18 +264,21 @@ class _SnackbarCard extends StatelessWidget {
           ],
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              width: Dimensions.itemWidth38,
-              height: Dimensions.itemHeight38,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: iconBg,
-                borderRadius: BorderRadius.circular(Dimensions.borderRadius),
+            Padding(
+              padding: const EdgeInsets.only(top: Dimensions.itemHeight1),
+              child: Container(
+                width: Dimensions.itemWidth38,
+                height: Dimensions.itemHeight38,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: iconBg,
+                  borderRadius: BorderRadius.circular(Dimensions.borderRadius),
+                ),
+                child:
+                    Icon(icon, size: Dimensions.itemHeight18, color: iconColor),
               ),
-              child:
-                  Icon(icon, size: Dimensions.itemHeight18, color: iconColor),
             ),
             const SizedBox(width: Dimensions.padding12),
             Expanded(
@@ -286,16 +289,14 @@ class _SnackbarCard extends StatelessWidget {
                   Text(
                     title,
                     style: AppTextStyles.labelLarge(colors.textPrimary),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   if (subtitle != null) ...<Widget>[
-                    const SizedBox(height: Dimensions.itemHeight2),
+                    const SizedBox(height: Dimensions.itemHeight4),
                     Text(
                       subtitle!,
-                      style: AppTextStyles.caption(colors.textSecondary),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.bodySmall(colors.textSecondary),
                     ),
                   ],
                 ],

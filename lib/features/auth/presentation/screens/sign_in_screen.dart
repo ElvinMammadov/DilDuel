@@ -92,6 +92,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   overlay,
                   type: SnackbarType.success,
                   title: 'auth.sign_in.success'.tr(),
+                  subtitle: 'auth.sign_in.success_subtitle'.tr(),
                 );
               }
             });
@@ -101,6 +102,7 @@ class _SignInScreenState extends State<SignInScreen> {
               ctx,
               type: SnackbarType.success,
               title: 'auth.sign_in.reset_sent'.tr(),
+              subtitle: 'auth.sign_in.reset_sent_subtitle'.tr(),
             );
           }
           if (state is AuthError) {

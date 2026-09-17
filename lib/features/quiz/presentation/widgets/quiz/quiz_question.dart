@@ -41,16 +41,6 @@ class _QuizQuestionState extends State<QuizQuestion> {
   @override
   Widget build(BuildContext context) {
     final AppColors colors = AppColors.of(context);
-    final Color primary = colors.primary;
-    final Color primaryTint = colors.primaryTint;
-    final Color textPrimary = colors.textPrimary;
-    final Color textSecondary = colors.textSecondary;
-    final Color surface = colors.surface;
-    final Color border = colors.border;
-    final Color success = colors.success;
-    final Color successTint = colors.successTint;
-    final Color error = colors.error;
-    final Color errorTint = colors.errorTint;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -60,15 +50,15 @@ class _QuizQuestionState extends State<QuizQuestion> {
           margin: const EdgeInsets.only(top: Dimensions.padding16),
           padding: const EdgeInsets.symmetric(
               horizontal: Dimensions.padding20,
-              vertical: Dimensions.padding36),
+              vertical: Dimensions.padding20),
           decoration: BoxDecoration(
-            color: primaryTint,
-            border: Border.all(color: primary, width: 1.5),
+            color: colors.primaryTint,
+            border: Border.all(color: colors.primary, width: 1.5),
             borderRadius: BorderRadius.circular(Dimensions.borderRadiusMedium),
           ),
           child: Text(
             widget.word.question,
-            style: AppTextStyles.wordSource(textPrimary, size: 24),
+            style: AppTextStyles.wordSource(colors.textPrimary, size: 18),
             textAlign: TextAlign.center,
           ),
         ),
@@ -78,21 +68,21 @@ class _QuizQuestionState extends State<QuizQuestion> {
           final bool isSelected = selectedAnswer == option;
           final bool isCorrect = widget.word.correctAnswer == option;
 
-          Color bg = surface;
-          Color textColor = textPrimary;
-          Color borderColor = border;
+          Color bg = colors.surface;
+          Color textColor = colors.textPrimary;
+          Color borderColor = colors.border;
 
           if (showAnswer) {
             if (isCorrect) {
-              bg = successTint;
-              textColor = success;
-              borderColor = success;
+              bg = colors.successTint;
+              textColor = colors.success;
+              borderColor = colors.success;
             } else if (isSelected) {
-              bg = errorTint;
-              textColor = error;
-              borderColor = error;
+              bg = colors.errorTint;
+              textColor = colors.error;
+              borderColor = colors.error;
             } else {
-              textColor = textSecondary;
+              textColor = colors.textSecondary;
             }
           }
 
@@ -103,7 +93,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
                 padding: const EdgeInsets.symmetric(
-                    vertical: Dimensions.padding15,
+                    vertical: Dimensions.padding10,
                     horizontal: Dimensions.padding16),
                 decoration: BoxDecoration(
                   color: bg,
@@ -112,7 +102,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
                 ),
                 child: Text(
                   option,
-                  style: AppTextStyles.bodyLargeBold(textColor),
+                  style: AppTextStyles.labelLarge(textColor),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -127,14 +117,14 @@ class _QuizQuestionState extends State<QuizQuestion> {
               padding: const EdgeInsets.symmetric(
                   vertical: Dimensions.padding14),
               decoration: BoxDecoration(
-                color: primary,
+                color: colors.primary,
                 borderRadius:
                     BorderRadius.circular(Dimensions.borderRadiusPill),
               ),
               child: Text(
                 'quiz.next'.tr(),
                 style:
-                    AppTextStyles.titleSmall(Colors.white),
+                    AppTextStyles.titleSmall(colors.onPrimary),
                 textAlign: TextAlign.center,
               ),
             ),

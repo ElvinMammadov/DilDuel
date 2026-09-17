@@ -29,6 +29,12 @@ class QuizRepositoryImpl implements QuizRepository {
   bool _isValidWord(Word word) =>
       _isValidString(word.key) && _isValidString(word.value);
 
+  /// Extracts the first translation from a numbered list (e.g. "1. ilanbalığı\n2. azalma")
+  String _firstTranslation(String value) {
+    final String first = value.split('\n').first.trim();
+    return first.replaceFirst(RegExp(r'^\d+\.\s*'), '');
+  }
+
   @override
   Future<Either<Failure, List<QuizWord>>> getQuizWords(String dicType) async {
     try {
@@ -50,13 +56,16 @@ class QuizRepositoryImpl implements QuizRepository {
       final List<Word> wordsForQuiz = validWords.take(10).toList();
 
       for (final Word word in wordsForQuiz) {
+        final String correctTranslation = _firstTranslation(word.value);
+
         // Get potential wrong answers (excluding the correct answer)
         final List<String> potentialWrongAnswers = validWords
             .where((Word w) =>
                     w.value != word.value && // Different from correct answer
                     _isValidString(w.value) // Ensure answer is valid
                 )
-            .map((Word w) => w.value)
+            .map((Word w) => _firstTranslation(w.value))
+            .where((String t) => t != correctTranslation)
             .toList();
 
         // If we can't get enough wrong answers, skip this word
@@ -70,12 +79,14 @@ class QuizRepositoryImpl implements QuizRepository {
             potentialWrongAnswers.take(3).toList();
 
         // Combine correct answer with wrong answers and shuffle
-        final List<String> options = <String>[word.value, ...wrongAnswers]
-          ..shuffle(_random);
+        final List<String> options = <String>[
+          correctTranslation,
+          ...wrongAnswers,
+        ]..shuffle(_random);
 
         quizWords.add(QuizWord(
           question: word.key,
-          correctAnswer: word.value,
+          correctAnswer: correctTranslation,
           options: options,
           dicType: dicType,
         ));

@@ -99,6 +99,7 @@ class AppTheme {
     extensions: const <ThemeExtension<dynamic>>[
       AppColors(
         primary: mainColor,
+        onPrimary: Colors.white,
         primaryTint: primaryTint,
         accent: accentColor,
         surface: surfaceLight,
@@ -115,6 +116,11 @@ class AppTheme {
         errorTint: errorTint,
         info: mainColor,
         infoTint: primaryTint,
+        shadow: Color(0x1F000000),
+        shadowStrong: Color(0x241B1730),
+        shadowMedium: Color(0x28000000),
+        shadowSubtle: Color(0x14000000),
+        barrier: Color(0x8A000000),
       ),
     ],
     useMaterial3: true,
@@ -170,6 +176,7 @@ class AppTheme {
     extensions: const <ThemeExtension<dynamic>>[
       AppColors(
         primary: mainColorDark,
+        onPrimary: Colors.white,
         primaryTint: primaryTintDark,
         accent: accentColorDark,
         surface: surfaceDark,
@@ -186,6 +193,11 @@ class AppTheme {
         errorTint: errorTintDark,
         info: mainColorDark,
         infoTint: primaryTintDark,
+        shadow: Color(0x1F000000),
+        shadowStrong: Color(0x80000000),
+        shadowMedium: Color(0x59000000),
+        shadowSubtle: Color(0x26000000),
+        barrier: Color(0x8A000000),
       ),
     ],
     useMaterial3: true,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors extends ThemeExtension<AppColors> {
   const AppColors({
     required this.primary,
+    required this.onPrimary,
     required this.primaryTint,
     required this.accent,
     required this.surface,
@@ -19,9 +20,15 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.errorTint,
     required this.info,
     required this.infoTint,
+    required this.shadow,
+    required this.shadowStrong,
+    required this.shadowMedium,
+    required this.shadowSubtle,
+    required this.barrier,
   });
 
   final Color primary;
+  final Color onPrimary;
   final Color primaryTint;
   final Color accent;
   final Color surface;
@@ -38,6 +45,11 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color errorTint;
   final Color info;
   final Color infoTint;
+  final Color shadow;
+  final Color shadowStrong;
+  final Color shadowMedium;
+  final Color shadowSubtle;
+  final Color barrier;
 
   static AppColors of(BuildContext context) =>
       Theme.of(context).extension<AppColors>()!;
@@ -45,6 +57,7 @@ class AppColors extends ThemeExtension<AppColors> {
   @override
   AppColors copyWith({
     Color? primary,
+    Color? onPrimary,
     Color? primaryTint,
     Color? accent,
     Color? surface,
@@ -61,9 +74,15 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? errorTint,
     Color? info,
     Color? infoTint,
+    Color? shadow,
+    Color? shadowStrong,
+    Color? shadowMedium,
+    Color? shadowSubtle,
+    Color? barrier,
   }) =>
       AppColors(
         primary: primary ?? this.primary,
+        onPrimary: onPrimary ?? this.onPrimary,
         primaryTint: primaryTint ?? this.primaryTint,
         accent: accent ?? this.accent,
         surface: surface ?? this.surface,
@@ -80,6 +99,11 @@ class AppColors extends ThemeExtension<AppColors> {
         errorTint: errorTint ?? this.errorTint,
         info: info ?? this.info,
         infoTint: infoTint ?? this.infoTint,
+        shadow: shadow ?? this.shadow,
+        shadowStrong: shadowStrong ?? this.shadowStrong,
+        shadowMedium: shadowMedium ?? this.shadowMedium,
+        shadowSubtle: shadowSubtle ?? this.shadowSubtle,
+        barrier: barrier ?? this.barrier,
       );
 
   @override
@@ -87,6 +111,7 @@ class AppColors extends ThemeExtension<AppColors> {
     if (other == null) return this;
     return AppColors(
       primary: Color.lerp(primary, other.primary, t)!,
+      onPrimary: Color.lerp(onPrimary, other.onPrimary, t)!,
       primaryTint: Color.lerp(primaryTint, other.primaryTint, t)!,
       accent: Color.lerp(accent, other.accent, t)!,
       surface: Color.lerp(surface, other.surface, t)!,
@@ -103,6 +128,11 @@ class AppColors extends ThemeExtension<AppColors> {
       errorTint: Color.lerp(errorTint, other.errorTint, t)!,
       info: Color.lerp(info, other.info, t)!,
       infoTint: Color.lerp(infoTint, other.infoTint, t)!,
+      shadow: Color.lerp(shadow, other.shadow, t)!,
+      shadowStrong: Color.lerp(shadowStrong, other.shadowStrong, t)!,
+      shadowMedium: Color.lerp(shadowMedium, other.shadowMedium, t)!,
+      shadowSubtle: Color.lerp(shadowSubtle, other.shadowSubtle, t)!,
+      barrier: Color.lerp(barrier, other.barrier, t)!,
     );
   }
 }

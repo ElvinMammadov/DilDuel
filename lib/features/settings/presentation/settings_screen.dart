@@ -320,7 +320,7 @@ class _FaqItemState extends State<_FaqItem> {
     final AppColors colors = AppColors.of(context);
     return Column(
       children: <Widget>[
-        InkWell(
+        GestureDetector(
           onTap: () => setState(() => _open = !_open),
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -330,7 +330,8 @@ class _FaqItemState extends State<_FaqItem> {
               children: <Widget>[
                 Expanded(
                     child: Text(widget.question,
-                        style: AppTextStyles.bodyMedium(colors.textPrimary))),
+                        style: AppTextStyles.bodyMedium(colors.textPrimary)
+                            .copyWith(fontWeight: FontWeight.w600))),
                 AnimatedRotation(
                   duration: const Duration(milliseconds: 200),
                   turns: _open ? 0.5 : 0,
@@ -353,7 +354,7 @@ class _FaqItemState extends State<_FaqItem> {
               Dimensions.padding14,
             ),
             child: Text(widget.answer,
-                style: AppTextStyles.bodyMedium(colors.textSecondary)
+                style: AppTextStyles.bodyMedium(colors.textPrimary)
                     .copyWith(height: 1.5, fontSize: 13)),
           ),
         if (widget.showDivider) Divider(height: 1, color: colors.border),

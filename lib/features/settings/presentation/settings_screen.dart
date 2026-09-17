@@ -162,31 +162,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           // FAQ
           _SettingsCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    Dimensions.padding16,
-                    Dimensions.padding14,
-                    Dimensions.padding16,
-                    Dimensions.padding14,
-                  ),
-                  child: Text('settings.faq.title'.tr(),
-                      style: AppTextStyles.titleMedium(colors.textPrimary)),
+            child: _SettingsRow(
+              icon: Icons.help_outline,
+              iconColor: colors.primary,
+              title: 'settings.faq.title'.tr(),
+              subtitle: 'settings.faq.row_subtitle'.tr(),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const FaqScreen(),
                 ),
-                Divider(height: 1, color: colors.border),
-                _FaqItem(
-                  question: 'settings.faq.dictionary_usage'.tr(),
-                  answer: 'settings.faq.dictionary_usage_answer'.tr(),
-                  showDivider: true,
-                ),
-                _FaqItem(
-                  question: 'settings.faq.quiz_usage'.tr(),
-                  answer: 'settings.faq.quiz_usage_answer'.tr(),
-                  showDivider: false,
-                ),
-              ],
+              ),
             ),
           ),
           const SizedBox(height: Dimensions.padding8),

@@ -14,6 +14,7 @@ import 'package:flutter_dic/features/widgets/app_bar.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 part 'presentation/settings_screen.dart';
+part 'presentation/faq_screen.dart';
 part 'widgets/theme_bottom_sheet.dart';
 part 'widgets/theme_card.dart';
 part 'widgets/language_bottom_sheet.dart';

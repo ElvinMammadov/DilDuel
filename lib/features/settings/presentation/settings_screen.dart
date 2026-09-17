@@ -29,14 +29,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showLanguageBottomSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) => const LanguageBottomSheet(),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(Dimensions.itemHeight16),
-        ),
-      ),
+    AppBottomSheet.show<void>(
+      context,
+      child: const LanguageBottomSheet(),
+      isScrollControlled: true,
     );
   }
 

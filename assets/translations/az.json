@@ -9,8 +9,10 @@
   },
   "settings": {
     "title": "Parametrlər",
-    "theme": "Tema",
+    "theme": "Görünüş",
+    "choose_theme": "Görünüşü seçin",
     "language": "Dil",
+    "choose_language": "Dili seçin",
     "light": "Açıq",
     "dark": "Tünd",
     "system": "Sistem",
@@ -35,6 +37,10 @@
       "quiz_usage": "Test necə işləyir?",
       "quiz_usage_answer": "Hər testdə 10 sual olur. Düzgün cavabları seçərək xalınızı artırın."
     },
+    "language_changed": "Dil dəyişdirildi",
+    "language_changed_to": "Seçilən dil: {}",
+    "theme_changed": "Görünüş dəyişdirildi",
+    "theme_changed_to": "Seçilən görünüş: {}",
     "logout": "Çıxış"
   },
   "quiz": {
@@ -140,9 +146,11 @@
       "apple_button": "Apple ilə daxil ol",
       "no_account": "Hesabınız yoxdur?",
       "register_link": "Qeydiyyat",
-      "reset_sent": "Şifrə bərpası linki e-poçtunuza göndərildi",
+      "reset_sent": "Şifrə sıfırlama linki göndərildi",
+      "reset_sent_subtitle": "Gələn qutunuzu yoxlayın və göstərişlərə əməl edin",
       "enter_email_first": "Əvvəlcə e-poçt ünvanınızı daxil edin",
-      "success": "Hesabınıza uğurla daxil oldunuz"
+      "success": "Uğurla daxil oldunuz",
+      "success_subtitle": "Xoş gəlmisiniz! Öyrənməyə davam edin"
     },
     "register": {
       "title": "Hesab yaradın",

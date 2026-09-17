@@ -4,9 +4,9 @@ class ThemeCard extends StatelessWidget {
   const ThemeCard({super.key});
 
   void _showThemeBottomSheet(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) => const ThemeBottomSheet(),
+    AppBottomSheet.show<void>(
+      context,
+      child: const ThemeBottomSheet(),
     );
   }
 

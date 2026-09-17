@@ -10,7 +10,9 @@
   "settings": {
     "title": "Einstellungen",
     "theme": "Design",
+    "choose_theme": "Design wählen",
     "language": "Sprache",
+    "choose_language": "Sprache wählen",
     "light": "Hell",
     "dark": "Dunkel",
     "system": "System",
@@ -35,6 +37,10 @@
       "quiz_usage": "Wie funktioniert das Quiz?",
       "quiz_usage_answer": "Jedes Quiz hat 10 Fragen. Wählen Sie die richtigen Antworten, um Punkte zu sammeln."
     },
+    "language_changed": "Sprache geändert",
+    "language_changed_to": "Ausgewählte Sprache: {}",
+    "theme_changed": "Design geändert",
+    "theme_changed_to": "Ausgewähltes Design: {}",
     "logout": "Abmelden"
   },
   "quiz": {
@@ -140,9 +146,11 @@
       "apple_button": "Mit Apple anmelden",
       "no_account": "Noch kein Konto?",
       "register_link": "Registrieren",
-      "reset_sent": "Link zum Zurücksetzen des Passworts wurde gesendet",
+      "reset_sent": "Link zum Zurücksetzen gesendet",
+      "reset_sent_subtitle": "Prüfen Sie Ihren Posteingang und folgen Sie den Anweisungen",
       "enter_email_first": "Bitte geben Sie zuerst Ihre E-Mail-Adresse ein",
-      "success": "Sie haben sich erfolgreich angemeldet"
+      "success": "Erfolgreich angemeldet",
+      "success_subtitle": "Willkommen zurück! Viel Spaß beim Lernen"
     },
     "register": {
       "title": "Konto erstellen",

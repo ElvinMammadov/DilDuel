@@ -58,7 +58,8 @@
     "language_changed_to": "Ausgewählte Sprache: {}",
     "theme_changed": "Design geändert",
     "theme_changed_to": "Ausgewähltes Design: {}",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "logout_success": "Erfolgreich abgemeldet"
   },
   "quiz": {
     "title": "Quiz",

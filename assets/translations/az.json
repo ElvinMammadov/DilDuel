@@ -58,7 +58,8 @@
     "language_changed_to": "Seçilən dil: {}",
     "theme_changed": "Görünüş dəyişdirildi",
     "theme_changed_to": "Seçilən görünüş: {}",
-    "logout": "Çıxış"
+    "logout": "Çıxış",
+    "logout_success": "Uğurla çıxış etdiniz"
   },
   "quiz": {
     "title": "Test",

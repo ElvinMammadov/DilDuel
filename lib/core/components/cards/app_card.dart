@@ -21,7 +21,7 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card(
         elevation: elevation ?? Dimensions.itemHeight1,
-        shadowColor: Colors.black12,
+        shadowColor: AppColors.of(context).shadow,
         shape: shape ??
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(Dimensions.itemHeight8),

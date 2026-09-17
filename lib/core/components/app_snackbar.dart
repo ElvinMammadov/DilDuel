@@ -255,9 +255,7 @@ class _SnackbarCard extends StatelessWidget {
           border: Border.all(color: isDark ? colors.border : colors.chipBg),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: isDark
-                  ? Colors.black.withValues(alpha: 0.5)
-                  : const Color(0xFF1B1730).withValues(alpha: 0.14),
+              color: colors.shadowStrong,
               blurRadius: 40,
               offset: const Offset(0, 8),
             ),

@@ -97,8 +97,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           child: Icon(
                             Icons.person,
                             size: Dimensions.itemWidth28,
-                            color:
-                                isSignedIn ? Colors.white : ctxColors.primary,
+                            color: isSignedIn
+                                ? ctxColors.onPrimary
+                                : ctxColors.primary,
                           ),
                         ),
                         const SizedBox(height: Dimensions.itemHeight10),
@@ -147,7 +148,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                               child: Text(
                                 'settings.sign_in'.tr(),
-                                style: AppTextStyles.labelMedium(Colors.white),
+                                style: AppTextStyles.labelMedium(
+                                    ctxColors.onPrimary),
                               ),
                             ),
                           ),

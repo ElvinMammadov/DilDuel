@@ -182,13 +182,13 @@ class _SignInView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'D',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: colors.onPrimary,
                         letterSpacing: -1,
                       ),
                     ),

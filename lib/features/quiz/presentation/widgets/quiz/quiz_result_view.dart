@@ -67,7 +67,7 @@ class QuizResultView extends StatelessWidget {
                 child: Text(
                   'quiz.try_again'.tr(),
                   style:
-                      AppTextStyles.labelLarge(Colors.white),
+                      AppTextStyles.labelLarge(colors.onPrimary),
                 ),
               ),
             ),

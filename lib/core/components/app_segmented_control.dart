@@ -38,7 +38,6 @@ class _AppSegmentedControlState extends State<AppSegmentedControl> {
   Widget build(BuildContext context) {
     final int selected = _tabController?.index ?? 0;
     final AppColors colors = AppColors.of(context);
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     const double inset = Dimensions.padding4;
     const Duration dur = Duration(milliseconds: 200);
@@ -77,29 +76,16 @@ class _AppSegmentedControlState extends State<AppSegmentedControl> {
                         borderRadius: BorderRadius.circular(
                           Dimensions.borderRadius - 2,
                         ),
-                        boxShadow: isDark
-                            ? <BoxShadow>[
+                        boxShadow: <BoxShadow>[
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.35),
+                                  color: colors.shadowMedium,
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
                                 ),
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.15),
+                                  color: colors.shadowSubtle,
                                   blurRadius: 2,
                                   offset: const Offset(0, 1),
-                                ),
-                              ]
-                            : <BoxShadow>[
-                                const BoxShadow(
-                                  color: Color(0x28000000),
-                                  blurRadius: 8,
-                                  offset: Offset(0, 2),
-                                ),
-                                const BoxShadow(
-                                  color: Color(0x14000000),
-                                  blurRadius: 2,
-                                  offset: Offset(0, 1),
                                 ),
                               ],
                       ),

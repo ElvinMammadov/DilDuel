@@ -492,7 +492,7 @@ class _SpeakButton extends StatelessWidget {
                 child: Icon(
                   isSpeaking ? Icons.stop_rounded : Icons.volume_up_outlined,
                   size: Dimensions.itemHeight20,
-                  color: isSpeaking ? Colors.white : colors.primary,
+                  color: isSpeaking ? colors.onPrimary : colors.primary,
                 ),
               ),
             ),

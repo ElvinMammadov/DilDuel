@@ -91,7 +91,7 @@ class _NavButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color fg = enabled
-        ? (filled ? Colors.white : primary)
+        ? (filled ? AppColors.of(context).onPrimary : primary)
         : disabledText;
     final Color bg = enabled
         ? (filled ? primary : surface)

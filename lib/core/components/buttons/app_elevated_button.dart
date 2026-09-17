@@ -22,8 +22,9 @@ class AppElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color bg = backgroundColor ?? AppColors.of(context).primary;
-    final Color fg = textColor ?? Colors.white;
+    final AppColors colors = AppColors.of(context);
+    final Color bg = backgroundColor ?? colors.primary;
+    final Color fg = textColor ?? colors.onPrimary;
 
     return SizedBox(
       width: width,
@@ -41,7 +42,7 @@ class AppElevatedButton extends StatelessWidget {
             vertical: Dimensions.padding14,
           ),
           elevation: Dimensions.itemHeight1,
-          shadowColor: Colors.black12,
+          shadowColor: colors.shadow,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimensions.borderRadiusPill),
           ),

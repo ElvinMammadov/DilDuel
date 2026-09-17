@@ -42,7 +42,7 @@ class AppBottomSheet extends StatelessWidget {
         context: context,
         isScrollControlled: isScrollControlled,
         backgroundColor: Colors.transparent,
-        barrierColor: Colors.black54,
+        barrierColor: AppColors.of(context).barrier,
         builder: (_) => child,
       );
 

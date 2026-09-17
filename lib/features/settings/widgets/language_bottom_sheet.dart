@@ -127,10 +127,10 @@ class _LanguageRow extends StatelessWidget {
                     color: colors.primary,
                     shape: BoxShape.circle,
                   ),
-                  child: const SizedBox(
+                  child: SizedBox(
                     width: Dimensions.itemWidth18,
                     height: Dimensions.itemHeight18,
-                    child: Icon(Icons.check, size: 11, color: Colors.white),
+                    child: Icon(Icons.check, size: 11, color: colors.onPrimary),
                   ),
                 )
               else

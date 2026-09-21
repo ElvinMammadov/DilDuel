@@ -11,6 +11,7 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBackPressed;
   final bool showBackButton;
   final bool showProfileButton;
+  final bool showDictionarySwitcher;
 
   const DilDuelAppBar({
     super.key,
@@ -18,6 +19,7 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onBackPressed,
     this.showBackButton = true,
     this.showProfileButton = true,
+    this.showDictionarySwitcher = true,
   });
 
   @override
@@ -45,48 +47,50 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: showProfileButton
           ? <Widget>[
-              GestureDetector(
-                onTap: () => context.read<AppCubit>().toggleDictionaryType(),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: colors.surface,
-                    border: Border.all(color: colors.border),
-                    borderRadius: BorderRadius.circular(
-                        Dimensions.borderRadiusPill),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.padding12,
-                      vertical: Dimensions.padding8,
+              if (showDictionarySwitcher) ...<Widget>[
+                GestureDetector(
+                  onTap: () => context.read<AppCubit>().toggleDictionaryType(),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: colors.surface,
+                      border: Border.all(color: colors.border),
+                      borderRadius: BorderRadius.circular(
+                          Dimensions.borderRadiusPill),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          isAzDe ? 'Az' : 'De',
-                          style: AppTextStyles.labelMedium(colors.primary),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Dimensions.itemWidth6,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Dimensions.padding12,
+                        vertical: Dimensions.padding8,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            isAzDe ? 'Az' : 'De',
+                            style: AppTextStyles.labelMedium(colors.primary),
                           ),
-                          child: Icon(
-                            Icons.arrow_forward_rounded,
-                            size: Dimensions.itemWidth14,
-                            color: colors.primary,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: Dimensions.itemWidth6,
+                            ),
+                            child: Icon(
+                              Icons.arrow_forward_rounded,
+                              size: Dimensions.itemWidth14,
+                              color: colors.primary,
+                            ),
                           ),
-                        ),
-                        Text(
-                          isAzDe ? 'De' : 'Az',
-                          style:
-                              AppTextStyles.labelMedium(colors.textSecondary),
-                        ),
-                      ],
+                          Text(
+                            isAzDe ? 'De' : 'Az',
+                            style: AppTextStyles.labelMedium(
+                                colors.textSecondary),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: Dimensions.itemWidth8),
+                const SizedBox(width: Dimensions.itemWidth8),
+              ],
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/settings'),
                 child: SizedBox(

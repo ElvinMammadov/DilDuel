@@ -43,6 +43,7 @@ class _HomeShellState extends State<HomeShell> {
         appBar: DilDuelAppBar(
           title: 'app.title'.tr(),
           showBackButton: false,
+          showDictionarySwitcher: _currentIndex == 0,
         ),
         body: IndexedStack(
           index: _currentIndex,

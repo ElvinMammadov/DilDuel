@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source.dart';
+import 'package:flutter_dic/core/data/models/answer_record.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:flutter_dic/features/quiz/domain/models/quiz_result.dart';
 import 'package:injectable/injectable.dart';
@@ -24,6 +25,10 @@ class DBHelper implements WordLocalDataSource {
   static const String unknownWords = 'unknown_words';
   static const String trainingProgress = 'training_progress';
   static const String trainingLevelPosition = 'training_level_position';
+  static const String listenedWords = 'listened_words';
+  static const String listeningResults = 'listening_results';
+  static const String quizResultAnswers = 'quiz_result_answers';
+  static const String listeningResultAnswers = 'listening_result_answers';
 
   // ── shared columns ───────────────────────────────────────────────────────
   static const String colId = 'id';
@@ -98,11 +103,28 @@ class DBHelper implements WordLocalDataSource {
     ''');
   }
 
+  static Future<void> _createListenedWordsTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS $listenedWords(
+        key     TEXT NOT NULL,
+        value   TEXT NOT NULL,
+        date    DATETIME DEFAULT CURRENT_TIMESTAMP,
+        type    TEXT,
+        word_id TEXT,
+        PRIMARY KEY (key, value)
+      )
+    ''');
+  }
+
   static Future<void> _ensureTables(Database db) async {
     await _createQuizResultsTable(db);
     await _createUnknownWordsTable(db);
     await _createTrainingProgressTable(db);
     await _createTrainingLevelPositionTable(db);
+    await _createListenedWordsTable(db);
+    await _createListeningResultsTable(db);
+    await _createQuizResultAnswersTable(db);
+    await _createListeningResultAnswersTable(db);
     await _migrateAddWordId(db);
   }
 
@@ -456,18 +478,194 @@ class DBHelper implements WordLocalDataSource {
     );
   }
 
+  // ── Listened-word methods ─────────────────────────────────────────────────
+
+  static Future<void> addListenedWord(Word word) async {
+    await _db!.insert(
+      listenedWords,
+      <String, Object?>{
+        colKey: word.key,
+        colValue: word.value,
+        colType: word.dicType,
+        'word_id': word.id,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<void> removeListenedWord(Word word) async {
+    await _db!.delete(
+      listenedWords,
+      where: 'UPPER(key) = ? AND value = ?',
+      whereArgs: <Object?>[word.key.toUpperCase(), word.value],
+    );
+  }
+
+  static Future<bool> isListenedWord(Word word) async {
+    final List<Map<String, Object?>> result = await _db!.query(
+      listenedWords,
+      where: 'UPPER(key) = ? AND value = ?',
+      whereArgs: <Object?>[word.key.toUpperCase(), word.value],
+    );
+    return result.isNotEmpty;
+  }
+
+  static Future<List<String>> getAllListenedWords() async {
+    final List<Map<String, Object?>> result =
+        await _db!.query(listenedWords, orderBy: 'date DESC');
+    return result
+        .map((Map<String, Object?> row) => row[colKey] as String)
+        .toList();
+  }
+
+  static Future<Word?> getListenedWord(String key) async {
+    final List<Map<String, Object?>> result = await _db!.query(
+      listenedWords,
+      where: 'UPPER(key) = ?',
+      whereArgs: <Object?>[key.toUpperCase()],
+    );
+    if (result.isEmpty) return null;
+    final Map<String, Object?> row = result.first;
+    return Word(
+      id: row['word_id'] as String?,
+      key: row[colKey] as String? ?? '',
+      value: row[colValue] as String? ?? '',
+      dicType: row[colType] as String? ?? '',
+    );
+  }
+
+  // ── Listening result methods ──────────────────────────────────────────────
+
+  static Future<void> _createListeningResultsTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS $listeningResults(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        score INTEGER NOT NULL,
+        totalQuestions INTEGER NOT NULL,
+        dateTime TEXT NOT NULL
+      )
+    ''');
+  }
+
+  static Future<void> _createQuizResultAnswersTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS $quizResultAnswers(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        result_id INTEGER NOT NULL,
+        question TEXT NOT NULL,
+        correct_answer TEXT NOT NULL,
+        given_answer TEXT NOT NULL,
+        is_correct INTEGER NOT NULL
+      )
+    ''');
+  }
+
+  static Future<void> _createListeningResultAnswersTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS $listeningResultAnswers(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        result_id INTEGER NOT NULL,
+        question TEXT NOT NULL,
+        correct_answer TEXT NOT NULL,
+        given_answer TEXT NOT NULL,
+        is_correct INTEGER NOT NULL
+      )
+    ''');
+  }
+
+  static Future<void> insertListeningResult(QuizResult result) async {
+    await _db!.transaction((Transaction txn) async {
+      final int id = await txn.insert(listeningResults, <String, dynamic>{
+        'score': result.score,
+        'totalQuestions': result.totalQuestions,
+        'dateTime': result.dateTime.toIso8601String(),
+      });
+      for (final AnswerRecord a in result.answers) {
+        await txn.insert(listeningResultAnswers, <String, dynamic>{
+          'result_id': id,
+          'question': a.question,
+          'correct_answer': a.correctAnswer,
+          'given_answer': a.givenAnswer,
+          'is_correct': a.isCorrect ? 1 : 0,
+        });
+      }
+    });
+  }
+
+  static Future<List<QuizResult>> getListeningResults() async {
+    final List<Map<String, dynamic>> maps =
+        await _db!.query(listeningResults, orderBy: 'dateTime DESC');
+    final List<QuizResult> results = <QuizResult>[];
+    for (final Map<String, dynamic> map in maps) {
+      final int id = map['id'] as int;
+      final List<Map<String, dynamic>> answerMaps = await _db!.query(
+        listeningResultAnswers,
+        where: 'result_id = ?',
+        whereArgs: <Object?>[id],
+      );
+      final List<AnswerRecord> answers =
+          answerMaps.map(AnswerRecord.fromMap).toList();
+      results.add(QuizResult(
+        id: id,
+        score: map['score'] as int,
+        totalQuestions: map['totalQuestions'] as int,
+        dateTime: DateTime.parse(map['dateTime'] as String),
+        answers: answers,
+      ));
+    }
+    return results;
+  }
+
+  static Future<Map<String, dynamic>> getListeningStatistics() async {
+    final List<Map<String, dynamic>> results = await _db!.rawQuery('''
+      SELECT
+        COUNT(*) as totalSessions,
+        AVG(CAST(score AS FLOAT) / CAST(totalQuestions AS FLOAT) * 100)
+          as averageScore
+      FROM $listeningResults
+    ''');
+    return <String, dynamic>{
+      'totalSessions': results[0]['totalSessions'] as int,
+      'averageScore':
+          (results[0]['averageScore'] as double?)?.toStringAsFixed(1) ?? '0.0',
+    };
+  }
+
   // ── Quiz methods ──────────────────────────────────────────────────────────
 
-  static Future<int> insertQuizResult(QuizResult result) async =>
-      _db!.insert(quizResults, result.toMap());
+  static Future<void> insertQuizResult(QuizResult result) async {
+    await _db!.transaction((Transaction txn) async {
+      final int id = await txn.insert(quizResults, result.toMap());
+      for (final AnswerRecord a in result.answers) {
+        await txn.insert(quizResultAnswers, <String, dynamic>{
+          'result_id': id,
+          'question': a.question,
+          'correct_answer': a.correctAnswer,
+          'given_answer': a.givenAnswer,
+          'is_correct': a.isCorrect ? 1 : 0,
+        });
+      }
+    });
+  }
 
   static Future<List<QuizResult>> getQuizResults() async {
     final List<Map<String, dynamic>> maps = await _db!.query(
       quizResults,
       orderBy: 'dateTime DESC',
     );
-    return List<QuizResult>.generate(
-        maps.length, (int i) => QuizResult.fromMap(maps[i]));
+    final List<QuizResult> results = <QuizResult>[];
+    for (final Map<String, dynamic> map in maps) {
+      final int id = map['id'] as int;
+      final List<Map<String, dynamic>> answerMaps = await _db!.query(
+        quizResultAnswers,
+        where: 'result_id = ?',
+        whereArgs: <Object?>[id],
+      );
+      final List<AnswerRecord> answers =
+          answerMaps.map(AnswerRecord.fromMap).toList();
+      results.add(QuizResult.fromMap(map, answers: answers));
+    }
+    return results;
   }
 
   static Future<Map<String, dynamic>> getQuizStatistics() async {
@@ -502,5 +700,9 @@ class DBHelper implements WordLocalDataSource {
     await db.delete(trainingLevelPosition);
     await db.delete(quizResults);
     await db.delete(trainingProgress);
+    await db.delete(listenedWords);
+    await db.delete(listeningResults);
+    await db.delete(quizResultAnswers);
+    await db.delete(listeningResultAnswers);
   }
 }

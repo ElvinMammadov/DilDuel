@@ -3,7 +3,7 @@
     "title": "Dil Duel",
     "settings": "Parametrlər",
     "bookmarks": "Seçilmişlər",
-    "quiz": "Test",
+    "quiz": "Testlər",
     "search": "Axtar",
     "training": "Məşq"
   },
@@ -62,7 +62,7 @@
     "logout_success": "Uğurla çıxış etdiniz"
   },
   "quiz": {
-    "title": "Test",
+    "title": "Tərcümə",
     "start": "Testə başla",
     "next": "Növbəti",
     "finish": "Bitir",
@@ -83,6 +83,8 @@
       "title": "Nəticələr",
       "history": "Test Tarixçəsi",
       "statistics": "Test Statistikası",
+      "translation_statistics": "Tərcümə Statistikası",
+      "translation_history": "Tərcümə Tarixçəsi",
       "stats_details": "Ümumi Test: {}\nOrta Xal: {}%",
       "total_quizzes_label": "Ümumi Test",
       "average_score_label": "Orta Xal",
@@ -97,7 +99,10 @@
       "title_excellent": "Təbriklər!",
       "title_great": "Əla nəticə!",
       "title_good": "Yaxşı cəhd!",
-      "title_keep_trying": "Davam edin!"
+      "title_keep_trying": "Davam edin!",
+      "answer_breakdown": "Sual təfsilatı",
+      "your_answer": "Sizin cavabınız",
+      "correct_answer": "Düzgün cavab"
     }
   },
   "search": {
@@ -122,7 +127,24 @@
     "unknown": "Bilinməyənlər",
     "unknown_empty": "Bilinməyən söz yoxdur",
     "unknown_empty_description": "Məşq zamanı bilmədiyiniz sözlər buraya əlavə olunacaq",
-    "unknown_removed": "Bilinməyənlərdən silindi"
+    "unknown_removed": "Bilinməyənlərdən silindi",
+    "listened": "Dinlənilmişlər",
+    "listened_empty": "Dinlənilmiş söz yoxdur",
+    "listened_empty_description": "Dinləmə testini uğurla tamamladığınız sözlər burada görünəcək",
+    "listened_removed": "Dinlənilmişlərdən silindi"
+  },
+  "listening": {
+    "title": "Dinləmə",
+    "start": "Dinləmə testinə başla",
+    "tap_to_replay": "Yenidən dinləmək üçün toxun",
+    "error_not_enough": "Test üçün kifayət qədər söz yoxdur",
+    "results": {
+      "statistics": "Dinləmə Statistikası",
+      "history": "Dinləmə Tarixçəsi",
+      "total_sessions_label": "Ümumi Sessiya",
+      "empty": "Hələ dinləmə nəticəsi yoxdur. Dinləmə testini keçin!",
+      "session_number": "Sessiya #{}"
+    }
   },
   "word": {
     "translation": "TƏRCÜMƏ",

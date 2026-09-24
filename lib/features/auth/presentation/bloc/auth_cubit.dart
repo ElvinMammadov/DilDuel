@@ -7,12 +7,14 @@ class AuthCubit extends Cubit<AuthState> {
     this._bookmarkRepository,
     this._quizResultRepository,
     this._trainingProgressRepository,
+    this._listeningResultRepository,
   ) : super(const AuthInitial());
 
   final AuthRepository _authRepository;
   final BookmarkRepository _bookmarkRepository;
   final QuizResultRepository _quizResultRepository;
   final TrainingProgressRepository _trainingProgressRepository;
+  final ListeningResultRepository _listeningResultRepository;
   StreamSubscription<AuthUser?>? _authSub;
 
   /// Subscribes to Firebase auth-state changes. Call once at app start.
@@ -45,6 +47,8 @@ class AuthCubit extends Cubit<AuthState> {
         (_bookmarkRepository as SyncBookmarkRepository).mergeOnSignIn(uid),
         (_quizResultRepository as SyncQuizResultRepository).mergeOnSignIn(uid),
         (_trainingProgressRepository as SyncTrainingProgressRepository)
+            .mergeOnSignIn(uid),
+        (_listeningResultRepository as SyncListeningResultRepository)
             .mergeOnSignIn(uid),
       ]);
     } catch (e) {

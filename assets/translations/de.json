@@ -3,7 +3,7 @@
     "title": "Sprachduell",
     "settings": "Einstellungen",
     "bookmarks": "Lesezeichen",
-    "quiz": "Quiz",
+    "quiz": "Tests",
     "search": "Suche",
     "training": "Training"
   },
@@ -62,7 +62,7 @@
     "logout_success": "Erfolgreich abgemeldet"
   },
   "quiz": {
-    "title": "Quiz",
+    "title": "Übersetzung",
     "start": "Quiz starten",
     "next": "Weiter",
     "finish": "Beenden",
@@ -83,6 +83,8 @@
       "title": "Ergebnisse",
       "history": "Quiz-Verlauf",
       "statistics": "Quiz-Statistiken",
+      "translation_statistics": "Übersetzungsstatistiken",
+      "translation_history": "Übersetzungsverlauf",
       "stats_details": "Gesamtanzahl Quiz: {}\nDurchschnittliche Punktzahl: {}%",
       "total_quizzes_label": "Gesamtanzahl Quiz",
       "average_score_label": "Ø Punktzahl",
@@ -97,7 +99,10 @@
       "title_excellent": "Herzlichen Glückwunsch!",
       "title_great": "Hervorragendes Ergebnis!",
       "title_good": "Guter Versuch!",
-      "title_keep_trying": "Weiter so!"
+      "title_keep_trying": "Weiter so!",
+      "answer_breakdown": "Antwortübersicht",
+      "your_answer": "Ihre Antwort",
+      "correct_answer": "Richtige Antwort"
     }
   },
   "search": {
@@ -122,7 +127,24 @@
     "unknown": "Unbekannte",
     "unknown_empty": "Keine unbekannten Wörter",
     "unknown_empty_description": "Wörter, die Sie beim Training nicht kennen, werden hier angezeigt",
-    "unknown_removed": "Aus Unbekannte entfernt"
+    "unknown_removed": "Aus Unbekannte entfernt",
+    "listened": "Gehörte Wörter",
+    "listened_empty": "Keine gehörten Wörter",
+    "listened_empty_description": "Wörter, die Sie im Hörtest richtig beantwortet haben, erscheinen hier",
+    "listened_removed": "Aus gehörten Wörtern entfernt"
+  },
+  "listening": {
+    "title": "Hören",
+    "start": "Hörtest starten",
+    "tap_to_replay": "Zum Wiederholen antippen",
+    "error_not_enough": "Nicht genug Wörter für den Test",
+    "results": {
+      "statistics": "Hörstatistiken",
+      "history": "Hörverlauf",
+      "total_sessions_label": "Gesamte Sitzungen",
+      "empty": "Noch keine Hörergebnisse. Machen Sie einen Hörtest!",
+      "session_number": "Sitzung #{}"
+    }
   },
   "word": {
     "translation": "ÜBERSETZUNG",

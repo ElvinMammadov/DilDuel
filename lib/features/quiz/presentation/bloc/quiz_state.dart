@@ -32,13 +32,17 @@ class QuizInProgress extends QuizState {
   /// Whether the last answer was correct (null if no answer yet)
   final bool? lastAnswerCorrect;
 
+  /// Accumulated per-question answer records for this session
+  final List<AnswerRecord> answers;
+
   /// Creates a new [QuizInProgress] state
   QuizInProgress({
     required this.words,
     required this.currentIndex,
     required this.score,
     this.lastAnswerCorrect,
-  });
+    List<AnswerRecord>? answers,
+  }) : answers = answers ?? const <AnswerRecord>[];
 
   /// Whether all questions have been answered
   bool get isComplete => currentIndex >= words.length;
@@ -49,12 +53,14 @@ class QuizInProgress extends QuizState {
     int? currentIndex,
     int? score,
     bool? lastAnswerCorrect,
+    List<AnswerRecord>? answers,
   }) =>
       QuizInProgress(
         words: words ?? this.words,
         currentIndex: currentIndex ?? this.currentIndex,
         score: score ?? this.score,
         lastAnswerCorrect: lastAnswerCorrect,
+        answers: answers ?? this.answers,
       );
 }
 

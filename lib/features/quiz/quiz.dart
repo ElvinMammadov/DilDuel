@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/components/app_segmented_control.dart';
 import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
+import 'package:flutter_dic/core/data/models/answer_record.dart';
+import 'package:flutter_dic/core/data/repositories/listening_result_repository.dart';
 import 'package:flutter_dic/core/data/repositories/quiz_result_repository.dart';
 import 'package:flutter_dic/core/error/failures.dart';
 import 'package:get_it/get_it.dart';
@@ -16,6 +18,7 @@ import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/quiz/domain/entities/quiz_word.dart';
 import 'package:flutter_dic/features/quiz/domain/models/quiz_result.dart';
 import 'package:flutter_dic/features/quiz/domain/repositories/quiz_repository.dart';
+import 'package:flutter_dic/features/listening/listening.dart';
 import 'package:injectable/injectable.dart';
 import 'package:dartz/dartz.dart' as dartz;
 

@@ -48,16 +48,27 @@ class QuizBloc extends Cubit<QuizState> {
     final QuizWord currentWord = currentState.words[currentState.currentIndex];
     final bool isCorrect = currentWord.correctAnswer == answer;
 
+    final AnswerRecord answerRecord = AnswerRecord(
+      question: currentWord.question,
+      correctAnswer: currentWord.correctAnswer,
+      givenAnswer: answer,
+      isCorrect: isCorrect,
+    );
+    final List<AnswerRecord> newAnswers = <AnswerRecord>[
+      ...currentState.answers,
+      answerRecord,
+    ];
+
     final int newScore =
         isCorrect ? currentState.score + 1 : currentState.score;
     final int newIndex = currentState.currentIndex + 1;
 
     if (newIndex >= currentState.words.length) {
-      // Save quiz result to database
       final QuizResult result = QuizResult(
         score: newScore,
         totalQuestions: currentState.words.length,
         dateTime: DateTime.now(),
+        answers: newAnswers,
       );
       await quizResultRepository.insertQuizResult(result);
 
@@ -70,6 +81,7 @@ class QuizBloc extends Cubit<QuizState> {
         currentIndex: newIndex,
         score: newScore,
         lastAnswerCorrect: isCorrect,
+        answers: newAnswers,
       ));
     }
   }

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dic/core/data/models/answer_record.dart';
 import 'package:flutter_dic/core/data/repositories/quiz_result_repository.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/quiz/domain/models/quiz_result.dart';
@@ -50,6 +51,8 @@ class FirestoreQuizResultRepository implements QuizResultRepository {
         'score': result.score,
         'totalQuestions': result.totalQuestions,
         'dateTime': result.dateTime.toIso8601String(),
+        'answers':
+            result.answers.map((AnswerRecord a) => a.toJson()).toList(),
         'takenAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
@@ -97,9 +100,18 @@ class FirestoreQuizResultRepository implements QuizResultRepository {
     }
   }
 
-  QuizResult _fromData(Map<String, dynamic> data) => QuizResult(
-        score: data['score'] as int,
-        totalQuestions: data['totalQuestions'] as int,
-        dateTime: DateTime.parse(data['dateTime'] as String),
-      );
+  QuizResult _fromData(Map<String, dynamic> data) {
+    final List<dynamic> rawAnswers =
+        data['answers'] as List<dynamic>? ?? <dynamic>[];
+    final List<AnswerRecord> answers = rawAnswers
+        .map((dynamic a) =>
+            AnswerRecord.fromJson(a as Map<String, dynamic>))
+        .toList();
+    return QuizResult(
+      score: data['score'] as int,
+      totalQuestions: data['totalQuestions'] as int,
+      dateTime: DateTime.parse(data['dateTime'] as String),
+      answers: answers,
+    );
+  }
 }

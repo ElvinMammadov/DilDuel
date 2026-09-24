@@ -200,6 +200,23 @@ class FirestoreBookmarkRepository implements BookmarkRepository {
     }
   }
 
+  // ── Listened words (local-only, no Firestore sync) ───────────────────────
+
+  @override
+  Future<void> addListenedWord(Word word) async {}
+
+  @override
+  Future<void> removeListenedWord(Word word) async {}
+
+  @override
+  Future<bool> isListenedWord(Word word) async => false;
+
+  @override
+  Future<List<String>> getAllListenedWords() async => <String>[];
+
+  @override
+  Future<Word?> getListenedWord(String key) async => null;
+
   // ── Sync helpers ──────────────────────────────────────────────────────────
 
   /// Returns all remote bookmarks as [Word] records.

@@ -17,4 +17,12 @@ abstract class BookmarkRepository {
   Future<bool> isUnknownWord(Word word);
   Future<List<String>> getAllUnknownWords();
   Future<Word?> getUnknownWord(String key);
+
+  // ── Listened words ────────────────────────────────────────────────────────
+
+  Future<void> addListenedWord(Word word);
+  Future<void> removeListenedWord(Word word);
+  Future<bool> isListenedWord(Word word);
+  Future<List<String>> getAllListenedWords();
+  Future<Word?> getListenedWord(String key);
 }

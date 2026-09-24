@@ -68,14 +68,50 @@ class _CardContent extends StatefulWidget {
   State<_CardContent> createState() => _CardContentState();
 }
 
-class _CardContentState extends State<_CardContent> {
+class _CardContentState extends State<_CardContent>
+    with SingleTickerProviderStateMixin {
+  late final FlutterTts _flutterTts;
+  late final AnimationController _speakController;
   bool _isBookmarked = false;
   bool _isUnknown = false;
+  bool _isSpeaking = false;
 
   @override
   void initState() {
     super.initState();
+    _flutterTts = FlutterTts();
+    _flutterTts.setLanguage('de-DE');
+    _flutterTts.setSpeechRate(0.5);
+    _flutterTts.setCompletionHandler(() {
+      if (mounted) setState(() => _isSpeaking = false);
+    });
+    _speakController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
     _initActionStates();
+  }
+
+  Future<void> _speak() async {
+    if (_isSpeaking) {
+      await _flutterTts.stop();
+      _speakController.stop();
+      _speakController.reset();
+      if (mounted) setState(() => _isSpeaking = false);
+      return;
+    }
+    if (mounted) {
+      setState(() => _isSpeaking = true);
+      _speakController.repeat(reverse: true);
+    }
+    await _flutterTts.speak(widget.word.key);
+  }
+
+  @override
+  void dispose() {
+    _flutterTts.stop();
+    _speakController.dispose();
+    super.dispose();
   }
 
   Future<void> _initActionStates() async {
@@ -278,6 +314,16 @@ class _CardContentState extends State<_CardContent> {
               // ── Action buttons (row) ─────────────────────────────────
               Row(
                 children: <Widget>[
+                  _SpeakButton(
+                    controller: _speakController,
+                    isSpeaking: _isSpeaking,
+                    primary: primary,
+                    primaryTint: primaryTint,
+                    onPrimary: colors.onPrimary,
+                    chipBg: chipBg,
+                    onTap: _speak,
+                  ),
+                  const SizedBox(width: Dimensions.itemWidth8),
                   _ActionButton(
                     icon:
                         _isBookmarked ? Icons.bookmark : Icons.bookmark_border,
@@ -402,6 +448,60 @@ class _ActionButton extends StatelessWidget {
             size: Dimensions.itemWidth18,
             color: isActive ? activeColor : inactiveColor,
           ),
+        ),
+      );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _SpeakButton extends StatelessWidget {
+  final AnimationController controller;
+  final bool isSpeaking;
+  final Color primary;
+  final Color primaryTint;
+  final Color onPrimary;
+  final Color chipBg;
+  final VoidCallback onTap;
+
+  const _SpeakButton({
+    required this.controller,
+    required this.isSpeaking,
+    required this.primary,
+    required this.primaryTint,
+    required this.onPrimary,
+    required this.chipBg,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: onTap,
+        child: AnimatedBuilder(
+          animation: controller,
+          builder: (BuildContext ctx, Widget? _) {
+            final double scale =
+                isSpeaking ? 1.0 + controller.value * 0.1 : 1.0;
+            return Transform.scale(
+              scale: scale,
+              child: SizedBox(
+                width: Dimensions.itemWidth36,
+                height: Dimensions.itemHeight36,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: isSpeaking ? primary : chipBg,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    isSpeaking
+                        ? Icons.stop_rounded
+                        : Icons.volume_up_outlined,
+                    size: Dimensions.itemWidth18,
+                    color: isSpeaking ? onPrimary : primary,
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       );
 }

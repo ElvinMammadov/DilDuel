@@ -18,6 +18,7 @@ import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';
 import 'package:flutter_dic/features/shared/widgets/empty_state_view.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 // State & logic
 part 'presentation/bloc/training_state.dart';

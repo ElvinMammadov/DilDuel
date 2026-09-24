@@ -10,13 +10,14 @@ class QuizScreen extends StatelessWidget {
         listener: (BuildContext context, AuthState state) =>
             context.read<QuizBloc>().cancelQuiz(),
         child: DefaultTabController(
-          length: 2,
+          length: 3,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               AppSegmentedControl(
                 labels: <String>[
                   'quiz.title'.tr(),
+                  'listening.title'.tr(),
                   'quiz.results.title'.tr(),
                 ],
               ),
@@ -24,6 +25,7 @@ class QuizScreen extends StatelessWidget {
                 child: TabBarView(
                   children: <Widget>[
                     QuizContent(),
+                    ListeningScreen(),
                     ResultsTab(),
                   ],
                 ),

@@ -10,19 +10,41 @@ class BookmarksScreen extends StatefulWidget {
 class _BookmarksScreenState extends State<BookmarksScreen> {
   static const String _keyBookmarks = 'bookmarks';
   static const String _keyUnknown = 'unknown';
+  static const String _keyListened = 'listened';
 
   static const List<String> _categories = <String>[
     _keyBookmarks,
     _keyUnknown,
+    _keyListened,
   ];
 
   String _selected = _keyBookmarks;
 
-  String _labelFor(String key) =>
-      key == _keyBookmarks ? 'app.bookmarks'.tr() : 'bookmarks.unknown'.tr();
+  String _labelFor(String key) {
+    switch (key) {
+      case _keyBookmarks:
+        return 'app.bookmarks'.tr();
+      case _keyUnknown:
+        return 'bookmarks.unknown'.tr();
+      case _keyListened:
+        return 'bookmarks.listened'.tr();
+      default:
+        return key;
+    }
+  }
 
-  IconData _iconFor(String key) =>
-      key == _keyBookmarks ? Icons.bookmark_outline : Icons.help_outline;
+  IconData _iconFor(String key) {
+    switch (key) {
+      case _keyBookmarks:
+        return Icons.bookmark_outline;
+      case _keyUnknown:
+        return Icons.help_outline;
+      case _keyListened:
+        return Icons.headphones_outlined;
+      default:
+        return Icons.list;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +53,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        // ── Category dropdown ───────────────────────────────────────
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: Dimensions.padding16,
@@ -97,11 +118,12 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
           ),
         ),
 
-        // ── Content ─────────────────────────────────────────────────
         Expanded(
-          child: _selected == _keyBookmarks
-              ? const _BookmarksTab()
-              : const _UnknownTab(),
+          child: switch (_selected) {
+            _keyUnknown => const _UnknownTab(),
+            _keyListened => const _ListenedTab(),
+            _ => const _BookmarksTab(),
+          },
         ),
       ],
     );
@@ -242,6 +264,77 @@ class _UnknownTab extends StatelessWidget {
       );
 }
 
+// ── Listened tab ────────────────────────────────────────────────────────────
+
+class _ListenedTab extends StatelessWidget {
+  const _ListenedTab();
+
+  @override
+  Widget build(BuildContext context) =>
+      BlocBuilder<BookmarksBloc, BookmarksState>(
+        builder: (BuildContext context, BookmarksState state) {
+          if (state is BookmarksLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is BookmarksLoaded) {
+            final AppColors colors = AppColors.of(context);
+
+            if (state.listenedWords.isEmpty) {
+              return EmptyStateView(
+                icon: Icons.headphones_outlined,
+                color: colors.primary,
+                tintColor: colors.primaryTint,
+                title: 'bookmarks.listened_empty'.tr(),
+                description: 'bookmarks.listened_empty_description'.tr(),
+              );
+            }
+            return ListView.builder(
+              padding: const EdgeInsets.fromLTRB(
+                Dimensions.padding20,
+                Dimensions.padding8,
+                Dimensions.padding20,
+                Dimensions.padding20,
+              ),
+              itemCount: state.listenedWords.length,
+              itemBuilder: (BuildContext context, int index) {
+                final Word word = state.listenedWords[index];
+                return _BookmarkItem(
+                  word: word,
+                  onRemoveWithUndo: () {
+                    final String? article = word.article;
+                    final String bare = article != null &&
+                            word.key.startsWith('$article ')
+                        ? word.key.substring(article.length + 1)
+                        : word.key;
+                    context.read<BookmarksBloc>().removeListenedWord(word);
+                    AppSnackbar.show(
+                      context,
+                      type: SnackbarType.info,
+                      title: bare,
+                      subtitle: 'bookmarks.listened_removed'.tr(),
+                      action: SnackbarAction(
+                        label: 'bookmarks.undo'.tr(),
+                        onPressed: () async {
+                          await DBHelper.addListenedWord(word);
+                          if (context.mounted) {
+                            context.read<BookmarksBloc>().loadBookmarks();
+                          }
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          }
+          if (state is BookmarksError) {
+            return _BookmarksErrorView(state: state);
+          }
+          return Center(child: Text('common.something_wrong'.tr()));
+        },
+      );
+}
+
 // ── Shared error view ───────────────────────────────────────────────────────
 
 class _BookmarksErrorView extends StatelessWidget {
@@ -272,7 +365,7 @@ class _BookmarksErrorView extends StatelessWidget {
       );
 }
 
-// ── Bookmark item (shared by both tabs) ─────────────────────────────────────
+// ── Bookmark item (shared by all tabs) ──────────────────────────────────────
 
 class _BookmarkItem extends StatelessWidget {
   const _BookmarkItem({

@@ -13,11 +13,13 @@ class BookmarksBloc extends Cubit<BookmarksState> {
         <Future<List<String>>>[
           _repository.getAllBookmarks(),
           _repository.getAllUnknownWords(),
+          _repository.getAllListenedWords(),
         ],
       );
 
       final List<String> bookmarkKeys = keyLists[0];
       final List<String> unknownKeys = keyLists[1];
+      final List<String> listenedKeys = keyLists[2];
 
       final List<Word> bookmarks = <Word>[];
       for (final String key in bookmarkKeys) {
@@ -31,7 +33,17 @@ class BookmarksBloc extends Cubit<BookmarksState> {
         if (word != null) unknownWords.add(word);
       }
 
-      emit(BookmarksLoaded(bookmarks, unknownWords: unknownWords));
+      final List<Word> listenedWords = <Word>[];
+      for (final String key in listenedKeys) {
+        final Word? word = await _repository.getListenedWord(key);
+        if (word != null) listenedWords.add(word);
+      }
+
+      emit(BookmarksLoaded(
+        bookmarks,
+        unknownWords: unknownWords,
+        listenedWords: listenedWords,
+      ));
     } catch (e) {
       emit(BookmarksError(e.toString()));
     }
@@ -67,6 +79,15 @@ class BookmarksBloc extends Cubit<BookmarksState> {
   Future<void> removeUnknownWord(Word word) async {
     try {
       await _repository.removeUnknownWord(word);
+      await loadBookmarks();
+    } catch (e) {
+      emit(BookmarksError(e.toString()));
+    }
+  }
+
+  Future<void> removeListenedWord(Word word) async {
+    try {
+      await _repository.removeListenedWord(word);
       await loadBookmarks();
     } catch (e) {
       emit(BookmarksError(e.toString()));

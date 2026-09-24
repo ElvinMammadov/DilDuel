@@ -60,4 +60,30 @@ class LocalBookmarkRepository implements BookmarkRepository {
     }
     return words;
   }
+
+  @override
+  Future<void> addListenedWord(Word word) => DBHelper.addListenedWord(word);
+
+  @override
+  Future<void> removeListenedWord(Word word) =>
+      DBHelper.removeListenedWord(word);
+
+  @override
+  Future<bool> isListenedWord(Word word) => DBHelper.isListenedWord(word);
+
+  @override
+  Future<List<String>> getAllListenedWords() => DBHelper.getAllListenedWords();
+
+  @override
+  Future<Word?> getListenedWord(String key) => DBHelper.getListenedWord(key);
+
+  Future<List<Word>> getAllListenedWordRecords() async {
+    final List<String> keys = await getAllListenedWords();
+    final List<Word> words = <Word>[];
+    for (final String k in keys) {
+      final Word? w = await getListenedWord(k);
+      if (w != null) words.add(w);
+    }
+    return words;
+  }
 }

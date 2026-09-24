@@ -127,4 +127,19 @@ class SyncBookmarkRepository implements BookmarkRepository {
 
   @override
   Future<Word?> getUnknownWord(String key) => _local.getUnknownWord(key);
+
+  @override
+  Future<void> addListenedWord(Word word) => _local.addListenedWord(word);
+
+  @override
+  Future<void> removeListenedWord(Word word) => _local.removeListenedWord(word);
+
+  @override
+  Future<bool> isListenedWord(Word word) => _local.isListenedWord(word);
+
+  @override
+  Future<List<String>> getAllListenedWords() => _local.getAllListenedWords();
+
+  @override
+  Future<Word?> getListenedWord(String key) => _local.getListenedWord(key);
 }

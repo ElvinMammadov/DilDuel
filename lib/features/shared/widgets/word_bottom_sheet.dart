@@ -63,6 +63,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
   late final FlutterTts _flutterTts;
   late final AnimationController _speakController;
   bool _isBookmarked = false;
+  bool _isUnknown = false;
   bool _isSpeaking = false;
 
   bool get _isDeAz => widget.locale == 'de-DE';
@@ -80,12 +81,20 @@ class _WordBottomSheetState extends State<WordBottomSheet>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _checkIfBookmarked();
+    _initActionStates();
   }
 
-  Future<void> _checkIfBookmarked() async {
-    final bool v = await DBHelper.isBookmarked(widget.word);
-    if (mounted) setState(() => _isBookmarked = v);
+  Future<void> _initActionStates() async {
+    final List<bool> results = await Future.wait(<Future<bool>>[
+      DBHelper.isBookmarked(widget.word),
+      DBHelper.isUnknownWord(widget.word),
+    ]);
+    if (mounted) {
+      setState(() {
+        _isBookmarked = results[0];
+        _isUnknown = results[1];
+      });
+    }
   }
 
   Future<void> _speak() async {
@@ -128,6 +137,38 @@ class _WordBottomSheetState extends State<WordBottomSheet>
           type: adding ? SnackbarType.success : SnackbarType.info,
           title: label,
           subtitle: adding ? 'word.saved'.tr() : 'word.removed'.tr(),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        AppSnackbar.show(
+          context,
+          type: SnackbarType.error,
+          title: 'common.something_wrong'.tr(),
+        );
+      }
+    }
+  }
+
+  Future<void> _toggleUnknown() async {
+    final bool adding = !_isUnknown;
+    try {
+      final BookmarkRepository repo = sl<BookmarkRepository>();
+      if (_isUnknown) {
+        await repo.removeUnknownWord(widget.word);
+      } else {
+        await repo.addUnknownWord(widget.word);
+      }
+      if (mounted) {
+        setState(() => _isUnknown = !_isUnknown);
+        final String label = _bareWord(widget.word.key, widget.word.article);
+        AppSnackbar.show(
+          context,
+          type: adding ? SnackbarType.success : SnackbarType.info,
+          title: label,
+          subtitle: adding
+              ? 'word.marked_unknown'.tr()
+              : 'word.unknown_removed'.tr(),
         );
       }
     } catch (_) {
@@ -256,6 +297,17 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                             ? colors.warningTint
                             : colors.primaryTint,
                         onTap: _toggleBookmark,
+                      ),
+                      const SizedBox(width: Dimensions.itemWidth8),
+                      _CircleButton(
+                        icon: _isUnknown
+                            ? Icons.help
+                            : Icons.help_outline,
+                        color: _isUnknown ? colors.warning : colors.primary,
+                        background: _isUnknown
+                            ? colors.warningTint
+                            : colors.primaryTint,
+                        onTap: _toggleUnknown,
                       ),
                     ],
                   ),

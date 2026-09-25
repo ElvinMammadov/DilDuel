@@ -21,26 +21,30 @@ class _AppSegmentedControlState extends State<AppSegmentedControl> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _tabController?.removeListener(_onTabChanged);
+    _tabController?.animation?.removeListener(_onAnimationChanged);
+    _tabController?.removeListener(_onAnimationChanged);
     _tabController = DefaultTabController.of(context);
-    _tabController?.addListener(_onTabChanged);
+    _tabController?.animation?.addListener(_onAnimationChanged);
+    _tabController?.addListener(_onAnimationChanged);
   }
 
   @override
   void dispose() {
-    _tabController?.removeListener(_onTabChanged);
+    _tabController?.animation?.removeListener(_onAnimationChanged);
+    _tabController?.removeListener(_onAnimationChanged);
     super.dispose();
   }
 
-  void _onTabChanged() => setState(() {});
+  void _onAnimationChanged() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
-    final int selected = _tabController?.index ?? 0;
+    final double selected = _tabController?.animation?.value ??
+        (_tabController?.index ?? 0).toDouble();
+    final int selectedIndex = _tabController?.index ?? 0;
     final AppColors colors = AppColors.of(context);
 
     const double inset = Dimensions.padding4;
-    const Duration dur = Duration(milliseconds: 200);
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -62,10 +66,8 @@ class _AppSegmentedControlState extends State<AppSegmentedControl> {
               height: Dimensions.itemHeight40,
               child: Stack(
                 children: <Widget>[
-                  // Sliding thumb — only this element animates.
-                  AnimatedPositioned(
-                    duration: dur,
-                    curve: Curves.easeInOut,
+                  // Thumb tracks the TabController animation.
+                  Positioned(
                     left: selected * thumbW,
                     top: 0,
                     bottom: 0,
@@ -77,17 +79,17 @@ class _AppSegmentedControlState extends State<AppSegmentedControl> {
                           Dimensions.borderRadius - 2,
                         ),
                         boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                  color: colors.shadowMedium,
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
-                                ),
-                                BoxShadow(
-                                  color: colors.shadowSubtle,
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 1),
-                                ),
-                              ],
+                          BoxShadow(
+                            color: colors.shadowMedium,
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                          BoxShadow(
+                            color: colors.shadowSubtle,
+                            blurRadius: 2,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -103,7 +105,7 @@ class _AppSegmentedControlState extends State<AppSegmentedControl> {
                             child: Text(
                               widget.labels[i],
                               style: AppTextStyles.titleSmall(
-                                i == selected
+                                i == selectedIndex
                                     ? colors.textPrimary
                                     : colors.textSecondary,
                               ),

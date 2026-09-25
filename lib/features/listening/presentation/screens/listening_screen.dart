@@ -1,13 +1,25 @@
 part of listening;
 
-class ListeningScreen extends StatelessWidget {
+class ListeningScreen extends StatefulWidget {
   const ListeningScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => BlocProvider<ListeningCubit>(
-        create: (_) => sl<ListeningCubit>(),
-        child: const _ListeningView(),
-      );
+  State<ListeningScreen> createState() => _ListeningScreenState();
+}
+
+class _ListeningScreenState extends State<ListeningScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return BlocProvider<ListeningCubit>(
+      create: (_) => sl<ListeningCubit>(),
+      child: const _ListeningView(),
+    );
+  }
 }
 
 class _ListeningView extends StatelessWidget {

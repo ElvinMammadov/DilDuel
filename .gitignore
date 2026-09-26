@@ -44,6 +44,12 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Signing keys
+*.jks
+*.keystore
+key.properties
+android/key.properties
+
 # FVM Version Cache
 .fvm/
 

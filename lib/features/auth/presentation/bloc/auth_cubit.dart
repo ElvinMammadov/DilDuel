@@ -28,6 +28,12 @@ class AuthCubit extends Cubit<AuthState> {
           await _syncOnSignIn(user.uid);
           emit(AuthAuthenticated(user));
         } else {
+          // Clear user-specific local data before emitting so that listeners
+          // reacting to AuthUnauthenticated (e.g. cached Cubits resetting)
+          // always observe an already-empty database. This also handles the
+          // account-switch case where Firebase signs out user A and signs in
+          // user B without an explicit signOut() call.
+          await DBHelper.clearUserData();
           emit(const AuthUnauthenticated());
         }
       },
@@ -155,13 +161,12 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signOut() async {
     try {
       await _authRepository.signOut();
-      // Clear local data before emitting AuthUnauthenticated so that any
-      // listener reacting to the state change (e.g. resetting cached
-      // training/quiz state) sees an already-empty database.
-      await DBHelper.clearUserData();
+      // DB clearing and AuthUnauthenticated emission are handled by the
+      // auth stream listener when authStateChanges emits null after sign-out.
     } catch (e) {
       log('Sign-out error: $e', name: 'AuthCubit');
-    } finally {
+      // If sign-out throws, clear locally and emit so the app stays consistent.
+      await DBHelper.clearUserData();
       emit(const AuthUnauthenticated());
     }
   }

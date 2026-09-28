@@ -8,7 +8,7 @@ Flutter + Dart project using `flutter_bloc` (Cubit pattern), `sqflite`, `easy_lo
 - **Database**: `DBHelper` static SQLite helper; `bookmark` table schema has `key`, `value`, `date`, `type` columns
 - **i18n**: `easy_localization` with BCP-47 locale files at `assets/translations/` (`az.json`, `de.json`)
 - **Theme**: `AppTheme` class holds all colors, radii, and text styles; always use its constants
-  - `AppTheme.borderRadius` = 12px — standard cards and secondary buttons
+  - `AppTheme.borderRadius` = 16px — standard cards and secondary buttons
   - `AppTheme.borderRadiusPill` = 100px — CTA buttons (pill shape)
 - **Part files**: features use `part of` library pattern; avoid cross-library type imports by using callbacks
 - **Widget file organization**: One public widget per file. Private helper widgets (prefixed with `_`) that are only used by one parent widget stay in the same file — this is idiomatic Dart (Effective Dart explicitly supports multiple related classes per file). Extract a widget to its own file only when it becomes reusable across files or when the file grows large enough that scrolling past unrelated code becomes painful.

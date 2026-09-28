@@ -1,7 +1,9 @@
 part of auth;
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  const SignInScreen({super.key, this.onAuthenticated});
+
+  final VoidCallback? onAuthenticated;
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -73,7 +75,7 @@ class _SignInScreenState extends State<SignInScreen> {
       MaterialPageRoute<void>(
         builder: (_) => BlocProvider<AuthCubit>.value(
           value: context.read<AuthCubit>(),
-          child: const RegisterScreen(),
+          child: RegisterScreen(onAuthenticated: widget.onAuthenticated),
         ),
       ),
     );
@@ -83,19 +85,23 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) => BlocListener<AuthCubit, AuthState>(
         listener: (BuildContext ctx, AuthState state) {
           if (state is AuthAuthenticated) {
-            final NavigatorState navigator = Navigator.of(ctx);
-            final OverlayState? overlay = navigator.overlay;
-            navigator.popUntil((Route<dynamic> r) => r.isFirst);
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (overlay != null && overlay.mounted) {
-                AppSnackbar.showOnOverlay(
-                  overlay,
-                  type: SnackbarType.success,
-                  title: 'auth.sign_in.success'.tr(),
-                  subtitle: 'auth.sign_in.success_subtitle'.tr(),
-                );
-              }
-            });
+            if (widget.onAuthenticated != null) {
+              widget.onAuthenticated!();
+            } else {
+              final NavigatorState navigator = Navigator.of(ctx);
+              final OverlayState? overlay = navigator.overlay;
+              navigator.popUntil((Route<dynamic> r) => r.isFirst);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (overlay != null && overlay.mounted) {
+                  AppSnackbar.showOnOverlay(
+                    overlay,
+                    type: SnackbarType.success,
+                    title: 'auth.sign_in.success'.tr(),
+                    subtitle: 'auth.sign_in.success_subtitle'.tr(),
+                  );
+                }
+              });
+            }
           }
           if (state is AuthPasswordResetSent) {
             AppSnackbar.show(
@@ -313,6 +319,7 @@ class _AuthTextField extends StatelessWidget {
     this.errorText,
     this.textInputAction,
     this.onSubmitted,
+    this.onChanged,
   });
 
   final String label;
@@ -325,6 +332,7 @@ class _AuthTextField extends StatelessWidget {
   final String? errorText;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onSubmitted;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -344,6 +352,7 @@ class _AuthTextField extends StatelessWidget {
           keyboardType: keyboardType,
           textInputAction: textInputAction,
           onSubmitted: onSubmitted,
+          onChanged: onChanged,
           style: AppTextStyles.bodyLarge(colors.textPrimary),
           decoration: InputDecoration(
             hintText: hint,

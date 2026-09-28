@@ -1,7 +1,9 @@
 part of auth;
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  const RegisterScreen({super.key, this.onAuthenticated});
+
+  final VoidCallback? onAuthenticated;
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -80,6 +82,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void toggleConfirmVisibility() =>
       setState(() => _showConfirm = !_showConfirm);
 
+  void clearNameError() => setState(() => _nameError = null);
+  void clearEmailError() => setState(() => _emailError = null);
+  void clearPasswordError() => setState(() => _passwordError = null);
+  void clearConfirmError() => setState(() => _confirmError = null);
+
   void _submit() {
     if (!_validate()) return;
     context.read<AuthCubit>().registerWithEmailAndPassword(
@@ -93,7 +100,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) => BlocListener<AuthCubit, AuthState>(
         listener: (BuildContext ctx, AuthState state) {
           if (state is AuthAuthenticated) {
-            Navigator.of(ctx).popUntil((Route<dynamic> r) => r.isFirst);
+            if (widget.onAuthenticated != null) {
+              widget.onAuthenticated!();
+            } else {
+              Navigator.of(ctx).popUntil((Route<dynamic> r) => r.isFirst);
+            }
           }
           if (state is AuthError) {
             AppSnackbar.show(
@@ -207,6 +218,7 @@ class _RegisterView extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 errorText: state._nameError,
                 prefixIcon: Icons.person_outline_rounded,
+                onChanged: (_) => state.clearNameError(),
               ),
               const SizedBox(height: Dimensions.itemHeight14),
               // ── Email field ──────────────────────────────────────────────
@@ -218,6 +230,7 @@ class _RegisterView extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 errorText: state._emailError,
                 prefixIcon: Icons.mail_outline_rounded,
+                onChanged: (_) => state.clearEmailError(),
               ),
               const SizedBox(height: Dimensions.itemHeight14),
               // ── Password field ───────────────────────────────────────────
@@ -229,6 +242,7 @@ class _RegisterView extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 errorText: state._passwordError,
                 prefixIcon: Icons.lock_outline_rounded,
+                onChanged: (_) => state.clearPasswordError(),
                 suffixIcon: IconButton(
                   icon: Icon(
                     state._showPassword
@@ -251,6 +265,7 @@ class _RegisterView extends StatelessWidget {
                 onSubmitted: (_) => state._submit(),
                 errorText: state._confirmError,
                 prefixIcon: Icons.lock_outline_rounded,
+                onChanged: (_) => state.clearConfirmError(),
                 suffixIcon: IconButton(
                   icon: Icon(
                     state._showConfirm

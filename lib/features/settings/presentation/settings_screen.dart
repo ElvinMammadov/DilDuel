@@ -19,7 +19,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _openSignIn() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => const SignInScreen(),
+        builder: (_) => SignInScreen(
+          onAuthenticated: () => Navigator.of(context).pop(),
+        ),
       ),
     );
   }
@@ -40,20 +42,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return BlocListener<AuthCubit, AuthState>(
       listenWhen: (AuthState previous, AuthState current) =>
-          previous is AuthAuthenticated && current is AuthUnauthenticated,
+          (previous is AuthAuthenticated && current is AuthUnauthenticated) ||
+          (previous is AuthUnauthenticated && current is AuthAuthenticated),
       listener: (BuildContext ctx, AuthState state) {
-        final NavigatorState navigator = Navigator.of(ctx);
-        final OverlayState? overlay = navigator.overlay;
-        navigator.pop();
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (overlay != null && overlay.mounted) {
-            AppSnackbar.showOnOverlay(
-              overlay,
-              type: SnackbarType.success,
-              title: 'settings.logout_success'.tr(),
-            );
-          }
-        });
+        if (state is AuthUnauthenticated) {
+          AppSnackbar.show(
+            ctx,
+            type: SnackbarType.success,
+            title: 'settings.logout_success'.tr(),
+          );
+        } else if (state is AuthAuthenticated) {
+          AppSnackbar.show(
+            ctx,
+            type: SnackbarType.success,
+            title: 'auth.sign_in.success'.tr(),
+            subtitle: 'auth.sign_in.success_subtitle'.tr(),
+          );
+        }
       },
       child: Scaffold(
         appBar: DilDuelAppBar(

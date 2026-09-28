@@ -13,10 +13,17 @@ class SearchBloc extends Cubit<SearchState> {
         await searchWord(query, dicType);
     result.fold(
       (Failure failure) => emit(SearchError()),
-      (List<Word> words) => emit(SearchLoaded(words)),
+      (List<Word> words) => emit(SearchLoaded(words, query)),
     );
   }
 
-  /// Resets the search state — called when the search field is cleared.
-  void clear() => emit(SearchInitial());
+  Future<void> clear(String dicType) async {
+    final List<String> recents = await DBHelper.getRecentSearches(dicType);
+    emit(SearchInitial(recentQueries: recents));
+  }
+
+  Future<void> saveSearch(String query, String dicType) =>
+      DBHelper.saveRecentSearch(query.trim(), dicType);
+
+  void recentTapped(String query) => emit(SearchFillField(query));
 }

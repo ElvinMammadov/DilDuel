@@ -107,7 +107,7 @@ class _ThemeOption extends StatelessWidget {
             color: isSelected
                 ? colors.primaryTint
                 : Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(Dimensions.borderRadius16),
+            borderRadius: BorderRadius.circular(Dimensions.borderRadius),
             border: Border.all(
               color: isSelected ? colors.primary : colors.border,
               width: 2,

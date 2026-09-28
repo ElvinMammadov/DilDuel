@@ -156,9 +156,9 @@ class _BookmarksTab extends StatelessWidget {
             }
             return ListView.builder(
               padding: const EdgeInsets.fromLTRB(
-                Dimensions.padding20,
+                Dimensions.padding16,
                 Dimensions.padding8,
-                Dimensions.padding20,
+                Dimensions.padding16,
                 Dimensions.padding20,
               ),
               itemCount: state.bookmarks.length,
@@ -223,9 +223,9 @@ class _UnknownTab extends StatelessWidget {
             }
             return ListView.builder(
               padding: const EdgeInsets.fromLTRB(
-                Dimensions.padding20,
+                Dimensions.padding16,
                 Dimensions.padding8,
-                Dimensions.padding20,
+                Dimensions.padding16,
                 Dimensions.padding20,
               ),
               itemCount: state.unknownWords.length,
@@ -290,9 +290,9 @@ class _ListenedTab extends StatelessWidget {
             }
             return ListView.builder(
               padding: const EdgeInsets.fromLTRB(
-                Dimensions.padding20,
+                Dimensions.padding16,
                 Dimensions.padding8,
-                Dimensions.padding20,
+                Dimensions.padding16,
                 Dimensions.padding20,
               ),
               itemCount: state.listenedWords.length,
@@ -399,7 +399,7 @@ class _BookmarkItem extends StatelessWidget {
         background: Container(
           decoration: BoxDecoration(
             color: colors.error.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
+            borderRadius: BorderRadius.circular(Dimensions.borderRadius),
           ),
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: Dimensions.padding16),
@@ -417,7 +417,7 @@ class _BookmarkItem extends StatelessWidget {
             decoration: BoxDecoration(
               color: colors.surface,
               border: Border.all(color: colors.border),
-              borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
+              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
             ),
             child: Row(
               children: <Widget>[

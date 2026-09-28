@@ -15,9 +15,9 @@ class _TrainingNavButtons extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        Dimensions.padding20,
         Dimensions.padding16,
-        Dimensions.padding20,
+        Dimensions.padding16,
+        Dimensions.padding16,
         Dimensions.padding20,
       ),
       child: Row(

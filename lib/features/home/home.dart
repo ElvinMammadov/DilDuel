@@ -105,7 +105,7 @@ class _DesignedNavBar extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: active ? primaryTint : Colors.transparent,
-                borderRadius: BorderRadius.circular(Dimensions.padding16),
+                borderRadius: BorderRadius.circular(Dimensions.borderRadius),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,

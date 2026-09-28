@@ -57,7 +57,7 @@ class QuizInProgressView extends StatelessWidget {
                 color: surface,
                 border: Border.all(color: border),
                 borderRadius:
-                    BorderRadius.circular(Dimensions.borderRadiusLarge),
+                    BorderRadius.circular(Dimensions.borderRadius),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

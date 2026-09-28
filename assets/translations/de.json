@@ -115,7 +115,12 @@
     "error": {
       "title": "Suche fehlgeschlagen",
       "description": "Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut"
-    }
+    },
+    "not_found": {
+      "title": "\"{}\" nicht gefunden",
+      "description": "Dieses Wort ist im Wörterbuch nicht vorhanden"
+    },
+    "recent_searches": "Letzte Suchen"
   },
   "bookmarks": {
     "empty": "Keine Lesezeichen",
@@ -170,7 +175,10 @@
     "try_again": "Erneut versuchen",
     "something_wrong": "Etwas ist schiefgelaufen",
     "yes": "Ja",
-    "no": "Nein"
+    "no": "Nein",
+    "dictionary_switched": "Wörterbuchrichtung geändert",
+    "dictionary_switched_to_az_de": "Wörter werden jetzt vom Aserbaidschanischen ins Deutsche übersetzt",
+    "dictionary_switched_to_de_az": "Wörter werden jetzt vom Deutschen ins Aserbaidschanische übersetzt"
   },
   "auth": {
     "or_divider": "oder",

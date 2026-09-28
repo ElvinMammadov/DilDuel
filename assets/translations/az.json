@@ -115,7 +115,12 @@
     "error": {
       "title": "Axtarış alınmadı",
       "description": "İnternet bağlantınızı yoxlayıb yenidən cəhd edin"
-    }
+    },
+    "not_found": {
+      "title": "\"{}\" tapılmadı",
+      "description": "Bu söz lüğətdə mövcud deyil"
+    },
+    "recent_searches": "Son axtarışlar"
   },
   "bookmarks": {
     "empty": "Seçilmiş sözlər yoxdur",
@@ -170,7 +175,10 @@
     "try_again": "Yenidən cəhd et",
     "something_wrong": "Nəsə səhv getdi",
     "yes": "Bəli",
-    "no": "Xeyr"
+    "no": "Xeyr",
+    "dictionary_switched": "Lüğət istiqaməti dəyişdirildi",
+    "dictionary_switched_to_az_de": "İndi sözlər Azərbaycan dilindən alman dilinə tərcümə olunacaq",
+    "dictionary_switched_to_de_az": "İndi sözlər alman dilindən Azərbaycan dilinə tərcümə olunacaq"
   },
   "auth": {
     "or_divider": "və ya",

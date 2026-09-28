@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dic/core/components/app_snackbar.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/state/app_state.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
@@ -49,7 +51,19 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? <Widget>[
               if (showDictionarySwitcher) ...<Widget>[
                 GestureDetector(
-                  onTap: () => context.read<AppCubit>().toggleDictionaryType(),
+                  onTap: () {
+                    context.read<AppCubit>().toggleDictionaryType();
+                    final bool willBeAzDe =
+                        appState.dictionaryType == DictionaryType.deAz;
+                    AppSnackbar.show(
+                      context,
+                      type: SnackbarType.info,
+                      title: 'common.dictionary_switched'.tr(),
+                      subtitle: willBeAzDe
+                          ? 'common.dictionary_switched_to_az_de'.tr()
+                          : 'common.dictionary_switched_to_de_az'.tr(),
+                    );
+                  },
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       color: colors.surface,

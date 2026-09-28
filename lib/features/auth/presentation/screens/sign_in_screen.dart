@@ -173,7 +173,7 @@ class _SignInView extends StatelessWidget {
                       end: Alignment.bottomRight,
                     ),
                     borderRadius:
-                        BorderRadius.circular(Dimensions.borderRadiusLarge),
+                        BorderRadius.circular(Dimensions.borderRadius),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: colors.primary.withValues(alpha: 0.30),

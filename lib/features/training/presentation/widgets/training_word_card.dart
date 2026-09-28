@@ -24,11 +24,11 @@ class _TrainingWordCard extends StatelessWidget {
     final AppColors colors = AppColors.of(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.padding20),
+      padding: const EdgeInsets.symmetric(horizontal: Dimensions.padding16),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: colors.surface,
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(Dimensions.borderRadius),
           border: Border.all(color: colors.border),
         ),
         child: AnimatedSwitcher(

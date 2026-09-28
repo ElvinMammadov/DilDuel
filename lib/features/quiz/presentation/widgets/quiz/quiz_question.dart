@@ -54,7 +54,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
           decoration: BoxDecoration(
             color: colors.primaryTint,
             border: Border.all(color: colors.primary, width: 1.5),
-            borderRadius: BorderRadius.circular(Dimensions.borderRadiusMedium),
+            borderRadius: BorderRadius.circular(Dimensions.borderRadius),
           ),
           child: Text(
             widget.word.question,

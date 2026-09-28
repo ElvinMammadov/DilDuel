@@ -104,7 +104,7 @@ class _ListeningQuestionCardState extends State<ListeningQuestionCard>
             color: colors.primaryTint,
             border: Border.all(color: colors.primary, width: 1.5),
             borderRadius:
-                BorderRadius.circular(Dimensions.borderRadiusMedium),
+                BorderRadius.circular(Dimensions.borderRadius),
           ),
           child: Column(
             children: <Widget>[

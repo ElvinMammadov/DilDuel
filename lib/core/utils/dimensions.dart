@@ -98,10 +98,7 @@ class Dimensions {
   static const double padding100 = 100.0;
 
   // ─── Border radii ─────────────────────────────────────────────
-  static const double borderRadius = 12.0;
-  static const double borderRadius16 = 16.0;
-  static const double borderRadiusMedium = 20.0;
-  static const double borderRadiusLarge = 18.0;
+  static const double borderRadius = 16.0;
   static const double borderRadiusSheet = 28.0;
   static const double borderRadiusPill = 100.0;
 

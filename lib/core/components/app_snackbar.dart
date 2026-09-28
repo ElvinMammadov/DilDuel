@@ -251,7 +251,7 @@ class _SnackbarCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: colors.surface,
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
+          borderRadius: BorderRadius.circular(Dimensions.borderRadius),
           border: Border.all(color: isDark ? colors.border : colors.chipBg),
           boxShadow: <BoxShadow>[
             BoxShadow(

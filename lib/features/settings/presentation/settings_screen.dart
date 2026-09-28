@@ -253,7 +253,7 @@ class _SettingsCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         border: Border.all(color: colors.border),
-        borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
+        borderRadius: BorderRadius.circular(Dimensions.borderRadius),
       ),
       child: child,
     );
@@ -282,7 +282,7 @@ class _SettingsRow extends StatelessWidget {
     final AppColors colors = AppColors.of(context);
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(Dimensions.borderRadiusLarge),
+      borderRadius: BorderRadius.circular(Dimensions.borderRadius),
       child: Padding(
         padding: const EdgeInsets.symmetric(
             horizontal: Dimensions.padding16, vertical: Dimensions.padding14),

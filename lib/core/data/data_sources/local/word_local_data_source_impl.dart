@@ -29,6 +29,7 @@ class DBHelper implements WordLocalDataSource {
   static const String listeningResults = 'listening_results';
   static const String quizResultAnswers = 'quiz_result_answers';
   static const String listeningResultAnswers = 'listening_result_answers';
+  static const String recentSearches = 'recent_searches';
 
   // ── shared columns ───────────────────────────────────────────────────────
   static const String colId = 'id';
@@ -103,6 +104,50 @@ class DBHelper implements WordLocalDataSource {
     ''');
   }
 
+  static Future<void> _createRecentSearchesTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS $recentSearches(
+        query    TEXT NOT NULL,
+        dic_type TEXT NOT NULL,
+        date     TEXT NOT NULL,
+        PRIMARY KEY (query, dic_type)
+      )
+    ''');
+  }
+
+  static Future<void> saveRecentSearch(String query, String dicType) async {
+    await _db!.insert(
+      recentSearches,
+      <String, Object?>{
+        'query': query,
+        'dic_type': dicType,
+        'date': DateTime.now().toIso8601String(),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    await _db!.execute('''
+      DELETE FROM $recentSearches
+      WHERE dic_type = ? AND query NOT IN (
+        SELECT query FROM $recentSearches
+        WHERE dic_type = ?
+        ORDER BY date DESC
+        LIMIT 10
+      )
+    ''', <Object?>[dicType, dicType]);
+  }
+
+  static Future<List<String>> getRecentSearches(String dicType) async {
+    final List<Map<String, Object?>> rows = await _db!.query(
+      recentSearches,
+      columns: <String>['query'],
+      where: 'dic_type = ?',
+      whereArgs: <Object?>[dicType],
+      orderBy: 'date DESC',
+      limit: 10,
+    );
+    return rows.map((Map<String, Object?> r) => r['query'] as String).toList();
+  }
+
   static Future<void> _createListenedWordsTable(Database db) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS $listenedWords(
@@ -122,6 +167,7 @@ class DBHelper implements WordLocalDataSource {
     await _createTrainingProgressTable(db);
     await _createTrainingLevelPositionTable(db);
     await _createListenedWordsTable(db);
+    await _createRecentSearchesTable(db);
     await _createListeningResultsTable(db);
     await _createQuizResultAnswersTable(db);
     await _createListeningResultAnswersTable(db);
@@ -704,5 +750,6 @@ class DBHelper implements WordLocalDataSource {
     await db.delete(listeningResults);
     await db.delete(quizResultAnswers);
     await db.delete(listeningResultAnswers);
+    await db.delete(recentSearches);
   }
 }

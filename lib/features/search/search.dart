@@ -3,6 +3,7 @@ library search;
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/error/failures.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/state/app_state.dart';

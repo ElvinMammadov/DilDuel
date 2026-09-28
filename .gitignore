@@ -55,3 +55,6 @@ android/key.properties
 
 # Claude Code local settings
 .claude/settings.local.json
+# Firebase config — keep off public repo
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist

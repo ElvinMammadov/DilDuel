@@ -203,15 +203,59 @@ jobs:
           PROFILES_DIR=~/Library/MobileDevice/Provisioning\ Profiles
           mkdir -p "$PROFILES_DIR"
           echo "${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}" \
-            | base64 --decode > "$PROFILES_DIR/dilduel_appstore.mobileprovision"
+            | base64 --decode > "$PROFILES_DIR/profile.mobileprovision"
+          PROFILE_UUID=$(security cms -D -i "$PROFILES_DIR/profile.mobileprovision" \
+            | /usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin)
+          PROFILE_NAME=$(security cms -D -i "$PROFILES_DIR/profile.mobileprovision" \
+            | /usr/libexec/PlistBuddy -c 'Print :Name' /dev/stdin)
+          echo "PROFILE_UUID=$PROFILE_UUID" >> $GITHUB_ENV
+          echo "PROFILE_NAME=$PROFILE_NAME" >> $GITHUB_ENV
+          echo "Installed profile: $PROFILE_NAME ($PROFILE_UUID)"
 
       - run: flutter pub get
 
       - name: Switch Xcode project to manual signing
         run: |
-          sed -i '' \
-            's/PRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;/PRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;\n\t\t\t\tCODE_SIGN_STYLE = Manual;\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "dilduel_appstore";/g' \
-            ios/Runner.xcodeproj/project.pbxproj
+          python3 << 'PYTHON'
+          import os
+          uuid = os.environ['PROFILE_UUID']
+          with open('ios/Runner.xcodeproj/project.pbxproj', 'r') as f:
+              content = f.read()
+          replacement = (
+              'PRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;\n'
+              '\t\t\t\tCODE_SIGN_STYLE = Manual;\n'
+              f'\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "{uuid}";'
+          )
+          content = content.replace(
+              'PRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;',
+              replacement
+          )
+          with open('ios/Runner.xcodeproj/project.pbxproj', 'w') as f:
+              f.write(content)
+          print(f'Updated pbxproj with profile UUID: {uuid}')
+          PYTHON
+
+      - name: Generate ExportOptions.plist
+        run: |
+          cat > ios/ExportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>teamID</key>
+              <string>DPKFU7J628</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>com.example.dilduel.app</key>
+                  <string>$PROFILE_UUID</string>
+              </dict>
+          </dict>
+          </plist>
+          EOF
 
       - name: Build iOS IPA
         run: |

@@ -509,6 +509,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -727,6 +728,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";

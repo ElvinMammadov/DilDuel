@@ -197,11 +197,18 @@ jobs:
 
       - run: flutter pub get
 
+      - name: Switch Xcode project to manual signing
+        run: |
+          sed -i '' \
+            's/PRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;/PRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;\n\t\t\t\tCODE_SIGN_STYLE = Manual;\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "dilduel_appstore";/g' \
+            ios/Runner.xcodeproj/project.pbxproj
+
       - name: Build iOS IPA
         run: |
           flutter build ipa --release \
             --target=lib/mains/prod/main.dart \
-            --build-number=${{ needs.prepare.outputs.build_number }}
+            --build-number=${{ needs.prepare.outputs.build_number }} \
+            --export-options-plist=ios/ExportOptions.plist
 
       - name: Decode App Store Connect API key
         run: |

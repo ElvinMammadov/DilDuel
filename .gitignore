@@ -47,6 +47,8 @@ app.*.map.json
 # Signing keys
 *.jks
 *.keystore
+*.p12
+*.mobileprovision
 key.properties
 android/key.properties
 

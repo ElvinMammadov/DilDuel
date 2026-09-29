@@ -199,18 +199,25 @@ jobs:
           p12-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
 
       - name: Install App Store provisioning profile
+        env:
+          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
         run: |
           PROFILES_DIR=~/Library/MobileDevice/Provisioning\ Profiles
           mkdir -p "$PROFILES_DIR"
-          echo "${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}" \
+          printf '%s' "$IOS_PROVISIONING_PROFILE_BASE64" \
             | base64 --decode > "$PROFILES_DIR/profile.mobileprovision"
-          PROFILE_UUID=$(security cms -D -i "$PROFILES_DIR/profile.mobileprovision" \
-            | /usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin)
-          PROFILE_NAME=$(security cms -D -i "$PROFILES_DIR/profile.mobileprovision" \
-            | /usr/libexec/PlistBuddy -c 'Print :Name' /dev/stdin)
-          echo "PROFILE_UUID=$PROFILE_UUID" >> $GITHUB_ENV
-          echo "PROFILE_NAME=$PROFILE_NAME" >> $GITHUB_ENV
-          echo "Installed profile: $PROFILE_NAME ($PROFILE_UUID)"
+          python3 - "$PROFILES_DIR/profile.mobileprovision" << 'PYTHON'
+          import plistlib, sys, os
+          with open(sys.argv[1], 'rb') as f:
+              content = f.read()
+          start = content.find(b'<?xml')
+          end = content.rfind(b'</plist>') + len(b'</plist>')
+          plist = plistlib.loads(content[start:end])
+          with open(os.environ['GITHUB_ENV'], 'a') as env:
+              env.write(f"PROFILE_UUID={plist['UUID']}\n")
+              env.write(f"PROFILE_NAME={plist['Name']}\n")
+          print(f"Installed: {plist['Name']} ({plist['UUID']})")
+          PYTHON
 
       - run: flutter pub get
 

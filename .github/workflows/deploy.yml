@@ -150,6 +150,7 @@ jobs:
       - name: Build Android App Bundle
         run: |
           flutter build appbundle --release \
+            --target=lib/mains/prod/main.dart \
             --build-number=${{ needs.prepare.outputs.build_number }}
 
       - name: Upload to Google Play (internal track)
@@ -199,6 +200,7 @@ jobs:
       - name: Build iOS IPA
         run: |
           flutter build ipa --release \
+            --target=lib/mains/prod/main.dart \
             --build-number=${{ needs.prepare.outputs.build_number }}
 
       - name: Decode App Store Connect API key

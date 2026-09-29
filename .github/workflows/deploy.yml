@@ -132,17 +132,27 @@ jobs:
             | base64 --decode > android/app/google-services.json
 
       - name: Restore keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > dilduel-key.jks
+
+      - name: Verify keystore
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" \
-            | base64 --decode > dilduel-key.jks
+          keytool -list \
+            -keystore dilduel-key.jks \
+            -storepass "${{ secrets.ANDROID_STORE_PASSWORD }}" \
+            -storetype PKCS12 2>/dev/null \
+          || keytool -list \
+            -keystore dilduel-key.jks \
+            -storepass "${{ secrets.ANDROID_STORE_PASSWORD }}"
 
       - name: Write key.properties
         run: |
-          cat > android/key.properties << 'EOF'
+          cat > android/key.properties << EOF
           storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}
           keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
           keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
-          storeFile=../../dilduel-key.jks
+          storeFile=$(pwd)/dilduel-key.jks
           EOF
 
       - run: flutter pub get

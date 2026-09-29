@@ -171,6 +171,7 @@ jobs:
           releaseFiles: build/app/outputs/bundle/release/*.aab
           track: internal
           status: completed
+          changesNotSentForReview: true
 
   # ─── iOS ──────────────────────────────────────────────────────────────────
   build-ios:
@@ -221,25 +222,22 @@ jobs:
 
       - run: flutter pub get
 
-      - name: Switch Xcode project to manual signing
+      - name: Inject provisioning profile UUID into Xcode project
         run: |
           python3 << 'PYTHON'
           import os
           uuid = os.environ['PROFILE_UUID']
           with open('ios/Runner.xcodeproj/project.pbxproj', 'r') as f:
               content = f.read()
-          replacement = (
-              'PRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;\n'
-              '\t\t\t\tCODE_SIGN_STYLE = Manual;\n'
-              f'\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "{uuid}";'
-          )
+          # Insert PROVISIONING_PROFILE_SPECIFIER after CODE_SIGN_STYLE = Manual
+          # (permanently set in project for Release/Profile configs)
           content = content.replace(
-              'PRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;',
-              replacement
+              'CODE_SIGN_STYLE = Manual;\n\t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;',
+              f'CODE_SIGN_STYLE = Manual;\n\t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = com.example.dilduel.app;\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "{uuid}";'
           )
           with open('ios/Runner.xcodeproj/project.pbxproj', 'w') as f:
               f.write(content)
-          print(f'Updated pbxproj with profile UUID: {uuid}')
+          print(f'Injected PROVISIONING_PROFILE_SPECIFIER: {uuid}')
           PYTHON
 
       - name: Generate ExportOptions.plist

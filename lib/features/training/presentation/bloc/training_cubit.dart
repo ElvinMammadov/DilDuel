@@ -82,6 +82,9 @@ class TrainingCubit extends Cubit<TrainingState> {
     await _progressRepository.saveLevelPosition(level, index);
   }
 
+  /// Returns to the level selection grid without clearing any progress.
+  void backToLevels() => emit(TrainingInitial());
+
   /// Clears the in-memory progress cache and reloads it from storage.
   ///
   /// Call this on sign-out: without it, [savedIndices] and [levelTotals]

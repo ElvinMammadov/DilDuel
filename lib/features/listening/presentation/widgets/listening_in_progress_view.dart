@@ -66,14 +66,8 @@ class ListeningInProgressView extends StatelessWidget {
             0,
           ),
           sliver: SliverToBoxAdapter(
-            child: Container(
+            child: AppCard(
               padding: const EdgeInsets.all(Dimensions.padding14),
-              decoration: BoxDecoration(
-                color: colors.surface,
-                border: Border.all(color: colors.border),
-                borderRadius:
-                    BorderRadius.circular(Dimensions.borderRadius),
-              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[

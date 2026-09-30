@@ -114,21 +114,13 @@ class _RecentSearchList extends StatelessWidget {
           );
         }
         final String query = queries[index - 1];
-        return GestureDetector(
+        return AppCard(
           onTap: () => context.read<SearchBloc>().recentTapped(query),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: colors.surface,
-              border: Border.all(color: colors.border),
-              borderRadius:
-                  BorderRadius.circular(Dimensions.borderRadius),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.padding16,
-                vertical: Dimensions.padding14,
-              ),
-              child: Row(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.padding16,
+            vertical: Dimensions.padding14,
+          ),
+          child: Row(
                 children: <Widget>[
                   Icon(
                     Icons.history_rounded,
@@ -149,8 +141,6 @@ class _RecentSearchList extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ),
         );
       },
     );
@@ -170,54 +160,45 @@ class _WordCard extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: Dimensions.padding10),
-      child: GestureDetector(
+      child: AppCard(
         onTap: onTap,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: colors.surface,
-            border: Border.all(color: colors.border),
-            borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.padding16,
-              vertical: Dimensions.padding14,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        word.key,
-                        style: AppTextStyles.wordSource(colors.textPrimary),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: Dimensions.itemHeight6),
-                      if (isAzDe)
-                        TranslationChips(
-                          translations: TranslationChips.parse(word.value),
-                        )
-                      else
-                        Text(
-                          word.value,
-                          style: AppTextStyles.bodyMedium(colors.textSecondary),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                    ],
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.padding16,
+          vertical: Dimensions.padding14,
+        ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    word.key,
+                    style: AppTextStyles.wordSource(colors.textPrimary),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                const SizedBox(width: Dimensions.itemWidth8),
-                Icon(
-                  Icons.chevron_right,
-                  size: Dimensions.itemWidth18,
-                  color: colors.textSecondary.withValues(alpha: 0.4),
-                ),
-              ],
+                  const SizedBox(height: Dimensions.itemHeight6),
+                  if (isAzDe)
+                    TranslationChips(
+                      translations: TranslationChips.parse(word.value),
+                    )
+                  else
+                    Text(
+                      word.value,
+                      style: AppTextStyles.bodyMedium(colors.textSecondary),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
+              ),
             ),
-          ),
+            const SizedBox(width: Dimensions.itemWidth8),
+            Icon(
+              Icons.chevron_right,
+              size: Dimensions.itemWidth18,
+              color: colors.textSecondary.withValues(alpha: 0.4),
+            ),
+          ],
         ),
       ),
     );

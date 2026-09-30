@@ -36,66 +36,68 @@ class _TrainingView extends StatelessWidget {
   Widget build(BuildContext context) =>
       BlocBuilder<TrainingCubit, TrainingState>(
         builder: (BuildContext context, TrainingState state) {
-          final String? selectedLevel = state is TrainingReady
-              ? state.level
-              : (state is TrainingLoading ? state.level : null);
+          if (state is TrainingInitial) {
+            return const _LevelCardsGrid();
+          }
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _LevelSelector(selectedLevel: selectedLevel),
-              Expanded(
-                child: GestureDetector(
-                  onHorizontalDragEnd: (DragEndDetails details) {
-                    final double? v = details.primaryVelocity;
-                    if (v == null) return;
-                    if (v < -400) {
-                      context.read<TrainingCubit>().next();
-                    } else if (v > 400) {
-                      context.read<TrainingCubit>().previous();
-                    }
-                  },
-                  child: _buildBody(context, state),
+          if (state is TrainingLoading) {
+            return Column(
+              children: <Widget>[
+                _LevelBackBar(level: state.level),
+                const Expanded(
+                  child: Center(child: CircularProgressIndicator()),
                 ),
-              ),
-            ],
-          );
+              ],
+            );
+          }
+
+          if (state is TrainingError) {
+            return Column(
+              children: <Widget>[
+                const _LevelBackBar(),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      state.message,
+                      style: AppTextStyles.bodyMedium(
+                        AppColors.of(context).textSecondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+
+          if (state is TrainingReady) {
+            return Column(
+              children: <Widget>[
+                _LevelBackBar(level: state.level),
+                Expanded(
+                  child: GestureDetector(
+                    onHorizontalDragEnd: (DragEndDetails details) {
+                      final double? v = details.primaryVelocity;
+                      if (v == null) return;
+                      if (v < -400) {
+                        context.read<TrainingCubit>().next();
+                      } else if (v > 400) {
+                        context.read<TrainingCubit>().previous();
+                      }
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(child: _TrainingWordCard(state: state)),
+                        _TrainingNavButtons(state: state),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return const _LevelCardsGrid();
         },
       );
-
-  Widget _buildBody(BuildContext context, TrainingState state) {
-    if (state is TrainingLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (state is TrainingError) {
-      return Center(
-        child: Text(
-          state.message,
-          style: AppTextStyles.bodyMedium(
-            AppColors.of(context).textSecondary,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      );
-    }
-
-    if (state is TrainingReady) {
-      return Column(
-        children: <Widget>[
-          Expanded(child: _TrainingWordCard(state: state)),
-          _TrainingNavButtons(state: state),
-        ],
-      );
-    }
-
-    final AppColors colors = AppColors.of(context);
-    return EmptyStateView(
-      icon: Icons.menu_book_rounded,
-      color: colors.primary,
-      tintColor: colors.primaryTint,
-      title: 'training.empty_title'.tr(),
-      description: 'training.empty_subtitle'.tr(),
-    );
-  }
 }

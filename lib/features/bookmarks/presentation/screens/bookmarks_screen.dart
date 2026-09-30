@@ -407,19 +407,13 @@ class _BookmarkItem extends StatelessWidget {
         ),
         direction: DismissDirection.endToStart,
         onDismissed: (_) => onRemoveWithUndo(),
-        child: GestureDetector(
+        child: AppCard(
           onTap: () => _openDetails(context),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.padding16,
-              vertical: Dimensions.padding14,
-            ),
-            decoration: BoxDecoration(
-              color: colors.surface,
-              border: Border.all(color: colors.border),
-              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-            ),
-            child: Row(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.padding16,
+            vertical: Dimensions.padding14,
+          ),
+          child: Row(
               children: <Widget>[
                 Expanded(
                   child: Column(
@@ -455,7 +449,6 @@ class _BookmarkItem extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }

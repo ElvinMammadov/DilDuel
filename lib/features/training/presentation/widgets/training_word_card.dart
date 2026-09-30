@@ -20,17 +20,9 @@ class _TrainingWordCard extends StatelessWidget {
   const _TrainingWordCard({required this.state});
 
   @override
-  Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(horizontal: Dimensions.padding16),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: colors.surface,
-          borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-          border: Border.all(color: colors.border),
-        ),
+      child: AppCard(
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 220),
           transitionBuilder: (Widget child, Animation<double> animation) =>
@@ -51,7 +43,6 @@ class _TrainingWordCard extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

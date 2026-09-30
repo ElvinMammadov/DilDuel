@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dic/core/components/app_card.dart';
 import 'package:flutter_dic/core/components/app_snackbar.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
@@ -327,20 +328,14 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                   _SheetSection(label: 'word.translation'.tr()),
                   const SizedBox(height: Dimensions.padding10),
                   if (_isDeAz)
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: cardBg,
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.borderRadius),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(Dimensions.padding14),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            word.value,
-                            style: AppTextStyles.bodyLarge(colors.textPrimary),
-                          ),
+                    AppCard(
+                      color: cardBg,
+                      padding: const EdgeInsets.all(Dimensions.padding14),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          word.value,
+                          style: AppTextStyles.bodyLarge(colors.textPrimary),
                         ),
                       ),
                     )
@@ -570,12 +565,8 @@ class _AzDeTranslationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (rows.isEmpty) return const SizedBox.shrink();
     final AppColors colors = AppColors.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-        border: Border.all(color: colors.border),
-      ),
+    return AppCard(
+      color: cardBg,
       child: SizedBox(
         width: double.infinity,
         child: Column(
@@ -704,13 +695,8 @@ class _GrammarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<(String, String?, String)> rows = _buildRows(context);
     if (rows.isEmpty) return const SizedBox.shrink();
-    final AppColors colors = AppColors.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-        border: Border.all(color: colors.border),
-      ),
+    return AppCard(
+      color: cardBg,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: rows.indexed

@@ -37,7 +37,6 @@ class QuizInProgressView extends StatelessWidget {
     final AppColors colors = AppColors.of(context);
     final Color primary = colors.primary;
     final Color textPrimary = colors.textPrimary;
-    final Color surface = colors.surface;
     final Color border = colors.border;
     final Color error = colors.error;
 
@@ -51,14 +50,8 @@ class QuizInProgressView extends StatelessWidget {
               Dimensions.padding16,
               0),
           sliver: SliverToBoxAdapter(
-            child: Container(
+            child: AppCard(
               padding: const EdgeInsets.all(Dimensions.padding14),
-              decoration: BoxDecoration(
-                color: surface,
-                border: Border.all(color: border),
-                borderRadius:
-                    BorderRadius.circular(Dimensions.borderRadius),
-              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[

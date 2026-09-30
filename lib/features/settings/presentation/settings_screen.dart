@@ -252,17 +252,7 @@ class _SettingsCard extends StatelessWidget {
   const _SettingsCard({required this.child});
 
   @override
-  Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        border: Border.all(color: colors.border),
-        borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-      ),
-      child: child,
-    );
-  }
+  Widget build(BuildContext context) => AppCard(child: child);
 }
 
 class _SettingsRow extends StatelessWidget {

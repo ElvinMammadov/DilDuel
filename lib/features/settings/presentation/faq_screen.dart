@@ -41,10 +41,24 @@ class FaqScreen extends StatelessWidget {
       'settings.faq.quiz_results_answer',
     ),
     (
+      'settings.faq.listening_usage',
+      'settings.faq.listening_usage_answer',
+    ),
+    (
+      'settings.faq.offline_usage',
+      'settings.faq.offline_usage_answer',
+    ),
+    (
+      'settings.faq.theme_language_usage',
+      'settings.faq.theme_language_usage_answer',
+    ),
+    (
       'settings.faq.sign_in_benefits',
       'settings.faq.sign_in_benefits_answer',
     ),
   ];
+
+  static int get itemCount => _items.length;
 
   @override
   Widget build(BuildContext context) => Scaffold(

@@ -188,7 +188,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 icon: Icons.help_outline,
                 iconColor: colors.primary,
                 title: 'settings.faq.title'.tr(),
-                subtitle: 'settings.faq.row_subtitle'.tr(),
+                subtitle: 'settings.faq.row_subtitle'.tr(
+                  args: <String>['${FaqScreen.itemCount}'],
+                ),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
                     builder: (_) => const FaqScreen(),

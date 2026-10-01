@@ -132,11 +132,7 @@
     "unknown": "Bilinməyənlər",
     "unknown_empty": "Bilinməyən söz yoxdur",
     "unknown_empty_description": "Məşq zamanı bilmədiyiniz sözlər buraya əlavə olunacaq",
-    "unknown_removed": "Bilinməyənlərdən silindi",
-    "listened": "Dinlənilmişlər",
-    "listened_empty": "Dinlənilmiş söz yoxdur",
-    "listened_empty_description": "Dinləmə testini uğurla tamamladığınız sözlər burada görünəcək",
-    "listened_removed": "Dinlənilmişlərdən silindi"
+    "unknown_removed": "Bilinməyənlərdən silindi"
   },
   "listening": {
     "title": "Dinləmə",
@@ -229,7 +225,6 @@
   },
   "training": {
     "title": "Söz Məşqi",
-    "choose_level": "Səviyyəni seçin",
     "level": "Səviyyə",
     "word_count": "{} / {}",
     "no_words": "Bu səviyyə üçün söz tapılmadı",

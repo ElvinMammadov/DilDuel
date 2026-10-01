@@ -5,6 +5,15 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.primary,
     required this.onPrimary,
     required this.primaryTint,
+    required this.levelA1,
+    required this.levelA2,
+    required this.levelB1,
+    required this.levelB2,
+    required this.bookmarksCard,
+    required this.unknownCard,
+    required this.quizCard,
+    required this.listeningCard,
+    required this.resultsCard,
     required this.accent,
     required this.surface,
     required this.headerBg,
@@ -30,6 +39,20 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color primary;
   final Color onPrimary;
   final Color primaryTint;
+
+  /// Progressively deeper shades of [primary], used for CEFR level cards.
+  final Color levelA1;
+  final Color levelA2;
+  final Color levelB1;
+  final Color levelB2;
+
+  /// Filled card colors for the Bookmarks (amber) and Tests (green) tabs.
+  final Color bookmarksCard;
+  final Color unknownCard;
+  final Color quizCard;
+  final Color listeningCard;
+  final Color resultsCard;
+
   final Color accent;
   final Color surface;
   final Color headerBg;
@@ -59,6 +82,15 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? primary,
     Color? onPrimary,
     Color? primaryTint,
+    Color? levelA1,
+    Color? levelA2,
+    Color? levelB1,
+    Color? levelB2,
+    Color? bookmarksCard,
+    Color? unknownCard,
+    Color? quizCard,
+    Color? listeningCard,
+    Color? resultsCard,
     Color? accent,
     Color? surface,
     Color? headerBg,
@@ -84,6 +116,15 @@ class AppColors extends ThemeExtension<AppColors> {
         primary: primary ?? this.primary,
         onPrimary: onPrimary ?? this.onPrimary,
         primaryTint: primaryTint ?? this.primaryTint,
+        levelA1: levelA1 ?? this.levelA1,
+        levelA2: levelA2 ?? this.levelA2,
+        levelB1: levelB1 ?? this.levelB1,
+        levelB2: levelB2 ?? this.levelB2,
+        bookmarksCard: bookmarksCard ?? this.bookmarksCard,
+        unknownCard: unknownCard ?? this.unknownCard,
+        quizCard: quizCard ?? this.quizCard,
+        listeningCard: listeningCard ?? this.listeningCard,
+        resultsCard: resultsCard ?? this.resultsCard,
         accent: accent ?? this.accent,
         surface: surface ?? this.surface,
         headerBg: headerBg ?? this.headerBg,
@@ -113,6 +154,15 @@ class AppColors extends ThemeExtension<AppColors> {
       primary: Color.lerp(primary, other.primary, t)!,
       onPrimary: Color.lerp(onPrimary, other.onPrimary, t)!,
       primaryTint: Color.lerp(primaryTint, other.primaryTint, t)!,
+      levelA1: Color.lerp(levelA1, other.levelA1, t)!,
+      levelA2: Color.lerp(levelA2, other.levelA2, t)!,
+      levelB1: Color.lerp(levelB1, other.levelB1, t)!,
+      levelB2: Color.lerp(levelB2, other.levelB2, t)!,
+      bookmarksCard: Color.lerp(bookmarksCard, other.bookmarksCard, t)!,
+      unknownCard: Color.lerp(unknownCard, other.unknownCard, t)!,
+      quizCard: Color.lerp(quizCard, other.quizCard, t)!,
+      listeningCard: Color.lerp(listeningCard, other.listeningCard, t)!,
+      resultsCard: Color.lerp(resultsCard, other.resultsCard, t)!,
       accent: Color.lerp(accent, other.accent, t)!,
       surface: Color.lerp(surface, other.surface, t)!,
       headerBg: Color.lerp(headerBg, other.headerBg, t)!,

@@ -10,124 +10,85 @@ class BookmarksScreen extends StatefulWidget {
 class _BookmarksScreenState extends State<BookmarksScreen> {
   static const String _keyBookmarks = 'bookmarks';
   static const String _keyUnknown = 'unknown';
-  static const String _keyListened = 'listened';
 
-  static const List<String> _categories = <String>[
-    _keyBookmarks,
-    _keyUnknown,
-    _keyListened,
-  ];
+  String? _selected;
 
-  String _selected = _keyBookmarks;
+  String _labelFor(String key) =>
+      key == _keyUnknown ? 'bookmarks.unknown'.tr() : 'app.bookmarks'.tr();
 
-  String _labelFor(String key) {
-    switch (key) {
-      case _keyBookmarks:
-        return 'app.bookmarks'.tr();
-      case _keyUnknown:
-        return 'bookmarks.unknown'.tr();
-      case _keyListened:
-        return 'bookmarks.listened'.tr();
-      default:
-        return key;
-    }
-  }
-
-  IconData _iconFor(String key) {
-    switch (key) {
-      case _keyBookmarks:
-        return Icons.bookmark_outline;
-      case _keyUnknown:
-        return Icons.help_outline;
-      case _keyListened:
-        return Icons.headphones_outlined;
-      default:
-        return Icons.list;
-    }
-  }
+  IconData _iconFor(String key) =>
+      key == _keyUnknown ? Icons.help_outline : Icons.bookmark_outline;
 
   @override
   Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-
+    final String? selected = _selected;
+    if (selected == null) {
+      return _BookmarkCategoryCards(
+        labelFor: _labelFor,
+        iconFor: _iconFor,
+        onSelected: (String key) => setState(() => _selected = key),
+      );
+    }
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Dimensions.padding16,
-            vertical: Dimensions.padding8,
-          ),
-          child: AppDropdown<String>(
-            onSelected: (String key) => setState(() => _selected = key),
-            itemsBuilder: (BuildContext ctx) {
-              final AppColors ctxColors = AppColors.of(ctx);
-
-              return <PopupMenuEntry<String>>[
-                for (int i = 0;
-                    i < _categories.length;
-                    i++) ...<PopupMenuEntry<String>>[
-                  PopupMenuItem<String>(
-                    value: _categories[i],
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.padding16,
-                      vertical: Dimensions.padding8,
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          _iconFor(_categories[i]),
-                          size: Dimensions.itemWidth20,
-                          color: ctxColors.textPrimary,
-                        ),
-                        const SizedBox(width: Dimensions.itemWidth12),
-                        Text(
-                          _labelFor(_categories[i]),
-                          style: AppTextStyles.bodyLarge(
-                            ctxColors.textPrimary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (i < _categories.length - 1)
-                    PopupMenuDivider(height: 1, color: ctxColors.border),
-                ],
-              ];
-            },
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  _iconFor(_selected),
-                  size: Dimensions.itemWidth20,
-                  color: colors.textPrimary,
-                ),
-                const SizedBox(width: Dimensions.itemWidth8),
-                Expanded(
-                  child: Text(
-                    _labelFor(_selected),
-                    style: AppTextStyles.bodyLarge(colors.textPrimary),
-                  ),
-                ),
-                Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: colors.textSecondary,
-                ),
-              ],
-            ),
-          ),
+        AppBackBar(
+          label: _labelFor(selected),
+          onBack: () => setState(() => _selected = null),
         ),
-
         Expanded(
-          child: switch (_selected) {
-            _keyUnknown => const _UnknownTab(),
-            _keyListened => const _ListenedTab(),
-            _ => const _BookmarksTab(),
-          },
+          child: selected == _keyUnknown
+              ? const _UnknownTab()
+              : const _BookmarksTab(),
         ),
       ],
     );
   }
+}
+
+// ── Category cards ──────────────────────────────────────────────────────────
+
+class _BookmarkCategoryCards extends StatelessWidget {
+  const _BookmarkCategoryCards({
+    required this.labelFor,
+    required this.iconFor,
+    required this.onSelected,
+  });
+
+  final String Function(String key) labelFor;
+  final IconData Function(String key) iconFor;
+  final ValueChanged<String> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return BlocBuilder<BookmarksBloc, BookmarksState>(
+      builder: (BuildContext context, BookmarksState state) {
+        final BookmarksLoaded? loaded = state is BookmarksLoaded ? state : null;
+        return AppFilledCardList(
+          children: <Widget>[
+            _card(
+              _BookmarksScreenState._keyBookmarks,
+              colors.bookmarksCard,
+              loaded?.bookmarks.length,
+            ),
+            _card(
+              _BookmarksScreenState._keyUnknown,
+              colors.unknownCard,
+              loaded?.unknownWords.length,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _card(String key, Color color, int? count) => AppIconFilledCard(
+        color: color,
+        icon: iconFor(key),
+        label: labelFor(key),
+        count: count,
+        onTap: () => onSelected(key),
+      );
 }
 
 // ── Bookmarks tab ───────────────────────────────────────────────────────────
@@ -168,10 +129,10 @@ class _BookmarksTab extends StatelessWidget {
                   word: word,
                   onRemoveWithUndo: () {
                     final String? article = word.article;
-                    final String bare = article != null &&
-                            word.key.startsWith('$article ')
-                        ? word.key.substring(article.length + 1)
-                        : word.key;
+                    final String bare =
+                        article != null && word.key.startsWith('$article ')
+                            ? word.key.substring(article.length + 1)
+                            : word.key;
                     context.read<BookmarksBloc>().removeBookmark(word);
                     AppSnackbar.show(
                       context,
@@ -235,10 +196,10 @@ class _UnknownTab extends StatelessWidget {
                   word: word,
                   onRemoveWithUndo: () {
                     final String? article = word.article;
-                    final String bare = article != null &&
-                            word.key.startsWith('$article ')
-                        ? word.key.substring(article.length + 1)
-                        : word.key;
+                    final String bare =
+                        article != null && word.key.startsWith('$article ')
+                            ? word.key.substring(article.length + 1)
+                            : word.key;
                     context.read<BookmarksBloc>().removeUnknownWord(word);
                     AppSnackbar.show(
                       context,
@@ -249,77 +210,6 @@ class _UnknownTab extends StatelessWidget {
                         label: 'bookmarks.undo'.tr(),
                         onPressed: () =>
                             context.read<BookmarksBloc>().addUnknownWord(word),
-                      ),
-                    );
-                  },
-                );
-              },
-            );
-          }
-          if (state is BookmarksError) {
-            return _BookmarksErrorView(state: state);
-          }
-          return Center(child: Text('common.something_wrong'.tr()));
-        },
-      );
-}
-
-// ── Listened tab ────────────────────────────────────────────────────────────
-
-class _ListenedTab extends StatelessWidget {
-  const _ListenedTab();
-
-  @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<BookmarksBloc, BookmarksState>(
-        builder: (BuildContext context, BookmarksState state) {
-          if (state is BookmarksLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is BookmarksLoaded) {
-            final AppColors colors = AppColors.of(context);
-
-            if (state.listenedWords.isEmpty) {
-              return EmptyStateView(
-                icon: Icons.headphones_outlined,
-                color: colors.primary,
-                tintColor: colors.primaryTint,
-                title: 'bookmarks.listened_empty'.tr(),
-                description: 'bookmarks.listened_empty_description'.tr(),
-              );
-            }
-            return ListView.builder(
-              padding: const EdgeInsets.fromLTRB(
-                Dimensions.padding16,
-                Dimensions.padding8,
-                Dimensions.padding16,
-                Dimensions.padding20,
-              ),
-              itemCount: state.listenedWords.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Word word = state.listenedWords[index];
-                return _BookmarkItem(
-                  word: word,
-                  onRemoveWithUndo: () {
-                    final String? article = word.article;
-                    final String bare = article != null &&
-                            word.key.startsWith('$article ')
-                        ? word.key.substring(article.length + 1)
-                        : word.key;
-                    context.read<BookmarksBloc>().removeListenedWord(word);
-                    AppSnackbar.show(
-                      context,
-                      type: SnackbarType.info,
-                      title: bare,
-                      subtitle: 'bookmarks.listened_removed'.tr(),
-                      action: SnackbarAction(
-                        label: 'bookmarks.undo'.tr(),
-                        onPressed: () async {
-                          await DBHelper.addListenedWord(word);
-                          if (context.mounted) {
-                            context.read<BookmarksBloc>().loadBookmarks();
-                          }
-                        },
                       ),
                     );
                   },
@@ -414,41 +304,41 @@ class _BookmarkItem extends StatelessWidget {
             vertical: Dimensions.padding14,
           ),
           child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      word.key,
+                      style: AppTextStyles.wordSource(colors.textPrimary),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: Dimensions.itemHeight6),
+                    if (isAzDe)
+                      TranslationChips(
+                        translations: TranslationChips.parse(word.value),
+                      )
+                    else
                       Text(
-                        word.key,
-                        style: AppTextStyles.wordSource(colors.textPrimary),
+                        word.value,
+                        style: AppTextStyles.bodyMedium(colors.textSecondary),
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: Dimensions.itemHeight6),
-                      if (isAzDe)
-                        TranslationChips(
-                          translations: TranslationChips.parse(word.value),
-                        )
-                      else
-                        Text(
-                          word.value,
-                          style: AppTextStyles.bodyMedium(colors.textSecondary),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                    ],
-                  ),
+                  ],
                 ),
-                const SizedBox(width: Dimensions.itemWidth8),
-                Icon(
-                  Icons.chevron_right,
-                  size: Dimensions.itemWidth18,
-                  color: colors.textSecondary.withValues(alpha: 0.4),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(width: Dimensions.itemWidth8),
+              Icon(
+                Icons.chevron_right,
+                size: Dimensions.itemWidth18,
+                color: colors.textSecondary.withValues(alpha: 0.4),
+              ),
+            ],
           ),
         ),
+      ),
     );
   }
 }

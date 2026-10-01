@@ -8,6 +8,15 @@ class AppTheme {
   // ─── Light palette ───────────────────────────────────────────
   static const Color mainColor = Color(0xFF4F3DE0); // deep indigo
   static const Color primaryTint = Color(0xFFEDEAFB);
+  static const Color levelA1 = Color(0xFF7B6CF0);
+  static const Color levelA2 = Color(0xFF6252E6);
+  static const Color levelB1 = Color(0xFF4F3DE0);
+  static const Color levelB2 = Color(0xFF3626A8);
+  static const Color bookmarksCard = Color(0xFFB9790C);
+  static const Color unknownCard = Color(0xFF8F5A00);
+  static const Color quizCard = Color(0xFF1FA97E);
+  static const Color listeningCard = Color(0xFF138A6F);
+  static const Color resultsCard = Color(0xFF0C6B58);
   static const Color accentColor = Color(0xFFB9790C); // warm gold
   static const Color secondaryColor = Color(0xFF6B6580);
 
@@ -31,6 +40,15 @@ class AppTheme {
   // ─── Dark palette ────────────────────────────────────────────
   static const Color mainColorDark = Color(0xFF8C7DFF);
   static const Color primaryTintDark = Color(0x2E8C7DFF); // ~18%
+  static const Color levelA1Dark = Color(0xFF8C7DFF);
+  static const Color levelA2Dark = Color(0xFF7767F0);
+  static const Color levelB1Dark = Color(0xFF6455DC);
+  static const Color levelB2Dark = Color(0xFF5244C2);
+  static const Color bookmarksCardDark = Color(0xFFC98A1B);
+  static const Color unknownCardDark = Color(0xFFA06E10);
+  static const Color quizCardDark = Color(0xFF2EAE86);
+  static const Color listeningCardDark = Color(0xFF1F9A74);
+  static const Color resultsCardDark = Color(0xFF177F5F);
   static const Color accentColorDark = Color(0xFFFBBF57);
 
   static const Color backgroundDark = Color(0xFF14121F);
@@ -101,6 +119,15 @@ class AppTheme {
         primary: mainColor,
         onPrimary: Colors.white,
         primaryTint: primaryTint,
+        levelA1: levelA1,
+        levelA2: levelA2,
+        levelB1: levelB1,
+        levelB2: levelB2,
+        bookmarksCard: bookmarksCard,
+        unknownCard: unknownCard,
+        quizCard: quizCard,
+        listeningCard: listeningCard,
+        resultsCard: resultsCard,
         accent: accentColor,
         surface: surfaceLight,
         headerBg: headerBgLight,
@@ -178,6 +205,15 @@ class AppTheme {
         primary: mainColorDark,
         onPrimary: Colors.white,
         primaryTint: primaryTintDark,
+        levelA1: levelA1Dark,
+        levelA2: levelA2Dark,
+        levelB1: levelB1Dark,
+        levelB2: levelB2Dark,
+        bookmarksCard: bookmarksCardDark,
+        unknownCard: unknownCardDark,
+        quizCard: quizCardDark,
+        listeningCard: listeningCardDark,
+        resultsCard: resultsCardDark,
         accent: accentColorDark,
         surface: surfaceDark,
         headerBg: headerBgDark,

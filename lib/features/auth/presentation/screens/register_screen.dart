@@ -137,11 +137,7 @@ class _RegisterView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: bg,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded,
-              size: Dimensions.itemHeight20, color: colors.textPrimary),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        leading: BackButton(color: colors.textPrimary),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

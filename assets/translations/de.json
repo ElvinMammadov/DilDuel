@@ -132,11 +132,7 @@
     "unknown": "Unbekannte",
     "unknown_empty": "Keine unbekannten Wörter",
     "unknown_empty_description": "Wörter, die Sie beim Training nicht kennen, werden hier angezeigt",
-    "unknown_removed": "Aus Unbekannte entfernt",
-    "listened": "Gehörte Wörter",
-    "listened_empty": "Keine gehörten Wörter",
-    "listened_empty_description": "Wörter, die Sie im Hörtest richtig beantwortet haben, erscheinen hier",
-    "listened_removed": "Aus gehörten Wörtern entfernt"
+    "unknown_removed": "Aus Unbekannte entfernt"
   },
   "listening": {
     "title": "Hören",
@@ -229,7 +225,6 @@
   },
   "training": {
     "title": "Wortübung",
-    "choose_level": "Niveau wählen",
     "level": "Niveau",
     "word_count": "{} / {}",
     "no_words": "Keine Wörter für dieses Niveau gefunden",

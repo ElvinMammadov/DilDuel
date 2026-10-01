@@ -34,9 +34,9 @@ class DilDuelAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       titleSpacing: 0,
       leading: showBackButton
-          ? IconButton(
-              icon: Icon(Icons.arrow_back, color: colors.textPrimary),
-              onPressed: onBackPressed ?? () => Navigator.pop(context),
+          ? BackButton(
+              color: colors.textPrimary,
+              onPressed: onBackPressed,
             )
           : null,
       title: Padding(

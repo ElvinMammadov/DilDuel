@@ -66,6 +66,15 @@
     "theme_changed_to": "Ausgewähltes Design: {}",
     "logout": "Abmelden",
     "logout_success": "Erfolgreich abgemeldet",
+    "privacy_policy": {
+      "title": "Datenschutzerklärung",
+      "subtitle": "Wie wir mit Ihren Daten umgehen"
+    },
+    "legal_notice": {
+      "title": "Impressum",
+      "subtitle": "Anbieterkennzeichnung"
+    },
+    "link_error": "Seite konnte nicht geöffnet werden",
     "delete_account": {
       "button": "Konto löschen",
       "title": "Konto löschen?",

@@ -6,89 +6,21 @@
 <title>Delete your DilDuel account</title>
 <meta name="description" content="Request deletion of your DilDuel account and all associated data.">
 <link rel="icon" href="../assets/icon.png">
-<style>
-  @font-face {
-    font-family: "Plus Jakarta Sans";
-    src: url("../assets/fonts/PlusJakartaSans.ttf") format("truetype");
-    font-weight: 200 800;
-    font-display: swap;
-  }
-  :root {
-    --bg: #f6f5fb; --surface: #ffffff; --text: #1b1730; --muted: #6b6580;
-    --border: #e7e4f3; --chip: #f0eef9; --primary: #4f3de0; --on-primary: #ffffff;
-    --primary-tint: #edeafb; --danger: #d63c41; --danger-tint: #fbe9ea;
-    --ok: #1fa97e; --ok-tint: #e6f6ef;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #14121f; --surface: #1e1b2e; --text: #f3f1fa; --muted: #a39fb8;
-      --border: #2b2840; --chip: #2b2840; --primary: #8c7dff; --on-primary: #14121f;
-      --primary-tint: #2a2548; --danger: #ff7a7d; --danger-tint: #3a2230;
-      --ok: #4ade9a; --ok-tint: #1c3330;
-    }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; background: var(--bg); color: var(--text);
-    font: 16px/1.55 "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  }
-  main { max-width: 640px; margin: 0 auto; padding: 32px 16px 64px; }
-  h1 { font-size: 28px; line-height: 1.2; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 8px; }
-  h2 { font-size: 18px; margin: 0 0 8px; }
-  p { margin: 0 0 12px; }
-  .lead { color: var(--muted); margin-bottom: 24px; }
-  .card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 16px; padding: 20px; margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba(27, 23, 48, .08);
-  }
-  ul, ol { margin: 0 0 12px; padding-left: 20px; }
-  li { margin-bottom: 4px; }
-  label { display: block; font-weight: 600; margin: 12px 0 4px; }
-  input[type=email], input[type=password], input[type=text] {
-    width: 100%; padding: 12px 14px; font: inherit; color: var(--text);
-    background: var(--chip); border: 1px solid var(--border); border-radius: 12px;
-  }
-  input:focus-visible, button:focus-visible, a:focus-visible {
-    outline: 2px solid var(--primary); outline-offset: 2px;
-  }
-  button {
-    font: inherit; font-weight: 700; cursor: pointer; border-radius: 100px;
-    padding: 12px 20px; border: 1px solid var(--primary);
-    background: var(--primary); color: var(--on-primary);
-  }
-  button.secondary { background: transparent; color: var(--primary); }
-  button.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
-  button:disabled { opacity: .5; cursor: not-allowed; }
-  .row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
-  .msg { padding: 12px 14px; border-radius: 12px; margin-top: 12px; }
-  .msg.error { background: var(--danger-tint); color: var(--danger); }
-  .msg.ok { background: var(--ok-tint); color: var(--ok); }
-  .hidden { display: none !important; }
-  .back {
-    display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px;
-    padding: 8px 16px 8px 12px; border-radius: 100px; background: var(--chip);
-    color: var(--primary); font-size: 14px; font-weight: 700; text-decoration: none;
-  }
-  .back svg { width: 18px; height: 18px; fill: currentColor; }
-  .site-links { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: center; margin-top: 24px; }
-  .site-links a { font-size: 14px; font-weight: 600; text-decoration: none; color: var(--muted); }
-  .site-links a:hover { color: var(--primary); }
-  .small { font-size: 14px; color: var(--muted); }
-  a { color: var(--primary); }
-  .lang { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 16px; }
-  .lang button { padding: 6px 14px; font-size: 14px; background: transparent; color: var(--primary); }
-  .lang button[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
-</style>
+<link rel="stylesheet" href="../assets/site.css">
 </head>
 <body>
-<main>
-  <nav class="lang" aria-label="Language">
-    <button type="button" data-lang="en">EN</button>
-    <button type="button" data-lang="az">AZ</button>
-    <button type="button" data-lang="de">DE</button>
-  </nav>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" id="brand-link" href="../"><img src="../assets/icon.png" alt="" width="32" height="32"><span>DilDuel</span></a>
+    <nav class="lang" aria-label="Language">
+      <a href="?lang=en" hreflang="en" lang="en" data-lang="en" title="English">EN</a>
+      <a href="?lang=de" hreflang="de" lang="de" data-lang="de" title="Deutsch">DE</a>
+      <a href="?lang=az" hreflang="az" lang="az" data-lang="az" title="Azərbaycan">AZ</a>
+    </nav>
+  </div>
+</header>
 
+<main class="wrap prose">
   <a class="back" id="link-back" href="../">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
     <span data-i18n="linkBack"></span>
@@ -123,7 +55,7 @@
     <h2 data-i18n="s1Title"></h2>
     <p data-i18n="s1Intro"></p>
     <div class="row">
-      <button id="google-btn" type="button" data-i18n="googleBtn"></button>
+      <button class="btn primary" id="google-btn" type="button" data-i18n="googleBtn"></button>
     </div>
     <form id="email-form" novalidate>
       <label for="email" data-i18n="emailLabel"></label>
@@ -131,7 +63,7 @@
       <label for="password" data-i18n="passwordLabel"></label>
       <input id="password" type="password" autocomplete="current-password" required>
       <div class="row">
-        <button class="secondary" type="submit" data-i18n="emailBtn"></button>
+        <button class="btn" type="submit" data-i18n="emailBtn"></button>
       </div>
     </form>
     <div id="signin-error" class="msg error hidden" role="alert"></div>
@@ -144,23 +76,29 @@
     <label for="confirm-text" data-i18n-html="confirmLabel"></label>
     <input id="confirm-text" type="text" autocomplete="off" autocapitalize="characters">
     <div class="row">
-      <button id="delete-btn" class="danger" type="button" disabled data-i18n="deleteBtn"></button>
-      <button id="cancel-btn" class="secondary" type="button" data-i18n="cancelBtn"></button>
+      <button class="btn danger" id="delete-btn" type="button" disabled data-i18n="deleteBtn"></button>
+      <button class="btn" id="cancel-btn" type="button" data-i18n="cancelBtn"></button>
     </div>
     <div id="delete-error" class="msg error hidden" role="alert"></div>
   </section>
-
-  <nav class="site-links" aria-label="Site">
-    <a id="link-home" href="../"></a>
-    <a id="link-privacy" href="../privacy/"></a>
-    <a id="link-impressum" href="../impressum/"></a>
-  </nav>
 
   <section class="card hidden" id="done-card">
     <h2 data-i18n="doneTitle"></h2>
     <p data-i18n="doneBody"></p>
   </section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <nav>
+      <a id="foot-home" href="../"></a>
+      <a id="foot-privacy" href="../privacy/"></a>
+      <a id="foot-impressum" href="../impressum/"></a>
+      <a id="foot-delete" href="./"></a>
+    </nav>
+    <small id="foot-small"></small>
+  </div>
+</footer>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
@@ -180,9 +118,9 @@
     appId: "1:503985897884:web:8a4b58c8522352470fc859",
   };
   const CONTACT_EMAIL = "elvin.m@hotmail.com";
-  // Must match the developer name shown on the Google Play listing.
-  const DEVELOPER_NAME = "Elvin Mammadov";
   const MAIL_SUBJECT = "DilDuel account deletion request";
+  const NAME = { en: "Elvin Mammadov", de: "Elvin Mammadov", az: "Elvin Məmmədov" };
+  const COPYRIGHT_YEAR = "2026";
   const GOOGLE_DELETION_POLICY = "https://cloud.google.com/docs/security/deletion";
 
   // Per-user subcollections written by the app: users/{uid}/<name>/*
@@ -228,6 +166,8 @@
       doneTitle: "Your account has been deleted",
       doneBody: "Your account and associated data were removed. You can close this page.",
       linkBack: "Back to home",
+      linkDelete: "Delete account",
+      tagline: "German–Azerbaijani dictionary and vocabulary trainer",
       linkHome: "Home",
       linkPrivacy: "Privacy Policy",
       linkImpressum: "Legal Notice",
@@ -274,6 +214,8 @@
       doneTitle: "Hesabınız silindi",
       doneBody: "Hesabınız və əlaqəli məlumatlar silindi. Bu səhifəni bağlaya bilərsiniz.",
       linkBack: "Ana səhifəyə qayıt",
+      linkDelete: "Hesabı sil",
+      tagline: "Alman–Azərbaycan lüğəti və söz öyrənmə tətbiqi",
       linkHome: "Ana səhifə",
       linkPrivacy: "Məxfilik siyasəti",
       linkImpressum: "Impressum",
@@ -320,6 +262,8 @@
       doneTitle: "Ihr Konto wurde gelöscht",
       doneBody: "Ihr Konto und die zugehörigen Daten wurden entfernt. Sie können diese Seite schließen.",
       linkBack: "Zurück zur Startseite",
+      linkDelete: "Konto löschen",
+      tagline: "Wörterbuch und Vokabeltrainer Deutsch–Aserbaidschanisch",
       linkHome: "Startseite",
       linkPrivacy: "Datenschutzerklärung",
       linkImpressum: "Impressum",
@@ -361,7 +305,7 @@
 
   // Only static constants are interpolated; no user input reaches innerHTML.
   const fill = (template) => template
-    .replaceAll("{dev}", DEVELOPER_NAME)
+    .replaceAll("{dev}", NAME[lang])
     .replaceAll("{email}", `<a href="mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(MAIL_SUBJECT)}">${CONTACT_EMAIL}</a>`)
     .replaceAll("{policy}", `<a href="${GOOGLE_DELETION_POLICY}" rel="noopener">${t("policyLink")}</a>`);
 
@@ -384,21 +328,30 @@
     document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
     document.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = fill(t(el.dataset.i18nHtml)); });
     const sitePrefix = next === "en" ? "../" : `../${next}/`;
+    $("brand-link").href = sitePrefix;
     $("link-back").href = sitePrefix;
-    [["link-home", "", "linkHome"], ["link-privacy", "privacy/", "linkPrivacy"],
-     ["link-impressum", "impressum/", "linkImpressum"]].forEach(([id, path, key]) => {
+    [["foot-home", "", "linkHome"], ["foot-privacy", "privacy/", "linkPrivacy"],
+     ["foot-impressum", "impressum/", "linkImpressum"]].forEach(([id, path, key]) => {
       $(id).href = sitePrefix + path;
       $(id).textContent = t(key);
     });
-    document.querySelectorAll("[data-lang]").forEach((btn) => {
-      btn.setAttribute("aria-pressed", String(btn.dataset.lang === next));
+    $("foot-delete").href = `./?lang=${next}`;
+    $("foot-delete").textContent = t("linkDelete");
+    $("foot-small").textContent = `© ${COPYRIGHT_YEAR} ${NAME[next]} · ${t("tagline")}`;
+    document.querySelectorAll("[data-lang]").forEach((link) => {
+      if (link.dataset.lang === next) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
     });
     if (lastError) lastError.el.textContent = t(lastError.key);
     try { localStorage.setItem("lang", next); } catch (_) { /* storage unavailable */ }
   }
 
-  document.querySelectorAll("[data-lang]").forEach((btn) =>
-    btn.addEventListener("click", () => applyLanguage(btn.dataset.lang)));
+  document.querySelectorAll("[data-lang]").forEach((link) =>
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      applyLanguage(link.dataset.lang);
+      history.replaceState(null, "", `?lang=${link.dataset.lang}`);
+    }));
 
   applyLanguage(pickInitialLang());
 

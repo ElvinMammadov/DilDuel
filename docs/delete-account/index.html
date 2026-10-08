@@ -65,6 +65,12 @@
   .msg.error { background: var(--danger-tint); color: var(--danger); }
   .msg.ok { background: var(--ok-tint); color: var(--ok); }
   .hidden { display: none !important; }
+  .back {
+    display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px;
+    padding: 8px 16px 8px 12px; border-radius: 100px; background: var(--chip);
+    color: var(--primary); font-size: 14px; font-weight: 700; text-decoration: none;
+  }
+  .back svg { width: 18px; height: 18px; fill: currentColor; }
   .site-links { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: center; margin-top: 24px; }
   .site-links a { font-size: 14px; font-weight: 600; text-decoration: none; color: var(--muted); }
   .site-links a:hover { color: var(--primary); }
@@ -83,6 +89,10 @@
     <button type="button" data-lang="de">DE</button>
   </nav>
 
+  <a class="back" id="link-back" href="../">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    <span data-i18n="linkBack"></span>
+  </a>
   <h1 data-i18n="h1"></h1>
   <p class="lead" data-i18n-html="lead"></p>
 
@@ -217,6 +227,7 @@
       cancelBtn: "Cancel",
       doneTitle: "Your account has been deleted",
       doneBody: "Your account and associated data were removed. You can close this page.",
+      linkBack: "Back to home",
       linkHome: "Home",
       linkPrivacy: "Privacy Policy",
       linkImpressum: "Legal Notice",
@@ -262,6 +273,7 @@
       cancelBtn: "Ləğv et",
       doneTitle: "Hesabınız silindi",
       doneBody: "Hesabınız və əlaqəli məlumatlar silindi. Bu səhifəni bağlaya bilərsiniz.",
+      linkBack: "Ana səhifəyə qayıt",
       linkHome: "Ana səhifə",
       linkPrivacy: "Məxfilik siyasəti",
       linkImpressum: "Impressum",
@@ -307,6 +319,7 @@
       cancelBtn: "Abbrechen",
       doneTitle: "Ihr Konto wurde gelöscht",
       doneBody: "Ihr Konto und die zugehörigen Daten wurden entfernt. Sie können diese Seite schließen.",
+      linkBack: "Zurück zur Startseite",
       linkHome: "Startseite",
       linkPrivacy: "Datenschutzerklärung",
       linkImpressum: "Impressum",
@@ -371,6 +384,7 @@
     document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
     document.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = fill(t(el.dataset.i18nHtml)); });
     const sitePrefix = next === "en" ? "../" : `../${next}/`;
+    $("link-back").href = sitePrefix;
     [["link-home", "", "linkHome"], ["link-privacy", "privacy/", "linkPrivacy"],
      ["link-impressum", "impressum/", "linkImpressum"]].forEach(([id, path, key]) => {
       $(id).href = sitePrefix + path;

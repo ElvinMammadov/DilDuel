@@ -227,6 +227,12 @@
       "name_full_required": "Lütfən ad və soyadınızı daxil edin",
       "confirm_required": "Şifrəni təsdiqləyin",
       "passwords_mismatch": "Şifrələr uyğun gəlmir"
+    },
+    "guest_data": {
+      "title": "Məlumatlarınız saxlanılsın?",
+      "message": "Qeydiyyatdan əvvəl əlavə etdiyiniz əlfəcinlər, məşq nəticələri və digər məlumatlar var. Onları hesabınıza yükləmək istəyirsiniz?",
+      "keep": "Saxla",
+      "discard": "Sil"
     }
   },
   "training": {
@@ -241,6 +247,13 @@
     "bookmarked": "\"{}\" seçilmişlərə əlavə edildi",
     "bookmark_removed": "\"{}\" seçilmişlərdən silindi",
     "marked_unknown": "\"{}\" bilinməyənlərə əlavə edildi",
-    "unknown_removed": "\"{}\" bilinməyənlərdən silindi"
+    "unknown_removed": "\"{}\" bilinməyənlərdən silindi",
+    "jump": {
+      "title": "Sözə keç",
+      "hint": "Söz nömrəsini dəyiş",
+      "start": "Başlanğıc",
+      "end": "Son",
+      "go": "{} nömrəli sözə keç"
+    }
   }
 }

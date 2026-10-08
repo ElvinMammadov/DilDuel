@@ -15,4 +15,7 @@ class LocalTrainingProgressRepository implements TrainingProgressRepository {
 
   @override
   Future<String?> getLastTrainingLevel() => DBHelper.getLastTrainingLevel();
+
+  @override
+  Future<void> flush() async {}
 }

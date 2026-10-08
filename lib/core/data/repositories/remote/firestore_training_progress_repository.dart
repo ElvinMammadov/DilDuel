@@ -56,6 +56,27 @@ class FirestoreTrainingProgressRepository
     }
   }
 
+  /// Writes every `{level: index}` entry for [uid] in a single batch.
+  ///
+  /// Unlike [saveLevelPosition], errors propagate so the caller can retry.
+  Future<void> saveLevelPositions(String uid, Map<String, int> positions) {
+    final WriteBatch batch = _firestore.batch();
+    positions.forEach((String level, int index) {
+      batch.set(
+        _progress(uid).doc(level),
+        <String, dynamic>{
+          'currentIndex': index,
+          'lastAccessedAt': FieldValue.serverTimestamp(),
+        },
+        SetOptions(merge: true),
+      );
+    });
+    return batch.commit();
+  }
+
+  @override
+  Future<void> flush() async {}
+
   @override
   Future<String?> getLastTrainingLevel() async {
     final String? uid = _uid;

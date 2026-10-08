@@ -43,6 +43,9 @@ class _TrainingNavButtons extends StatelessWidget {
             current: state.currentIndex,
             primary: primary,
             border: border,
+            onTap: state.total > 1
+                ? () => _JumpToWordSheet.show(context, state: state)
+                : null,
           ),
           const SizedBox(width: Dimensions.itemWidth16),
           // ── Forward button ────────────────────────────────────────
@@ -126,52 +129,112 @@ class _NavButton extends StatelessWidget {
   }
 }
 
-/// A compact animated progress bar with word counter below it.
+/// A compact animated progress bar with a tappable word counter below it.
+///
+/// Tapping opens the "jump to word" sheet when [onTap] is provided.
 class _TrainingProgressBar extends StatelessWidget {
   final int total;
   final int current;
   final Color primary;
   final Color border;
+  final VoidCallback? onTap;
 
   const _TrainingProgressBar({
     required this.total,
     required this.current,
     required this.primary,
     required this.border,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final double value = total <= 1 ? 1.0 : current / (total - 1);
-    return SizedBox(
-      width: 56,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: TweenAnimationBuilder<double>(
-              tween: Tween<double>(begin: 0, end: value),
-              duration: const Duration(milliseconds: 300),
-              builder: (BuildContext ctx, double v, Widget? _) =>
-                  LinearProgressIndicator(
-                value: v,
-                minHeight: Dimensions.itemHeight6,
-                backgroundColor: border.a < 0.32
-                    ? border.withValues(alpha: 0.32)
-                    : border,
-                valueColor: AlwaysStoppedAnimation<Color>(primary),
+    return Semantics(
+      button: onTap != null,
+      label: 'training.jump.hint'.tr(),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: Dimensions.padding8),
+          child: IntrinsicWidth(
+            child: ConstrainedBox(
+              constraints:
+                  const BoxConstraints(minWidth: Dimensions.itemWidth64),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(Dimensions.itemHeight4),
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0, end: value),
+                      duration: const Duration(milliseconds: 300),
+                      builder: (BuildContext ctx, double v, Widget? _) =>
+                          LinearProgressIndicator(
+                        value: v,
+                        minHeight: Dimensions.itemHeight6,
+                        backgroundColor: border.a < 0.32
+                            ? border.withValues(alpha: 0.32)
+                            : border,
+                        valueColor: AlwaysStoppedAnimation<Color>(primary),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: Dimensions.padding6),
+                  _CounterPill(
+                    text: '${current + 1} / $total',
+                    color: primary,
+                    showIcon: onTap != null,
+                  ),
+                ],
               ),
             ),
           ),
-          const SizedBox(height: Dimensions.padding4),
-          Text(
-            '${current + 1} / $total',
-            style: AppTextStyles.caption(primary),
-            textAlign: TextAlign.center,
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+class _CounterPill extends StatelessWidget {
+  const _CounterPill({
+    required this.text,
+    required this.color,
+    required this.showIcon,
+  });
+
+  final String text;
+  final Color color;
+  final bool showIcon;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+        decoration: BoxDecoration(
+          color: AppColors.of(context).primaryTint,
+          borderRadius: BorderRadius.circular(Dimensions.borderRadiusPill),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.padding8,
+            vertical: Dimensions.padding2,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(text, style: AppTextStyles.caption(color)),
+              if (showIcon) ...<Widget>[
+                const SizedBox(width: Dimensions.itemWidth2),
+                Icon(
+                  Icons.unfold_more_rounded,
+                  size: Dimensions.itemHeight14,
+                  color: color,
+                ),
+              ],
+            ],
+          ),
+        ),
+      );
 }

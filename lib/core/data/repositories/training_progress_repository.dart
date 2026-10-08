@@ -8,4 +8,8 @@ abstract class TrainingProgressRepository {
 
   /// Returns the most recently accessed level, or `null` if none.
   Future<String?> getLastTrainingLevel();
+
+  /// Sends any positions still waiting to be synced to remote storage.
+  /// A no-op for repositories that write through immediately.
+  Future<void> flush();
 }

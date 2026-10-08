@@ -65,7 +65,20 @@
     "theme_changed": "Görünüş dəyişdirildi",
     "theme_changed_to": "Seçilən görünüş: {}",
     "logout": "Çıxış",
-    "logout_success": "Uğurla çıxış etdiniz"
+    "logout_success": "Uğurla çıxış etdiniz",
+    "delete_account": {
+      "button": "Hesabı sil",
+      "title": "Hesab silinsin?",
+      "message": "Hesabınız və bütün sinxronlaşdırılmış məlumatlar (seçilmişlər, test nəticələri, məşq irəliləyişi) həmişəlik silinəcək. Bu əməliyyatı geri qaytarmaq olmaz.",
+      "password_hint": "Təsdiq üçün şifrənizi daxil edin",
+      "reauth_hint": "Təsdiq üçün yenidən daxil olmağınız istənəcək.",
+      "confirm": "Sil",
+      "cancel": "Ləğv et",
+      "success": "Hesabınız silindi",
+      "error_wrong_password": "Şifrə yanlışdır",
+      "error_network": "Şəbəkə xətası. İnternet bağlantınızı yoxlayın.",
+      "error_generic": "Hesabı silmək alınmadı. Yenidən cəhd edin."
+    }
   },
   "quiz": {
     "title": "Tərcümə",

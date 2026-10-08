@@ -44,7 +44,7 @@ class _TrainingNavButtons extends StatelessWidget {
             primary: primary,
             border: border,
             onTap: state.total > 1
-                ? () => _JumpToWordSheet.show(context, state: state)
+                ? () => JumpToWordSheet.show(context, state: state)
                 : null,
           ),
           const SizedBox(width: Dimensions.itemWidth16),

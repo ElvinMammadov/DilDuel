@@ -49,7 +49,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           AppSnackbar.show(
             ctx,
             type: SnackbarType.success,
-            title: 'settings.logout_success'.tr(),
+            title: state is AuthAccountDeleted
+                ? 'settings.delete_account.success'.tr()
+                : 'settings.logout_success'.tr(),
           );
         } else if (state is AuthAuthenticated) {
           AppSnackbar.show(
@@ -236,6 +238,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       width: double.infinity,
                       backgroundColor: ctxColors.errorTint,
                       textColor: ctxColors.error,
+                    ),
+                    const SizedBox(height: Dimensions.itemHeight10),
+                    AppOutlinedButton(
+                      text: 'settings.delete_account.button'.tr(),
+                      onPressed: () => _DeleteAccountDialog.show(context),
+                      width: double.infinity,
+                      borderColor: ctxColors.error,
                     ),
                   ],
                 );

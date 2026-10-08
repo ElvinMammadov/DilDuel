@@ -33,6 +33,12 @@ class AuthUnauthenticated extends AuthState {
   List<Object?> get props => <Object?>[];
 }
 
+/// The signed-in user's account was permanently deleted. Behaves like
+/// [AuthUnauthenticated] for listeners that only care about being signed out.
+class AuthAccountDeleted extends AuthUnauthenticated {
+  const AuthAccountDeleted();
+}
+
 /// Password-reset e-mail was sent successfully.
 class AuthPasswordResetSent extends AuthState {
   const AuthPasswordResetSent();

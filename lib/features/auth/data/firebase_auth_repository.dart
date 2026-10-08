@@ -28,13 +28,7 @@ class FirebaseAuthRepository implements AuthRepository {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     if (googleUser == null) throw const SignInCancelledException();
 
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-
-    final fb.OAuthCredential credential = fb.GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+    final fb.OAuthCredential credential = await _googleCredential(googleUser);
 
     final fb.UserCredential result =
         await _auth.signInWithCredential(credential);
@@ -57,10 +51,7 @@ class FirebaseAuthRepository implements AuthRepository {
     );
 
     final fb.OAuthCredential credential =
-        fb.OAuthProvider('apple.com').credential(
-      idToken: appleCredential.identityToken,
-      accessToken: appleCredential.authorizationCode,
-    );
+        _appleOAuthCredential(appleCredential);
 
     final fb.UserCredential result =
         await _auth.signInWithCredential(credential);
@@ -131,7 +122,136 @@ class FirebaseAuthRepository implements AuthRepository {
     ]);
   }
 
+  // ── Account deletion ──────────────────────────────────────────────────────
+
+  static const int _batchLimit = 400;
+
+  @override
+  bool get hasPasswordSignIn => _providerIds.contains('password');
+
+  Set<String> get _providerIds => <String>{
+        for (final fb.UserInfo info
+            in _auth.currentUser?.providerData ?? <fb.UserInfo>[])
+          info.providerId,
+      };
+
+  @override
+  Future<void> deleteAccount({String? password}) async {
+    final fb.User? user = _auth.currentUser;
+    if (user == null) return;
+
+    // Re-authenticate first so a failed prompt leaves all data untouched.
+    final String? appleAuthorizationCode =
+        await _reauthenticate(user, password);
+    await _deleteUserData(user.uid);
+    if (appleAuthorizationCode != null) {
+      await _revokeAppleToken(appleAuthorizationCode);
+    }
+    await user.delete();
+    await _googleSignIn.signOut();
+  }
+
+  /// Re-authenticates with the provider the account uses. Returns the Apple
+  /// authorization code when the account uses Sign in with Apple, so the
+  /// token can be revoked after deletion.
+  Future<String?> _reauthenticate(fb.User user, String? password) async {
+    final Set<String> providers = _providerIds;
+    if (providers.contains('password')) {
+      await _reauthenticateWithPassword(user, password);
+    } else if (providers.contains('google.com')) {
+      await _reauthenticateWithGoogle(user);
+    } else if (providers.contains('apple.com')) {
+      return _reauthenticateWithApple(user);
+    }
+    return null;
+  }
+
+  Future<void> _reauthenticateWithPassword(
+    fb.User user,
+    String? password,
+  ) async {
+    final String? email = user.email;
+    if (email == null || password == null) {
+      throw fb.FirebaseAuthException(code: 'wrong-password');
+    }
+    await user.reauthenticateWithCredential(
+      fb.EmailAuthProvider.credential(email: email, password: password),
+    );
+  }
+
+  Future<void> _reauthenticateWithGoogle(fb.User user) async {
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) throw const SignInCancelledException();
+    await user.reauthenticateWithCredential(
+      await _googleCredential(googleUser),
+    );
+  }
+
+  Future<String> _reauthenticateWithApple(fb.User user) async {
+    final AuthorizationCredentialAppleID appleCredential =
+        await SignInWithApple.getAppleIDCredential(
+      scopes: <AppleIDAuthorizationScopes>[],
+    );
+    await user.reauthenticateWithCredential(
+      _appleOAuthCredential(appleCredential),
+    );
+    return appleCredential.authorizationCode;
+  }
+
+  Future<void> _deleteUserData(String uid) async {
+    final DocumentReference<Map<String, dynamic>> userDoc =
+        FirebaseFirestore.instance.collection(FirestorePaths.users).doc(uid);
+    for (final String name in FirestorePaths.userSubcollections) {
+      await _deleteCollection(userDoc.collection(name));
+    }
+    await userDoc.delete();
+  }
+
+  Future<void> _deleteCollection(
+    CollectionReference<Map<String, dynamic>> collection,
+  ) async {
+    final List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
+        (await collection.get()).docs;
+    for (int i = 0; i < docs.length; i += _batchLimit) {
+      final WriteBatch batch = FirebaseFirestore.instance.batch();
+      docs.skip(i).take(_batchLimit).forEach(
+            (QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
+                batch.delete(doc.reference),
+          );
+      await batch.commit();
+    }
+  }
+
+  /// Apple requires revoking the Sign in with Apple token when an account is
+  /// deleted. Failure must not block deletion, so it is only logged.
+  Future<void> _revokeAppleToken(String authorizationCode) async {
+    try {
+      await _auth.revokeTokenWithAuthorizationCode(authorizationCode);
+    } catch (e) {
+      log('Apple token revocation failed: $e', name: 'FirebaseAuthRepository');
+    }
+  }
+
   // ── Helpers ───────────────────────────────────────────────────────────────
+
+  Future<fb.OAuthCredential> _googleCredential(
+    GoogleSignInAccount googleUser,
+  ) async {
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    return fb.GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+  }
+
+  fb.OAuthCredential _appleOAuthCredential(
+    AuthorizationCredentialAppleID appleCredential,
+  ) =>
+      fb.OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
 
   /// Writes the user's email to `users/{uid}` so the account is identifiable
   /// when browsing the Firestore console.

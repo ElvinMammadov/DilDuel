@@ -65,7 +65,20 @@
     "theme_changed": "Design geändert",
     "theme_changed_to": "Ausgewähltes Design: {}",
     "logout": "Abmelden",
-    "logout_success": "Erfolgreich abgemeldet"
+    "logout_success": "Erfolgreich abgemeldet",
+    "delete_account": {
+      "button": "Konto löschen",
+      "title": "Konto löschen?",
+      "message": "Ihr Konto und alle synchronisierten Daten (Lesezeichen, Testergebnisse, Trainingsfortschritt) werden dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
+      "password_hint": "Passwort zur Bestätigung eingeben",
+      "reauth_hint": "Zur Bestätigung werden Sie aufgefordert, sich erneut anzumelden.",
+      "confirm": "Löschen",
+      "cancel": "Abbrechen",
+      "success": "Ihr Konto wurde gelöscht",
+      "error_wrong_password": "Falsches Passwort",
+      "error_network": "Netzwerkfehler. Bitte Verbindung prüfen.",
+      "error_generic": "Konto konnte nicht gelöscht werden. Bitte erneut versuchen."
+    }
   },
   "quiz": {
     "title": "Übersetzung",

@@ -48,4 +48,17 @@ abstract class AuthRepository {
 
   /// Signs out from Firebase (and Google, if that was the sign-in method).
   Future<void> signOut();
+
+  // ── Account deletion ──────────────────────────────────────────────────────
+
+  /// Whether the signed-in account uses a password, in which case
+  /// [deleteAccount] needs it to re-authenticate.
+  bool get hasPasswordSignIn;
+
+  /// Re-authenticates, permanently deletes the user's cloud data and the
+  /// Firebase account, then signs out.
+  ///
+  /// [password] is required when [hasPasswordSignIn] is true. Throws
+  /// [SignInCancelledException] if the user dismisses a provider prompt.
+  Future<void> deleteAccount({String? password});
 }

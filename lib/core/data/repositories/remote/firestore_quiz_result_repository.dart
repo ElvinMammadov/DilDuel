@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dic/core/data/repositories/remote/firestore_paths.dart';
 import 'package:flutter_dic/core/data/models/answer_record.dart';
 import 'package:flutter_dic/core/data/repositories/quiz_result_repository.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
@@ -26,7 +27,9 @@ class FirestoreQuizResultRepository implements QuizResultRepository {
   String? get _uid => _authRepository.currentUser?.uid;
 
   CollectionReference<Map<String, dynamic>> _results(String uid) =>
-      _firestore.collection('users/$uid/quizResults');
+      _firestore.collection(
+        FirestorePaths.userCollection(uid, FirestorePaths.quizResults),
+      );
 
   /// UUID v5 namespace for quiz result IDs — arbitrary but fixed.
   static const String _namespace =

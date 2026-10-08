@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dic/core/data/repositories/remote/firestore_paths.dart';
 import 'package:flutter_dic/core/data/repositories/training_progress_repository.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:injectable/injectable.dart';
@@ -20,7 +21,9 @@ class FirestoreTrainingProgressRepository
   String? get _uid => _authRepository.currentUser?.uid;
 
   CollectionReference<Map<String, dynamic>> _progress(String uid) =>
-      _firestore.collection('users/$uid/trainingProgress');
+      _firestore.collection(
+        FirestorePaths.userCollection(uid, FirestorePaths.trainingProgress),
+      );
 
   @override
   Future<int> getLevelPosition(String level) async {

@@ -6,8 +6,6 @@ part of training;
 /// which writes to local SQLite and syncs to Firestore when signed in.
 @injectable
 class TrainingCubit extends Cubit<TrainingState> {
-  static const List<String> _allLevels = <String>['A1', 'A2', 'B1', 'B2'];
-
   /// Saved word index for every level (in-memory cache, loaded on [init]).
   final Map<String, int> savedIndices = <String, int>{};
 
@@ -26,7 +24,7 @@ class TrainingCubit extends Cubit<TrainingState> {
   Future<void> init() async {
     final int gen = ++_initGeneration;
     await Future.wait(
-      _allLevels.map((String l) async {
+      trainingLevels.map((String l) async {
         savedIndices[l] = await _progressRepository.getLevelPosition(l);
         levelTotals[l] = await DBHelper.getWordCountByLevel(l);
       }),

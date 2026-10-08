@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dic/core/data/repositories/remote/firestore_paths.dart';
 import 'package:flutter_dic/core/data/models/answer_record.dart';
 import 'package:flutter_dic/core/data/repositories/listening_result_repository.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
@@ -19,7 +20,9 @@ class FirestoreListeningResultRepository implements ListeningResultRepository {
   String? get _uid => _authRepository.currentUser?.uid;
 
   CollectionReference<Map<String, dynamic>> _results(String uid) =>
-      _firestore.collection('users/$uid/listeningResults');
+      _firestore.collection(
+        FirestorePaths.userCollection(uid, FirestorePaths.listeningResults),
+      );
 
   static const String _namespace = '6ba7b811-9dad-11d1-80b4-00c04fd430c9';
 

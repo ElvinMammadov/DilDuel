@@ -11,9 +11,11 @@ import 'package:flutter_dic/core/state/theme_state.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
+import 'package:flutter_dic/core/utils/legal_links.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'presentation/settings_screen.dart';
 part 'presentation/faq_screen.dart';

@@ -66,6 +66,15 @@
     "theme_changed_to": "Seçilən görünüş: {}",
     "logout": "Çıxış",
     "logout_success": "Uğurla çıxış etdiniz",
+    "privacy_policy": {
+      "title": "Məxfilik siyasəti",
+      "subtitle": "Məlumatlarınızla necə rəftar edirik"
+    },
+    "legal_notice": {
+      "title": "Impressum",
+      "subtitle": "Provayder məlumatı"
+    },
+    "link_error": "Səhifəni açmaq mümkün olmadı",
     "delete_account": {
       "button": "Hesabı sil",
       "title": "Hesab silinsin?",

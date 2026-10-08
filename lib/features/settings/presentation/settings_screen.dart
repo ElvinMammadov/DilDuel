@@ -28,6 +28,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _signOut() => context.read<AuthCubit>().signOut();
 
+  Future<void> _openLink(Uri Function(String languageCode) pageFor) async {
+    final String languageCode = context.locale.languageCode;
+    final bool opened = await launchUrl(
+      pageFor(languageCode),
+      mode: LaunchMode.externalApplication,
+    );
+    if (!opened && mounted) {
+      AppSnackbar.show(
+        context,
+        type: SnackbarType.error,
+        title: 'settings.link_error'.tr(),
+      );
+    }
+  }
+
   void _showLanguageBottomSheet() {
     AppBottomSheet.show<void>(
       context,
@@ -198,6 +213,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     builder: (_) => const FaqScreen(),
                   ),
                 ),
+              ),
+            ),
+            const SizedBox(height: Dimensions.padding8),
+
+            // Privacy policy
+            _SettingsCard(
+              child: _SettingsRow(
+                icon: Icons.privacy_tip_outlined,
+                iconColor: colors.primary,
+                title: 'settings.privacy_policy.title'.tr(),
+                subtitle: 'settings.privacy_policy.subtitle'.tr(),
+                onTap: () => _openLink(LegalLinks.privacyPolicy),
+              ),
+            ),
+            const SizedBox(height: Dimensions.padding8),
+
+            // Legal notice
+            _SettingsCard(
+              child: _SettingsRow(
+                icon: Icons.gavel_outlined,
+                iconColor: colors.primary,
+                title: 'settings.legal_notice.title'.tr(),
+                subtitle: 'settings.legal_notice.subtitle'.tr(),
+                onTap: () => _openLink(LegalLinks.impressum),
               ),
             ),
             const SizedBox(height: Dimensions.padding8),

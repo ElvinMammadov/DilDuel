@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delete your DilDuel account</title>
+<meta name="description" content="Request deletion of your DilDuel account and all associated data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
+<style>
+  :root {
+    --bg: #f6f5fb; --surface: #ffffff; --text: #1b1730; --muted: #6b6580;
+    --border: #e7e4f3; --chip: #f0eef9; --primary: #4f3de0; --on-primary: #ffffff;
+    --primary-tint: #edeafb; --danger: #d63c41; --danger-tint: #fbe9ea;
+    --ok: #1fa97e; --ok-tint: #e6f6ef;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14121f; --surface: #1e1b2e; --text: #f3f1fa; --muted: #a39fb8;
+      --border: #2b2840; --chip: #2b2840; --primary: #8c7dff; --on-primary: #14121f;
+      --primary-tint: #2a2548; --danger: #ff7a7d; --danger-tint: #3a2230;
+      --ok: #4ade9a; --ok-tint: #1c3330;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.55 "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 640px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 28px; line-height: 1.2; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 8px; }
+  h2 { font-size: 18px; margin: 0 0 8px; }
+  p { margin: 0 0 12px; }
+  .lead { color: var(--muted); margin-bottom: 24px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px; margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(27, 23, 48, .08);
+  }
+  ul, ol { margin: 0 0 12px; padding-left: 20px; }
+  li { margin-bottom: 4px; }
+  label { display: block; font-weight: 600; margin: 12px 0 4px; }
+  input[type=email], input[type=password], input[type=text] {
+    width: 100%; padding: 12px 14px; font: inherit; color: var(--text);
+    background: var(--chip); border: 1px solid var(--border); border-radius: 12px;
+  }
+  input:focus-visible, button:focus-visible, a:focus-visible {
+    outline: 2px solid var(--primary); outline-offset: 2px;
+  }
+  button {
+    font: inherit; font-weight: 700; cursor: pointer; border-radius: 100px;
+    padding: 12px 20px; border: 1px solid var(--primary);
+    background: var(--primary); color: var(--on-primary);
+  }
+  button.secondary { background: transparent; color: var(--primary); }
+  button.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+  .msg { padding: 12px 14px; border-radius: 12px; margin-top: 12px; }
+  .msg.error { background: var(--danger-tint); color: var(--danger); }
+  .msg.ok { background: var(--ok-tint); color: var(--ok); }
+  .hidden { display: none !important; }
+  .small { font-size: 14px; color: var(--muted); }
+  a { color: var(--primary); }
+  .lang { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 16px; }
+  .lang button { padding: 6px 14px; font-size: 14px; background: transparent; color: var(--primary); }
+  .lang button[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
+</style>
+</head>
+<body>
+<main>
+  <nav class="lang" aria-label="Language">
+    <button type="button" data-lang="en">EN</button>
+    <button type="button" data-lang="az">AZ</button>
+    <button type="button" data-lang="de">DE</button>
+  </nav>
+
+  <h1 data-i18n="h1"></h1>
+  <p class="lead" data-i18n-html="lead"></p>
+
+  <section class="card">
+    <h2 data-i18n="howTitle"></h2>
+    <ol>
+      <li data-i18n-html="step1"></li>
+      <li data-i18n-html="step2"></li>
+      <li data-i18n-html="step3"></li>
+    </ol>
+    <p data-i18n-html="fallback"></p>
+  </section>
+
+  <section class="card">
+    <h2 data-i18n="deletedTitle"></h2>
+    <ul>
+      <li data-i18n="item1"></li>
+      <li data-i18n="item2"></li>
+      <li data-i18n="item3"></li>
+      <li data-i18n="item4"></li>
+    </ul>
+    <h2 data-i18n="keptTitle"></h2>
+    <p data-i18n-html="keptBody"></p>
+    <p class="small" data-i18n="deviceNote"></p>
+  </section>
+
+  <section class="card" id="signin-card">
+    <h2 data-i18n="s1Title"></h2>
+    <p data-i18n="s1Intro"></p>
+    <div class="row">
+      <button id="google-btn" type="button" data-i18n="googleBtn"></button>
+    </div>
+    <form id="email-form" novalidate>
+      <label for="email" data-i18n="emailLabel"></label>
+      <input id="email" type="email" autocomplete="email" required>
+      <label for="password" data-i18n="passwordLabel"></label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <div class="row">
+        <button class="secondary" type="submit" data-i18n="emailBtn"></button>
+      </div>
+    </form>
+    <div id="signin-error" class="msg error hidden" role="alert"></div>
+  </section>
+
+  <section class="card hidden" id="confirm-card">
+    <h2 data-i18n="s2Title"></h2>
+    <p><span data-i18n="signedInAs"></span> <strong id="who"></strong></p>
+    <p data-i18n="s2Body"></p>
+    <label for="confirm-text" data-i18n-html="confirmLabel"></label>
+    <input id="confirm-text" type="text" autocomplete="off" autocapitalize="characters">
+    <div class="row">
+      <button id="delete-btn" class="danger" type="button" disabled data-i18n="deleteBtn"></button>
+      <button id="cancel-btn" class="secondary" type="button" data-i18n="cancelBtn"></button>
+    </div>
+    <div id="delete-error" class="msg error hidden" role="alert"></div>
+  </section>
+
+  <section class="card hidden" id="done-card">
+    <h2 data-i18n="doneTitle"></h2>
+    <p data-i18n="doneBody"></p>
+  </section>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+  import {
+    getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider,
+    signInWithEmailAndPassword, deleteUser, signOut,
+  } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+  import {
+    getFirestore, collection, getDocs, doc, writeBatch,
+  } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+  // TODO: fill in from Firebase Console → Project settings → Your apps → Web app.
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyB4KIHW4B2xQlwbZeTQY0WGbeulTO0IKeQ",
+    authDomain: "feedsample-2cc28.firebaseapp.com",
+    projectId: "feedsample-2cc28",
+    appId: "1:503985897884:web:8a4b58c8522352470fc859",
+  };
+  const CONTACT_EMAIL = "elvin.m@hotmail.com";
+  // Must match the developer name shown on the Google Play listing.
+  const DEVELOPER_NAME = "Elvin Mammadov";
+  const MAIL_SUBJECT = "DilDuel account deletion request";
+  const GOOGLE_DELETION_POLICY = "https://cloud.google.com/docs/security/deletion";
+
+  // Per-user subcollections written by the app: users/{uid}/<name>/*
+  const SUBCOLLECTIONS = [
+    "bookmarks", "unknownWords", "quizResults", "listeningResults",
+    "trainingProgress",
+  ];
+  const BATCH_LIMIT = 400;
+
+  // Entries marked "html" may contain {dev}, {email} and {policy} placeholders.
+  const TEXT = {
+    en: {
+      title: "Delete your DilDuel account",
+      metaDesc: "Request deletion of your DilDuel account and all associated data.",
+      h1: "Delete your DilDuel account",
+      lead: "<strong>DilDuel</strong> (German–Azerbaijani dictionary and vocabulary trainer) by <strong>{dev}</strong>. Use this page to permanently delete your DilDuel account and the data linked to it.",
+      howTitle: "How to request account deletion",
+      step1: "<strong>Sign in below</strong> with the method you use in the DilDuel app (Google, or email and password).",
+      step2: "<strong>Type DELETE</strong> to confirm and press <strong>Delete my account</strong>.",
+      step3: "Your account and data are deleted <strong>immediately</strong>. You will see a confirmation on this page.",
+      fallback: "Can't sign in (for example, you signed up with Apple)? Email {email} from your registered address with the subject \"DilDuel account deletion request\". We will delete your account within <strong>30 days</strong> and confirm by email.",
+      deletedTitle: "What is deleted",
+      item1: "Your account: email address, display name and sign-in details",
+      item2: "Bookmarked words and words you marked as \"unknown\"",
+      item3: "Quiz and listening test results",
+      item4: "Training progress for every level",
+      keptTitle: "What is kept",
+      keptBody: "<strong>Nothing.</strong> We do not keep any copy of your account data after deletion, and there is no additional retention period on our side. The only exception is routine backups in Google's infrastructure (our hosting provider), which are overwritten on Google's standard schedule; see {policy}.",
+      policyLink: "Google Cloud's data deletion policy",
+      deviceNote: "Data stored only on your device (for example, as a guest) is never sent to us. Remove it by clearing the app's storage or uninstalling the app.",
+      s1Title: "Step 1: Sign in",
+      s1Intro: "Sign in with the method you used in the app.",
+      googleBtn: "Continue with Google",
+      emailLabel: "Email",
+      passwordLabel: "Password",
+      emailBtn: "Sign in with email",
+      s2Title: "Step 2: Delete account",
+      signedInAs: "Signed in as",
+      s2Body: "This permanently deletes your account and all data listed above.",
+      confirmLabel: "Type <strong>DELETE</strong> to confirm",
+      deleteBtn: "Delete my account",
+      cancelBtn: "Cancel",
+      doneTitle: "Your account has been deleted",
+      doneBody: "Your account and associated data were removed. You can close this page.",
+      errBadCredentials: "Email or password is incorrect.",
+      errNoUser: "No account found for this email.",
+      errTooMany: "Too many attempts. Please try again later.",
+      errCancelled: "Sign-in was cancelled.",
+      errNetwork: "Network error. Check your connection.",
+      errSignIn: "Sign-in failed. Please try again.",
+      errRecentLogin: "For security, please sign in again and retry.",
+      errDelete: "Something went wrong. Some data may already have been removed. Please try again or email us.",
+    },
+    az: {
+      title: "DilDuel hesabınızı silin",
+      metaDesc: "DilDuel hesabınızın və əlaqəli bütün məlumatların silinməsini tələb edin.",
+      h1: "DilDuel hesabınızı silin",
+      lead: "<strong>DilDuel</strong> (alman–azərbaycan lüğəti və söz öyrənmə tətbiqi), müəllif: <strong>{dev}</strong>. Bu səhifədən DilDuel hesabınızı və ona bağlı məlumatları həmişəlik silə bilərsiniz.",
+      howTitle: "Hesabın silinməsini necə tələb etmək olar",
+      step1: "Aşağıda DilDuel tətbiqində istifadə etdiyiniz üsulla (Google və ya e-poçt və şifrə) <strong>daxil olun</strong>.",
+      step2: "Təsdiq üçün <strong>DELETE</strong> yazın və <strong>Hesabımı sil</strong> düyməsinə basın.",
+      step3: "Hesabınız və məlumatlarınız <strong>dərhal</strong> silinir. Bu səhifədə təsdiq mesajı görəcəksiniz.",
+      fallback: "Daxil ola bilmirsiniz (məsələn, Apple ilə qeydiyyatdan keçmisiniz)? Qeydiyyatdakı ünvanınızdan {email} ünvanına \"DilDuel account deletion request\" mövzusu ilə yazın. Hesabınızı <strong>30 gün</strong> ərzində siləcək və e-poçtla təsdiq edəcəyik.",
+      deletedTitle: "Nələr silinir",
+      item1: "Hesabınız: e-poçt ünvanı, görünən ad və giriş məlumatları",
+      item2: "Seçilmiş sözlər və \"bilinməyən\" kimi qeyd etdiyiniz sözlər",
+      item3: "Quiz və dinləmə testi nəticələri",
+      item4: "Hər səviyyə üzrə məşq irəliləyişi",
+      keptTitle: "Nələr saxlanılır",
+      keptBody: "<strong>Heç nə.</strong> Silindikdən sonra hesab məlumatlarınızın heç bir nüsxəsini saxlamırıq və bizim tərəfdən əlavə saxlama müddəti yoxdur. Yeganə istisna Google infrastrukturundakı (hostinq provayderimiz) müntəzəm ehtiyat nüsxələridir; onlar Google-un standart qrafikinə uyğun üzərinə yazılır, bax: {policy}.",
+      policyLink: "Google Cloud məlumatların silinməsi siyasəti",
+      deviceNote: "Yalnız cihazınızda saxlanılan məlumatlar (məsələn, qonaq kimi) bizə göndərilmir. Onları tətbiqin yaddaşını təmizləməklə və ya tətbiqi silməklə aradan qaldıra bilərsiniz.",
+      s1Title: "Addım 1: Daxil olun",
+      s1Intro: "Tətbiqdə istifadə etdiyiniz üsulla daxil olun.",
+      googleBtn: "Google ilə davam et",
+      emailLabel: "E-poçt",
+      passwordLabel: "Şifrə",
+      emailBtn: "E-poçt ilə daxil ol",
+      s2Title: "Addım 2: Hesabı silin",
+      signedInAs: "Daxil olmusunuz:",
+      s2Body: "Bu, hesabınızı və yuxarıda sadalanan bütün məlumatları həmişəlik siləcək.",
+      confirmLabel: "Təsdiq üçün <strong>DELETE</strong> yazın",
+      deleteBtn: "Hesabımı sil",
+      cancelBtn: "Ləğv et",
+      doneTitle: "Hesabınız silindi",
+      doneBody: "Hesabınız və əlaqəli məlumatlar silindi. Bu səhifəni bağlaya bilərsiniz.",
+      errBadCredentials: "E-poçt və ya şifrə yanlışdır.",
+      errNoUser: "Bu e-poçt ünvanı ilə hesab tapılmadı.",
+      errTooMany: "Çox sayda cəhd. Bir az sonra yenidən cəhd edin.",
+      errCancelled: "Giriş ləğv edildi.",
+      errNetwork: "Şəbəkə xətası. İnternet bağlantınızı yoxlayın.",
+      errSignIn: "Giriş alınmadı. Yenidən cəhd edin.",
+      errRecentLogin: "Təhlükəsizlik üçün yenidən daxil olub təkrar cəhd edin.",
+      errDelete: "Xəta baş verdi. Bəzi məlumatlar artıq silinmiş ola bilər. Yenidən cəhd edin və ya bizə yazın.",
+    },
+    de: {
+      title: "DilDuel-Konto löschen",
+      metaDesc: "Beantragen Sie die Löschung Ihres DilDuel-Kontos und aller zugehörigen Daten.",
+      h1: "DilDuel-Konto löschen",
+      lead: "<strong>DilDuel</strong> (Wörterbuch und Vokabeltrainer Deutsch–Aserbaidschanisch) von <strong>{dev}</strong>. Mit dieser Seite löschen Sie Ihr DilDuel-Konto und die damit verbundenen Daten dauerhaft.",
+      howTitle: "So beantragen Sie die Kontolöschung",
+      step1: "<strong>Melden Sie sich unten an</strong> – mit der Methode, die Sie in der DilDuel-App nutzen (Google oder E-Mail und Passwort).",
+      step2: "<strong>Geben Sie DELETE ein</strong> und klicken Sie auf <strong>Mein Konto löschen</strong>.",
+      step3: "Ihr Konto und Ihre Daten werden <strong>sofort</strong> gelöscht. Auf dieser Seite erscheint eine Bestätigung.",
+      fallback: "Anmeldung nicht möglich (z. B. weil Sie sich mit Apple registriert haben)? Schreiben Sie von Ihrer registrierten Adresse an {email} mit dem Betreff \"DilDuel account deletion request\". Wir löschen Ihr Konto innerhalb von <strong>30 Tagen</strong> und bestätigen dies per E-Mail.",
+      deletedTitle: "Was gelöscht wird",
+      item1: "Ihr Konto: E-Mail-Adresse, Anzeigename und Anmeldedaten",
+      item2: "Lesezeichen und als \"unbekannt\" markierte Wörter",
+      item3: "Quiz- und Hörtest-Ergebnisse",
+      item4: "Trainingsfortschritt für jede Stufe",
+      keptTitle: "Was gespeichert bleibt",
+      keptBody: "<strong>Nichts.</strong> Nach der Löschung bewahren wir keine Kopie Ihrer Kontodaten auf; es gibt auf unserer Seite keine zusätzliche Aufbewahrungsfrist. Die einzige Ausnahme sind routinemäßige Backups in der Infrastruktur von Google (unser Hosting-Anbieter), die nach dem üblichen Zeitplan von Google überschrieben werden; siehe {policy}.",
+      policyLink: "Datenlöschungsrichtlinie von Google Cloud",
+      deviceNote: "Daten, die nur auf Ihrem Gerät gespeichert sind (z. B. als Gast), werden nie an uns übertragen. Sie entfernen sie, indem Sie den App-Speicher löschen oder die App deinstallieren.",
+      s1Title: "Schritt 1: Anmelden",
+      s1Intro: "Melden Sie sich mit der Methode an, die Sie in der App verwendet haben.",
+      googleBtn: "Weiter mit Google",
+      emailLabel: "E-Mail",
+      passwordLabel: "Passwort",
+      emailBtn: "Mit E-Mail anmelden",
+      s2Title: "Schritt 2: Konto löschen",
+      signedInAs: "Angemeldet als",
+      s2Body: "Dadurch werden Ihr Konto und alle oben genannten Daten dauerhaft gelöscht.",
+      confirmLabel: "Zur Bestätigung <strong>DELETE</strong> eingeben",
+      deleteBtn: "Mein Konto löschen",
+      cancelBtn: "Abbrechen",
+      doneTitle: "Ihr Konto wurde gelöscht",
+      doneBody: "Ihr Konto und die zugehörigen Daten wurden entfernt. Sie können diese Seite schließen.",
+      errBadCredentials: "E-Mail oder Passwort ist falsch.",
+      errNoUser: "Für diese E-Mail wurde kein Konto gefunden.",
+      errTooMany: "Zu viele Versuche. Bitte versuchen Sie es später erneut.",
+      errCancelled: "Die Anmeldung wurde abgebrochen.",
+      errNetwork: "Netzwerkfehler. Bitte prüfen Sie Ihre Verbindung.",
+      errSignIn: "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      errRecentLogin: "Aus Sicherheitsgründen melden Sie sich bitte erneut an und versuchen Sie es noch einmal.",
+      errDelete: "Etwas ist schiefgelaufen. Einige Daten wurden möglicherweise bereits entfernt. Bitte versuchen Sie es erneut oder schreiben Sie uns.",
+    },
+  };
+
+  const app = initializeApp(FIREBASE_CONFIG);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const $ = (id) => document.getElementById(id);
+  const show = (el, on) => el.classList.toggle("hidden", !on);
+
+  // ── Language ────────────────────────────────────────────────────────────
+  const LANGS = Object.keys(TEXT);
+  let lang = "en";
+  let lastError = null; // { el, key } so messages re-translate on switch
+
+  const pickInitialLang = () => {
+    const fromUrl = new URLSearchParams(location.search).get("lang");
+    if (LANGS.includes(fromUrl)) return fromUrl;
+    try {
+      const saved = localStorage.getItem("lang");
+      if (LANGS.includes(saved)) return saved;
+    } catch (_) { /* storage unavailable */ }
+    const browser = (navigator.language || "en").slice(0, 2).toLowerCase();
+    return LANGS.includes(browser) ? browser : "en";
+  };
+
+  const t = (key) => TEXT[lang][key];
+
+  // Only static constants are interpolated; no user input reaches innerHTML.
+  const fill = (template) => template
+    .replaceAll("{dev}", DEVELOPER_NAME)
+    .replaceAll("{email}", `<a href="mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(MAIL_SUBJECT)}">${CONTACT_EMAIL}</a>`)
+    .replaceAll("{policy}", `<a href="${GOOGLE_DELETION_POLICY}" rel="noopener">${t("policyLink")}</a>`);
+
+  function showError(el, key) {
+    lastError = { el, key };
+    el.textContent = t(key);
+    show(el, true);
+  }
+
+  function clearError(el) {
+    if (lastError?.el === el) lastError = null;
+    show(el, false);
+  }
+
+  function applyLanguage(next) {
+    lang = next;
+    document.documentElement.lang = next;
+    document.title = t("title");
+    document.querySelector('meta[name="description"]').content = t("metaDesc");
+    document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = fill(t(el.dataset.i18nHtml)); });
+    document.querySelectorAll("[data-lang]").forEach((btn) => {
+      btn.setAttribute("aria-pressed", String(btn.dataset.lang === next));
+    });
+    if (lastError) lastError.el.textContent = t(lastError.key);
+    try { localStorage.setItem("lang", next); } catch (_) { /* storage unavailable */ }
+  }
+
+  document.querySelectorAll("[data-lang]").forEach((btn) =>
+    btn.addEventListener("click", () => applyLanguage(btn.dataset.lang)));
+
+  applyLanguage(pickInitialLang());
+
+  // ── Auth and deletion ───────────────────────────────────────────────────
+  let deleting = false;
+
+  onAuthStateChanged(auth, (user) => {
+    if (deleting) return;
+    show($("signin-card"), !user);
+    show($("confirm-card"), !!user);
+    if (user) $("who").textContent = user.email || user.displayName || user.uid;
+  });
+
+  const signInErrorKeys = {
+    "auth/invalid-credential": "errBadCredentials",
+    "auth/wrong-password": "errBadCredentials",
+    "auth/user-not-found": "errNoUser",
+    "auth/too-many-requests": "errTooMany",
+    "auth/popup-closed-by-user": "errCancelled",
+    "auth/network-request-failed": "errNetwork",
+  };
+
+  async function signIn(action) {
+    clearError($("signin-error"));
+    try {
+      await action();
+    } catch (e) {
+      showError($("signin-error"), signInErrorKeys[e.code] || "errSignIn");
+    }
+  }
+
+  $("google-btn").addEventListener("click", () =>
+    signIn(() => signInWithPopup(auth, new GoogleAuthProvider())));
+
+  $("email-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    signIn(() => signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value));
+  });
+
+  $("confirm-text").addEventListener("input", (event) => {
+    $("delete-btn").disabled = event.target.value.trim() !== "DELETE";
+  });
+
+  $("cancel-btn").addEventListener("click", () => signOut(auth));
+
+  async function deleteSubcollection(uid, name) {
+    const snapshot = await getDocs(collection(db, "users", uid, name));
+    for (let i = 0; i < snapshot.docs.length; i += BATCH_LIMIT) {
+      const batch = writeBatch(db);
+      snapshot.docs.slice(i, i + BATCH_LIMIT).forEach((d) => batch.delete(d.ref));
+      await batch.commit();
+    }
+  }
+
+  $("delete-btn").addEventListener("click", async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    clearError($("delete-error"));
+    $("delete-btn").disabled = true;
+    deleting = true;
+    try {
+      for (const name of SUBCOLLECTIONS) await deleteSubcollection(user.uid, name);
+      const batch = writeBatch(db);
+      batch.delete(doc(db, "users", user.uid));
+      await batch.commit();
+      await deleteUser(user);
+      show($("confirm-card"), false);
+      show($("done-card"), true);
+    } catch (e) {
+      deleting = false;
+      $("delete-btn").disabled = false;
+      showError($("delete-error"),
+        e.code === "auth/requires-recent-login" ? "errRecentLogin" : "errDelete");
+    }
+  });
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@ import 'package:flutter_dic/core/utils/legal_links.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const String base = 'https://elvinmammadov.github.io/Dictionary/';
+  const String base = 'https://elvinmammadov.github.io/DilDuel/';
 
   group('LegalLinks', () {
     test('points German and Azerbaijani users to their language', () {

@@ -3,7 +3,7 @@
 /// The pages exist in English (site root), German and Azerbaijani; any other
 /// language falls back to English.
 abstract final class LegalLinks {
-  static const String _baseUrl = 'https://elvinmammadov.github.io/Dictionary/';
+  static const String _baseUrl = 'https://elvinmammadov.github.io/DilDuel/';
   static const Set<String> _localizedLanguages = <String>{'de', 'az'};
 
   /// The privacy policy page for [languageCode].

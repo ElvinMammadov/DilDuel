@@ -5,10 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Delete your DilDuel account</title>
 <meta name="description" content="Request deletion of your DilDuel account and all associated data.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
+<link rel="icon" href="../assets/icon.png">
 <style>
+  @font-face {
+    font-family: "Plus Jakarta Sans";
+    src: url("../assets/fonts/PlusJakartaSans.ttf") format("truetype");
+    font-weight: 200 800;
+    font-display: swap;
+  }
   :root {
     --bg: #f6f5fb; --surface: #ffffff; --text: #1b1730; --muted: #6b6580;
     --border: #e7e4f3; --chip: #f0eef9; --primary: #4f3de0; --on-primary: #ffffff;
@@ -61,6 +65,9 @@
   .msg.error { background: var(--danger-tint); color: var(--danger); }
   .msg.ok { background: var(--ok-tint); color: var(--ok); }
   .hidden { display: none !important; }
+  .site-links { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: center; margin-top: 24px; }
+  .site-links a { font-size: 14px; font-weight: 600; text-decoration: none; color: var(--muted); }
+  .site-links a:hover { color: var(--primary); }
   .small { font-size: 14px; color: var(--muted); }
   a { color: var(--primary); }
   .lang { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 16px; }
@@ -133,6 +140,12 @@
     <div id="delete-error" class="msg error hidden" role="alert"></div>
   </section>
 
+  <nav class="site-links" aria-label="Site">
+    <a id="link-home" href="../"></a>
+    <a id="link-privacy" href="../privacy/"></a>
+    <a id="link-impressum" href="../impressum/"></a>
+  </nav>
+
   <section class="card hidden" id="done-card">
     <h2 data-i18n="doneTitle"></h2>
     <p data-i18n="doneBody"></p>
@@ -204,6 +217,9 @@
       cancelBtn: "Cancel",
       doneTitle: "Your account has been deleted",
       doneBody: "Your account and associated data were removed. You can close this page.",
+      linkHome: "Home",
+      linkPrivacy: "Privacy Policy",
+      linkImpressum: "Legal Notice",
       errBadCredentials: "Email or password is incorrect.",
       errNoUser: "No account found for this email.",
       errTooMany: "Too many attempts. Please try again later.",
@@ -246,6 +262,9 @@
       cancelBtn: "Ləğv et",
       doneTitle: "Hesabınız silindi",
       doneBody: "Hesabınız və əlaqəli məlumatlar silindi. Bu səhifəni bağlaya bilərsiniz.",
+      linkHome: "Ana səhifə",
+      linkPrivacy: "Məxfilik siyasəti",
+      linkImpressum: "Impressum",
       errBadCredentials: "E-poçt və ya şifrə yanlışdır.",
       errNoUser: "Bu e-poçt ünvanı ilə hesab tapılmadı.",
       errTooMany: "Çox sayda cəhd. Bir az sonra yenidən cəhd edin.",
@@ -288,6 +307,9 @@
       cancelBtn: "Abbrechen",
       doneTitle: "Ihr Konto wurde gelöscht",
       doneBody: "Ihr Konto und die zugehörigen Daten wurden entfernt. Sie können diese Seite schließen.",
+      linkHome: "Startseite",
+      linkPrivacy: "Datenschutzerklärung",
+      linkImpressum: "Impressum",
       errBadCredentials: "E-Mail oder Passwort ist falsch.",
       errNoUser: "Für diese E-Mail wurde kein Konto gefunden.",
       errTooMany: "Zu viele Versuche. Bitte versuchen Sie es später erneut.",
@@ -348,6 +370,12 @@
     document.querySelector('meta[name="description"]').content = t("metaDesc");
     document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
     document.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = fill(t(el.dataset.i18nHtml)); });
+    const sitePrefix = next === "en" ? "../" : `../${next}/`;
+    [["link-home", "", "linkHome"], ["link-privacy", "privacy/", "linkPrivacy"],
+     ["link-impressum", "impressum/", "linkImpressum"]].forEach(([id, path, key]) => {
+      $(id).href = sitePrefix + path;
+      $(id).textContent = t(key);
+    });
     document.querySelectorAll("[data-lang]").forEach((btn) => {
       btn.setAttribute("aria-pressed", String(btn.dataset.lang === next));
     });

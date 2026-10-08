@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dic/core/data/repositories/remote/firestore_paths.dart';
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
@@ -28,10 +29,14 @@ class FirestoreBookmarkRepository implements BookmarkRepository {
       '${word.key.toUpperCase()}_${word.dicType}';
 
   CollectionReference<Map<String, dynamic>> _bookmarks(String uid) =>
-      _firestore.collection('users/$uid/bookmarks');
+      _firestore.collection(
+        FirestorePaths.userCollection(uid, FirestorePaths.bookmarks),
+      );
 
   CollectionReference<Map<String, dynamic>> _unknownWords(String uid) =>
-      _firestore.collection('users/$uid/unknownWords');
+      _firestore.collection(
+        FirestorePaths.userCollection(uid, FirestorePaths.unknownWords),
+      );
 
   // ── Bookmarks ─────────────────────────────────────────────────────────────
 

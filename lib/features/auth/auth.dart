@@ -16,6 +16,7 @@ import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
 import 'package:flutter_dic/core/data/repositories/listening_result_repository.dart';
 import 'package:flutter_dic/core/data/repositories/quiz_result_repository.dart';
+import 'package:flutter_dic/core/data/repositories/remote/firestore_paths.dart';
 import 'package:flutter_dic/core/data/repositories/sync_bookmark_repository.dart';
 import 'package:flutter_dic/core/data/repositories/sync_listening_result_repository.dart';
 import 'package:flutter_dic/core/data/repositories/sync_quiz_result_repository.dart';

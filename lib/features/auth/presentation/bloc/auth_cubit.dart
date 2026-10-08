@@ -1,5 +1,14 @@
 part of auth;
 
+/// Outcome of [AuthCubit.deleteAccount].
+enum DeleteAccountResult {
+  success,
+  cancelled,
+  wrongPassword,
+  networkError,
+  failed,
+}
+
 @lazySingleton
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit(
@@ -16,6 +25,7 @@ class AuthCubit extends Cubit<AuthState> {
   final TrainingProgressRepository _trainingProgressRepository;
   final ListeningResultRepository _listeningResultRepository;
   StreamSubscription<AuthUser?>? _authSub;
+  bool _isDeletingAccount = false;
 
   /// Subscribes to Firebase auth-state changes. Call once at app start.
   void init() {
@@ -37,7 +47,9 @@ class AuthCubit extends Cubit<AuthState> {
           // account-switch case where Firebase signs out user A and signs in
           // user B without an explicit signOut() call.
           await DBHelper.clearUserData();
-          emit(const AuthUnauthenticated());
+          emit(_isDeletingAccount
+              ? const AuthAccountDeleted()
+              : const AuthUnauthenticated());
         }
       },
       onError: (Object e) {
@@ -198,6 +210,46 @@ class AuthCubit extends Cubit<AuthState> {
       emit(const AuthUnauthenticated());
     }
   }
+
+  // ── Account deletion ──────────────────────────────────────────────────────
+
+  /// Whether deleting the account requires the user's password.
+  bool get deletionNeedsPassword => _authRepository.hasPasswordSignIn;
+
+  /// Permanently deletes the signed-in user's account and cloud data.
+  ///
+  /// On success the auth stream emits [AuthAccountDeleted] after local data
+  /// has been cleared. State is left untouched on failure so the user stays
+  /// signed in.
+  Future<DeleteAccountResult> deleteAccount({String? password}) async {
+    _isDeletingAccount = true;
+    try {
+      // Send queued progress first so nothing is written after deletion.
+      await _trainingProgressRepository.flush();
+      await _authRepository.deleteAccount(password: password);
+      return DeleteAccountResult.success;
+    } catch (e) {
+      log('Delete account error: $e', name: 'AuthCubit');
+      return _deleteResultFor(e);
+    } finally {
+      _isDeletingAccount = false;
+    }
+  }
+
+  DeleteAccountResult _deleteResultFor(Object error) => switch (error) {
+        SignInCancelledException() => DeleteAccountResult.cancelled,
+        SignInWithAppleAuthorizationException(
+          code: AuthorizationErrorCode.canceled,
+        ) =>
+          DeleteAccountResult.cancelled,
+        fb.FirebaseAuthException(
+          code: 'wrong-password' || 'invalid-credential',
+        ) =>
+          DeleteAccountResult.wrongPassword,
+        fb.FirebaseAuthException(code: 'network-request-failed') =>
+          DeleteAccountResult.networkError,
+        _ => DeleteAccountResult.failed,
+      };
 
   // ── Firebase error mapping ────────────────────────────────────────────────
 

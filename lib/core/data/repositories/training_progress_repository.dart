@@ -1,3 +1,6 @@
+/// The training levels, in display order.
+const List<String> trainingLevels = <String>['A1', 'A2', 'B1', 'B2'];
+
 /// Contract for persisting per-level training progress.
 abstract class TrainingProgressRepository {
   /// Returns the saved word index for [level], or 0 if never set.

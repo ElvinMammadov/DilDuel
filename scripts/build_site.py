@@ -30,6 +30,8 @@ PHONE_TEL = "+4917656884380"
 EMAIL = "elvin.m@hotmail.com"
 COPYRIGHT_YEAR = "2026"
 
+BACK_ARROW = "M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+
 ICONS = {
     "search": "M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z",
     "grammar": "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z",
@@ -46,19 +48,19 @@ COMMON = {
         "home": "Home", "privacy": "Privacy Policy", "impressum": "Legal Notice",
         "delete": "Delete account",
         "tagline": "German–Azerbaijani dictionary and vocabulary trainer",
-        "lang_label": "Language",
+        "lang_label": "Language", "back": "Back to home",
     },
     "de": {
         "home": "Startseite", "privacy": "Datenschutzerklärung", "impressum": "Impressum",
         "delete": "Konto löschen",
         "tagline": "Wörterbuch und Vokabeltrainer Deutsch–Aserbaidschanisch",
-        "lang_label": "Sprache",
+        "lang_label": "Sprache", "back": "Zurück zur Startseite",
     },
     "az": {
         "home": "Ana səhifə", "privacy": "Məxfilik siyasəti", "impressum": "Impressum",
         "delete": "Hesabı sil",
         "tagline": "Alman–Azərbaycan lüğəti və söz öyrənmə tətbiqi",
-        "lang_label": "Dil",
+        "lang_label": "Dil", "back": "Ana səhifəyə qayıt",
     },
 }
 
@@ -594,7 +596,10 @@ def prose_body(lang, slug, data, numbered):
         meta = f'<p class="meta">{esc(data["updated"].replace("{date}", UPDATED[lang]))}</p>'
     if data.get("note"):
         meta += f'<p class="meta">{esc(data["note"])}</p>'
-    return (f'<main class="wrap prose">\n<h1>{esc(data["h1"])}</h1>\n{meta}\n'
+    back = (f'<a class="back" href="{rel(here, page_dir(lang, ""))}">'
+            f'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="{BACK_ARROW}"/></svg>'
+            f'{esc(COMMON[lang]["back"])}</a>')
+    return (f'<main class="wrap prose">\n{back}\n<h1>{esc(data["h1"])}</h1>\n{meta}\n'
             + "\n".join(parts) + "\n</main>")
 
 

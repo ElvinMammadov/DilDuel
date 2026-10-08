@@ -93,6 +93,15 @@ h2 { font-size: 24px; line-height: 1.25; font-weight: 800; letter-spacing: -.4px
 .prose li { margin-bottom: 6px; }
 .prose address { font-style: normal; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px; margin: 8px 0 12px; box-shadow: var(--shadow); }
 
+/* Back link */
+.back {
+  display: inline-flex; align-items: center; gap: 6px; margin: 0 0 20px;
+  padding: 8px 16px 8px 12px; border-radius: 100px; background: var(--chip);
+  color: var(--primary); font-size: 14px; font-weight: 700; text-decoration: none;
+}
+.back svg { width: 18px; height: 18px; fill: currentColor; }
+.back:hover { background: var(--tint); }
+
 /* Footer */
 footer { margin-top: 72px; border-top: 1px solid var(--border); background: var(--surface); }
 footer .wrap { padding-top: 28px; padding-bottom: 36px; display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; }

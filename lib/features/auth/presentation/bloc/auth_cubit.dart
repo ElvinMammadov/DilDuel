@@ -22,11 +22,14 @@ class AuthCubit extends Cubit<AuthState> {
     _authSub = _authRepository.authStateChanges.listen(
       (AuthUser? user) async {
         if (user != null) {
-          // Await the sign-in merge before emitting AuthAuthenticated so
-          // that any listener reacting to this state (e.g. reloading
-          // cached training/quiz Cubits) reads already-synced local data.
-          await _syncOnSignIn(user.uid);
-          emit(AuthAuthenticated(user));
+          // If the user accumulated guest data, let them decide whether to
+          // keep it (sync) or discard it before completing sign-in.
+          if (await DBHelper.hasUserData()) {
+            emit(AuthGuestDataDecision(user));
+          } else {
+            await _syncOnSignIn(user.uid);
+            emit(AuthAuthenticated(user));
+          }
         } else {
           // Clear user-specific local data before emitting so that listeners
           // reacting to AuthUnauthenticated (e.g. cached Cubits resetting)
@@ -150,6 +153,29 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  // ── Guest data decision ───────────────────────────────────────────────────
+
+  /// Merges all local guest data into the signed-in account, then completes
+  /// sign-in. Called when the user chooses to keep their guest data.
+  Future<void> keepGuestData() async {
+    final AuthState s = state;
+    if (s is! AuthGuestDataDecision) return;
+    emit(const AuthLoading());
+    await _syncOnSignIn(s.user.uid);
+    emit(AuthAuthenticated(s.user));
+  }
+
+  /// Discards local guest data, pulls only the account's remote data, then
+  /// completes sign-in. Called when the user chooses not to keep guest data.
+  Future<void> discardGuestData() async {
+    final AuthState s = state;
+    if (s is! AuthGuestDataDecision) return;
+    emit(const AuthLoading());
+    await DBHelper.clearUserData();
+    await _syncOnSignIn(s.user.uid);
+    emit(AuthAuthenticated(s.user));
+  }
+
   // ── Sign-out ──────────────────────────────────────────────────────────────
 
   /// Resets an [AuthError] state back to [AuthUnauthenticated] so the same
@@ -160,6 +186,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> signOut() async {
     try {
+      // Send queued training progress while the user is still authenticated.
+      await _trainingProgressRepository.flush();
       await _authRepository.signOut();
       // DB clearing and AuthUnauthenticated emission are handled by the
       // auth stream listener when authStateChanges emits null after sign-out.

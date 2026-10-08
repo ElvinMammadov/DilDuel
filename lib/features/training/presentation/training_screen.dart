@@ -10,17 +10,16 @@ class TrainingScreen extends StatelessWidget {
           listenWhen: (AuthState previous, AuthState current) =>
               (previous is AuthAuthenticated &&
                   current is AuthUnauthenticated) ||
-              (previous is AuthUnauthenticated && current is AuthAuthenticated),
+              (current is AuthAuthenticated && previous is! AuthAuthenticated),
           listener: (BuildContext context, AuthState state) {
             final TrainingCubit cubit = context.read<TrainingCubit>();
             if (state is AuthUnauthenticated) {
-              // Sign-out: local data was already cleared, so reset the
-              // in-memory cache and reload (will come back empty).
               cubit.reset();
             } else if (state is AuthAuthenticated) {
-              // Sign-in: the sign-in merge has already completed by the
-              // time this state is emitted, so reload to pick up the
-              // signed-in user's own synced progress.
+              // Reload after sign-in: Firebase sync has already completed by
+              // the time AuthAuthenticated is emitted, so init() will read
+              // the already-merged local DB (covers app-restart, normal
+              // sign-in, and the guest-data decision flow).
               cubit.init();
             }
           },

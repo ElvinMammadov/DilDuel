@@ -227,6 +227,12 @@
       "name_full_required": "Bitte geben Sie Vor- und Nachname ein",
       "confirm_required": "Bitte bestätigen Sie Ihr Passwort",
       "passwords_mismatch": "Passwörter stimmen nicht überein"
+    },
+    "guest_data": {
+      "title": "Daten speichern?",
+      "message": "Sie haben als Gast Daten gesammelt (Lesezeichen, Übungsergebnisse u. a.). Möchten Sie diese in Ihr Konto übertragen?",
+      "keep": "Behalten",
+      "discard": "Verwerfen"
     }
   },
   "training": {
@@ -241,6 +247,13 @@
     "bookmarked": "\"{}\" zu Lesezeichen hinzugefügt",
     "bookmark_removed": "\"{}\" aus Lesezeichen entfernt",
     "marked_unknown": "\"{}\" als unbekannt markiert",
-    "unknown_removed": "\"{}\" aus Unbekannte entfernt"
+    "unknown_removed": "\"{}\" aus Unbekannte entfernt",
+    "jump": {
+      "title": "Zu Wort springen",
+      "hint": "Wortnummer ändern",
+      "start": "Anfang",
+      "end": "Ende",
+      "go": "Zu Wort {} springen"
+    }
   }
 }

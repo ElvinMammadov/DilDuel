@@ -737,6 +737,27 @@ class DBHelper implements WordLocalDataSource {
   /// device starts with a clean local state and their own data is pulled
   /// from Firestore during the sign-in merge.
   ///
+  /// Returns true if any user-owned table contains at least one row.
+  /// Used to detect guest data before a sign-in merge decision.
+  static Future<bool> hasUserData() async {
+    final Database db = _db!;
+    for (final String table in <String>[
+      bookmark,
+      unknownWords,
+      trainingLevelPosition,
+      quizResults,
+      trainingProgress,
+      listenedWords,
+      listeningResults,
+      recentSearches,
+    ]) {
+      final List<Map<String, Object?>> result =
+          await db.rawQuery('SELECT COUNT(*) AS c FROM $table');
+      if ((result.first['c'] as int) > 0) return true;
+    }
+    return false;
+  }
+
   /// The read-only dictionary tables (DeAz, AzDe) are shared assets and
   /// are intentionally left untouched.
   static Future<void> clearUserData() async {

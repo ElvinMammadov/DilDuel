@@ -1,13 +1,18 @@
 library training;
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/components/app_back_bar.dart';
+import 'package:flutter_dic/core/components/app_bottom_sheet.dart';
 import 'package:flutter_dic/core/components/app_card.dart';
 import 'package:flutter_dic/core/components/app_filled_card.dart';
 import 'package:flutter_dic/core/components/app_filled_card_list.dart';
 import 'package:flutter_dic/core/components/app_snackbar.dart';
+import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
 import 'package:flutter_dic/core/data/repositories/training_progress_repository.dart';
@@ -30,6 +35,7 @@ part 'presentation/bloc/training_cubit.dart';
 part 'presentation/widgets/training_level_selector.dart';
 part 'presentation/widgets/training_word_card.dart';
 part 'presentation/widgets/training_nav_buttons.dart';
+part 'presentation/widgets/training_jump_sheet.dart';
 
 // Screen
 part 'presentation/training_screen.dart';

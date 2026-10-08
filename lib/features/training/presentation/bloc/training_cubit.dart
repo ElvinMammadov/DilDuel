@@ -14,22 +14,29 @@ class TrainingCubit extends Cubit<TrainingState> {
   /// Total word count for every level (populated on [init]).
   final Map<String, int> levelTotals = <String, int>{};
 
+  /// Incremented each time [init] is called; lets concurrent calls
+  /// detect that a newer call has superseded them and bail out early.
+  int _initGeneration = 0;
+
   TrainingCubit(this._progressRepository) : super(TrainingInitial());
 
   final TrainingProgressRepository _progressRepository;
 
   /// Loads per-level stats from the DB and restores the last active session.
   Future<void> init() async {
+    final int gen = ++_initGeneration;
     await Future.wait(
       _allLevels.map((String l) async {
         savedIndices[l] = await _progressRepository.getLevelPosition(l);
         levelTotals[l] = await DBHelper.getWordCountByLevel(l);
       }),
     );
+    if (gen != _initGeneration) return;
 
     emit(TrainingInitial());
 
     final String? lastLevel = await _progressRepository.getLastTrainingLevel();
+    if (gen != _initGeneration) return;
     if (lastLevel != null) {
       await _doLoad(lastLevel, startIndex: savedIndices[lastLevel] ?? 0);
     }
@@ -77,13 +84,27 @@ class TrainingCubit extends Cubit<TrainingState> {
     emit(s.copyWith(currentIndex: newIndex));
   }
 
+  /// Jumps straight to [index] (clamped to the level) and persists the new
+  /// position once.
+  Future<void> jumpTo(int index) async {
+    final TrainingState s = state;
+    if (s is! TrainingReady) return;
+    final int target = index.clamp(0, s.total - 1);
+    if (target == s.currentIndex) return;
+    await _persist(s.level, target);
+    emit(s.copyWith(currentIndex: target));
+  }
+
   Future<void> _persist(String level, int index) async {
     savedIndices[level] = index;
     await _progressRepository.saveLevelPosition(level, index);
   }
 
   /// Returns to the level selection grid without clearing any progress.
-  void backToLevels() => emit(TrainingInitial());
+  void backToLevels() {
+    unawaited(_progressRepository.flush());
+    emit(TrainingInitial());
+  }
 
   /// Clears the in-memory progress cache and reloads it from storage.
   ///
@@ -94,6 +115,10 @@ class TrainingCubit extends Cubit<TrainingState> {
   Future<void> reset() async {
     savedIndices.clear();
     levelTotals.clear();
+    // Emit immediately so _LevelCard rebuilds with zeroed maps before the
+    // async DB reads in init() complete. Without this, old progress values
+    // remain visible during the async gap.
+    emit(TrainingInitial());
     await init();
   }
 }

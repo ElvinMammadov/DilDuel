@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
+import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';
 import 'package:flutter_dic/features/search/search.dart';
 import 'package:flutter_dic/features/quiz/quiz.dart';
@@ -38,21 +39,73 @@ class _HomeShellState extends State<HomeShell> {
     setState(() => _currentIndex = index);
   }
 
+  void _showGuestDataDialog(BuildContext context, AuthCubit cubit) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => _GuestDataDialog(cubit: cubit),
+    );
+  }
+
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: DilDuelAppBar(
-          title: 'app.title'.tr(),
-          showBackButton: false,
-          showDictionarySwitcher: _currentIndex == 0 || _currentIndex == 2,
+  Widget build(BuildContext context) => MultiBlocListener(
+        listeners: <BlocListenerBase<dynamic, dynamic>>[
+          BlocListener<AuthCubit, AuthState>(
+            listenWhen: (AuthState p, AuthState c) =>
+                c is AuthGuestDataDecision && p is! AuthGuestDataDecision,
+            listener: (BuildContext ctx, AuthState state) =>
+                _showGuestDataDialog(ctx, ctx.read<AuthCubit>()),
+          ),
+          BlocListener<AuthCubit, AuthState>(
+            listenWhen: (AuthState p, AuthState c) =>
+                p is AuthAuthenticated && c is AuthUnauthenticated,
+            listener: (BuildContext ctx, AuthState state) =>
+                ctx.read<BookmarksBloc>().reset(),
+          ),
+        ],
+        child: Scaffold(
+          appBar: DilDuelAppBar(
+            title: 'app.title'.tr(),
+            showBackButton: false,
+            showDictionarySwitcher: _currentIndex == 0 || _currentIndex == 2,
+          ),
+          body: IndexedStack(
+            index: _currentIndex,
+            children: _pages,
+          ),
+          bottomNavigationBar: _DesignedNavBar(
+            currentIndex: _currentIndex,
+            onTap: _onTabTapped,
+          ),
         ),
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _pages,
-        ),
-        bottomNavigationBar: _DesignedNavBar(
-          currentIndex: _currentIndex,
-          onTap: _onTabTapped,
-        ),
+      );
+}
+
+class _GuestDataDialog extends StatelessWidget {
+  const _GuestDataDialog({required this.cubit});
+
+  final AuthCubit cubit;
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+        title: Text('auth.guest_data.title'.tr()),
+        content: Text('auth.guest_data.message'.tr()),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              cubit.discardGuestData();
+            },
+            child: Text('auth.guest_data.discard'.tr()),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              cubit.keepGuestData();
+            },
+            child: Text('auth.guest_data.keep'.tr()),
+          ),
+        ],
       );
 }
 

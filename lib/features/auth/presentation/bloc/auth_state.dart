@@ -40,6 +40,15 @@ class AuthPasswordResetSent extends AuthState {
   List<Object?> get props => <Object?>[];
 }
 
+/// Guest data exists locally; waiting for the user to decide whether to
+/// keep it (bidirectional sync) or discard it (clear local, pull remote).
+class AuthGuestDataDecision extends AuthState {
+  const AuthGuestDataDecision(this.user);
+  final AuthUser user;
+  @override
+  List<Object?> get props => <Object?>[user];
+}
+
 /// An auth operation failed with a user-facing [message].
 class AuthError extends AuthState {
   const AuthError(this.message);

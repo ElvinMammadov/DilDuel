@@ -79,7 +79,7 @@ class FaqScreen extends StatelessWidget {
               const SizedBox(height: Dimensions.padding8),
           itemBuilder: (BuildContext context, int index) {
             final (String q, String a) = _items[index];
-            return _SettingsCard(
+            return AppCard(
               child: _FaqItem(
                 question: q.tr(),
                 answer: a.tr(),
@@ -89,4 +89,70 @@ class FaqScreen extends StatelessWidget {
           },
         ),
       );
+}
+
+class _FaqItem extends StatefulWidget {
+  final String question;
+  final String answer;
+  final bool showDivider;
+
+  const _FaqItem({
+    required this.question,
+    required this.answer,
+    required this.showDivider,
+  });
+
+  @override
+  State<_FaqItem> createState() => _FaqItemState();
+}
+
+class _FaqItemState extends State<_FaqItem> {
+  bool _open = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+    return Column(
+      children: <Widget>[
+        GestureDetector(
+          onTap: () => setState(() => _open = !_open),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.padding16,
+                vertical: Dimensions.padding14),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                    child: Text(widget.question,
+                        style: AppTextStyles.bodyMedium(colors.textPrimary)
+                            .copyWith(fontWeight: FontWeight.w600))),
+                AnimatedRotation(
+                  duration: const Duration(milliseconds: 200),
+                  turns: _open ? 0.5 : 0,
+                  child: Icon(
+                    Icons.keyboard_arrow_down,
+                    size: Dimensions.itemWidth18,
+                    color: colors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_open)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              Dimensions.padding16,
+              0,
+              Dimensions.padding16,
+              Dimensions.padding14,
+            ),
+            child: Text(widget.answer,
+                style: AppTextStyles.bodyMedium(colors.textPrimary)
+                    .copyWith(height: 1.5, fontSize: 13)),
+          ),
+        if (widget.showDivider) Divider(height: 1, color: colors.border),
+      ],
+    );
+  }
 }

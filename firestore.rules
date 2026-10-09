@@ -14,6 +14,21 @@ service cloud.firestore {
                          && request.auth.uid == uid;
     }
 
+    // Anyone, guests included, can submit feedback; nobody can read, edit or
+    // delete it from the client (use the Firebase console). Keep the limits
+    // in sync with FeedbackSubmission.
+    match /feedback/{feedbackId} {
+      allow create: if request.resource.data.keys().hasOnly(
+                         ['name', 'message', 'createdAt'])
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 60
+                    && request.resource.data.message is string
+                    && request.resource.data.message.size() > 0
+                    && request.resource.data.message.size() <= 1000
+                    && request.resource.data.createdAt == request.time;
+    }
+
     // Deny all other paths explicitly.
     match /{document=**} {
       allow read, write: if false;

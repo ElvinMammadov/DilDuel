@@ -16,14 +16,11 @@
     "light": "Hell",
     "dark": "Dunkel",
     "system": "System",
-    "about": "Über",
     "version": "Version {0}",
     "sign_in": "Anmelden",
     "profile": {
       "title": "Profil",
       "edit": "Profil bearbeiten",
-      "name": "Elvin Mammadov",
-      "email": "elvin@example.com",
       "guest": "Gast",
       "guest_hint": "Melden Sie sich an, um auf Ihre Profildaten zuzugreifen"
     },
@@ -75,6 +72,20 @@
       "subtitle": "Anbieterkennzeichnung"
     },
     "link_error": "Seite konnte nicht geöffnet werden",
+    "feedback": {
+      "title": "Feedback senden",
+      "row_subtitle": "Falsches Wort melden oder Idee teilen",
+      "name_label": "Ihr Name",
+      "name_hint": "Namen eingeben",
+      "message_label": "Ihre Nachricht",
+      "message_hint": "Falsches Wort, Übersetzung oder Vorschlag beschreiben",
+      "required": "Dieses Feld darf nicht leer sein",
+      "send": "Senden",
+      "success": "Feedback gesendet",
+      "success_subtitle": "Vielen Dank!",
+      "error_network": "Senden fehlgeschlagen. Prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.",
+      "error_generic": "Senden fehlgeschlagen. Bitte versuchen Sie es später erneut."
+    },
     "delete_account": {
       "button": "Konto löschen",
       "title": "Konto löschen?",

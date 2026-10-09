@@ -16,14 +16,11 @@
     "light": "Açıq",
     "dark": "Tünd",
     "system": "Sistem",
-    "about": "Haqqında",
     "version": "Versiya {}",
     "sign_in": "Daxil ol",
     "profile": {
       "title": "Profil",
       "edit": "Profili düzəlt",
-      "name": "Elvin Mammadov",
-      "email": "elvin@example.com",
       "guest": "Qonaq",
       "guest_hint": "Profil məlumatlarına giriş üçün daxil olun"
     },
@@ -75,6 +72,20 @@
       "subtitle": "Provayder məlumatı"
     },
     "link_error": "Səhifəni açmaq mümkün olmadı",
+    "feedback": {
+      "title": "Rəy göndər",
+      "row_subtitle": "Səhv söz bildirin və ya təklif verin",
+      "name_label": "Adınız",
+      "name_hint": "Adınızı daxil edin",
+      "message_label": "Rəyiniz",
+      "message_hint": "Səhv söz, tərcümə və ya təklifinizi yazın",
+      "required": "Bu sahə boş ola bilməz",
+      "send": "Göndər",
+      "success": "Rəyiniz göndərildi",
+      "success_subtitle": "Təşəkkür edirik!",
+      "error_network": "Göndərmək alınmadı. İnternet bağlantınızı yoxlayıb yenidən cəhd edin.",
+      "error_generic": "Göndərmək alınmadı. Bir az sonra yenidən cəhd edin."
+    },
     "delete_account": {
       "button": "Hesabı sil",
       "title": "Hesab silinsin?",

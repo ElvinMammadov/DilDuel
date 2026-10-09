@@ -8,6 +8,10 @@ abstract final class FirestorePaths {
   static const String listeningResults = 'listeningResults';
   static const String trainingProgress = 'trainingProgress';
 
+  /// Top-level collection of user feedback; not tied to a user, so account
+  /// deletion leaves it alone.
+  static const String feedback = 'feedback';
+
   /// Every collection stored under `users/{uid}`. Account deletion removes
   /// all of them, so add new per-user collections here.
   static const List<String> userSubcollections = <String>[

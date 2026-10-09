@@ -25,28 +25,32 @@ import '../../features/search/data/repositories/word_repository_impl.dart'
     as _i11;
 import '../../features/search/domain/usecases/search_word.dart' as _i1023;
 import '../../features/search/search.dart' as _i725;
+import '../../features/settings/settings.dart' as _i944;
 import '../../features/training/training.dart' as _i406;
 import '../data/data_sources/local/word_local_data_source.dart' as _i94;
 import '../data/data_sources/local/word_local_data_source_impl.dart' as _i816;
 import '../data/repositories/bookmark_repository.dart' as _i807;
-import '../data/repositories/listening_result_repository.dart' as _i52;
+import '../data/repositories/feedback_repository.dart' as _i213;
+import '../data/repositories/listening_result_repository.dart' as _i109;
 import '../data/repositories/local/local_bookmark_repository.dart' as _i817;
 import '../data/repositories/local/local_listening_result_repository.dart'
-    as _i50;
+    as _i441;
 import '../data/repositories/local/local_quiz_result_repository.dart' as _i36;
 import '../data/repositories/local/local_training_progress_repository.dart'
     as _i45;
 import '../data/repositories/quiz_result_repository.dart' as _i662;
 import '../data/repositories/remote/firestore_bookmark_repository.dart'
     as _i957;
+import '../data/repositories/remote/firestore_feedback_repository.dart'
+    as _i1008;
 import '../data/repositories/remote/firestore_listening_result_repository.dart'
-    as _i51;
+    as _i787;
 import '../data/repositories/remote/firestore_quiz_result_repository.dart'
     as _i843;
 import '../data/repositories/remote/firestore_training_progress_repository.dart'
     as _i63;
 import '../data/repositories/sync_bookmark_repository.dart' as _i709;
-import '../data/repositories/sync_listening_result_repository.dart' as _i53;
+import '../data/repositories/sync_listening_result_repository.dart' as _i671;
 import '../data/repositories/sync_quiz_result_repository.dart' as _i551;
 import '../data/repositories/sync_training_progress_repository.dart' as _i311;
 import '../data/repositories/training_progress_repository.dart' as _i871;
@@ -73,12 +77,14 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i817.LocalBookmarkRepository>(
         () => _i817.LocalBookmarkRepository());
+    gh.lazySingleton<_i441.LocalListeningResultRepository>(
+        () => _i441.LocalListeningResultRepository());
     gh.lazySingleton<_i36.LocalQuizResultRepository>(
         () => _i36.LocalQuizResultRepository());
     gh.lazySingleton<_i45.LocalTrainingProgressRepository>(
         () => _i45.LocalTrainingProgressRepository());
-    gh.lazySingleton<_i50.LocalListeningResultRepository>(
-        () => _i50.LocalListeningResultRepository());
+    gh.lazySingleton<_i213.FeedbackRepository>(
+        () => _i1008.FirestoreFeedbackRepository());
     gh.lazySingleton<_i430.AuthRepository>(
         () => _i430.FirebaseAuthRepository());
     gh.lazySingleton<_i94.WordLocalDataSource>(() => _i816.DBHelper());
@@ -88,10 +94,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i655.ThemeCubit(gh<_i460.SharedPreferences>()));
     gh.lazySingleton<_i957.FirestoreBookmarkRepository>(
         () => _i957.FirestoreBookmarkRepository(gh<_i430.AuthRepository>()));
+    gh.lazySingleton<_i787.FirestoreListeningResultRepository>(() =>
+        _i787.FirestoreListeningResultRepository(gh<_i430.AuthRepository>()));
     gh.lazySingleton<_i843.FirestoreQuizResultRepository>(
         () => _i843.FirestoreQuizResultRepository(gh<_i430.AuthRepository>()));
-    gh.lazySingleton<_i51.FirestoreListeningResultRepository>(() =>
-        _i51.FirestoreListeningResultRepository(gh<_i430.AuthRepository>()));
     gh.lazySingleton<_i63.FirestoreTrainingProgressRepository>(() =>
         _i63.FirestoreTrainingProgressRepository(gh<_i430.AuthRepository>()));
     gh.lazySingleton<_i871.TrainingProgressRepository>(
@@ -108,23 +114,20 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i843.FirestoreQuizResultRepository>(),
               gh<_i430.AuthRepository>(),
             ));
-    gh.lazySingleton<_i52.ListeningResultRepository>(
-        () => _i53.SyncListeningResultRepository(
-              gh<_i50.LocalListeningResultRepository>(),
-              gh<_i51.FirestoreListeningResultRepository>(),
-              gh<_i430.AuthRepository>(),
-            ));
     gh.factory<_i381.QuizBloc>(() => _i381.QuizBloc(
           repository: gh<_i613.QuizRepository>(),
           quizResultRepository: gh<_i662.QuizResultRepository>(),
         ));
-    gh.factory<_i169.ListeningCubit>(
-        () => _i169.ListeningCubit(
-              gh<_i94.WordLocalDataSource>(),
-              gh<_i52.ListeningResultRepository>(),
-            ));
+    gh.factory<_i944.FeedbackCubit>(
+        () => _i944.FeedbackCubit(gh<_i213.FeedbackRepository>()));
     gh.lazySingleton<_i6.WordRepository>(() => _i11.WordRepositoryImpl(
         localDataSource: gh<_i94.WordLocalDataSource>()));
+    gh.lazySingleton<_i109.ListeningResultRepository>(
+        () => _i671.SyncListeningResultRepository(
+              gh<_i441.LocalListeningResultRepository>(),
+              gh<_i787.FirestoreListeningResultRepository>(),
+              gh<_i430.AuthRepository>(),
+            ));
     gh.factory<_i1023.SearchWord>(
         () => _i1023.SearchWord(gh<_i6.WordRepository>()));
     gh.factory<_i725.SearchBloc>(
@@ -135,15 +138,19 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i957.FirestoreBookmarkRepository>(),
               gh<_i430.AuthRepository>(),
             ));
+    gh.factory<_i169.ListeningCubit>(() => _i169.ListeningCubit(
+          gh<_i94.WordLocalDataSource>(),
+          gh<_i109.ListeningResultRepository>(),
+        ));
+    gh.factory<_i1027.BookmarksBloc>(
+        () => _i1027.BookmarksBloc(gh<_i807.BookmarkRepository>()));
     gh.lazySingleton<_i430.AuthCubit>(() => _i430.AuthCubit(
           gh<_i430.AuthRepository>(),
           gh<_i807.BookmarkRepository>(),
           gh<_i662.QuizResultRepository>(),
           gh<_i871.TrainingProgressRepository>(),
-          gh<_i52.ListeningResultRepository>(),
+          gh<_i109.ListeningResultRepository>(),
         ));
-    gh.factory<_i1027.BookmarksBloc>(
-        () => _i1027.BookmarksBloc(gh<_i807.BookmarkRepository>()));
     return this;
   }
 }

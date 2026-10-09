@@ -99,6 +99,7 @@ class Dimensions {
 
   // ─── Border radii ─────────────────────────────────────────────
   static const double borderRadius = 16.0;
+  static const double borderRadiusSmall = 8.0;
   static const double borderRadiusSheet = 28.0;
   static const double borderRadiusPill = 100.0;
 

@@ -19,14 +19,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _openSignIn() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => SignInScreen(
-          onAuthenticated: () => Navigator.of(context).pop(),
-        ),
+        builder: (_) =>
+            SignInScreen(onAuthenticated: () => Navigator.of(context).pop()),
       ),
     );
   }
 
-  Future<void> _signOut() => context.read<AuthCubit>().signOut();
+  void _openFaq() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (_) => const FaqScreen()));
+  }
+
+  void _openFeedback() {
+    final AuthState authState = context.read<AuthCubit>().state;
+    final String name = switch (authState) {
+      AuthAuthenticated(:final AuthUser user) => user.displayName ?? '',
+      _ => '',
+    };
+    FeedbackBottomSheet.show(context, initialName: name);
+  }
 
   Future<void> _openLink(Uri Function(String languageCode) pageFor) async {
     final String languageCode = context.locale.languageCode;
@@ -91,204 +103,58 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Dimensions.padding30,
           ),
           children: <Widget>[
-            // Profile card
-            BlocBuilder<AuthCubit, AuthState>(
-              builder: (BuildContext ctx, AuthState authState) {
-                final bool isSignedIn = authState is AuthAuthenticated;
-                final AuthUser? user = switch (authState) {
-                  AuthAuthenticated(:final AuthUser user) => user,
-                  _ => null,
-                };
-                final AppColors ctxColors = AppColors.of(ctx);
-
-                return _SettingsCard(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      Dimensions.padding20,
-                      Dimensions.padding24,
-                      Dimensions.padding20,
-                      Dimensions.padding24,
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: Dimensions.itemHeight36,
-                          backgroundColor: isSignedIn
-                              ? ctxColors.primary
-                              : ctxColors.primaryTint,
-                          child: Icon(
-                            Icons.person,
-                            size: Dimensions.itemWidth28,
-                            color: isSignedIn
-                                ? ctxColors.onPrimary
-                                : ctxColors.primary,
-                          ),
-                        ),
-                        const SizedBox(height: Dimensions.itemHeight10),
-                        if (isSignedIn) ...<Widget>[
-                          Text(
-                            user?.displayName ?? 'settings.profile.name'.tr(),
-                            style: AppTextStyles.titleMedium(
-                              ctxColors.textPrimary,
-                            ),
-                          ),
-                          const SizedBox(height: Dimensions.itemHeight2),
-                          Text(
-                            user?.email ?? '',
-                            style: AppTextStyles.bodySmall(
-                              ctxColors.textSecondary,
-                            ),
-                          ),
-                        ] else ...<Widget>[
-                          Text(
-                            'settings.profile.guest'.tr(),
-                            style: AppTextStyles.titleMedium(
-                              ctxColors.textPrimary,
-                            ),
-                          ),
-                          const SizedBox(height: Dimensions.itemHeight2),
-                          Text(
-                            'settings.profile.guest_hint'.tr(),
-                            style: AppTextStyles.bodyMedium(
-                              ctxColors.textSecondary,
-                            ).copyWith(fontSize: 13),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                        const SizedBox(height: Dimensions.itemHeight14),
-                        if (!isSignedIn)
-                          GestureDetector(
-                            onTap: _openSignIn,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: Dimensions.padding22,
-                                  vertical: Dimensions.padding10),
-                              decoration: BoxDecoration(
-                                color: ctxColors.primary,
-                                borderRadius: BorderRadius.circular(
-                                    Dimensions.borderRadiusPill),
-                              ),
-                              child: Text(
-                                'settings.sign_in'.tr(),
-                                style: AppTextStyles.labelMedium(
-                                    ctxColors.onPrimary),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+            _ProfileCard(onSignIn: _openSignIn),
+            const SizedBox(height: Dimensions.itemHeight14),
+            _SettingsGroup(
+              children: <Widget>[
+                _SettingsRow(
+                  icon: Icons.language_outlined,
+                  iconBackground: colors.levelB1,
+                  title: 'settings.language'.tr(),
+                  subtitle: 'settings.language_name'.tr(),
+                  onTap: _showLanguageBottomSheet,
+                ),
+                const ThemeRow(),
+              ],
             ),
             const SizedBox(height: Dimensions.itemHeight14),
-
-            // Language
-            _SettingsCard(
-              child: _SettingsRow(
-                icon: Icons.language_outlined,
-                iconColor: colors.primary,
-                title: 'settings.language'.tr(),
-                subtitle: 'settings.language_name'.tr(),
-                onTap: _showLanguageBottomSheet,
-              ),
-            ),
-            const SizedBox(height: Dimensions.padding8),
-
-            // Theme
-            const _SettingsCard(child: ThemeCard()),
-            const SizedBox(height: Dimensions.padding8),
-
-            // FAQ
-            _SettingsCard(
-              child: _SettingsRow(
-                icon: Icons.help_outline,
-                iconColor: colors.primary,
-                title: 'settings.faq.title'.tr(),
-                subtitle: 'settings.faq.row_subtitle'.tr(
-                  args: <String>['${FaqScreen.itemCount}'],
-                ),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const FaqScreen(),
+            _SettingsGroup(
+              children: <Widget>[
+                _SettingsRow(
+                  icon: Icons.help_outline,
+                  iconBackground: colors.quizCard,
+                  title: 'settings.faq.title'.tr(),
+                  subtitle: 'settings.faq.row_subtitle'.tr(
+                    args: <String>['${FaqScreen.itemCount}'],
                   ),
+                  onTap: _openFaq,
                 ),
-              ),
+                _SettingsRow(
+                  icon: Icons.rate_review_outlined,
+                  iconBackground: colors.resultsCard,
+                  title: 'settings.feedback.title'.tr(),
+                  subtitle: 'settings.feedback.row_subtitle'.tr(),
+                  onTap: _openFeedback,
+                ),
+                _SettingsRow(
+                  icon: Icons.privacy_tip_outlined,
+                  iconBackground: colors.levelB2,
+                  title: 'settings.privacy_policy.title'.tr(),
+                  subtitle: 'settings.privacy_policy.subtitle'.tr(),
+                  onTap: () => _openLink(LegalLinks.privacyPolicy),
+                ),
+                _SettingsRow(
+                  icon: Icons.gavel_outlined,
+                  iconBackground: colors.unknownCard,
+                  title: 'settings.legal_notice.title'.tr(),
+                  subtitle: 'settings.legal_notice.subtitle'.tr(),
+                  onTap: () => _openLink(LegalLinks.impressum),
+                ),
+              ],
             ),
-            const SizedBox(height: Dimensions.padding8),
-
-            // Privacy policy
-            _SettingsCard(
-              child: _SettingsRow(
-                icon: Icons.privacy_tip_outlined,
-                iconColor: colors.primary,
-                title: 'settings.privacy_policy.title'.tr(),
-                subtitle: 'settings.privacy_policy.subtitle'.tr(),
-                onTap: () => _openLink(LegalLinks.privacyPolicy),
-              ),
-            ),
-            const SizedBox(height: Dimensions.padding8),
-
-            // Legal notice
-            _SettingsCard(
-              child: _SettingsRow(
-                icon: Icons.gavel_outlined,
-                iconColor: colors.primary,
-                title: 'settings.legal_notice.title'.tr(),
-                subtitle: 'settings.legal_notice.subtitle'.tr(),
-                onTap: () => _openLink(LegalLinks.impressum),
-              ),
-            ),
-            const SizedBox(height: Dimensions.padding8),
-
-            // About
-            _SettingsCard(
-              child: FutureBuilder<PackageInfo>(
-                future: _packageInfo,
-                builder: (BuildContext context,
-                    AsyncSnapshot<PackageInfo> snapshot) {
-                  final String version =
-                      snapshot.hasData ? snapshot.data!.version : '...';
-                  return _SettingsRow(
-                    icon: Icons.info_outline,
-                    iconColor: AppColors.of(context).primary,
-                    title: 'settings.about'.tr(),
-                    subtitle: 'settings.version'.tr(args: <String>[version]),
-                    showChevron: false,
-                    onTap: () {},
-                  );
-                },
-              ),
-            ),
-
-            // Logout — only shown when signed in
-            BlocBuilder<AuthCubit, AuthState>(
-              builder: (BuildContext ctx, AuthState authState) {
-                if (authState is! AuthAuthenticated) {
-                  return const SizedBox.shrink();
-                }
-                final AppColors ctxColors = AppColors.of(ctx);
-                return Column(
-                  children: <Widget>[
-                    const SizedBox(height: Dimensions.itemHeight14),
-                    AppElevatedButton(
-                      text: 'settings.logout'.tr(),
-                      onPressed: _signOut,
-                      width: double.infinity,
-                      backgroundColor: ctxColors.errorTint,
-                      textColor: ctxColors.error,
-                    ),
-                    const SizedBox(height: Dimensions.itemHeight10),
-                    AppOutlinedButton(
-                      text: 'settings.delete_account.button'.tr(),
-                      onPressed: () => _DeleteAccountDialog.show(context),
-                      width: double.infinity,
-                      borderColor: ctxColors.error,
-                    ),
-                  ],
-                );
-              },
-            ),
+            const _AccountActions(),
+            const SizedBox(height: Dimensions.itemHeight24),
+            _VersionFooter(packageInfo: _packageInfo),
           ],
         ),
       ),
@@ -296,62 +162,213 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-class _SettingsCard extends StatelessWidget {
-  final Widget child;
+class _ProfileCard extends StatelessWidget {
+  final VoidCallback onSignIn;
 
-  const _SettingsCard({required this.child});
+  const _ProfileCard({required this.onSignIn});
 
   @override
-  Widget build(BuildContext context) => AppCard(child: child);
+  Widget build(BuildContext context) {
+    final AppColors colors = AppColors.of(context);
+
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (BuildContext context, AuthState authState) {
+        final AuthUser? user = switch (authState) {
+          AuthAuthenticated(:final AuthUser user) => user,
+          _ => null,
+        };
+        final bool isSignedIn = authState is AuthAuthenticated;
+        final String? subtitle = isSignedIn
+            ? user?.visibleEmail
+            : 'settings.profile.guest_hint'.tr();
+
+        return AppCard(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.padding20,
+            vertical: Dimensions.padding24,
+          ),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: Dimensions.itemHeight36,
+                  backgroundColor: isSignedIn
+                      ? colors.primary
+                      : colors.primaryTint,
+                  child: Icon(
+                    Icons.person,
+                    size: Dimensions.itemWidth28,
+                    color: isSignedIn ? colors.onPrimary : colors.primary,
+                  ),
+                ),
+                const SizedBox(height: Dimensions.itemHeight10),
+                Text(
+                  isSignedIn
+                      ? user?.displayName ?? 'settings.profile.title'.tr()
+                      : 'settings.profile.guest'.tr(),
+                  style: AppTextStyles.titleMedium(colors.textPrimary),
+                ),
+                if (subtitle != null) ...<Widget>[
+                  const SizedBox(height: Dimensions.itemHeight2),
+                  Text(
+                    subtitle,
+                    style: AppTextStyles.bodySmall(colors.textSecondary),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                if (!isSignedIn) ...<Widget>[
+                  const SizedBox(height: Dimensions.itemHeight14),
+                  AppElevatedButton(
+                    text: 'settings.sign_in'.tr(),
+                    onPressed: onSignIn,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _AccountActions extends StatelessWidget {
+  const _AccountActions();
+
+  @override
+  Widget build(BuildContext context) => BlocBuilder<AuthCubit, AuthState>(
+    builder: (BuildContext context, AuthState authState) {
+      if (authState is! AuthAuthenticated) {
+        return const SizedBox.shrink();
+      }
+      final AppColors colors = AppColors.of(context);
+
+      return Padding(
+        padding: const EdgeInsets.only(top: Dimensions.itemHeight14),
+        child: Column(
+          children: <Widget>[
+            AppElevatedButton(
+              text: 'settings.logout'.tr(),
+              onPressed: () => context.read<AuthCubit>().signOut(),
+              width: double.infinity,
+              backgroundColor: colors.errorTint,
+              textColor: colors.error,
+            ),
+            const SizedBox(height: Dimensions.itemHeight10),
+            AppOutlinedButton(
+              text: 'settings.delete_account.button'.tr(),
+              onPressed: () => _DeleteAccountDialog.show(context),
+              width: double.infinity,
+              borderColor: colors.error,
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+class _VersionFooter extends StatelessWidget {
+  final Future<PackageInfo> packageInfo;
+
+  const _VersionFooter({required this.packageInfo});
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<PackageInfo>(
+    future: packageInfo,
+    builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+      final String version = snapshot.data?.version ?? '...';
+      return Text(
+        'settings.version'.tr(args: <String>[version]),
+        textAlign: TextAlign.center,
+        style: AppTextStyles.caption(AppColors.of(context).textSecondary),
+      );
+    },
+  );
+}
+
+/// One card holding several [_SettingsRow]s separated by inset dividers.
+class _SettingsGroup extends StatelessWidget {
+  final List<Widget> children;
+
+  const _SettingsGroup({required this.children});
+
+  static const double _dividerIndent =
+      Dimensions.padding16 + Dimensions.itemWidth32 + Dimensions.itemWidth12;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color dividerColor = AppColors.of(context).border;
+
+    return AppCard(
+      child: Column(
+        children: <Widget>[
+          for (int index = 0; index < children.length; index++) ...<Widget>[
+            if (index > 0)
+              Divider(
+                height: Dimensions.itemHeight1,
+                indent: _dividerIndent,
+                color: dividerColor,
+              ),
+            children[index],
+          ],
+        ],
+      ),
+    );
+  }
 }
 
 class _SettingsRow extends StatelessWidget {
-  final IconData? icon;
-  final Color? iconColor;
+  final IconData icon;
+  final Color iconBackground;
   final String title;
   final String subtitle;
-  final VoidCallback? onTap;
-  final bool showChevron;
+  final VoidCallback onTap;
 
   const _SettingsRow({
-    this.icon,
-    this.iconColor,
+    required this.icon,
+    required this.iconBackground,
     required this.title,
     required this.subtitle,
-    this.onTap,
-    this.showChevron = true,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final AppColors colors = AppColors.of(context);
+
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(Dimensions.borderRadius),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-            horizontal: Dimensions.padding16, vertical: Dimensions.padding14),
+          horizontal: Dimensions.padding16,
+          vertical: Dimensions.padding12,
+        ),
         child: Row(
           children: <Widget>[
-            if (icon != null) ...<Widget>[
-              Icon(icon, size: Dimensions.itemWidth20, color: iconColor),
-              const SizedBox(width: Dimensions.itemWidth12),
-            ],
+            _IconTile(icon: icon, background: iconBackground),
+            const SizedBox(width: Dimensions.itemWidth12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(title,
-                      style: AppTextStyles.titleSmall(colors.textPrimary)),
-                  Text(subtitle,
-                      style: AppTextStyles.bodySmall(colors.textSecondary)),
+                  Text(
+                    title,
+                    style: AppTextStyles.titleSmall(colors.textPrimary),
+                  ),
+                  Text(
+                    subtitle,
+                    style: AppTextStyles.bodySmall(colors.textSecondary),
+                  ),
                 ],
               ),
             ),
-            if (showChevron)
-              Icon(Icons.chevron_right,
-                  size: Dimensions.itemWidth16,
-                  color: colors.textSecondary.withValues(alpha: 0.4)),
+            Icon(
+              Icons.chevron_right,
+              size: Dimensions.itemWidth16,
+              color: colors.textSecondary.withValues(alpha: 0.4),
+            ),
           ],
         ),
       ),
@@ -359,68 +376,23 @@ class _SettingsRow extends StatelessWidget {
   }
 }
 
-class _FaqItem extends StatefulWidget {
-  final String question;
-  final String answer;
-  final bool showDivider;
+/// iOS-style rounded square with a white glyph on a colored background.
+class _IconTile extends StatelessWidget {
+  final IconData icon;
+  final Color background;
 
-  const _FaqItem({
-    required this.question,
-    required this.answer,
-    required this.showDivider,
-  });
+  const _IconTile({required this.icon, required this.background});
 
   @override
-  State<_FaqItem> createState() => _FaqItemState();
-}
-
-class _FaqItemState extends State<_FaqItem> {
-  bool _open = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-    return Column(
-      children: <Widget>[
-        GestureDetector(
-          onTap: () => setState(() => _open = !_open),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.padding16,
-                vertical: Dimensions.padding14),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                    child: Text(widget.question,
-                        style: AppTextStyles.bodyMedium(colors.textPrimary)
-                            .copyWith(fontWeight: FontWeight.w600))),
-                AnimatedRotation(
-                  duration: const Duration(milliseconds: 200),
-                  turns: _open ? 0.5 : 0,
-                  child: Icon(
-                    Icons.keyboard_arrow_down,
-                    size: Dimensions.itemWidth18,
-                    color: colors.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (_open)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              Dimensions.padding16,
-              0,
-              Dimensions.padding16,
-              Dimensions.padding14,
-            ),
-            child: Text(widget.answer,
-                style: AppTextStyles.bodyMedium(colors.textPrimary)
-                    .copyWith(height: 1.5, fontSize: 13)),
-          ),
-        if (widget.showDivider) Divider(height: 1, color: colors.border),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: BoxDecoration(
+      color: background,
+      borderRadius: BorderRadius.circular(Dimensions.borderRadiusSmall),
+    ),
+    child: SizedBox(
+      width: Dimensions.itemWidth32,
+      height: Dimensions.itemHeight32,
+      child: Icon(icon, size: Dimensions.itemWidth18, color: Colors.white),
+    ),
+  );
 }

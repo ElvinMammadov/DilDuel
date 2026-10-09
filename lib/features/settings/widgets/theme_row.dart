@@ -1,7 +1,7 @@
 part of '../settings.dart';
 
-class ThemeCard extends StatelessWidget {
-  const ThemeCard({super.key});
+class ThemeRow extends StatelessWidget {
+  const ThemeRow({super.key});
 
   void _showThemeBottomSheet(BuildContext context) {
     AppBottomSheet.show<void>(
@@ -13,20 +13,15 @@ class ThemeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocBuilder<ThemeCubit, ThemeState>(
         builder: (BuildContext context, ThemeState state) {
-          final AppColors colors = AppColors.of(context);
-          final String themeText;
-          switch (state.themeType) {
-            case ThemeType.light:
-              themeText = 'settings.light'.tr();
-            case ThemeType.dark:
-              themeText = 'settings.dark'.tr();
-            case ThemeType.system:
-              themeText = 'settings.system'.tr();
-          }
+          final String themeText = switch (state.themeType) {
+            ThemeType.light => 'settings.light'.tr(),
+            ThemeType.dark => 'settings.dark'.tr(),
+            ThemeType.system => 'settings.system'.tr(),
+          };
 
           return _SettingsRow(
             icon: Icons.palette_outlined,
-            iconColor: colors.primary,
+            iconBackground: AppColors.of(context).bookmarksCard,
             title: 'settings.theme'.tr(),
             subtitle: themeText,
             onTap: () => _showThemeBottomSheet(context),

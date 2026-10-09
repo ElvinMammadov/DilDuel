@@ -1,11 +1,18 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/components/app_bottom_sheet.dart';
 import 'package:flutter_dic/core/components/app_card.dart';
 import 'package:flutter_dic/core/components/app_snackbar.dart';
+import 'package:flutter_dic/core/components/app_text_field.dart';
 import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
 import 'package:flutter_dic/core/components/buttons/app_outlined_button.dart';
+import 'package:flutter_dic/core/data/models/feedback_submission.dart';
+import 'package:flutter_dic/core/data/repositories/feedback_repository.dart';
+import 'package:flutter_dic/core/di/dependency_injection.dart';
 import 'package:flutter_dic/core/state/theme_cubit.dart';
 import 'package:flutter_dic/core/state/theme_state.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
@@ -14,12 +21,16 @@ import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/core/utils/legal_links.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';
+import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'presentation/settings_screen.dart';
 part 'presentation/faq_screen.dart';
+part 'presentation/bloc/feedback_state.dart';
+part 'presentation/bloc/feedback_cubit.dart';
 part 'widgets/theme_bottom_sheet.dart';
-part 'widgets/theme_card.dart';
+part 'widgets/theme_row.dart';
 part 'widgets/language_bottom_sheet.dart';
 part 'widgets/delete_account_dialog.dart';
+part 'widgets/feedback_bottom_sheet.dart';

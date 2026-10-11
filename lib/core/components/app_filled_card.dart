@@ -2,31 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 
-/// A wide, short card filled with a solid [color], with a soft colored
-/// shadow and an optional oversized [watermark] in the bottom-right corner.
+/// A wide, short card on the [AppColors.surface] background with a border,
+/// a soft shadow and an optional oversized [watermark] in the bottom-right
+/// corner.
 ///
 /// A trailing chevron signals that the card is tappable. Content is expected
-/// to use [AppColors.onPrimary] for text and icons.
+/// to use [AppColors.primary] for text and icons.
 class AppFilledCard extends StatelessWidget {
   const AppFilledCard({
     super.key,
-    required this.color,
     required this.onTap,
     required this.child,
     this.watermark,
   });
 
-  final Color color;
   final VoidCallback onTap;
   final Widget child;
   final Widget? watermark;
 
-  BoxDecoration get _decoration => BoxDecoration(
-        color: color,
+  BoxDecoration _decoration(AppColors colors) => BoxDecoration(
+        color: colors.surface,
+        border: Border.all(color: colors.border),
         borderRadius: BorderRadius.circular(Dimensions.borderRadius),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: color.withValues(alpha: 0.45),
+            color: colors.shadowSubtle,
             blurRadius: Dimensions.itemHeight20,
             offset: const Offset(0, Dimensions.itemHeight8),
           ),
@@ -39,7 +39,7 @@ class AppFilledCard extends StatelessWidget {
         child: GestureDetector(
           onTap: onTap,
           child: DecoratedBox(
-            decoration: _decoration,
+            decoration: _decoration(AppColors.of(context)),
             child: SizedBox(
               height: Dimensions.itemHeight88,
               child: Stack(
@@ -75,7 +75,7 @@ class _CardContent extends StatelessWidget {
             Icon(
               Icons.chevron_right_rounded,
               size: Dimensions.itemWidth24,
-              color: AppColors.of(context).onPrimary.withValues(alpha: 0.70),
+              color: AppColors.of(context).primary.withValues(alpha: 0.70),
             ),
           ],
         ),

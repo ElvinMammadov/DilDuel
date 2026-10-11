@@ -15,12 +15,6 @@ enum _QuizSection {
         results => 'quiz.results.title'.tr(),
       };
 
-  Color color(AppColors colors) => switch (this) {
-        quiz => colors.quizCard,
-        listening => colors.listeningCard,
-        results => colors.resultsCard,
-      };
-
   Widget get content => switch (this) {
         quiz => const QuizContent(),
         listening => const ListeningScreen(),
@@ -94,26 +88,23 @@ class _QuizSectionCards extends StatelessWidget {
   final ValueChanged<_QuizSection> onSelected;
 
   @override
-  Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-    return FutureBuilder<Map<_QuizSection, int>>(
-      future: counts,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<Map<_QuizSection, int>> snapshot,
-      ) =>
-          AppFilledCardList(
-        children: <Widget>[
-          for (final _QuizSection section in _QuizSection.values)
-            AppIconFilledCard(
-              color: section.color(colors),
-              icon: section.icon,
-              label: section.label,
-              count: snapshot.data?[section],
-              onTap: () => onSelected(section),
-            ),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      FutureBuilder<Map<_QuizSection, int>>(
+        future: counts,
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<Map<_QuizSection, int>> snapshot,
+        ) =>
+            AppFilledCardList(
+          children: <Widget>[
+            for (final _QuizSection section in _QuizSection.values)
+              AppIconFilledCard(
+                icon: section.icon,
+                label: section.label,
+                count: snapshot.data?[section],
+                onTap: () => onSelected(section),
+              ),
+          ],
+        ),
+      );
 }

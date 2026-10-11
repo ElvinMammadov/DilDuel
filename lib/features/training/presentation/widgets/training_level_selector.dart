@@ -12,6 +12,10 @@ Color _levelFg(String level, AppColors colors) {
       return colors.warning;
     case 'B2':
       return colors.primary;
+    case 'C1':
+      return colors.info;
+    case 'C2':
+      return colors.error;
     default:
       return colors.primary;
   }
@@ -29,21 +33,12 @@ Color _levelBg(String level, AppColors colors, bool isDark) {
       return colors.errorTint;
     case 'B2':
       return colors.primaryTint;
+    case 'C1':
+      return colors.infoTint;
+    case 'C2':
+      return colors.errorTint;
     default:
       return colors.primaryTint;
-  }
-}
-
-Color _levelCardColor(String level, AppColors colors) {
-  switch (level) {
-    case 'A1':
-      return colors.levelA1;
-    case 'A2':
-      return colors.levelA2;
-    case 'B1':
-      return colors.levelB1;
-    default:
-      return colors.levelB2;
   }
 }
 
@@ -52,14 +47,12 @@ Color _levelCardColor(String level, AppColors colors) {
 class _LevelCardsGrid extends StatelessWidget {
   const _LevelCardsGrid();
 
-  static const List<String> _levels = <String>['A1', 'A2', 'B1', 'B2'];
-
   @override
   Widget build(BuildContext context) {
     final TrainingCubit cubit = context.read<TrainingCubit>();
     return AppFilledCardList(
       children: <Widget>[
-        for (final String level in _levels)
+        for (final String level in trainingLevels)
           _LevelCard(level: level, cubit: cubit),
       ],
     );
@@ -74,20 +67,21 @@ class _LevelCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
     final int total = cubit.levelTotals[level] ?? 0;
     final int saved = cubit.savedIndices[level] ?? 0;
 
     return AppFilledCard(
-      color: _levelCardColor(level, colors),
       onTap: () => context.read<TrainingCubit>().loadLevel(level),
       watermark: _LevelWatermark(level: level),
       child: Row(
         children: <Widget>[
+          if (total > 0) ...<Widget>[
+            _CircularLevelProgress(value: (saved + 1) / total),
+            const SizedBox(width: Dimensions.padding16),
+          ],
           Expanded(
             child: _LevelInfo(level: level, saved: saved, total: total),
           ),
-          if (total > 0) _CircularLevelProgress(value: (saved + 1) / total),
         ],
       ),
     );
@@ -107,16 +101,16 @@ class _LevelInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color onPrimary = AppColors.of(context).onPrimary;
+    final Color primary = AppColors.of(context).primary;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(level, style: AppTextStyles.titleLarge(onPrimary)),
+        Text(level, style: AppTextStyles.titleLarge(primary)),
         if (total > 0)
           Text(
             '$saved / $total',
-            style: AppTextStyles.caption(onPrimary.withValues(alpha: 0.70)),
+            style: AppTextStyles.caption(primary.withValues(alpha: 0.70)),
           ),
       ],
     );
@@ -132,7 +126,7 @@ class _LevelWatermark extends StatelessWidget {
   Widget build(BuildContext context) => Text(
         level,
         style: AppTextStyles.headlineLarge(
-          AppColors.of(context).onPrimary.withValues(alpha: 0.10),
+          AppColors.of(context).primary.withValues(alpha: 0.08),
         ).copyWith(
           fontSize: Dimensions.itemHeight88,
           fontWeight: FontWeight.w900,
@@ -148,7 +142,7 @@ class _CircularLevelProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color onPrimary = AppColors.of(context).onPrimary;
+    final Color primary = AppColors.of(context).primary;
     return SizedBox(
       width: Dimensions.itemHeight50,
       height: Dimensions.itemHeight50,
@@ -160,13 +154,13 @@ class _CircularLevelProgress extends StatelessWidget {
               value: value,
               strokeWidth: 3.5,
               strokeCap: StrokeCap.round,
-              backgroundColor: onPrimary.withValues(alpha: 0.25),
-              valueColor: AlwaysStoppedAnimation<Color>(onPrimary),
+              backgroundColor: primary.withValues(alpha: 0.15),
+              valueColor: AlwaysStoppedAnimation<Color>(primary),
             ),
           ),
           Text(
             '${(value * 100).round()}%',
-            style: AppTextStyles.caption(onPrimary),
+            style: AppTextStyles.caption(primary),
           ),
         ],
       ),

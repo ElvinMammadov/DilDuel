@@ -8,14 +8,12 @@ import 'package:flutter_dic/core/utils/dimensions.dart';
 class AppIconFilledCard extends StatelessWidget {
   const AppIconFilledCard({
     super.key,
-    required this.color,
     required this.icon,
     required this.label,
     required this.onTap,
     this.count,
   });
 
-  final Color color;
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -23,28 +21,27 @@ class AppIconFilledCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color onPrimary = AppColors.of(context).onPrimary;
+    final Color primary = AppColors.of(context).primary;
     return AppFilledCard(
-      color: color,
       onTap: onTap,
       watermark: Icon(
         icon,
         size: Dimensions.itemHeight88,
-        color: onPrimary.withValues(alpha: 0.10),
+        color: primary.withValues(alpha: 0.08),
       ),
       child: Row(
         children: <Widget>[
-          Icon(icon, size: Dimensions.itemWidth24, color: onPrimary),
+          Icon(icon, size: Dimensions.itemWidth24, color: primary),
           const SizedBox(width: Dimensions.padding12),
           Expanded(
             child: Text(
               label,
-              style: AppTextStyles.titleLarge(onPrimary),
+              style: AppTextStyles.titleLarge(primary),
               overflow: TextOverflow.ellipsis,
             ),
           ),
           if (count != null)
-            Text('$count', style: AppTextStyles.titleLarge(onPrimary)),
+            Text('$count', style: AppTextStyles.titleLarge(primary)),
         ],
       ),
     );

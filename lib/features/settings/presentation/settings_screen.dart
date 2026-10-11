@@ -31,6 +31,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     ).push(MaterialPageRoute<void>(builder: (_) => const FaqScreen()));
   }
 
+  void _openAbout() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => AboutScreen(packageInfo: _packageInfo),
+      ),
+    );
+  }
+
   void _openFeedback() {
     final AuthState authState = context.read<AuthCubit>().state;
     final String name = switch (authState) {
@@ -150,11 +158,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   subtitle: 'settings.legal_notice.subtitle'.tr(),
                   onTap: () => _openLink(LegalLinks.impressum),
                 ),
+                FutureBuilder<PackageInfo>(
+                  future: _packageInfo,
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<PackageInfo> snapshot,
+                  ) =>
+                      _SettingsRow(
+                    icon: Icons.info_outline,
+                    iconBackground: colors.primary,
+                    title: 'settings.about.title'.tr(),
+                    subtitle: 'settings.version'.tr(
+                      args: <String>[snapshot.data?.version ?? '...'],
+                    ),
+                    onTap: _openAbout,
+                  ),
+                ),
               ],
             ),
             const _AccountActions(),
-            const SizedBox(height: Dimensions.itemHeight24),
-            _VersionFooter(packageInfo: _packageInfo),
           ],
         ),
       ),
@@ -264,25 +286,6 @@ class _AccountActions extends StatelessWidget {
             ),
           ],
         ),
-      );
-    },
-  );
-}
-
-class _VersionFooter extends StatelessWidget {
-  final Future<PackageInfo> packageInfo;
-
-  const _VersionFooter({required this.packageInfo});
-
-  @override
-  Widget build(BuildContext context) => FutureBuilder<PackageInfo>(
-    future: packageInfo,
-    builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
-      final String version = snapshot.data?.version ?? '...';
-      return Text(
-        'settings.version'.tr(args: <String>[version]),
-        textAlign: TextAlign.center,
-        style: AppTextStyles.caption(AppColors.of(context).textSecondary),
       );
     },
   );

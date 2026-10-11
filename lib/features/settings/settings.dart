@@ -27,6 +27,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 part 'presentation/settings_screen.dart';
 part 'presentation/faq_screen.dart';
+part 'presentation/about_screen.dart';
 part 'presentation/bloc/feedback_state.dart';
 part 'presentation/bloc/feedback_cubit.dart';
 part 'widgets/theme_bottom_sheet.dart';

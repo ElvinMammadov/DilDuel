@@ -26,14 +26,20 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
       return _BookmarkCategoryCards(
         labelFor: _labelFor,
         iconFor: _iconFor,
-        onSelected: (String key) => setState(() => _selected = key),
+        onSelected: (String key) {
+          context.read<AdsCubit>().setBookmarksSectionOpen(open: true);
+          setState(() => _selected = key);
+        },
       );
     }
     return Column(
       children: <Widget>[
         AppBackBar(
           label: _labelFor(selected),
-          onBack: () => setState(() => _selected = null),
+          onBack: () {
+            context.read<AdsCubit>().setBookmarksSectionOpen(open: false);
+            setState(() => _selected = null);
+          },
         ),
         Expanded(
           child: selected == _keyUnknown

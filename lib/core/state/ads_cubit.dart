@@ -29,6 +29,9 @@ class AdsCubit extends Cubit<AdsState> {
   void setQuizSectionOpen({required bool open}) =>
       emit(state.copyWith(quizSectionOpen: open));
 
+  void setBookmarksSectionOpen({required bool open}) =>
+      emit(state.copyWith(bookmarksSectionOpen: open));
+
   void _apply(AdConsentResult result) => emit(
     state.copyWith(
       canRequestAds: result.canRequestAds,

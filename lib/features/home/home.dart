@@ -42,11 +42,12 @@ class _HomeShellState extends State<HomeShell> {
     );
   }
 
-  /// Banners stay off the training flashcards and the quiz and listening
-  /// tests, where swipes and answer buttons risk accidental taps.
+  /// Search always shows the banner; the other tabs show it only inside a
+  /// practice screen, not on their card lists.
   bool _bannerAllowed(AdsState ads) => switch (_currentIndex) {
-        1 => !ads.trainingSessionActive,
-        2 => !ads.quizSectionOpen,
+        1 => ads.trainingSessionActive,
+        2 => ads.quizSectionOpen,
+        3 => ads.bookmarksSectionOpen,
         _ => true,
       };
 

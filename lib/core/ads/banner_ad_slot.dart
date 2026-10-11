@@ -1,12 +1,17 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dic/core/ads/ad_unit_ids.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
+import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-/// An anchored adaptive banner that takes no space until an ad has loaded.
+/// A standard 320x50 banner that takes no space until an ad has loaded.
+///
+/// The fixed size keeps the banner compact; an adaptive banner grows with the
+/// screen width and gets tall on large phones. AdMob does not allow resizing
+/// or cropping an ad, so the size can only be changed by picking another
+/// [AdSize].
 ///
 /// The loaded ad is kept while [visible] is false, so switching between tabs
 /// does not trigger a new ad request every time.
@@ -22,24 +27,17 @@ class BannerAdSlot extends StatefulWidget {
 class _BannerAdSlotState extends State<BannerAdSlot> {
   BannerAd? _ad;
   bool _loaded = false;
-  bool _requested = false;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_requested) return;
-    _requested = true;
-    unawaited(_load());
+  void initState() {
+    super.initState();
+    _load();
   }
 
-  Future<void> _load() async {
-    final int width = MediaQuery.sizeOf(context).width.truncate();
-    final AnchoredAdaptiveBannerAdSize? size =
-        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(width);
-    if (size == null || !mounted) return;
+  void _load() {
     final BannerAd ad = BannerAd(
       adUnitId: AdUnitIds.banner,
-      size: size,
+      size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (_) {
@@ -53,7 +51,7 @@ class _BannerAdSlotState extends State<BannerAdSlot> {
       ),
     );
     _ad = ad;
-    await ad.load();
+    ad.load();
   }
 
   @override
@@ -68,13 +66,21 @@ class _BannerAdSlotState extends State<BannerAdSlot> {
     if (!widget.visible || !_loaded || ad == null) {
       return const SizedBox.shrink();
     }
+    // The gap keeps the banner clear of buttons above it (such as the
+    // training navigation) and of the tab bar below, to avoid accidental taps.
     return ColoredBox(
       color: AppColors.of(context).surface,
-      child: Center(
-        child: SizedBox(
-          width: ad.size.width.toDouble(),
-          height: ad.size.height.toDouble(),
-          child: AdWidget(ad: ad),
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: Dimensions.padding16,
+          bottom: Dimensions.padding8,
+        ),
+        child: Center(
+          child: SizedBox(
+            width: ad.size.width.toDouble(),
+            height: ad.size.height.toDouble(),
+            child: AdWidget(ad: ad),
+          ),
         ),
       ),
     );

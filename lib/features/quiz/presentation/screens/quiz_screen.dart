@@ -63,9 +63,7 @@ class _QuizScreenState extends State<QuizScreen> {
           ? _QuizSectionCards(
               counts: _counts,
               onSelected: (_QuizSection section) {
-                context.read<AdsCubit>().setQuizSectionOpen(
-                      open: section != _QuizSection.results,
-                    );
+                context.read<AdsCubit>().setQuizSectionOpen(open: true);
                 setState(() => _selected = section);
               },
             )

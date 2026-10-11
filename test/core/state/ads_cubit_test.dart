@@ -77,18 +77,21 @@ void main() {
 
     cubit.setTrainingSessionActive(active: true);
     cubit.setQuizSectionOpen(open: true);
+    cubit.setBookmarksSectionOpen(open: true);
 
     check(cubit.state).equals(const AdsState(
       canRequestAds: true,
       privacyOptionsRequired: true,
       trainingSessionActive: true,
       quizSectionOpen: true,
+      bookmarksSectionOpen: true,
     ));
 
     cubit.setTrainingSessionActive(active: false);
 
     check(cubit.state.trainingSessionActive).isFalse();
     check(cubit.state.quizSectionOpen).isTrue();
+    check(cubit.state.bookmarksSectionOpen).isTrue();
   });
 
   test('consent results do not reset the session flags', () async {

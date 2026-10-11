@@ -147,7 +147,7 @@ Translation files live in `assets/translations/`.
 
 ## Advertising
 
-An adaptive AdMob banner sits above the bottom navigation (`lib/core/ads/`). It is shown on Search, Bookmarks, the Quiz tab's card list and results, and the Training level cards. It is hidden during training flashcards and quiz or listening tests, where swipes and answer buttons risk accidental taps. `AdsCubit` (`lib/core/state/`) decides when.
+A standard 320x50 AdMob banner sits above the bottom navigation (`lib/core/ads/`). It is shown on Search and inside the practice screens (training flashcards, quiz, listening and results, and the bookmarks lists), but not on the Training, Quiz and Bookmarks card lists. The banner has spacing above and below it so it never touches buttons or the tab bar. `AdsCubit` (`lib/core/state/`) decides when.
 
 **Consent.** `AdsCubit.init()` runs on the first frame of `HomeShell`. It uses Google's User Messaging Platform to ask for consent where required (EEA, UK), plus Apple's tracking prompt on iOS, and starts the ads SDK only if ads may be requested. In regions where it applies, Settings shows *Privacy options for ads* so users can change their choice. The privacy policy (`scripts/build_site.py`) describes this.
 

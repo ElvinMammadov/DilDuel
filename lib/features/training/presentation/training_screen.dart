@@ -26,7 +26,7 @@ class TrainingScreen extends StatelessWidget {
           child: BlocListener<TrainingCubit, TrainingState>(
             listener: (BuildContext context, TrainingState state) =>
                 context.read<AdsCubit>().setTrainingSessionActive(
-                      active: state is! TrainingInitial,
+                      active: state is TrainingReady,
                     ),
             child: const _TrainingView(),
           ),

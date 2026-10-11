@@ -15,6 +15,7 @@ A German-Azerbaijani dictionary app built with Flutter. Supports bidirectional t
 - **Themes** — light, dark, and system-default
 - **Localization** — UI available in Azerbaijani and German
 - **Offline-first** — all dictionary data is bundled locally; auth and sync are optional
+- **Ads** — an AdMob banner above the bottom navigation, shown only after consent where the law requires it (see [Advertising](#advertising))
 
 ## Tech Stack
 
@@ -143,6 +144,19 @@ flutter build ios --target lib/mains/prod/main.dart
 | German | `de` |
 
 Translation files live in `assets/translations/`.
+
+## Advertising
+
+An adaptive AdMob banner sits above the bottom navigation (`lib/core/ads/`). It is shown on Search, Bookmarks, the Quiz tab's card list and results, and the Training level cards. It is hidden during training flashcards and quiz or listening tests, where swipes and answer buttons risk accidental taps. `AdsCubit` (`lib/core/state/`) decides when.
+
+**Consent.** `AdsCubit.init()` runs on the first frame of `HomeShell`. It uses Google's User Messaging Platform to ask for consent where required (EEA, UK), plus Apple's tracking prompt on iOS, and starts the ads SDK only if ads may be requested. In regions where it applies, Settings shows *Privacy options for ads* so users can change their choice. The privacy policy (`scripts/build_site.py`) describes this.
+
+**Before release**
+- Android uses the real AdMob app ID (`AndroidManifest.xml`). iOS uses its real AdMob app ID too (`ios/Runner/Info.plist`).
+- The banner ad units for both platforms are the defaults in `lib/core/ads/ad_unit_ids.dart`; `--dart-define=ADMOB_BANNER_ANDROID=...` / `ADMOB_BANNER_IOS=...` override them. Every debug build uses Google's test unit.
+- In AdMob, *Privacy & messaging*, publish a GDPR message and, for iOS, an IDFA explainer message; update the store privacy forms.
+
+**Testing consent.** Run a debug build with `--dart-define=ADS_DEBUG_EEA=true` to make a simulator or emulator appear to be in the EEA. A physical device must also be added as a test device (`ConsentDebugSettings.testIdentifiers`).
 
 ## Dictionary Data
 

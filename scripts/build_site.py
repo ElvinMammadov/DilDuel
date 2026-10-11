@@ -16,7 +16,7 @@ OUT = "docs"
 LANGS = ["en", "de", "az"]
 LANG_LABEL = {"en": "EN", "de": "DE", "az": "AZ"}
 LANG_NAME = {"en": "English", "de": "Deutsch", "az": "Azərbaycan"}
-UPDATED = {"en": "October 9, 2026", "de": "9. Oktober 2026", "az": "9 oktyabr 2026"}
+UPDATED = {"en": "October 12, 2026", "de": "12. Oktober 2026", "az": "12 oktyabr 2026"}
 
 # Set to False once the app bundles its fonts instead of loading Google Fonts.
 APP_LOADS_GOOGLE_FONTS = True
@@ -150,7 +150,7 @@ PRIVACY = {
                 ("ul", [
                     "Without an account (guest mode), your bookmarks, progress and results are stored only on your device. We do not receive them.",
                     "If you create an account, we store your account details and your learning data in the cloud so that they can be synced between your devices.",
-                    "We do not use analytics, advertising or tracking tools. The app currently contains no advertising.",
+                    "We do not use analytics or tracking tools of our own. The app shows advertising from Google AdMob, and only after your consent where the law requires it (see “Advertising”).",
                     "You can delete your account and all cloud data at any time.",
                 ]),
             ]),
@@ -183,11 +183,17 @@ PRIVACY = {
             ("This website", [
                 ("p", "This website is hosted on GitHub Pages (GitHub, Inc., USA). When you visit it, GitHub processes technical data such as your IP address in server logs. Legal basis: Art. 6(1)(f) GDPR (legitimate interest in presenting our app securely). The information pages use no cookies, analytics, or external fonts or scripts. The account deletion page loads Google's Firebase scripts and connects to Firebase so that you can sign in and delete your data; Google then processes technical data such as your IP address (Art. 6(1)(b) and (f) GDPR)."),
             ]),
-            ("No analytics, advertising or tracking", [
-                ("p", "The app does not use analytics, crash-reporting, advertising or tracking tools, and it does not access your location, contacts, camera or microphone. If we introduce advertising in the future, we will update this policy beforehand and, where required, ask for your consent. There is no automated decision-making or profiling within the meaning of Art. 22 GDPR."),
+            ("Advertising (Google AdMob)", [
+                ("p", "The app shows banner advertising from Google AdMob (Google Ireland Limited; Google LLC, USA). Ads appear only on some screens and never during training cards, quizzes or listening tests."),
+                ("p", "Before any ad is loaded, we ask for your consent where the law requires it, using Google's consent form (User Messaging Platform). On iOS we also ask, through Apple's tracking prompt, whether the app may track you across apps and websites of other companies. If you do not consent, advertising is limited accordingly: depending on your choice you will see non-personalised ads or no ads."),
+                ("p", "When an ad is requested, Google and its advertising partners process data such as your IP address, device and advertising identifiers, information about the app and your interaction with ads, and the approximate location derived from your IP address, in order to deliver, measure and personalise ads and to prevent fraud. We do not receive this data and have no influence on this processing. Legal basis: your consent (Art. 6(1)(a) GDPR; Section 25(1) TDDDG). More information: <a href='https://policies.google.com/privacy'>Google's privacy policy</a>."),
+                ("p", "You can change or withdraw your choice at any time under <em>Settings → Privacy options for ads</em> (shown where consent applies). On iOS you can also change the tracking permission in the system settings. Withdrawal does not affect the lawfulness of processing carried out until then."),
+            ]),
+            ("No analytics or tracking by us", [
+                ("p", "The app does not use analytics or crash-reporting tools, and it does not access your location, contacts, camera or microphone. The only third-party tracking technology is the advertising described above, which depends on your consent. There is no automated decision-making or profiling by us within the meaning of Art. 22 GDPR."),
             ]),
             ("Recipients and transfers to third countries", [
-                ("p", "We use these service providers, who process data on our behalf: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland (Firebase Authentication, Cloud Firestore and Google Sign-In); Apple Distribution International Ltd., Cork, Ireland (Sign in with Apple, if you use it); GitHub, Inc., USA (website hosting)."),
+                ("p", "We use these service providers, who process data on our behalf: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland (Firebase Authentication, Cloud Firestore and Google Sign-In); Apple Distribution International Ltd., Cork, Ireland (Sign in with Apple, if you use it); Google Ireland Limited and Google LLC, USA (Google AdMob advertising, with your consent); GitHub, Inc., USA (website hosting)."),
                 ("p", "Data may be processed in countries outside the EU, in particular the USA. Where this happens, the transfer relies on the EU–US Data Privacy Framework adequacy decision or on standard contractual clauses."),
             ]),
             ("Storage period and deletion", [
@@ -233,7 +239,7 @@ PRIVACY = {
                 ("ul", [
                     "Ohne Konto (Gastmodus) werden Ihre Lesezeichen, Ihr Fortschritt und Ihre Ergebnisse ausschließlich auf Ihrem Gerät gespeichert. Wir erhalten sie nicht.",
                     "Wenn Sie ein Konto anlegen, speichern wir Ihre Kontodaten und Ihre Lerndaten in der Cloud, damit sie zwischen Ihren Geräten synchronisiert werden können.",
-                    "Wir verwenden keine Analyse-, Werbe- oder Tracking-Werkzeuge. Die App enthält derzeit keine Werbung.",
+                    "Wir verwenden keine eigenen Analyse- oder Tracking-Werkzeuge. Die App zeigt Werbung von Google AdMob, und zwar erst nach Ihrer Einwilligung, soweit gesetzlich erforderlich (siehe „Werbung“).",
                     "Sie können Ihr Konto und alle Cloud-Daten jederzeit löschen.",
                 ]),
             ]),
@@ -266,11 +272,17 @@ PRIVACY = {
             ("Diese Website", [
                 ("p", "Diese Website wird über GitHub Pages (GitHub, Inc., USA) gehostet. Beim Besuch verarbeitet GitHub technische Daten wie Ihre IP-Adresse in Server-Logfiles. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer sicheren Darstellung unserer App). Die Informationsseiten verwenden keine Cookies, keine Analyse sowie keine externen Schriftarten oder Skripte. Die Seite zur Kontolöschung lädt Firebase-Skripte von Google und verbindet sich mit Firebase, damit Sie sich anmelden und Ihre Daten löschen können; dabei verarbeitet Google technische Daten wie Ihre IP-Adresse (Art. 6 Abs. 1 lit. b und f DSGVO)."),
             ]),
-            ("Keine Analyse, Werbung oder Tracking", [
-                ("p", "Die App verwendet keine Analyse-, Absturzberichts-, Werbe- oder Tracking-Werkzeuge und greift nicht auf Standort, Kontakte, Kamera oder Mikrofon zu. Sollten wir künftig Werbung einführen, aktualisieren wir diese Erklärung vorher und holen, soweit erforderlich, Ihre Einwilligung ein. Eine automatisierte Entscheidungsfindung einschließlich Profiling im Sinne von Art. 22 DSGVO findet nicht statt."),
+            ("Werbung (Google AdMob)", [
+                ("p", "Die App zeigt Bannerwerbung von Google AdMob (Google Ireland Limited; Google LLC, USA). Werbung erscheint nur auf einigen Bildschirmen und nie während der Lernkarten, Quiz oder Hörtests."),
+                ("p", "Bevor Werbung geladen wird, holen wir – soweit gesetzlich erforderlich – Ihre Einwilligung über das Einwilligungsformular von Google (User Messaging Platform) ein. Unter iOS fragen wir zusätzlich über die Tracking-Abfrage von Apple, ob die App Sie über Apps und Websites anderer Unternehmen hinweg nachverfolgen darf. Wenn Sie nicht einwilligen, wird die Werbung entsprechend eingeschränkt: Je nach Ihrer Auswahl sehen Sie nicht personalisierte Werbung oder keine Werbung."),
+                ("p", "Wird Werbung angefordert, verarbeiten Google und seine Werbepartner Daten wie Ihre IP-Adresse, Geräte- und Werbekennungen, Informationen zur App und zu Ihrer Interaktion mit Anzeigen sowie den aus der IP-Adresse abgeleiteten ungefähren Standort, um Werbung auszuliefern, ihre Wirkung zu messen, sie zu personalisieren und Missbrauch zu verhindern. Wir erhalten diese Daten nicht und haben keinen Einfluss auf diese Verarbeitung. Rechtsgrundlage: Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO; § 25 Abs. 1 TDDDG). Weitere Informationen: <a href='https://policies.google.com/privacy'>Datenschutzerklärung von Google</a>."),
+                ("p", "Sie können Ihre Entscheidung jederzeit unter <em>Einstellungen → Datenschutzoptionen für Werbung</em> ändern oder widerrufen (sichtbar, wo eine Einwilligung gilt). Unter iOS können Sie die Tracking-Erlaubnis außerdem in den Systemeinstellungen ändern. Der Widerruf berührt nicht die Rechtmäßigkeit der bis dahin erfolgten Verarbeitung."),
+            ]),
+            ("Keine Analyse oder Tracking durch uns", [
+                ("p", "Die App verwendet keine Analyse- oder Absturzberichts-Werkzeuge und greift nicht auf Standort, Kontakte, Kamera oder Mikrofon zu. Die einzige Tracking-Technik von Dritten ist die oben beschriebene Werbung, die von Ihrer Einwilligung abhängt. Eine automatisierte Entscheidungsfindung einschließlich Profiling durch uns im Sinne von Art. 22 DSGVO findet nicht statt."),
             ]),
             ("Empfänger und Übermittlung in Drittländer", [
-                ("p", "Wir setzen folgende Dienstleister ein, die in unserem Auftrag Daten verarbeiten: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland (Firebase Authentication, Cloud Firestore und Google-Anmeldung); Apple Distribution International Ltd., Cork, Irland (Anmeldung mit Apple, falls Sie sie nutzen); GitHub, Inc., USA (Hosting der Website)."),
+                ("p", "Wir setzen folgende Dienstleister ein, die in unserem Auftrag Daten verarbeiten: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland (Firebase Authentication, Cloud Firestore und Google-Anmeldung); Apple Distribution International Ltd., Cork, Irland (Anmeldung mit Apple, falls Sie sie nutzen); Google Ireland Limited und Google LLC, USA (Werbung über Google AdMob, mit Ihrer Einwilligung); GitHub, Inc., USA (Hosting der Website)."),
                 ("p", "Daten können in Ländern außerhalb der EU verarbeitet werden, insbesondere in den USA. In diesem Fall stützt sich die Übermittlung auf den Angemessenheitsbeschluss zum EU-US Data Privacy Framework oder auf Standardvertragsklauseln."),
             ]),
             ("Speicherdauer und Löschung", [
@@ -316,7 +328,7 @@ PRIVACY = {
                 ("ul", [
                     "Hesabsız (qonaq rejimi) seçilmişləriniz, irəliləyişiniz və nəticələriniz yalnız cihazınızda saxlanılır. Biz onları almırıq.",
                     "Hesab yaratsanız, hesab məlumatlarınızı və öyrənmə məlumatlarınızı cihazlarınız arasında sinxronlaşdırmaq üçün bulud sistemində saxlayırıq.",
-                    "Analitika, reklam və izləmə alətlərindən istifadə etmirik. Tətbiqdə hazırda reklam yoxdur.",
+                    "Özümüzün analitika və ya izləmə alətlərindən istifadə etmirik. Tətbiq Google AdMob reklamları göstərir və qanunun tələb etdiyi hallarda yalnız razılığınızdan sonra (bax: „Reklam“).",
                     "Hesabınızı və bütün bulud məlumatlarını istənilən vaxt silə bilərsiniz.",
                 ]),
             ]),
@@ -349,11 +361,17 @@ PRIVACY = {
             ("Bu veb sayt", [
                 ("p", "Bu veb sayt GitHub Pages-də (GitHub, Inc., ABŞ) yerləşdirilir. Ziyarət zamanı GitHub server qeydlərində IP ünvanınız kimi texniki məlumatları emal edir. Hüquqi əsas: GDPR maddə 6(1)(f) (tətbiqimizin təhlükəsiz təqdimatında qanuni maraq). Məlumat səhifələri kuki, analitika, xarici şrift və ya skriptlərdən istifadə etmir. Hesabın silinməsi səhifəsi Google-un Firebase skriptlərini yükləyir və daxil olub məlumatlarınızı silə bilməyiniz üçün Firebase ilə əlaqə qurur; bu zaman Google IP ünvanınız kimi texniki məlumatları emal edir (GDPR maddə 6(1)(b) və (f))."),
             ]),
-            ("Analitika, reklam və izləmə yoxdur", [
-                ("p", "Tətbiq analitika, xəta hesabatı, reklam və ya izləmə alətlərindən istifadə etmir, məkanınıza, kontaktlarınıza, kameranıza və ya mikrofonunuza giriş əldə etmir. Gələcəkdə reklam əlavə etsək, bu siyasəti əvvəlcədən yeniləyəcək və lazım olduqda razılığınızı alacağıq. GDPR maddə 22 mənasında avtomatlaşdırılmış qərar qəbulu və ya profilləşdirmə həyata keçirilmir."),
+            ("Reklam (Google AdMob)", [
+                ("p", "Tətbiq Google AdMob-dan (Google Ireland Limited; Google LLC, ABŞ) banner reklamları göstərir. Reklamlar yalnız bəzi ekranlarda görünür və heç vaxt məşq kartları, testlər və dinləmə testləri zamanı göstərilmir."),
+                ("p", "Reklam yüklənməzdən əvvəl qanunun tələb etdiyi hallarda Google-un razılıq formu (User Messaging Platform) vasitəsilə razılığınızı alırıq. iOS-da əlavə olaraq Apple-ın izləmə sorğusu ilə tətbiqin sizi digər şirkətlərin tətbiq və veb saytları üzrə izləyə bilib-bilməməsini soruşuruq. Razılıq verməsəniz, reklam buna uyğun məhdudlaşdırılır: seçiminizdən asılı olaraq fərdiləşdirilməmiş reklam görəcəksiniz və ya heç reklam görməyəcəksiniz."),
+                ("p", "Reklam sorğusu göndərildikdə Google və onun reklam tərəfdaşları reklamı çatdırmaq, effektivliyini ölçmək, fərdiləşdirmək və sui-istifadənin qarşısını almaq üçün IP ünvanınız, cihaz və reklam identifikatorları, tətbiq və reklamla qarşılıqlı əlaqəniz haqqında məlumatlar, həmçinin IP ünvanından çıxarılan təxmini məkan kimi məlumatları emal edir. Bu məlumatları biz almırıq və bu emala təsir göstərmirik. Hüquqi əsas: razılığınız (GDPR maddə 6(1)(a); TDDDG § 25(1)). Əlavə məlumat: <a href='https://policies.google.com/privacy'>Google-un məxfilik siyasəti</a>."),
+                ("p", "Seçiminizi istənilən vaxt <em>Parametrlər → Reklam məxfiliyi seçimləri</em> bölməsində dəyişə və ya geri ala bilərsiniz (razılıq tətbiq olunan yerlərdə göstərilir). iOS-da izləmə icazəsini sistem parametrlərində də dəyişə bilərsiniz. Geri alma, o vaxta qədər aparılmış emalın qanuniliyinə təsir etmir."),
+            ]),
+            ("Bizdən analitika və izləmə yoxdur", [
+                ("p", "Tətbiq analitika və ya xəta hesabatı alətlərindən istifadə etmir, məkanınıza, kontaktlarınıza, kameranıza və ya mikrofonunuza giriş əldə etmir. Üçüncü tərəfin yeganə izləmə texnologiyası yuxarıda təsvir olunan, razılığınızdan asılı olan reklamdır. GDPR maddə 22 mənasında bizim tərəfimizdən avtomatlaşdırılmış qərar qəbulu və ya profilləşdirmə həyata keçirilmir."),
             ]),
             ("Alıcılar və üçüncü ölkələrə ötürmə", [
-                ("p", "Bizim adımızdan məlumatları emal edən aşağıdakı xidmət təminatçılarından istifadə edirik: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, İrlandiya (Firebase Authentication, Cloud Firestore və Google ilə giriş); Apple Distribution International Ltd., Cork, İrlandiya (istifadə etsəniz, Apple ilə giriş); GitHub, Inc., ABŞ (veb saytın yerləşdirilməsi)."),
+                ("p", "Bizim adımızdan məlumatları emal edən aşağıdakı xidmət təminatçılarından istifadə edirik: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, İrlandiya (Firebase Authentication, Cloud Firestore və Google ilə giriş); Apple Distribution International Ltd., Cork, İrlandiya (istifadə etsəniz, Apple ilə giriş); Google Ireland Limited və Google LLC, ABŞ (razılığınızla Google AdMob reklamı); GitHub, Inc., ABŞ (veb saytın yerləşdirilməsi)."),
                 ("p", "Məlumatlar Aİ-dən kənar ölkələrdə, xüsusilə ABŞ-da emal oluna bilər. Bu halda ötürmə Aİ–ABŞ Məlumat Məxfiliyi Çərçivəsi üzrə adekvatlıq qərarına və ya standart müqavilə bəndlərinə əsaslanır."),
             ]),
             ("Saxlanma müddəti və silinmə", [

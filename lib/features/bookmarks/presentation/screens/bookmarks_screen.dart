@@ -59,31 +59,27 @@ class _BookmarkCategoryCards extends StatelessWidget {
   final ValueChanged<String> onSelected;
 
   @override
-  Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-    return BlocBuilder<BookmarksBloc, BookmarksState>(
-      builder: (BuildContext context, BookmarksState state) {
-        final BookmarksLoaded? loaded = state is BookmarksLoaded ? state : null;
-        return AppFilledCardList(
-          children: <Widget>[
-            _card(
-              _BookmarksScreenState._keyBookmarks,
-              colors.bookmarksCard,
-              loaded?.bookmarks.length,
-            ),
-            _card(
-              _BookmarksScreenState._keyUnknown,
-              colors.unknownCard,
-              loaded?.unknownWords.length,
-            ),
-          ],
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) =>
+      BlocBuilder<BookmarksBloc, BookmarksState>(
+        builder: (BuildContext context, BookmarksState state) {
+          final BookmarksLoaded? loaded =
+              state is BookmarksLoaded ? state : null;
+          return AppFilledCardList(
+            children: <Widget>[
+              _card(
+                _BookmarksScreenState._keyBookmarks,
+                loaded?.bookmarks.length,
+              ),
+              _card(
+                _BookmarksScreenState._keyUnknown,
+                loaded?.unknownWords.length,
+              ),
+            ],
+          );
+        },
+      );
 
-  Widget _card(String key, Color color, int? count) => AppIconFilledCard(
-        color: color,
+  Widget _card(String key, int? count) => AppIconFilledCard(
         icon: iconFor(key),
         label: labelFor(key),
         count: count,

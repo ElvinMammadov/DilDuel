@@ -150,3 +150,16 @@ The dictionary database (`assets/luget.db`) is bundled with the app and loaded a
 
 - `AzDe` — Azerbaijani to German
 - `DeAz` — German to Azerbaijani
+
+### Sources and credits
+
+The dictionary data is based on the German–Azerbaijani dictionary *Alman – Azərbaycanca lüğət* (A1–B2), compiled by Ramil Səfiyev. This credit is also shown in the app (Settings → About app) and on the website.
+
+### CEFR levels
+
+Every `DeAz` word has a `level` from A1 to C2:
+
+- **A1, A2, B1** come from the official Goethe-Institut word lists (Start Deutsch 1 / Fit in Deutsch 1, Goethe-Zertifikat A2 and B1). A word gets the earliest level whose list contains it.
+- **B2, C1, C2** are estimates. Goethe publishes no lists above B1, so words missing from all three lists are split by word frequency (`wordfreq`).
+
+`scripts/assign_goethe_levels.py` regenerates the levels. The Goethe PDFs are copyrighted and not stored in the repo; download them from goethe.de and pass their paths (see the script's docstring). When the levels change, bump `dbVersion` in `word_local_data_source_impl.dart` to match the script's `DB_VERSION`; existing installs are then migrated in place without losing user data.

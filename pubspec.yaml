@@ -57,6 +57,7 @@ dev_dependencies:
   # `dart run flutter_native_splash:create`)
   flutter_launcher_icons: ^0.14.3
   flutter_native_splash: ^2.4.4
+  sqflite_common_ffi: ^2.3.7+1
 
 flutter_native_splash:
   color: "#4A3AD1"

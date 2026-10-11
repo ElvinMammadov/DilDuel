@@ -39,7 +39,7 @@
       "pronunciation": "Wie funktioniert die Aussprache-Schaltfläche?",
       "pronunciation_answer": "Tippen Sie auf das Lautsprecher-Symbol im Wort-Detailfenster, um das deutsche Wort vorzulesen. Diese Funktion ist für die Richtung De→Az verfügbar.",
       "training_usage": "Wie funktioniert das Training?",
-      "training_usage_answer": "Wählen Sie im Training zuerst eine Niveaukarte von A1 bis B2. Danach erscheinen die Lernkarten dieses Niveaus: Wischen Sie nach links für die nächste, nach rechts für die vorherige Karte. Sie können Wörter als Lesezeichen speichern oder als unbekannt markieren.",
+      "training_usage_answer": "Wählen Sie im Training zuerst eine Niveaukarte von A1 bis C2. Danach erscheinen die Lernkarten dieses Niveaus: Wischen Sie nach links für die nächste, nach rechts für die vorherige Karte. Sie können Wörter als Lesezeichen speichern oder als unbekannt markieren. A1 bis B1 basieren auf den Wortlisten des Goethe-Instituts; B2, C1 und C2 werden anhand der Worthäufigkeit geschätzt.",
       "bookmarks_usage": "Wie speichere ich ein Wort?",
       "bookmarks_usage_answer": "Tippen Sie auf das Lesezeichen-Symbol im Wort-Detailfenster oder auf der Trainingskarte, um das Wort zu speichern. Alle gespeicherten Wörter sind im Lesezeichen-Bereich zu finden.",
       "unknown_words": "Was ist die Liste der unbekannten Wörter?",
@@ -66,6 +66,13 @@
     "privacy_policy": {
       "title": "Datenschutzerklärung",
       "subtitle": "Wie wir mit Ihren Daten umgehen"
+    },
+    "about": {
+      "title": "Über die App",
+      "dictionary_title": "Wörterbuchdaten",
+      "dictionary_text": "Die Wörterbuchdaten basieren auf dem „Alman – Azərbaycanca lüğət“ (A1–B2), zusammengestellt von Ramil Səfiyev.",
+      "levels_title": "Niveaus",
+      "levels_text": "Die Niveaus A1, A2 und B1 richten sich nach den offiziellen Wortlisten des Goethe-Instituts. B2, C1 und C2 werden anhand der Worthäufigkeit geschätzt."
     },
     "legal_notice": {
       "title": "Impressum",

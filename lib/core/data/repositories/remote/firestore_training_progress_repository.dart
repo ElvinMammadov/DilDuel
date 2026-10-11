@@ -15,6 +15,11 @@ class FirestoreTrainingProgressRepository
   FirestoreTrainingProgressRepository(this._authRepository)
       : _firestore = FirebaseFirestore.instance;
 
+  /// Version of the level scheme the stored indexes refer to. Indexes point
+  /// into per-level word lists, so records written before the A1–C2 levels
+  /// (which carry no scheme) refer to different words and are ignored.
+  static const int levelScheme = 2;
+
   final AuthRepository _authRepository;
   final FirebaseFirestore _firestore;
 
@@ -32,8 +37,9 @@ class FirestoreTrainingProgressRepository
     try {
       final DocumentSnapshot<Map<String, dynamic>> snap =
           await _progress(uid).doc(level).get();
-      if (!snap.exists) return 0;
-      return snap.data()?['currentIndex'] as int? ?? 0;
+      final Map<String, dynamic>? data = snap.data();
+      if (data == null || data['levelScheme'] != levelScheme) return 0;
+      return data['currentIndex'] as int? ?? 0;
     } catch (e) {
       log('Firestore getLevelPosition error: $e',
           name: 'FirestoreTrainingProgressRepository');
@@ -49,6 +55,7 @@ class FirestoreTrainingProgressRepository
       await _progress(uid).doc(level).set(
         <String, dynamic>{
           'currentIndex': index,
+          'levelScheme': levelScheme,
           'lastAccessedAt': FieldValue.serverTimestamp(),
         },
         SetOptions(merge: true),
@@ -69,6 +76,7 @@ class FirestoreTrainingProgressRepository
         _progress(uid).doc(level),
         <String, dynamic>{
           'currentIndex': index,
+          'levelScheme': levelScheme,
           'lastAccessedAt': FieldValue.serverTimestamp(),
         },
         SetOptions(merge: true),
@@ -105,7 +113,8 @@ class FirestoreTrainingProgressRepository
           await _progress(uid).get();
       return <String, int>{
         for (final QueryDocumentSnapshot<Map<String, dynamic>> doc in snap.docs)
-          doc.id: doc.data()['currentIndex'] as int? ?? 0,
+          if (doc.data()['levelScheme'] == levelScheme)
+            doc.id: doc.data()['currentIndex'] as int? ?? 0,
       };
     } catch (e) {
       log('Firestore getAllRemoteProgress error: $e',

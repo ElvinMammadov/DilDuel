@@ -39,7 +39,7 @@
       "pronunciation": "Tələffüz düyməsi necə işləyir?",
       "pronunciation_answer": "Söz detalları pəncərəsindəki dinamik ikonuna toxunsanız alman sözü ucadan oxunur. Bu funksiya De→Az lüğət istiqaməti üçün mövcuddur.",
       "training_usage": "Məşq bölməsi necə işləyir?",
-      "training_usage_answer": "Məşq bölməsində əvvəlcə A1-dən B2-yə qədər səviyyə kartlarından birini seçin. Sonra həmin səviyyənin söz kartları açılır: sola sürüşdürsəniz növbəti, sağa sürüşdürsəniz əvvəlki kart göstərilir. Hər kartda sözü seçilmişlərə əlavə edə və ya bilinməyənlər siyahısına sala bilərsiniz.",
+      "training_usage_answer": "Məşq bölməsində əvvəlcə A1-dən C2-yə qədər səviyyə kartlarından birini seçin. Sonra həmin səviyyənin söz kartları açılır: sola sürüşdürsəniz növbəti, sağa sürüşdürsəniz əvvəlki kart göstərilir. Hər kartda sözü seçilmişlərə əlavə edə və ya bilinməyənlər siyahısına sala bilərsiniz. A1–B1 səviyyələri Goethe-Institut söz siyahılarına əsaslanır; B2, C1 və C2 səviyyələri isə sözün işlənmə tezliyinə görə təxmini müəyyən edilir.",
       "bookmarks_usage": "Söz necə yadda saxlanılır?",
       "bookmarks_usage_answer": "Söz detalları pəncərəsindəki və ya məşq kartındakı yer işarəsi ikonuna toxunsanız söz seçilmişlərə əlavə olunur. Bütün saxlanılmış sözlər Seçilmişlər bölməsindən əldə edilə bilər.",
       "unknown_words": "Bilinməyənlər siyahısı nədir?",
@@ -66,6 +66,13 @@
     "privacy_policy": {
       "title": "Məxfilik siyasəti",
       "subtitle": "Məlumatlarınızla necə rəftar edirik"
+    },
+    "about": {
+      "title": "Tətbiq haqqında",
+      "dictionary_title": "Lüğət məlumatları",
+      "dictionary_text": "Lüğət məlumatları Ramil Səfiyevin tərtib etdiyi “Alman – Azərbaycanca lüğət” (A1–B2) əsasında hazırlanmışdır.",
+      "levels_title": "Səviyyələr",
+      "levels_text": "A1, A2 və B1 səviyyələri Goethe-Institut-un rəsmi söz siyahılarına əsasən müəyyən edilib. B2, C1 və C2 səviyyələri isə sözün işlənmə tezliyinə görə təxmini hesablanıb."
     },
     "legal_notice": {
       "title": "Impressum",

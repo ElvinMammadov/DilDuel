@@ -67,58 +67,64 @@ COMMON = {
 LANDING = {
     "en": {
         "title": "DilDuel – German–Azerbaijani dictionary and vocabulary trainer",
-        "desc": "DilDuel is a German–Azerbaijani dictionary that works offline, with vocabulary training from A1 to B2, quizzes and listening tests.",
+        "desc": "DilDuel is a German–Azerbaijani dictionary that works offline, with vocabulary training from A1 to C2, quizzes and listening tests.",
         "h1": "Learn German and Azerbaijani words, your way",
         "lead": "DilDuel is a German–Azerbaijani dictionary and vocabulary trainer. Look words up, practise them level by level and test yourself, online or offline.",
         "features_title": "What you can do with DilDuel",
         "features": [
             ("search", "Offline dictionary", "Search in both directions, German → Azerbaijani and Azerbaijani → German. The dictionary is stored on your device, so search works without an internet connection."),
             ("grammar", "Grammar at a glance", "Every word shows its article in colour (der, die, das), noun and verb forms, and example sentences."),
-            ("school", "Training by level", "Flashcards from A1 to B2. Swipe through the words, mark the ones you don't know yet and jump to any word in a level. The app remembers where you stopped."),
+            ("school", "Training by level", "Flashcards from A1 to C2. Swipe through the words, mark the ones you don't know yet and jump to any word in a level. The app remembers where you stopped."),
             ("quiz", "Quizzes", "Translation quizzes with ten multiple-choice questions, a score at the end and a history of your results."),
             ("listen", "Listening tests", "Hear a German word read aloud and pick the correct answer."),
             ("bookmark", "Bookmarks and unknown words", "Save the words you want to keep and collect the ones you didn't know, so you can review them later."),
             ("cloud", "Optional sync", "Sign in with Google, Apple or email to keep your progress, bookmarks and results on every device. Without an account, everything stays on your device."),
             ("language", "Your language, your look", "The app is available in Azerbaijani and German, with light and dark themes."),
         ],
+        "sources_title": "Dictionary data and levels",
+        "sources": "The dictionary data is based on the German–Azerbaijani dictionary “Alman – Azərbaycanca lüğət” (A1–B2), compiled by Ramil Səfiyev. The levels A1, A2 and B1 follow the official word lists of the Goethe-Institut; B2, C1 and C2 are estimated from word frequency.",
         "callout_title": "Your data, your choice",
         "callout": "You can use DilDuel as a guest: everything stays on your device. Create an account only if you want to sync your progress. Read how we handle data, or delete your account at any time.",
     },
     "de": {
         "title": "DilDuel – Wörterbuch und Vokabeltrainer Deutsch–Aserbaidschanisch",
-        "desc": "DilDuel ist ein Wörterbuch Deutsch–Aserbaidschanisch, das offline funktioniert, mit Vokabeltraining von A1 bis B2, Quiz und Hörtests.",
+        "desc": "DilDuel ist ein Wörterbuch Deutsch–Aserbaidschanisch, das offline funktioniert, mit Vokabeltraining von A1 bis C2, Quiz und Hörtests.",
         "h1": "Deutsche und aserbaidschanische Wörter lernen – auf Ihre Art",
         "lead": "DilDuel ist ein Wörterbuch und Vokabeltrainer für Deutsch und Aserbaidschanisch. Wörter nachschlagen, Niveau für Niveau üben und sich testen – online oder offline.",
         "features_title": "Das können Sie mit DilDuel tun",
         "features": [
             ("search", "Offline-Wörterbuch", "Suchen Sie in beide Richtungen: Deutsch → Aserbaidschanisch und Aserbaidschanisch → Deutsch. Das Wörterbuch liegt auf Ihrem Gerät, die Suche funktioniert daher auch ohne Internet."),
             ("grammar", "Grammatik auf einen Blick", "Zu jedem Wort sehen Sie den Artikel in Farbe (der, die, das), Nomen- und Verbformen sowie Beispielsätze."),
-            ("school", "Training nach Niveau", "Lernkarten von A1 bis B2. Wischen Sie durch die Wörter, markieren Sie unbekannte Wörter und springen Sie zu jedem Wort eines Niveaus. Die App merkt sich, wo Sie aufgehört haben."),
+            ("school", "Training nach Niveau", "Lernkarten von A1 bis C2. Wischen Sie durch die Wörter, markieren Sie unbekannte Wörter und springen Sie zu jedem Wort eines Niveaus. Die App merkt sich, wo Sie aufgehört haben."),
             ("quiz", "Quiz", "Übersetzungsquiz mit zehn Multiple-Choice-Fragen, Punktzahl am Ende und Verlauf Ihrer Ergebnisse."),
             ("listen", "Hörtests", "Ein deutsches Wort wird vorgelesen – wählen Sie die richtige Antwort."),
             ("bookmark", "Lesezeichen und unbekannte Wörter", "Speichern Sie Wörter, die Sie behalten möchten, und sammeln Sie unbekannte Wörter zum späteren Wiederholen."),
             ("cloud", "Optionale Synchronisierung", "Melden Sie sich mit Google, Apple oder E-Mail an, um Fortschritt, Lesezeichen und Ergebnisse auf allen Geräten zu behalten. Ohne Konto bleibt alles auf Ihrem Gerät."),
             ("language", "Ihre Sprache, Ihr Design", "Die App gibt es auf Aserbaidschanisch und Deutsch, mit hellem und dunklem Design."),
         ],
+        "sources_title": "Wörterbuchdaten und Niveaus",
+        "sources": "Die Wörterbuchdaten basieren auf dem Wörterbuch „Alman – Azərbaycanca lüğət“ (A1–B2), zusammengestellt von Ramil Səfiyev. Die Niveaus A1, A2 und B1 richten sich nach den offiziellen Wortlisten des Goethe-Instituts; B2, C1 und C2 werden anhand der Worthäufigkeit geschätzt.",
         "callout_title": "Ihre Daten, Ihre Entscheidung",
         "callout": "Sie können DilDuel als Gast nutzen: Alles bleibt auf Ihrem Gerät. Legen Sie nur ein Konto an, wenn Sie Ihren Fortschritt synchronisieren möchten. Lesen Sie, wie wir mit Daten umgehen, oder löschen Sie Ihr Konto jederzeit.",
     },
     "az": {
         "title": "DilDuel – Alman–Azərbaycan lüğəti və söz öyrənmə tətbiqi",
-        "desc": "DilDuel oflayn işləyən alman–azərbaycan lüğətidir: A1-dən B2-yə qədər söz məşqi, testlər və dinləmə testləri.",
+        "desc": "DilDuel oflayn işləyən alman–azərbaycan lüğətidir: A1-dən C2-yə qədər söz məşqi, testlər və dinləmə testləri.",
         "h1": "Alman və azərbaycan sözlərini öz tərzinizdə öyrənin",
         "lead": "DilDuel alman–azərbaycan lüğəti və söz öyrənmə tətbiqidir. Sözləri axtarın, səviyyə-səviyyə məşq edin və özünüzü yoxlayın – onlayn və ya oflayn.",
         "features_title": "DilDuel ilə nələr edə bilərsiniz",
         "features": [
             ("search", "Oflayn lüğət", "Hər iki istiqamətdə axtarın: alman → azərbaycan və azərbaycan → alman. Lüğət cihazınızda saxlanılır, ona görə axtarış internetsiz də işləyir."),
             ("grammar", "Qrammatika bir baxışda", "Hər sözün artikli rənglə (der, die, das), isim və fel formaları, həmçinin nümunə cümlələr göstərilir."),
-            ("school", "Səviyyələr üzrə məşq", "A1-dən B2-yə qədər kartlar. Sözləri vərəqləyin, bilmədiklərinizi qeyd edin və səviyyədəki istənilən sözə keçin. Tətbiq harada qaldığınızı yadda saxlayır."),
+            ("school", "Səviyyələr üzrə məşq", "A1-dən C2-yə qədər kartlar. Sözləri vərəqləyin, bilmədiklərinizi qeyd edin və səviyyədəki istənilən sözə keçin. Tətbiq harada qaldığınızı yadda saxlayır."),
             ("quiz", "Testlər", "On çoxseçimli sualdan ibarət tərcümə testləri, sonda xal və nəticələrinizin tarixçəsi."),
             ("listen", "Dinləmə testləri", "Alman sözü səsləndirilir, siz düzgün cavabı seçirsiniz."),
             ("bookmark", "Seçilmişlər və bilinməyən sözlər", "Saxlamaq istədiyiniz sözləri seçilmişlərə əlavə edin, bilmədiklərinizi sonra təkrar etmək üçün toplayın."),
             ("cloud", "İstəyə bağlı sinxronizasiya", "İrəliləyişinizi, seçilmişlərinizi və nəticələrinizi bütün cihazlarda saxlamaq üçün Google, Apple və ya e-poçtla daxil olun. Hesabsız hər şey yalnız cihazınızda qalır."),
             ("language", "Sizin diliniz, sizin görünüşünüz", "Tətbiq Azərbaycan və alman dillərində, açıq və tünd görünüşlə təqdim olunur."),
         ],
+        "sources_title": "Lüğət məlumatları və səviyyələr",
+        "sources": "Lüğət məlumatları Ramil Səfiyevin tərtib etdiyi “Alman – Azərbaycanca lüğət” (A1–B2) əsasında hazırlanmışdır. A1, A2 və B1 səviyyələri Goethe-Institut-un rəsmi söz siyahılarına əsasən müəyyən edilib; B2, C1 və C2 səviyyələri isə sözün işlənmə tezliyinə görə təxmini hesablanıb.",
         "callout_title": "Sizin məlumatlarınız, sizin seçiminiz",
         "callout": "DilDuel-dən qonaq kimi istifadə edə bilərsiniz: hər şey yalnız cihazınızda qalır. İrəliləyişinizi sinxronlaşdırmaq istəyirsinizsə, hesab yaradın. Məlumatlarla necə rəftar etdiyimizi oxuyun və ya hesabınızı istənilən vaxt silin.",
     },
@@ -567,6 +573,12 @@ def landing_body(lang):
   <section>
     <h2>{esc(t["features_title"])}</h2>
     <div class="grid">{cards}</div>
+  </section>
+  <section>
+    <div class="card">
+      <h2>{esc(t["sources_title"])}</h2>
+      <p>{esc(t["sources"])}</p>
+    </div>
   </section>
   <section>
     <div class="card callout">

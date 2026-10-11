@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source.dart';
 import 'package:flutter_dic/core/data/models/answer_record.dart';
@@ -14,8 +15,17 @@ import 'package:path_provider/path_provider.dart';
 class DBHelper implements WordLocalDataSource {
   static const String dbName = 'luget.db';
 
-  /// Bump this when the asset DB schema changes so the file is re-copied.
-  static const int dbVersion = 5;
+  /// Bump this when the asset DB changes. Installs older than
+  /// [_firstMigratableVersion] get the asset file re-copied; newer ones are
+  /// migrated in place (see [_migrateLevels]).
+  static const int dbVersion = 6;
+
+  /// Oldest install version whose schema matches the current asset, so it
+  /// can be updated without replacing the file and losing user data.
+  static const int _firstMigratableVersion = 5;
+
+  /// First version that has the A1–C2 levels.
+  static const int _extendedLevelsVersion = 6;
 
   // ── table names ──────────────────────────────────────────────────────────
   static const String deAz = 'DeAz';
@@ -229,7 +239,7 @@ class DBHelper implements WordLocalDataSource {
   }
 
   /// Initialises the database, re-copying the asset file when the schema
-  /// version has changed (detected via SQLite PRAGMA user_version).
+  /// is too old to migrate (detected via SQLite PRAGMA user_version).
   static Future<void> initDB() async {
     final Directory documentsDir = await getApplicationDocumentsDirectory();
     final String dbPath = join(documentsDir.path, dbName);
@@ -237,11 +247,10 @@ class DBHelper implements WordLocalDataSource {
     bool needsCopy = !(await File(dbPath).exists());
 
     if (!needsCopy) {
-      // Re-copy if the stored user_version is older than the asset version.
       final Database existing = await openDatabase(dbPath);
       final int storedVersion = await existing.getVersion();
       await existing.close();
-      if (storedVersion < dbVersion) {
+      if (storedVersion < _firstMigratableVersion) {
         needsCopy = true;
       }
     }
@@ -260,11 +269,73 @@ class DBHelper implements WordLocalDataSource {
       },
       onUpgrade: (Database db, int oldVersion, int newVersion) async {
         await _ensureTables(db);
+        if (oldVersion < _extendedLevelsVersion) {
+          await _migrateLevels(db, await _readAssetLevels());
+        }
       },
       onOpen: (Database db) async {
         await _ensureTables(db);
       },
     );
+  }
+
+  /// Reads `{word id: level}` from the bundled asset DB.
+  static Future<Map<String, String>> _readAssetLevels() async {
+    final Directory tempDir = await getTemporaryDirectory();
+    final File file = File(join(tempDir.path, 'luget_levels.db'));
+    final ByteData data = await rootBundle.load('assets/$dbName');
+    await file.writeAsBytes(data.buffer.asUint8List(), flush: true);
+    final Database asset = await openDatabase(file.path, readOnly: true);
+    try {
+      final List<Map<String, Object?>> rows =
+          await asset.query(deAz, columns: <String>[colId, colLevel]);
+      return <String, String>{
+        for (final Map<String, Object?> row in rows)
+          if (row[colId] case final String id)
+            if (row[colLevel] case final String level) id: level,
+      };
+    } finally {
+      await asset.close();
+      await file.delete();
+    }
+  }
+
+  /// Applies [levels] to an existing install without replacing the file, so
+  /// bookmarks, results and per-word progress survive.
+  ///
+  /// Saved training positions are indexes into the per-level word lists,
+  /// which now hold different words, so they are reset.
+  @visibleForTesting
+  static Future<void> migrateLevels(
+    Database db,
+    Map<String, String> levels,
+  ) =>
+      _migrateLevels(db, levels);
+
+  static Future<void> _migrateLevels(
+    Database db,
+    Map<String, String> levels,
+  ) async {
+    await db.execute('CREATE INDEX IF NOT EXISTS idx_deaz_id ON $deAz($colId)');
+    final Batch batch = db.batch();
+    levels.forEach((String id, String level) {
+      batch.update(
+        deAz,
+        <String, Object?>{colLevel: level},
+        where: '$colId = ?',
+        whereArgs: <Object?>[id],
+      );
+    });
+    batch.execute('''
+      UPDATE $trainingProgress
+      SET level = (
+        SELECT $deAz.$colLevel FROM $deAz
+        WHERE $deAz.$colId = $trainingProgress.word_id
+      )
+      WHERE word_id IN (SELECT $colId FROM $deAz)
+    ''');
+    batch.delete(trainingLevelPosition);
+    await batch.commit(noResult: true);
   }
 
   static const int _deAzTypeValue = 321;

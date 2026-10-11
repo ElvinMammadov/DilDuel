@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';
+import 'package:flutter_dic/core/state/ads_cubit.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/state/theme_cubit.dart';
 import 'package:flutter_dic/core/state/theme_state.dart';
@@ -45,6 +46,9 @@ Future<void> main() async {
           ),
           BlocProvider<ThemeCubit>(
             create: (BuildContext context) => sl<ThemeCubit>(),
+          ),
+          BlocProvider<AdsCubit>(
+            create: (BuildContext context) => sl<AdsCubit>(),
           ),
           BlocProvider<AuthCubit>(
             create: (BuildContext context) => sl<AuthCubit>(),

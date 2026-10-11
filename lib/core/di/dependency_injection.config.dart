@@ -27,6 +27,7 @@ import '../../features/search/domain/usecases/search_word.dart' as _i1023;
 import '../../features/search/search.dart' as _i725;
 import '../../features/settings/settings.dart' as _i944;
 import '../../features/training/training.dart' as _i406;
+import '../ads/ad_consent.dart' as _i301;
 import '../data/data_sources/local/word_local_data_source.dart' as _i94;
 import '../data/data_sources/local/word_local_data_source_impl.dart' as _i816;
 import '../data/repositories/bookmark_repository.dart' as _i807;
@@ -54,6 +55,7 @@ import '../data/repositories/sync_listening_result_repository.dart' as _i671;
 import '../data/repositories/sync_quiz_result_repository.dart' as _i551;
 import '../data/repositories/sync_training_progress_repository.dart' as _i311;
 import '../data/repositories/training_progress_repository.dart' as _i871;
+import '../state/ads_cubit.dart' as _i845;
 import '../state/app_cubit.dart' as _i901;
 import '../state/theme_cubit.dart' as _i655;
 import 'shared_preferences_module.dart' as _i110;
@@ -90,6 +92,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i94.WordLocalDataSource>(() => _i816.DBHelper());
     gh.lazySingleton<_i613.QuizRepository>(() => _i656.QuizRepositoryImpl(
         localDataSource: gh<_i94.WordLocalDataSource>()));
+    gh.lazySingleton<_i301.AdConsent>(() => _i301.GoogleAdConsent());
+    gh.singleton<_i845.AdsCubit>(() => _i845.AdsCubit(gh<_i301.AdConsent>()));
     gh.singleton<_i655.ThemeCubit>(
         () => _i655.ThemeCubit(gh<_i460.SharedPreferences>()));
     gh.lazySingleton<_i957.FirestoreBookmarkRepository>(

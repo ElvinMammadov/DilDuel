@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dic/core/ads/banner_ad_slot.dart';
+import 'package:flutter_dic/core/state/ads_cubit.dart';
+import 'package:flutter_dic/core/state/ads_state.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
@@ -27,6 +32,23 @@ class _HomeShellState extends State<HomeShell> {
     QuizScreen(),
     BookmarksScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // The consent form needs a visible screen to present on.
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => unawaited(context.read<AdsCubit>().init()),
+    );
+  }
+
+  /// Banners stay off the training flashcards and the quiz and listening
+  /// tests, where swipes and answer buttons risk accidental taps.
+  bool _bannerAllowed(AdsState ads) => switch (_currentIndex) {
+        1 => !ads.trainingSessionActive,
+        2 => !ads.quizSectionOpen,
+        _ => true,
+      };
 
   void _onTabTapped(int index) {
     if (index == _currentIndex) return;
@@ -73,9 +95,20 @@ class _HomeShellState extends State<HomeShell> {
             index: _currentIndex,
             children: _pages,
           ),
-          bottomNavigationBar: _DesignedNavBar(
-            currentIndex: _currentIndex,
-            onTap: _onTabTapped,
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              BlocBuilder<AdsCubit, AdsState>(
+                builder: (BuildContext context, AdsState ads) {
+                  if (!ads.canRequestAds) return const SizedBox.shrink();
+                  return BannerAdSlot(visible: _bannerAllowed(ads));
+                },
+              ),
+              _DesignedNavBar(
+                currentIndex: _currentIndex,
+                onTap: _onTabTapped,
+              ),
+            ],
           ),
         ),
       );

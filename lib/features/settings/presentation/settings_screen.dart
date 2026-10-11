@@ -74,6 +74,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final AppColors colors = AppColors.of(context);
+    final bool privacyOptionsRequired = context.select(
+      (AdsCubit cubit) => cubit.state.privacyOptionsRequired,
+    );
 
     return BlocListener<AuthCubit, AuthState>(
       listenWhen: (AuthState previous, AuthState current) =>
@@ -151,6 +154,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   subtitle: 'settings.privacy_policy.subtitle'.tr(),
                   onTap: () => _openLink(LegalLinks.privacyPolicy),
                 ),
+                if (privacyOptionsRequired)
+                  _SettingsRow(
+                    icon: Icons.tune,
+                    iconBackground: colors.info,
+                    title: 'settings.privacy_options.title'.tr(),
+                    subtitle: 'settings.privacy_options.subtitle'.tr(),
+                    onTap: () => context.read<AdsCubit>().showPrivacyOptions(),
+                  ),
                 _SettingsRow(
                   icon: Icons.gavel_outlined,
                   iconBackground: colors.unknownCard,

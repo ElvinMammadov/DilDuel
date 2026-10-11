@@ -23,7 +23,13 @@ class TrainingScreen extends StatelessWidget {
               cubit.init();
             }
           },
-          child: const _TrainingView(),
+          child: BlocListener<TrainingCubit, TrainingState>(
+            listener: (BuildContext context, TrainingState state) =>
+                context.read<AdsCubit>().setTrainingSessionActive(
+                      active: state is! TrainingInitial,
+                    ),
+            child: const _TrainingView(),
+          ),
         ),
       );
 }

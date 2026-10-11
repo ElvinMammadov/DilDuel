@@ -62,17 +62,24 @@ class _QuizScreenState extends State<QuizScreen> {
       child: selected == null
           ? _QuizSectionCards(
               counts: _counts,
-              onSelected: (_QuizSection section) =>
-                  setState(() => _selected = section),
+              onSelected: (_QuizSection section) {
+                context.read<AdsCubit>().setQuizSectionOpen(
+                      open: section != _QuizSection.results,
+                    );
+                setState(() => _selected = section);
+              },
             )
           : Column(
               children: <Widget>[
                 AppBackBar(
                   label: selected.label,
-                  onBack: () => setState(() {
-                    _selected = null;
-                    _counts = _loadCounts();
-                  }),
+                  onBack: () {
+                    context.read<AdsCubit>().setQuizSectionOpen(open: false);
+                    setState(() {
+                      _selected = null;
+                      _counts = _loadCounts();
+                    });
+                  },
                 ),
                 Expanded(child: selected.content),
               ],

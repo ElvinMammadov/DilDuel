@@ -74,6 +74,10 @@
       "levels_title": "Niveaus",
       "levels_text": "Die Niveaus A1, A2 und B1 richten sich nach den offiziellen Wortlisten des Goethe-Instituts. B2, C1 und C2 werden anhand der Worthäufigkeit geschätzt."
     },
+    "privacy_options": {
+      "title": "Datenschutzoptionen für Werbung",
+      "subtitle": "Werbeeinwilligung verwalten"
+    },
     "legal_notice": {
       "title": "Impressum",
       "subtitle": "Anbieterkennzeichnung"

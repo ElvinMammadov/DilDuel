@@ -14,6 +14,7 @@ import 'package:flutter_dic/core/data/repositories/listening_result_repository.d
 import 'package:flutter_dic/core/data/repositories/quiz_result_repository.dart';
 import 'package:flutter_dic/core/error/failures.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_dic/core/state/ads_cubit.dart';
 import 'package:flutter_dic/core/state/app_cubit.dart';
 import 'package:flutter_dic/core/state/app_state.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';

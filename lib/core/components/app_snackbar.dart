@@ -240,10 +240,14 @@ class _SnackbarCard extends StatelessWidget {
         ),
     };
 
+    // A lone title is centred against the icon; with a subtitle the text
+    // block stays top-aligned so the title lines up with the icon's top.
+    final bool titleOnly = subtitle == null;
+
     return Semantics(
       container: true,
       liveRegion: true,
-      label: subtitle == null ? title : '$title. $subtitle',
+      label: titleOnly ? title : '$title. $subtitle',
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: Dimensions.padding16,
@@ -262,10 +266,13 @@ class _SnackbarCard extends StatelessWidget {
           ],
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+              titleOnly ? CrossAxisAlignment.center : CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: Dimensions.itemHeight1),
+              padding: titleOnly
+                  ? EdgeInsets.zero
+                  : const EdgeInsets.only(top: Dimensions.itemHeight1),
               child: Container(
                 width: Dimensions.itemWidth38,
                 height: Dimensions.itemHeight38,

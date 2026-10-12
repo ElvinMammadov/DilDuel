@@ -8,8 +8,8 @@ part of '../settings.dart';
 class _DeleteAccountDialog extends StatefulWidget {
   const _DeleteAccountDialog();
 
-  static Future<void> show(BuildContext context) => showDialog<void>(
-        context: context,
+  static Future<void> show(BuildContext context) => AppDialog.show<void>(
+        context,
         barrierDismissible: false,
         builder: (_) => BlocProvider<AuthCubit>.value(
           value: context.read<AuthCubit>(),
@@ -68,24 +68,27 @@ class _DeleteAccountDialogState extends State<_DeleteAccountDialog> {
     final AuthCubit cubit = context.read<AuthCubit>();
     return PopScope(
       canPop: !_isDeleting,
-      child: AlertDialog(
-        title: Text('settings.delete_account.title'.tr()),
-        content: _DialogBody(
+      child: AppDialog(
+        icon: Icons.delete_forever_outlined,
+        isDestructive: true,
+        title: 'settings.delete_account.title'.tr(),
+        message: 'settings.delete_account.message'.tr(),
+        body: _DialogBody(
           needsPassword: cubit.deletionNeedsPassword,
           passwordController: _passwordController,
           enabled: !_isDeleting,
           errorKey: _errorKey,
         ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: _isDeleting ? null : () => Navigator.of(context).pop(),
-            child: Text('settings.delete_account.cancel'.tr()),
-          ),
-          _ConfirmDeleteButton(
-            isDeleting: _isDeleting,
-            onPressed: () => _delete(cubit),
-          ),
-        ],
+        primary: AppDialogAction(
+          label: 'settings.delete_account.confirm'.tr(),
+          isDestructive: true,
+          isLoading: _isDeleting,
+          onPressed: () => _delete(cubit),
+        ),
+        secondary: AppDialogAction(
+          label: 'settings.delete_account.cancel'.tr(),
+          onPressed: _isDeleting ? null : () => Navigator.of(context).pop(),
+        ),
       ),
     );
   }
@@ -107,29 +110,26 @@ class _DialogBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppColors colors = AppColors.of(context);
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('settings.delete_account.message'.tr()),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        if (needsPassword)
+          _PasswordField(controller: passwordController, enabled: enabled)
+        else
+          Text(
+            'settings.delete_account.reauth_hint'.tr(),
+            textAlign: TextAlign.center,
+            style: AppTextStyles.bodySmall(colors.textSecondary),
+          ),
+        if (errorKey != null) ...<Widget>[
           const SizedBox(height: Dimensions.itemHeight12),
-          if (needsPassword)
-            _PasswordField(controller: passwordController, enabled: enabled)
-          else
-            Text(
-              'settings.delete_account.reauth_hint'.tr(),
-              style: AppTextStyles.bodySmall(colors.textSecondary),
-            ),
-          if (errorKey != null) ...<Widget>[
-            const SizedBox(height: Dimensions.itemHeight12),
-            Text(
-              errorKey!.tr(),
-              style: AppTextStyles.bodySmall(colors.error),
-            ),
-          ],
+          Text(
+            errorKey!.tr(),
+            textAlign: TextAlign.center,
+            style: AppTextStyles.bodySmall(colors.error),
+          ),
         ],
-      ),
+      ],
     );
   }
 }
@@ -149,32 +149,5 @@ class _PasswordField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: 'settings.delete_account.password_hint'.tr(),
         ),
-      );
-}
-
-class _ConfirmDeleteButton extends StatelessWidget {
-  const _ConfirmDeleteButton({
-    required this.isDeleting,
-    required this.onPressed,
-  });
-
-  final bool isDeleting;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) => TextButton(
-        onPressed: isDeleting ? null : onPressed,
-        style: TextButton.styleFrom(
-          foregroundColor: AppColors.of(context).error,
-        ),
-        child: isDeleting
-            ? const SizedBox(
-                width: Dimensions.itemWidth16,
-                height: Dimensions.itemHeight16,
-                child: CircularProgressIndicator(
-                  strokeWidth: Dimensions.itemWidth2,
-                ),
-              )
-            : Text('settings.delete_account.confirm'.tr()),
       );
 }

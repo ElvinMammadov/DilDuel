@@ -63,6 +63,12 @@
     "theme_changed_to": "Seçilən görünüş: {}",
     "logout": "Çıxış",
     "logout_success": "Uğurla çıxış etdiniz",
+    "logout_dialog": {
+      "title": "Hesabdan çıxılsın?",
+      "message": "Çıxış etdikdə bu cihazdakı yerli məlumatlar (seçilmişlər, test nəticələri, məşq irəliləyişi) silinəcək. Məlumatlarınız bulud hesabınızda saxlanılır və yenidən daxil olduqda bərpa olunacaq.",
+      "confirm": "Çıxış",
+      "cancel": "Ləğv et"
+    },
     "privacy_policy": {
       "title": "Məxfilik siyasəti",
       "subtitle": "Məlumatlarınızla necə rəftar edirik"

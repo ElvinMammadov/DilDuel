@@ -9,24 +9,22 @@ class QuizRestartDialog extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-        title: Text('quiz.restart'.tr()),
-        content: Text('quiz.confirm_restart'.tr()),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('common.cancel'.tr()),
-          ),
-          TextButton(
-            onPressed: () {
-              onRestart();
-              Navigator.pop(context);
-            },
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.of(context).error,
-            ),
-            child: Text('quiz.restart'.tr()),
-          ),
-        ],
+  Widget build(BuildContext context) => AppDialog(
+        icon: Icons.refresh_rounded,
+        isDestructive: true,
+        title: 'quiz.restart'.tr(),
+        message: 'quiz.confirm_restart'.tr(),
+        primary: AppDialogAction(
+          label: 'common.cancel'.tr(),
+          onPressed: () => Navigator.pop(context),
+        ),
+        secondary: AppDialogAction(
+          label: 'quiz.restart'.tr(),
+          isDestructive: true,
+          onPressed: () {
+            onRestart();
+            Navigator.pop(context);
+          },
+        ),
       );
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/components/app_back_bar.dart';
 import 'package:flutter_dic/core/components/app_card.dart';
+import 'package:flutter_dic/core/components/app_dialog.dart';
 import 'package:flutter_dic/core/components/app_icon_filled_card.dart';
 import 'package:flutter_dic/core/components/app_filled_card_list.dart';
 import 'package:flutter_dic/core/components/app_segmented_control.dart';

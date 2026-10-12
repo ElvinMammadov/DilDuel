@@ -283,7 +283,7 @@ class _AccountActions extends StatelessWidget {
           children: <Widget>[
             AppElevatedButton(
               text: 'settings.logout'.tr(),
-              onPressed: () => context.read<AuthCubit>().signOut(),
+              onPressed: () => _LogoutDialog.show(context),
               width: double.infinity,
               backgroundColor: colors.errorTint,
               textColor: colors.error,

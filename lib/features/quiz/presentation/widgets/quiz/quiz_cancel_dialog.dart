@@ -9,24 +9,22 @@ class QuizCancelDialog extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-        title: Text('quiz.cancel'.tr()),
-        content: Text('quiz.confirm_cancel'.tr()),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('common.no'.tr()),
-          ),
-          TextButton(
-            onPressed: () {
-              onCancel();
-              Navigator.pop(context);
-            },
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.of(context).error,
-            ),
-            child: Text('common.yes'.tr()),
-          ),
-        ],
+  Widget build(BuildContext context) => AppDialog(
+        icon: Icons.close_rounded,
+        isDestructive: true,
+        title: 'quiz.cancel'.tr(),
+        message: 'quiz.confirm_cancel'.tr(),
+        primary: AppDialogAction(
+          label: 'common.no'.tr(),
+          onPressed: () => Navigator.pop(context),
+        ),
+        secondary: AppDialogAction(
+          label: 'common.yes'.tr(),
+          isDestructive: true,
+          onPressed: () {
+            onCancel();
+            Navigator.pop(context);
+          },
+        ),
       );
 }

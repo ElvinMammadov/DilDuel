@@ -63,6 +63,12 @@
     "theme_changed_to": "Ausgewähltes Design: {}",
     "logout": "Abmelden",
     "logout_success": "Erfolgreich abgemeldet",
+    "logout_dialog": {
+      "title": "Abmelden?",
+      "message": "Beim Abmelden werden die lokalen Daten auf diesem Gerät (Lesezeichen, Testergebnisse, Trainingsfortschritt) gelöscht. Ihre Daten bleiben sicher in Ihrem Cloud-Konto gespeichert und stehen nach der erneuten Anmeldung wieder zur Verfügung.",
+      "confirm": "Abmelden",
+      "cancel": "Abbrechen"
+    },
     "privacy_policy": {
       "title": "Datenschutzerklärung",
       "subtitle": "Wie wir mit Ihren Daten umgehen"

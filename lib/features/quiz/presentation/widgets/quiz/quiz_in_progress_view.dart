@@ -10,8 +10,8 @@ class QuizInProgressView extends StatelessWidget {
 
   void _showRestartDialog(BuildContext context) {
     final QuizBloc quizBloc = context.read<QuizBloc>();
-    showDialog<void>(
-      context: context,
+    AppDialog.show<void>(
+      context,
       builder: (_) => QuizRestartDialog(
         onRestart: () {
           quizBloc.resetQuiz();
@@ -22,8 +22,8 @@ class QuizInProgressView extends StatelessWidget {
 
   void _showCancelDialog(BuildContext context) {
     final QuizBloc quizBloc = context.read<QuizBloc>();
-    showDialog<void>(
-      context: context,
+    AppDialog.show<void>(
+      context,
       builder: (_) => QuizCancelDialog(
         onCancel: () {
           quizBloc.cancelQuiz();

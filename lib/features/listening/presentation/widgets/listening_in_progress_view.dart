@@ -7,46 +7,48 @@ class ListeningInProgressView extends StatelessWidget {
 
   void _showCancelDialog(BuildContext context) {
     final ListeningCubit cubit = context.read<ListeningCubit>();
-    showDialog<void>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('quiz.confirm_cancel'.tr()),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('quiz.no'.tr()),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              cubit.cancel();
-            },
-            child: Text('quiz.yes'.tr()),
-          ),
-        ],
+    AppDialog.show<void>(
+      context,
+      builder: (BuildContext dialogContext) => AppDialog(
+        icon: Icons.close_rounded,
+        isDestructive: true,
+        title: 'quiz.confirm_cancel'.tr(),
+        primary: AppDialogAction(
+          label: 'quiz.no'.tr(),
+          onPressed: () => Navigator.of(dialogContext).pop(),
+        ),
+        secondary: AppDialogAction(
+          label: 'quiz.yes'.tr(),
+          isDestructive: true,
+          onPressed: () {
+            Navigator.of(dialogContext).pop();
+            cubit.cancel();
+          },
+        ),
       ),
     );
   }
 
   void _showRestartDialog(BuildContext context) {
     final ListeningCubit cubit = context.read<ListeningCubit>();
-    showDialog<void>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('quiz.confirm_restart'.tr()),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('quiz.no'.tr()),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              cubit.startListening();
-            },
-            child: Text('quiz.yes'.tr()),
-          ),
-        ],
+    AppDialog.show<void>(
+      context,
+      builder: (BuildContext dialogContext) => AppDialog(
+        icon: Icons.refresh_rounded,
+        isDestructive: true,
+        title: 'quiz.confirm_restart'.tr(),
+        primary: AppDialogAction(
+          label: 'quiz.no'.tr(),
+          onPressed: () => Navigator.of(dialogContext).pop(),
+        ),
+        secondary: AppDialogAction(
+          label: 'quiz.yes'.tr(),
+          isDestructive: true,
+          onPressed: () {
+            Navigator.of(dialogContext).pop();
+            cubit.startListening();
+          },
+        ),
       ),
     );
   }

@@ -35,6 +35,7 @@ void main() {
     <String>[
       'settings.delete_account.title',
       'settings.delete_account.error_wrong_password',
+      'settings.logout_dialog.title',
       'training.jump.title',
       'training.jump.go',
     ].forEach(expectKey);

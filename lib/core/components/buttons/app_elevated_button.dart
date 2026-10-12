@@ -4,7 +4,8 @@ import 'package:flutter_dic/core/utils/dimensions.dart';
 
 class AppElevatedButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  /// When `null` the button is disabled.
+  final VoidCallback? onPressed;
   final bool isLoading;
   final double? width;
   final Color? backgroundColor;

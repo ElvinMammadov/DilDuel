@@ -169,7 +169,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.Dictionary
           releaseFiles: build/app/outputs/bundle/release/*.aab
-          track: internal
+          tracks: internal
           status: completed
           changesNotSentForReview: true
 

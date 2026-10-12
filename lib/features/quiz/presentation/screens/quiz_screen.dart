@@ -51,14 +51,27 @@ class _QuizScreenState extends State<QuizScreen> {
     }
   }
 
+  /// Drops everything shown for the previous account on sign-out and
+  /// refreshes the counts on sign-in, once the merged data is in the DB.
+  void _onAuthChanged(BuildContext context, AuthState state) {
+    if (state is AuthUnauthenticated) {
+      context.read<QuizBloc>().cancelQuiz();
+      context.read<AdsCubit>().setQuizSectionOpen(open: false);
+    }
+    setState(() {
+      if (state is AuthUnauthenticated) _selected = null;
+      _counts = _loadCounts();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final _QuizSection? selected = _selected;
     return BlocListener<AuthCubit, AuthState>(
       listenWhen: (AuthState previous, AuthState current) =>
-          previous is AuthAuthenticated && current is AuthUnauthenticated,
-      listener: (BuildContext context, AuthState state) =>
-          context.read<QuizBloc>().cancelQuiz(),
+          (previous is AuthAuthenticated && current is AuthUnauthenticated) ||
+          (previous is! AuthAuthenticated && current is AuthAuthenticated),
+      listener: _onAuthChanged,
       child: selected == null
           ? _QuizSectionCards(
               counts: _counts,
@@ -95,6 +108,8 @@ class _QuizSectionCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       FutureBuilder<Map<_QuizSection, int>>(
+        // A new future must not show the previous snapshot's counts.
+        key: ObjectKey(counts),
         future: counts,
         builder: (
           BuildContext context,

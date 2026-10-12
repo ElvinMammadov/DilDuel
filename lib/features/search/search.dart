@@ -13,6 +13,7 @@ import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:flutter_dic/features/search/domain/usecases/search_word.dart';
+import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/bookmarks/bookmarks.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -28,8 +28,26 @@ class _SearchSectionState extends State<SearchSection> {
     super.dispose();
   }
 
+  /// Recent searches are wiped from the DB on sign-out; reload them so the
+  /// previous account's list is not left on screen.
+  void _onSignedOut(BuildContext context) {
+    if (_controller.text.trim().isNotEmpty) return;
+    context.read<SearchBloc>().clear(
+          context.read<AppCubit>().getDictionaryName(),
+        );
+  }
+
   @override
   Widget build(BuildContext context) =>
+      BlocListener<AuthCubit, AuthState>(
+        listenWhen: (AuthState previous, AuthState current) =>
+            previous is AuthAuthenticated && current is AuthUnauthenticated,
+        listener: (BuildContext context, AuthState state) =>
+            _onSignedOut(context),
+        child: _buildSearchListeners(context),
+      );
+
+  Widget _buildSearchListeners(BuildContext context) =>
       BlocListener<SearchBloc, SearchState>(
         listener: (BuildContext context, SearchState state) {
           if (state is SearchFillField) {

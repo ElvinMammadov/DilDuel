@@ -40,19 +40,21 @@ class AppFilledCard extends StatelessWidget {
           onTap: onTap,
           child: DecoratedBox(
             decoration: _decoration(AppColors.of(context)),
-            child: SizedBox(
-              height: Dimensions.itemHeight88,
-              child: Stack(
-                clipBehavior: Clip.hardEdge,
-                children: <Widget>[
-                  if (watermark case final Widget mark)
-                    Positioned(
-                      right: -Dimensions.padding8,
-                      bottom: -Dimensions.padding20,
-                      child: mark,
-                    ),
-                  Positioned.fill(child: _CardContent(child: child)),
-                ],
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
+              child: SizedBox(
+                height: Dimensions.itemHeight88,
+                child: Stack(
+                  children: <Widget>[
+                    if (watermark case final Widget mark)
+                      Positioned(
+                        right: -Dimensions.padding8,
+                        bottom: -Dimensions.padding20,
+                        child: mark,
+                      ),
+                    Positioned.fill(child: _CardContent(child: child)),
+                  ],
+                ),
               ),
             ),
           ),

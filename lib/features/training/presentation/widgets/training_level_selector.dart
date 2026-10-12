@@ -49,7 +49,9 @@ class _LevelCardsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TrainingCubit cubit = context.read<TrainingCubit>();
+    // Watch, not read: the word counts are filled in after the first frame, and
+    // this const widget is not rebuilt by its parent when the cubit emits.
+    final TrainingCubit cubit = context.watch<TrainingCubit>();
     return AppFilledCardList(
       children: <Widget>[
         for (final String level in trainingLevels)

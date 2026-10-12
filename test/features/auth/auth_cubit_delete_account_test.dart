@@ -6,6 +6,7 @@ import 'package:flutter_dic/core/data/repositories/quiz_result_repository.dart';
 import 'package:flutter_dic/core/data/repositories/training_progress_repository.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class _FakeAuthRepository extends Fake implements AuthRepository {
@@ -48,7 +49,8 @@ void main() {
   late _FakeAuthRepository authRepository;
   late AuthCubit cubit;
 
-  setUp(() {
+  setUp(() async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
     events = <String>[];
     authRepository = _FakeAuthRepository(events);
     cubit = AuthCubit(
@@ -57,6 +59,7 @@ void main() {
       _FakeQuizResults(),
       _FakeTrainingRepository(events),
       _FakeListeningResults(),
+      await SharedPreferences.getInstance(),
     );
   });
 

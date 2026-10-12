@@ -27,6 +27,7 @@ import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 part 'domain/auth_user.dart';

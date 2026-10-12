@@ -154,6 +154,7 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i662.QuizResultRepository>(),
           gh<_i871.TrainingProgressRepository>(),
           gh<_i109.ListeningResultRepository>(),
+          gh<_i460.SharedPreferences>(),
         ));
     return this;
   }

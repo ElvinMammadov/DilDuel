@@ -17,36 +17,46 @@ class AuthCubit extends Cubit<AuthState> {
     this._quizResultRepository,
     this._trainingProgressRepository,
     this._listeningResultRepository,
+    this._prefs,
   ) : super(const AuthInitial());
+
+  /// Preference key holding the uid of the account whose data is in the
+  /// local database. Lets a restored session be told apart from a fresh
+  /// sign-in over guest data.
+  static const String _dataOwnerKey = 'local_data_owner_uid';
 
   final AuthRepository _authRepository;
   final BookmarkRepository _bookmarkRepository;
   final QuizResultRepository _quizResultRepository;
   final TrainingProgressRepository _trainingProgressRepository;
   final ListeningResultRepository _listeningResultRepository;
+  final SharedPreferences _prefs;
   StreamSubscription<AuthUser?>? _authSub;
   bool _isDeletingAccount = false;
+
+  /// Whether the auth stream has reported a signed-in user during this run.
+  /// Firebase emits `null` on every launch for guests, which must not wipe
+  /// their local data; only a user going away should.
+  bool _hadSignedInUser = false;
 
   /// Subscribes to Firebase auth-state changes. Call once at app start.
   void init() {
     _authSub = _authRepository.authStateChanges.listen(
       (AuthUser? user) async {
         if (user != null) {
-          // If the user accumulated guest data, let them decide whether to
-          // keep it (sync) or discard it before completing sign-in.
-          if (await DBHelper.hasUserData()) {
-            emit(AuthGuestDataDecision(user));
-          } else {
-            await _syncOnSignIn(user.uid);
-            emit(AuthAuthenticated(user));
-          }
+          await _onUserSignedIn(user);
         } else {
           // Clear user-specific local data before emitting so that listeners
           // reacting to AuthUnauthenticated (e.g. cached Cubits resetting)
           // always observe an already-empty database. This also handles the
           // account-switch case where Firebase signs out user A and signs in
-          // user B without an explicit signOut() call.
-          await DBHelper.clearUserData();
+          // user B without an explicit signOut() call. Skipped for guests,
+          // whose data must survive app restarts.
+          if (_hadSignedInUser || _prefs.containsKey(_dataOwnerKey)) {
+            await DBHelper.clearUserData();
+          }
+          await _prefs.remove(_dataOwnerKey);
+          _hadSignedInUser = false;
           emit(_isDeletingAccount
               ? const AuthAccountDeleted()
               : const AuthUnauthenticated());
@@ -57,6 +67,24 @@ class AuthCubit extends Cubit<AuthState> {
         emit(const AuthUnauthenticated());
       },
     );
+  }
+
+  Future<void> _onUserSignedIn(AuthUser user) async {
+    _hadSignedInUser = true;
+    final bool ownsLocalData = _prefs.getString(_dataOwnerKey) == user.uid;
+    // Data not owned by this account is guest data: let the user decide
+    // whether to keep (sync) or discard it before completing sign-in.
+    if (!ownsLocalData && await DBHelper.hasUserData()) {
+      emit(AuthGuestDataDecision(user));
+      return;
+    }
+    await _completeSignIn(user);
+  }
+
+  Future<void> _completeSignIn(AuthUser user) async {
+    await _syncOnSignIn(user.uid);
+    await _prefs.setString(_dataOwnerKey, user.uid);
+    emit(AuthAuthenticated(user));
   }
 
   /// Merges remote data into local storage for the three synced data
@@ -173,8 +201,7 @@ class AuthCubit extends Cubit<AuthState> {
     final AuthState s = state;
     if (s is! AuthGuestDataDecision) return;
     emit(const AuthLoading());
-    await _syncOnSignIn(s.user.uid);
-    emit(AuthAuthenticated(s.user));
+    await _completeSignIn(s.user);
   }
 
   /// Discards local guest data, pulls only the account's remote data, then
@@ -184,8 +211,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (s is! AuthGuestDataDecision) return;
     emit(const AuthLoading());
     await DBHelper.clearUserData();
-    await _syncOnSignIn(s.user.uid);
-    emit(AuthAuthenticated(s.user));
+    await _completeSignIn(s.user);
   }
 
   // ── Sign-out ──────────────────────────────────────────────────────────────
@@ -207,6 +233,7 @@ class AuthCubit extends Cubit<AuthState> {
       log('Sign-out error: $e', name: 'AuthCubit');
       // If sign-out throws, clear locally and emit so the app stays consistent.
       await DBHelper.clearUserData();
+      await _prefs.remove(_dataOwnerKey);
       emit(const AuthUnauthenticated());
     }
   }

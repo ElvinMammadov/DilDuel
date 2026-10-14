@@ -60,7 +60,7 @@ class SyncTrainingProgressRepository
     _dropPending();
     try {
       final Map<String, int> remote = await _remote.getAllRemoteProgress(uid);
-      for (final String level in trainingLevels) {
+      for (final String level in trainingDecks) {
         await _mergeLevel(level, remote[level] ?? 0);
       }
     } catch (e) {

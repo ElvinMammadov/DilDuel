@@ -1,8 +1,24 @@
 part of training;
 
+/// Returns [words] in a mixed order that is the same on every call for a
+/// given [level].
+///
+/// The order must be reproducible because training progress is stored as an
+/// index into this list.
+List<Word> shuffleWordsForLevel(String level, List<Word> words) {
+  final int seed = level.codeUnits.fold(
+    0,
+    (int hash, int unit) => (hash * 31 + unit) & 0x7fffffff,
+  );
+  return List<Word>.of(words)..shuffle(Random(seed));
+}
+
 /// Cubit that manages the training session lifecycle.
 ///
-/// Progress (per-level word index) is stored via [TrainingProgressRepository],
+/// A deck is either a CEFR level (`A1`) or a topic (`topic_animals`); both
+/// share the same progress storage and the `level` names below.
+///
+/// Progress (per-deck word index) is stored via [TrainingProgressRepository],
 /// which writes to local SQLite and syncs to Firestore when signed in.
 @injectable
 class TrainingCubit extends Cubit<TrainingState> {
@@ -24,9 +40,9 @@ class TrainingCubit extends Cubit<TrainingState> {
   Future<void> init() async {
     final int gen = ++_initGeneration;
     await Future.wait(
-      trainingLevels.map((String l) async {
-        savedIndices[l] = await _progressRepository.getLevelPosition(l);
-        levelTotals[l] = await DBHelper.getWordCountByLevel(l);
+      trainingDecks.map((String deck) async {
+        savedIndices[deck] = await _progressRepository.getLevelPosition(deck);
+        levelTotals[deck] = await _countWords(deck);
       }),
     );
     if (gen != _initGeneration) return;
@@ -46,10 +62,30 @@ class TrainingCubit extends Cubit<TrainingState> {
     await _doLoad(level, startIndex: savedIndex);
   }
 
+  Future<int> _countWords(String deck) => isTopicDeck(deck)
+      ? DBHelper.getWordCountByTopic(topicOfDeck(deck))
+      : DBHelper.getWordCountByLevel(deck);
+
+  /// Topic decks run from the easiest level to the hardest, mixed within each
+  /// level, so beginners meet the simple words first.
+  Future<List<Word>> _loadWords(String deck) async {
+    if (!isTopicDeck(deck)) {
+      return shuffleWordsForLevel(deck, await DBHelper.getWordsByLevel(deck));
+    }
+    final String topic = topicOfDeck(deck);
+    final Map<String, List<Word>> byLevel = await DBHelper.getWordsByTopic(
+      topic,
+    );
+    return <Word>[
+      for (final MapEntry<String, List<Word>> entry in byLevel.entries)
+        ...shuffleWordsForLevel('$topic/${entry.key}', entry.value),
+    ];
+  }
+
   Future<void> _doLoad(String level, {required int startIndex}) async {
     emit(TrainingLoading(level: level));
     try {
-      final List<Word> words = await DBHelper.getWordsByLevel(level);
+      final List<Word> words = await _loadWords(level);
       if (words.isEmpty) {
         emit(TrainingError('training.no_words'.tr()));
         return;

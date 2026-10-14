@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source.dart';
 import 'package:flutter_dic/core/data/models/answer_record.dart';
+import 'package:flutter_dic/core/data/repositories/training_progress_repository.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:flutter_dic/features/quiz/domain/models/quiz_result.dart';
 import 'package:injectable/injectable.dart';
@@ -15,10 +17,17 @@ import 'package:path_provider/path_provider.dart';
 class DBHelper implements WordLocalDataSource {
   static const String dbName = 'luget.db';
 
+  /// Word ids per training topic, bundled next to the DB.
+  static const String topicsAsset = 'assets/training_topics.json';
+
+  /// SQLite's default limit on bound variables is 999, so ids are queried in
+  /// chunks below that.
+  static const int _idsPerQuery = 500;
+
   /// Bump this when the asset DB changes. Installs older than
   /// [_firstMigratableVersion] get the asset file re-copied; newer ones are
-  /// migrated in place (see [_migrateLevels]).
-  static const int dbVersion = 6;
+  /// migrated in place (see [_migrateLevels] and [_syncDictionaryText]).
+  static const int dbVersion = 14;
 
   /// Oldest install version whose schema matches the current asset, so it
   /// can be updated without replacing the file and losing user data.
@@ -26,6 +35,10 @@ class DBHelper implements WordLocalDataSource {
 
   /// First version that has the A1–C2 levels.
   static const int _extendedLevelsVersion = 6;
+
+  /// First version with corrected spellings, articles and translations in the
+  /// dictionary.
+  static const int _textFixesVersion = 14;
 
   // ── table names ──────────────────────────────────────────────────────────
   static const String deAz = 'DeAz';
@@ -182,6 +195,7 @@ class DBHelper implements WordLocalDataSource {
     await _createQuizResultAnswersTable(db);
     await _createListeningResultAnswersTable(db);
     await _migrateAddWordId(db);
+    await _migrateAddAzDePlural(db);
   }
 
   /// Adds `word_id` to existing `bookmark` and `unknown_words` tables.
@@ -195,6 +209,19 @@ class DBHelper implements WordLocalDataSource {
       } on DatabaseException catch (_) {
         // Column already exists — nothing to do.
       }
+    }
+  }
+
+  /// Adds the per-translation `plural` column to an existing `AzDe` table.
+  ///
+  /// Same approach as [_migrateAddWordId]: SQLite has no
+  /// `ADD COLUMN IF NOT EXISTS`, so the error for an existing column is
+  /// ignored.
+  static Future<void> _migrateAddAzDePlural(Database db) async {
+    try {
+      await db.execute('ALTER TABLE $azDe ADD COLUMN $colPlural TEXT');
+    } on DatabaseException catch (_) {
+      // Column already exists — nothing to do.
     }
   }
 
@@ -272,6 +299,13 @@ class DBHelper implements WordLocalDataSource {
         if (oldVersion < _extendedLevelsVersion) {
           await _migrateLevels(db, await _readAssetLevels());
         }
+        if (oldVersion < _textFixesVersion) {
+          final (
+            Map<String, Map<String, Object?>> deAzRows,
+            Map<String, Map<String, Object?>> azDeRows,
+          ) = await _readAssetText();
+          await _syncDictionaryText(db, deAzRows, azDeRows);
+        }
       },
       onOpen: (Database db) async {
         await _ensureTables(db);
@@ -297,6 +331,179 @@ class DBHelper implements WordLocalDataSource {
     } finally {
       await asset.close();
       await file.delete();
+    }
+  }
+
+  /// `DeAz` columns that dictionary text fixes can change.
+  static const List<String> _deAzTextColumns = <String>[
+    colKey,
+    colValue,
+    colMainType,
+    colArticle,
+    colGender,
+    colGenitive,
+    colPlural,
+    colImperfekt,
+    colPerfekt,
+    colComparative,
+    colSuperlative,
+  ];
+
+  /// `AzDe` columns that dictionary text fixes can change.
+  static const List<String> _azDeTextColumns = <String>[
+    colKey,
+    colValue,
+    colMainType,
+    colSubType,
+    colPlural,
+  ];
+
+  /// Reads the fixable text columns of every `DeAz` and `AzDe` row, by word
+  /// id, from the bundled asset DB.
+  static Future<
+      (
+        Map<String, Map<String, Object?>>,
+        Map<String, Map<String, Object?>>,
+      )> _readAssetText() async {
+    final Directory tempDir = await getTemporaryDirectory();
+    final File file = File(join(tempDir.path, 'luget_text.db'));
+    final ByteData data = await rootBundle.load('assets/$dbName');
+    await file.writeAsBytes(data.buffer.asUint8List(), flush: true);
+    final Database asset = await openDatabase(file.path, readOnly: true);
+    try {
+      return (
+        await _readTextColumns(asset, deAz, _deAzTextColumns),
+        await _readTextColumns(asset, azDe, _azDeTextColumns),
+      );
+    } finally {
+      await asset.close();
+      await file.delete();
+    }
+  }
+
+  static Future<Map<String, Map<String, Object?>>> _readTextColumns(
+    Database db,
+    String table,
+    List<String> columns,
+  ) async {
+    final List<Map<String, Object?>> rows = await db.query(
+      table,
+      columns: <String>[colId, ...columns],
+    );
+    return <String, Map<String, Object?>>{
+      for (final Map<String, Object?> row in rows)
+        if (row[colId] case final String id) id: row,
+    };
+  }
+
+  /// Brings the dictionary text of an existing install in line with the
+  /// bundled asset, so corrected spellings, articles and headwords reach
+  /// users without replacing the file.
+  ///
+  /// Bookmarks and unknown words keep their own copy of a word's key and
+  /// meaning, so the ones that point at a changed word are updated too.
+  @visibleForTesting
+  static Future<void> syncDictionaryText(
+    Database db,
+    Map<String, Map<String, Object?>> deAzRows,
+    Map<String, Map<String, Object?>> azDeRows,
+  ) =>
+      _syncDictionaryText(db, deAzRows, azDeRows);
+
+  static Future<void> _syncDictionaryText(
+    Database db,
+    Map<String, Map<String, Object?>> deAzRows,
+    Map<String, Map<String, Object?>> azDeRows,
+  ) async {
+    final Batch batch = db.batch();
+    await _queueTextChanges(batch, db, deAz, _deAzTextColumns, deAzRows);
+    await _queueTextChanges(
+      batch,
+      db,
+      azDe,
+      _azDeTextColumns,
+      azDeRows,
+      insertMissing: true,
+    );
+    await batch.commit(noResult: true);
+  }
+
+  /// Queues an update for every row of [table] whose [columns] differ from
+  /// [wantedRows], plus the saved copies of the words whose key or meaning
+  /// changed. With [insertMissing], rows the install does not have yet are
+  /// added as well.
+  static Future<void> _queueTextChanges(
+    Batch batch,
+    Database db,
+    String table,
+    List<String> columns,
+    Map<String, Map<String, Object?>> wantedRows, {
+    bool insertMissing = false,
+  }) async {
+    final List<Map<String, Object?>> current = await db.query(
+      table,
+      columns: <String>[colId, ...columns],
+    );
+    for (final Map<String, Object?> row in current) {
+      final Map<String, Object?>? wanted = wantedRows[row[colId]];
+      if (wanted == null) continue;
+      final Map<String, Object?> changes = <String, Object?>{
+        for (final String column in columns)
+          if (row[column] != wanted[column]) column: wanted[column],
+      };
+      if (changes.isEmpty) continue;
+      batch.update(
+        table,
+        changes,
+        where: '$colId = ?',
+        whereArgs: <Object?>[row[colId]],
+      );
+      if (changes.containsKey(colKey) || changes.containsKey(colValue)) {
+        _updateSavedWords(
+          batch,
+          values: <String, Object?>{
+            colKey: wanted[colKey],
+            colValue: wanted[colValue],
+            'word_id': row[colId],
+          },
+          where: '$colType = ? AND (word_id = ? OR '
+              '(word_id IS NULL AND $colKey = ? AND $colValue = ?))',
+          whereArgs: <Object?>[
+            table,
+            row[colId],
+            row[colKey],
+            row[colValue],
+          ],
+        );
+      }
+    }
+    if (insertMissing) {
+      final Set<Object?> existing = <Object?>{
+        for (final Map<String, Object?> row in current) row[colId],
+      };
+      for (final MapEntry<String, Map<String, Object?>> entry
+          in wantedRows.entries) {
+        if (!existing.contains(entry.key)) batch.insert(table, entry.value);
+      }
+    }
+  }
+
+  /// Queues [values] for the matching rows of both tables that keep a copy
+  /// of a word. A row that would collide with an existing one is left alone.
+  static void _updateSavedWords(
+    Batch batch, {
+    required Map<String, Object?> values,
+    required String where,
+    required List<Object?> whereArgs,
+  }) {
+    for (final String table in <String>[bookmark, unknownWords]) {
+      batch.update(
+        table,
+        values,
+        where: where,
+        whereArgs: whereArgs,
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
     }
   }
 
@@ -393,6 +600,7 @@ class DBHelper implements WordLocalDataSource {
         superlative: isDeAz ? row[colSuperlative] as String? : null,
         example: isDeAz ? row[colExample] as String? : null,
         sentence: isDeAz ? row[colSentence] as String? : null,
+        translationPlurals: isDeAz ? null : row[colPlural] as String?,
       );
     }).toList();
   }
@@ -410,34 +618,82 @@ class DBHelper implements WordLocalDataSource {
 
   /// Returns all [Word]s from [deAz] that have the given CEFR [level].
   ///
-  /// The caller should shuffle the list when building a training session.
+  /// Rows come back in insertion order, which keeps the list stable so a
+  /// caller can apply a reproducible shuffle on top of it.
   static Future<List<Word>> getWordsByLevel(String level) async {
     final List<Map<String, Object?>> result = await _db!.query(
       deAz,
       where: '$colLevel = ?',
       whereArgs: <Object?>[level],
+      orderBy: 'rowid',
     );
-    return result
-        .map((Map<String, Object?> row) => Word(
-              id: row[colId] as String?,
-              key: row[colKey] as String? ?? '',
-              value: row[colValue] as String? ?? '',
-              dicType: deAz,
-              article: row[colArticle] as String?,
-              gender: row[colGender] as String?,
-              mainType: row[colMainType] as String?,
-              subType: row[colSubType] as String?,
-              genitive: row[colGenitive] as String?,
-              plural: row[colPlural] as String?,
-              imperfekt: row[colImperfekt] as String?,
-              perfekt: row[colPerfekt] as String?,
-              comparative: row[colComparative] as String?,
-              superlative: row[colSuperlative] as String?,
-              example: row[colExample] as String?,
-              sentence: row[colSentence] as String?,
-            ))
-        .toList();
+    return result.map(_wordFromRow).toList();
   }
+
+  static Map<String, List<String>>? _topicWordIds;
+
+  static Future<Map<String, List<String>>> _loadTopicWordIds() async =>
+      _topicWordIds ??= <String, List<String>>{
+        for (final MapEntry<String, dynamic> entry
+            in (jsonDecode(await rootBundle.loadString(topicsAsset))
+                    as Map<String, dynamic>)
+                .entries)
+          entry.key: List<String>.from(entry.value as List<dynamic>),
+      };
+
+  /// Returns the number of words in the training [topic].
+  static Future<int> getWordCountByTopic(String topic) async =>
+      (await _loadTopicWordIds())[topic]?.length ?? 0;
+
+  /// Returns the words of the training [topic] grouped by CEFR level, easiest
+  /// level first. Within a level the words keep their insertion order, so a
+  /// caller can apply a reproducible shuffle per level.
+  static Future<Map<String, List<Word>>> getWordsByTopic(String topic) async {
+    final List<String> ids = (await _loadTopicWordIds())[topic] ?? <String>[];
+    final Map<String, List<Word>> byLevel = <String, List<Word>>{};
+    for (int start = 0; start < ids.length; start += _idsPerQuery) {
+      final List<String> chunk = ids.sublist(
+        start,
+        (start + _idsPerQuery).clamp(0, ids.length),
+      );
+      final String placeholders =
+          List<String>.filled(chunk.length, '?').join(',');
+      final List<Map<String, Object?>> rows = await _db!.query(
+        deAz,
+        where: '$colId IN ($placeholders)',
+        whereArgs: chunk,
+        orderBy: 'rowid',
+      );
+      for (final Map<String, Object?> row in rows) {
+        byLevel
+            .putIfAbsent(row[colLevel] as String? ?? '', () => <Word>[])
+            .add(_wordFromRow(row));
+      }
+    }
+    return <String, List<Word>>{
+      for (final String level in trainingLevels)
+        if (byLevel[level] case final List<Word> words) level: words,
+    };
+  }
+
+  static Word _wordFromRow(Map<String, Object?> row) => Word(
+        id: row[colId] as String?,
+        key: row[colKey] as String? ?? '',
+        value: row[colValue] as String? ?? '',
+        dicType: deAz,
+        article: row[colArticle] as String?,
+        gender: row[colGender] as String?,
+        mainType: row[colMainType] as String?,
+        subType: row[colSubType] as String?,
+        genitive: row[colGenitive] as String?,
+        plural: row[colPlural] as String?,
+        imperfekt: row[colImperfekt] as String?,
+        perfekt: row[colPerfekt] as String?,
+        comparative: row[colComparative] as String?,
+        superlative: row[colSuperlative] as String?,
+        example: row[colExample] as String?,
+        sentence: row[colSentence] as String?,
+      );
 
   /// Returns the full [Word] from the dictionary table for an exact key match.
   ///
@@ -470,6 +726,7 @@ class DBHelper implements WordLocalDataSource {
       superlative: isDeAz ? row[colSuperlative] as String? : null,
       example: isDeAz ? row[colExample] as String? : null,
       sentence: isDeAz ? row[colSentence] as String? : null,
+      translationPlurals: isDeAz ? null : row[colPlural] as String?,
     );
   }
 

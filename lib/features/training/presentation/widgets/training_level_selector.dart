@@ -42,6 +42,25 @@ Color _levelBg(String level, AppColors colors, bool isDark) {
   }
 }
 
+/// Display name of a deck: the level itself, or the localized topic name.
+String _deckTitle(String deck) =>
+    isTopicDeck(deck) ? 'training.topics.${topicOfDeck(deck)}'.tr() : deck;
+
+IconData _topicIcon(String topic) => switch (topic) {
+      'food_drink' => Icons.restaurant_rounded,
+      'family_relationships' => Icons.family_restroom_rounded,
+      'animals' => Icons.pets_rounded,
+      'plants_nature' => Icons.local_florist_rounded,
+      'body_health' => Icons.favorite_rounded,
+      'clothes' => Icons.checkroom_rounded,
+      'house_home' => Icons.home_rounded,
+      'travel_transport' => Icons.directions_bus_rounded,
+      'time_weather' => Icons.wb_sunny_rounded,
+      'numbers_quantities' => Icons.pin_rounded,
+      'shopping_money' => Icons.shopping_cart_rounded,
+      _ => Icons.category_rounded,
+    };
+
 // ── Level cards grid ──────────────────────────────────────────────────────
 
 class _LevelCardsGrid extends StatelessWidget {
@@ -54,13 +73,36 @@ class _LevelCardsGrid extends StatelessWidget {
     final TrainingCubit cubit = context.watch<TrainingCubit>();
     return AppFilledCardList(
       children: <Widget>[
+        _SectionTitle(title: 'training.levels_title'.tr()),
         for (final String level in trainingLevels)
           _LevelCard(level: level, cubit: cubit),
+        _SectionTitle(title: 'training.topics_title'.tr()),
+        for (final String topic in trainingTopics)
+          _LevelCard(level: topicDeck(topic), cubit: cubit),
       ],
     );
   }
 }
 
+class _SectionTitle extends StatelessWidget {
+  final String title;
+
+  const _SectionTitle({required this.title});
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(top: Dimensions.padding8),
+        child: Text(
+          title,
+          style: AppTextStyles.titleMedium(
+            AppColors.of(context).textSecondary,
+          ),
+        ),
+      );
+}
+
+/// A card for one deck: a CEFR level or, when [level] is a topic deck key, a
+/// topic.
 class _LevelCard extends StatelessWidget {
   final String level;
   final TrainingCubit cubit;
@@ -108,7 +150,7 @@ class _LevelInfo extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(level, style: AppTextStyles.titleLarge(primary)),
+        Text(_deckTitle(level), style: AppTextStyles.titleLarge(primary)),
         if (total > 0)
           Text(
             '$saved / $total',
@@ -125,16 +167,25 @@ class _LevelWatermark extends StatelessWidget {
   const _LevelWatermark({required this.level});
 
   @override
-  Widget build(BuildContext context) => Text(
-        level,
-        style: AppTextStyles.headlineLarge(
-          AppColors.of(context).primary.withValues(alpha: 0.08),
-        ).copyWith(
-          fontSize: Dimensions.itemHeight88,
-          fontWeight: FontWeight.w900,
-          height: 1,
-        ),
+  Widget build(BuildContext context) {
+    if (isTopicDeck(level)) {
+      return Icon(
+        _topicIcon(topicOfDeck(level)),
+        size: Dimensions.itemHeight88,
+        color: AppColors.of(context).primary.withValues(alpha: 0.08),
       );
+    }
+    return Text(
+      level,
+      style: AppTextStyles.headlineLarge(
+        AppColors.of(context).primary.withValues(alpha: 0.08),
+      ).copyWith(
+        fontSize: Dimensions.itemHeight88,
+        fontWeight: FontWeight.w900,
+        height: 1,
+      ),
+    );
+  }
 }
 
 class _CircularLevelProgress extends StatelessWidget {
@@ -181,7 +232,11 @@ class _LevelBackBar extends StatelessWidget {
   Widget build(BuildContext context) => AppBackBar(
         onBack: () => context.read<TrainingCubit>().backToLevels(),
         leading: level == null ? null : _LevelBadge(level: level!),
-        label: level == null ? null : 'training.level'.tr(),
+        label: switch (level) {
+          null => null,
+          final String deck when isTopicDeck(deck) => _deckTitle(deck),
+          _ => 'training.level'.tr(),
+        },
       );
 }
 
@@ -196,6 +251,13 @@ class _LevelBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppColors colors = AppColors.of(context);
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    if (isTopicDeck(level)) {
+      return Icon(
+        _topicIcon(topicOfDeck(level)),
+        size: Dimensions.itemHeight26,
+        color: colors.primary,
+      );
+    }
     return Container(
       width: Dimensions.itemWidth40,
       height: Dimensions.itemHeight26,

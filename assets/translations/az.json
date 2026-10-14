@@ -288,6 +288,21 @@
   "training": {
     "title": "Söz Məşqi",
     "level": "Səviyyə",
+    "levels_title": "Səviyyələr",
+    "topics_title": "Gündəlik mövzular",
+    "topics": {
+      "food_drink": "Yemək və içki",
+      "family_relationships": "Ailə və münasibətlər",
+      "animals": "Heyvanlar",
+      "plants_nature": "Bitkilər və təbiət",
+      "body_health": "Bədən və sağlamlıq",
+      "clothes": "Geyim",
+      "house_home": "Ev və məişət",
+      "travel_transport": "Səyahət və nəqliyyat",
+      "time_weather": "Vaxt və hava",
+      "numbers_quantities": "Rəqəmlər və miqdar",
+      "shopping_money": "Alış-veriş və pul"
+    },
     "word_count": "{} / {}",
     "no_words": "Bu səviyyə üçün söz tapılmadı",
     "empty_title": "Səviyyəni seçin",

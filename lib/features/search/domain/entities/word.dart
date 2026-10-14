@@ -23,6 +23,7 @@ class Word extends Equatable {
     this.superlative,
     this.example,
     this.sentence,
+    this.translationPlurals,
   });
 
   /// The word's primary key in the dictionary SQLite table.
@@ -75,6 +76,28 @@ class Word extends Equatable {
   /// Full example sentence(s).
   final String? sentence;
 
+  // ── AzDe-only field ───────────────────────────────────────────────────────
+
+  /// Plurals of the German translations in [value], one numbered line per
+  /// translation (`1. die Bücher`); a line with only its number means that
+  /// translation has no plural. Use [translationPluralAt] to read it.
+  final String? translationPlurals;
+
+  /// Returns the plural of the translation at the zero-based [index] of
+  /// [value], or `null` when that translation has none.
+  String? translationPluralAt(int index) {
+    final String? raw = translationPlurals;
+    if (raw == null) return null;
+    final String prefix = '${index + 1}.';
+    for (final String line in raw.split('\n')) {
+      final String trimmed = line.trim();
+      if (!trimmed.startsWith(prefix)) continue;
+      final String plural = trimmed.substring(prefix.length).trim();
+      return plural.isEmpty ? null : plural;
+    }
+    return null;
+  }
+
   /// Whether this entry has any grammatical detail beyond key/value.
   bool get hasRichData =>
       article != null ||
@@ -116,5 +139,6 @@ class Word extends Equatable {
         superlative,
         example,
         sentence,
+        translationPlurals,
       ];
 }

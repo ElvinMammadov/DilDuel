@@ -89,4 +89,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/luget.db
+    - assets/training_topics.json
     - assets/translations/

@@ -288,6 +288,21 @@
   "training": {
     "title": "Wortübung",
     "level": "Niveau",
+    "levels_title": "Niveaus",
+    "topics_title": "Alltagsthemen",
+    "topics": {
+      "food_drink": "Essen & Trinken",
+      "family_relationships": "Familie & Beziehungen",
+      "animals": "Tiere",
+      "plants_nature": "Pflanzen & Natur",
+      "body_health": "Körper & Gesundheit",
+      "clothes": "Kleidung",
+      "house_home": "Haus & Zuhause",
+      "travel_transport": "Reisen & Verkehr",
+      "time_weather": "Zeit & Wetter",
+      "numbers_quantities": "Zahlen & Mengen",
+      "shopping_money": "Einkaufen & Geld"
+    },
     "word_count": "{} / {}",
     "no_words": "Keine Wörter für dieses Niveau gefunden",
     "empty_title": "Niveau auswählen",

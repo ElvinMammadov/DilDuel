@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dic/core/components/app_card.dart';
+import 'package:flutter_dic/core/components/app_close_button.dart';
 import 'package:flutter_dic/core/components/app_snackbar.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
@@ -210,22 +211,39 @@ class _WordBottomSheetState extends State<WordBottomSheet>
       ),
       child: Column(
         children: <Widget>[
-          // ── Drag handle ──────────────────────────────────────
-          const SizedBox(height: Dimensions.padding12),
-          Center(
-            child: SizedBox(
-              width: Dimensions.itemWidth40,
-              height: Dimensions.itemHeight4,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: colors.border,
-                  borderRadius:
-                      BorderRadius.circular(Dimensions.borderRadiusPill),
+          // ── Drag handle + close button ───────────────────────
+          SizedBox(
+            height: Dimensions.itemHeight56,
+            child: Stack(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: Dimensions.padding12),
+                    child: SizedBox(
+                      width: Dimensions.itemWidth40,
+                      height: Dimensions.itemHeight4,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: colors.border,
+                          borderRadius: BorderRadius.circular(
+                            Dimensions.borderRadiusPill,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  top: Dimensions.padding8,
+                  right: Dimensions.padding16,
+                  child: AppCloseButton(
+                    onTap: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: Dimensions.padding16),
 
           // ── Scrollable content ───────────────────────────────
           Expanded(
@@ -418,7 +436,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
     return m != null ? s.substring(m.end).trim() : s.trim();
   }
 
-  List<(String?, String?, String)> _parseAzDeRows(Word w) {
+  List<(String?, String?, String?, String)> _parseAzDeRows(Word w) {
     final bool isAz = context.locale.languageCode == 'az';
 
     List<String> split(String? raw) => raw == null
@@ -433,7 +451,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
     final List<String> types = split(w.mainType).map(_stripNum).toList();
     final List<String> subtypes = split(w.subType).map(_stripNum).toList();
 
-    return List<(String?, String?, String)>.generate(
+    return List<(String?, String?, String?, String)>.generate(
       translations.length,
       (int i) {
         final String translation = _stripNum(translations[i]);
@@ -451,7 +469,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
             : isAz
                 ? GrammarTypeTranslator.subType(rawSubtype)
                 : rawSubtype;
-        return (type, subtype, translation);
+        return (type, subtype, w.translationPluralAt(i), translation);
       },
     );
   }
@@ -557,7 +575,7 @@ class _AzDeTranslationCard extends StatelessWidget {
     required this.onSpeak,
   });
 
-  final List<(String?, String?, String)> rows;
+  final List<(String?, String?, String?, String)> rows;
   final Color cardBg;
   final ValueChanged<String> onSpeak;
 
@@ -571,10 +589,15 @@ class _AzDeTranslationCard extends StatelessWidget {
         width: double.infinity,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: rows.indexed.map(((int, (String?, String?, String)) e) {
+          children:
+              rows.indexed.map(((int, (String?, String?, String?, String)) e) {
             final int i = e.$1;
-            final (String? mainType, String? subType, String translation) =
-                e.$2;
+            final (
+              String? mainType,
+              String? subType,
+              String? plural,
+              String translation,
+            ) = e.$2;
             final bool hasType = (mainType != null && mainType.isNotEmpty) ||
                 (subType != null && subType.isNotEmpty);
             return Column(
@@ -630,6 +653,15 @@ class _AzDeTranslationCard extends StatelessWidget {
                                 colors.textPrimary,
                               ),
                             ),
+                            if (plural != null) ...<Widget>[
+                              const SizedBox(height: Dimensions.itemHeight2),
+                              Text(
+                                '${'word.plural'.tr()}: $plural',
+                                style: AppTextStyles.bodySmall(
+                                  colors.textSecondary,
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),

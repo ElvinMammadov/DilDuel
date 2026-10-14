@@ -16,7 +16,7 @@ OUT = "docs"
 LANGS = ["en", "de", "az"]
 LANG_LABEL = {"en": "EN", "de": "DE", "az": "AZ"}
 LANG_NAME = {"en": "English", "de": "Deutsch", "az": "Azərbaycan"}
-UPDATED = {"en": "October 12, 2026", "de": "12. Oktober 2026", "az": "12 oktyabr 2026"}
+UPDATED = {"en": "October 14, 2026", "de": "14. Oktober 2026", "az": "14 oktyabr 2026"}
 
 # Set to False once the app bundles its fonts instead of loading Google Fonts.
 APP_LOADS_GOOGLE_FONTS = True
@@ -168,7 +168,7 @@ PRIVACY = {
                 ("p", "We also store a user ID that Firebase assigns to your account. Purpose: creating and managing your account and recognising you when you sign in. Legal basis: Art. 6(1)(b) GDPR (performance of the contract for the use of the app)."),
             ]),
             ("Cloud synchronisation", [
-                ("p", "While you are signed in, the following data is stored in the cloud database Cloud Firestore (Google) so that you can use it on several devices: your email address, bookmarked words, words marked as unknown, training progress per level, and quiz and listening results. Legal basis: Art. 6(1)(b) GDPR."),
+                ("p", "While you are signed in, the following data is stored in the cloud database Cloud Firestore (Google) so that you can use it on several devices: your email address, bookmarked words, words marked as unknown, training progress per level and topic, and quiz and listening results. Legal basis: Art. 6(1)(b) GDPR."),
                 ("p", "If you already have data on your device when you sign in, the app asks whether you want to keep it (it is then merged into your account) or discard it."),
             ]),
             ("Technical data", [
@@ -257,7 +257,7 @@ PRIVACY = {
                 ("p", "Außerdem speichern wir eine Nutzer-ID, die Firebase Ihrem Konto zuweist. Zweck: Anlegen und Verwalten Ihres Kontos und Wiedererkennung bei der Anmeldung. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung für die Nutzung der App)."),
             ]),
             ("Cloud-Synchronisierung", [
-                ("p", "Solange Sie angemeldet sind, werden folgende Daten in der Cloud-Datenbank Cloud Firestore (Google) gespeichert, damit Sie sie auf mehreren Geräten nutzen können: Ihre E-Mail-Adresse, Lesezeichen, als unbekannt markierte Wörter, Trainingsfortschritt je Niveau sowie Quiz- und Hörergebnisse. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO."),
+                ("p", "Solange Sie angemeldet sind, werden folgende Daten in der Cloud-Datenbank Cloud Firestore (Google) gespeichert, damit Sie sie auf mehreren Geräten nutzen können: Ihre E-Mail-Adresse, Lesezeichen, als unbekannt markierte Wörter, Trainingsfortschritt je Niveau und Thema sowie Quiz- und Hörergebnisse. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO."),
                 ("p", "Wenn sich beim Anmelden bereits Daten auf Ihrem Gerät befinden, fragt die App, ob Sie diese behalten (sie werden dann in Ihr Konto übernommen) oder verwerfen möchten."),
             ]),
             ("Technische Daten", [
@@ -346,7 +346,7 @@ PRIVACY = {
                 ("p", "Bundan əlavə, Firebase-in hesabınıza təyin etdiyi istifadəçi identifikatorunu saxlayırıq. Məqsəd: hesabınızı yaratmaq və idarə etmək, girişdə sizi tanımaq. Hüquqi əsas: GDPR maddə 6(1)(b) (tətbiqdən istifadə üzrə müqavilənin icrası)."),
             ]),
             ("Bulud sinxronizasiyası", [
-                ("p", "Daxil olduğunuz müddətdə aşağıdakı məlumatlar bir neçə cihazda istifadə edə bilməyiniz üçün Cloud Firestore (Google) bulud verilənlər bazasında saxlanılır: e-poçt ünvanınız, seçilmiş sözlər, bilinməyən kimi qeyd olunan sözlər, səviyyələr üzrə məşq irəliləyişi, test və dinləmə nəticələri. Hüquqi əsas: GDPR maddə 6(1)(b)."),
+                ("p", "Daxil olduğunuz müddətdə aşağıdakı məlumatlar bir neçə cihazda istifadə edə bilməyiniz üçün Cloud Firestore (Google) bulud verilənlər bazasında saxlanılır: e-poçt ünvanınız, seçilmiş sözlər, bilinməyən kimi qeyd olunan sözlər, səviyyələr və mövzular üzrə məşq irəliləyişi, test və dinləmə nəticələri. Hüquqi əsas: GDPR maddə 6(1)(b)."),
                 ("p", "Daxil olarkən cihazınızda artıq məlumat varsa, tətbiq onları saxlamaq (hesabınıza birləşdirilir) və ya ləğv etmək istədiyinizi soruşur."),
             ]),
             ("Texniki məlumatlar", [

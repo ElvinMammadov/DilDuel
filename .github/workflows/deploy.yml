@@ -126,6 +126,11 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Decrypt dictionary database
+        env:
+          LUGET_DB_PASSPHRASE: ${{ secrets.LUGET_DB_PASSPHRASE }}
+        run: scripts/luget_db.sh decrypt
+
       - name: Restore google-services.json
         run: |
           echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" \
@@ -186,6 +191,11 @@ jobs:
           flutter-version: "3.35.7"
           channel: stable
           cache: true
+
+      - name: Decrypt dictionary database
+        env:
+          LUGET_DB_PASSPHRASE: ${{ secrets.LUGET_DB_PASSPHRASE }}
+        run: scripts/luget_db.sh decrypt
 
       - name: Restore GoogleService-Info.plist
         run: |

@@ -33,8 +33,10 @@ on the device. Only the ad SDK talks to a third party for them.
 | Coarse location | Yes | No | Third-party advertising, analytics | AdMob (derived from the IP address) |
 | Crash data, performance data, other diagnostic data | No | No | Analytics, third-party advertising | AdMob |
 
-The app's own manifest declares the first four rows and tracking; the ad SDK
-declares the rest in its own manifest.
+The app's own manifest declares the first four rows; the ad SDK declares the
+rest in its own manifest, including the Device ID tracking. The app manifest
+keeps `NSPrivacyTracking` false and has no `NSPrivacyTrackingDomains`: Apple
+rejects `true` with an empty domain list (ITMS-91064, TN3181).
 
 ## Other questions
 

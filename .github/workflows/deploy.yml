@@ -281,10 +281,10 @@ jobs:
                   tracking = manifest.get('NSPrivacyTracking', False)
                   domains = manifest.get('NSPrivacyTrackingDomains', [])
                   print(f'{name}: tracking={tracking} domains={domains}')
-                  if domains and not tracking:
+                  if bool(domains) != bool(tracking):
                       invalid.append(name)
           if invalid:
-              print('ITMS-91064: domains listed but NSPrivacyTracking is false:')
+              print('ITMS-91064: NSPrivacyTracking and domains disagree:')
               print('\n'.join(invalid))
               sys.exit(1)
           PYTHON

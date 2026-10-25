@@ -26,6 +26,16 @@ class AuthAuthenticated extends AuthState {
   List<Object?> get props => <Object?>[user];
 }
 
+/// A signed-in session was restored at launch and its cloud data is still
+/// being merged. The UI treats it as signed in; [AuthAuthenticated] follows
+/// once the merge is done so data listeners reload from the merged database.
+class AuthSessionRestoring extends AuthState {
+  const AuthSessionRestoring(this.user);
+  final AuthUser user;
+  @override
+  List<Object?> get props => <Object?>[user];
+}
+
 /// No user is signed in — guest / local-only mode.
 class AuthUnauthenticated extends AuthState {
   const AuthUnauthenticated();

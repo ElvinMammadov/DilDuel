@@ -78,6 +78,9 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthGuestDataDecision(user));
       return;
     }
+    // The sync can take seconds; show the restored account meanwhile
+    // instead of guest mode.
+    if (ownsLocalData) emit(AuthSessionRestoring(user));
     await _completeSignIn(user);
   }
 

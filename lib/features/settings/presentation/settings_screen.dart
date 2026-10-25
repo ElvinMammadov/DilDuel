@@ -42,7 +42,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _openFeedback() {
     final AuthState authState = context.read<AuthCubit>().state;
     final String name = switch (authState) {
-      AuthAuthenticated(:final AuthUser user) => user.displayName ?? '',
+      AuthAuthenticated(:final AuthUser user) ||
+      AuthSessionRestoring(:final AuthUser user) =>
+        user.displayName ?? '',
       _ => '',
     };
     FeedbackBottomSheet.show(context, initialName: name);
@@ -207,12 +209,14 @@ class _ProfileCard extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (BuildContext context, AuthState authState) {
         final AuthUser? user = switch (authState) {
-          AuthAuthenticated(:final AuthUser user) => user,
+          AuthAuthenticated(:final AuthUser user) ||
+          AuthSessionRestoring(:final AuthUser user) =>
+            user,
           _ => null,
         };
-        final bool isSignedIn = authState is AuthAuthenticated;
+        final bool isSignedIn = user != null;
         final String? subtitle = isSignedIn
-            ? user?.visibleEmail
+            ? user.visibleEmail
             : 'settings.profile.guest_hint'.tr();
 
         return AppCard(
@@ -238,7 +242,7 @@ class _ProfileCard extends StatelessWidget {
                 const SizedBox(height: Dimensions.itemHeight10),
                 Text(
                   isSignedIn
-                      ? user?.displayName ?? 'settings.profile.title'.tr()
+                      ? user.displayName ?? 'settings.profile.title'.tr()
                       : 'settings.profile.guest'.tr(),
                   style: AppTextStyles.titleMedium(colors.textPrimary),
                 ),
@@ -272,7 +276,8 @@ class _AccountActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocBuilder<AuthCubit, AuthState>(
     builder: (BuildContext context, AuthState authState) {
-      if (authState is! AuthAuthenticated) {
+      if (authState is! AuthAuthenticated &&
+          authState is! AuthSessionRestoring) {
         return const SizedBox.shrink();
       }
       final AppColors colors = AppColors.of(context);

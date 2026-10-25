@@ -268,6 +268,27 @@ jobs:
             --build-number=${{ needs.prepare.outputs.build_number }} \
             --export-options-plist=ios/ExportOptions.plist
 
+      - name: Check privacy manifests in IPA
+        run: |
+          python3 - "$(find build/ios/ipa -name '*.ipa' | head -1)" << 'PYTHON'
+          import plistlib, sys, zipfile
+          invalid = []
+          with zipfile.ZipFile(sys.argv[1]) as ipa:
+              for name in ipa.namelist():
+                  if not name.endswith('PrivacyInfo.xcprivacy'):
+                      continue
+                  manifest = plistlib.loads(ipa.read(name))
+                  tracking = manifest.get('NSPrivacyTracking', False)
+                  domains = manifest.get('NSPrivacyTrackingDomains', [])
+                  print(f'{name}: tracking={tracking} domains={domains}')
+                  if domains and not tracking:
+                      invalid.append(name)
+          if invalid:
+              print('ITMS-91064: domains listed but NSPrivacyTracking is false:')
+              print('\n'.join(invalid))
+              sys.exit(1)
+          PYTHON
+
       - name: Decode App Store Connect API key
         run: |
           mkdir -p ~/.private_keys

@@ -168,11 +168,18 @@ jobs:
             --target=lib/mains/prod/main.dart \
             --build-number=${{ needs.prepare.outputs.build_number }}
 
+      - name: Read version name from pubspec.yaml
+        id: version
+        run: |
+          version=$(sed -n 's/^version: *\([^+ ]*\).*/\1/p' pubspec.yaml)
+          echo "name=$version" >> "$GITHUB_OUTPUT"
+
       - name: Upload to Google Play (internal track)
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.Dictionary
+          releaseName: ${{ steps.version.outputs.name }}
           releaseFiles: build/app/outputs/bundle/release/*.aab
           tracks: internal
           status: completed

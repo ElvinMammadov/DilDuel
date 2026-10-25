@@ -16,7 +16,7 @@
     "light": "Hell",
     "dark": "Dunkel",
     "system": "System",
-    "version": "Version {0}",
+    "version": "Version {}",
     "sign_in": "Anmelden",
     "profile": {
       "title": "Profil",

@@ -171,7 +171,6 @@ jobs:
           releaseFiles: build/app/outputs/bundle/release/*.aab
           tracks: internal
           status: completed
-          changesNotSentForReview: true
 
   # ─── iOS ──────────────────────────────────────────────────────────────────
   build-ios:

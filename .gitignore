@@ -65,3 +65,9 @@ ios/Runner/GoogleService-Info.plist
 # (see scripts/luget_db.sh)
 assets/luget.db
 java_dic/app/src/main/assets/luget.db
+
+# Local build output and machine-specific files
+.gradle/
+local.properties
+hs_err_pid*.log
+replay_pid*.log

@@ -21,6 +21,7 @@ import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/core/utils/legal_links.dart';
+import 'package:flutter_dic/core/utils/rebuild_all_elements.dart';
 import 'package:flutter_dic/features/auth/auth.dart';
 import 'package:flutter_dic/features/widgets/app_bar.dart';
 import 'package:injectable/injectable.dart';

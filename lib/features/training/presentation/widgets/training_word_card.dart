@@ -120,7 +120,7 @@ class _CardContentState extends State<_CardContent>
 
   Future<void> _toggleBookmark(BuildContext context) async {
     final BookmarkRepository repo = sl<BookmarkRepository>();
-    final String label = _bareWord(widget.word.key, widget.word.article);
+    final String label = bareWord(widget.word);
     if (_isBookmarked) {
       await repo.removeBookmark(widget.word);
       if (!context.mounted) return;
@@ -146,7 +146,7 @@ class _CardContentState extends State<_CardContent>
 
   Future<void> _toggleUnknown(BuildContext context) async {
     final BookmarkRepository repo = sl<BookmarkRepository>();
-    final String label = _bareWord(widget.word.key, widget.word.article);
+    final String label = bareWord(widget.word);
     if (_isUnknown) {
       await repo.removeUnknownWord(widget.word);
       if (!context.mounted) return;
@@ -191,12 +191,6 @@ class _CardContentState extends State<_CardContent>
     return r;
   }
 
-  String _bareWord(String key, String? article) {
-    if (article == null || article.isEmpty) return key;
-    final String prefix = '$article ';
-    return key.startsWith(prefix) ? key.substring(prefix.length) : key;
-  }
-
   String _typeLabel(BuildContext context) {
     final bool isAz = context.locale.languageCode == 'az';
     final StringBuffer b = StringBuffer();
@@ -212,7 +206,7 @@ class _CardContentState extends State<_CardContent>
     if (_ok(widget.word.gender)) {
       b.write(' · ');
       final String raw = widget.word.gender!;
-      b.write(raw);
+      b.write(GrammarTypeTranslator.germanGender(raw));
       if (isAz) {
         final String az = GrammarTypeTranslator.gender(raw);
         if (az != raw) b.write(' ($az)');
@@ -288,7 +282,7 @@ class _CardContentState extends State<_CardContent>
                     ],
                     // German word
                     Text(
-                      _bareWord(widget.word.key, widget.word.article),
+                      bareWord(widget.word),
                       style: AppTextStyles.wordSource(textPrimary, size: 26),
                     ),
                     // Grammar type

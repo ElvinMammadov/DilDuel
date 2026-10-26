@@ -8,7 +8,11 @@ import 'package:google_fonts/google_fonts.dart';
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
-  Future<void> showSnackbar(WidgetTester tester, {String? subtitle}) async {
+  Future<void> showSnackbar(
+    WidgetTester tester, {
+    String? subtitle,
+    SnackbarAction? action,
+  }) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppTheme.lightTheme,
@@ -21,6 +25,7 @@ void main() {
                   type: SnackbarType.success,
                   title: 'Title',
                   subtitle: subtitle,
+                  action: action,
                 ),
                 child: const Text('open'),
               ),
@@ -59,5 +64,21 @@ void main() {
 
     AppSnackbar.dismiss();
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('tapping the action runs it and dismisses the snackbar', (
+    WidgetTester tester,
+  ) async {
+    int pressed = 0;
+    await showSnackbar(
+      tester,
+      action: SnackbarAction(label: 'Undo', onPressed: () => pressed++),
+    );
+
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+
+    check(pressed).equals(1);
+    check(find.text('Title').evaluate()).isEmpty();
   });
 }

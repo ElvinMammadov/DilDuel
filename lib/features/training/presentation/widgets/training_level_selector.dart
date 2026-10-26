@@ -120,7 +120,7 @@ class _LevelCard extends StatelessWidget {
       child: Row(
         children: <Widget>[
           if (total > 0) ...<Widget>[
-            _CircularLevelProgress(value: (saved + 1) / total),
+            _CircularLevelProgress(value: saved / total),
             const SizedBox(width: Dimensions.padding16),
           ],
           Expanded(

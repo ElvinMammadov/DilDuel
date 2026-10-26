@@ -20,11 +20,14 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
     }
   }
 
-  void _apply() {
-    final OverlayState? overlay = Navigator.of(context).overlay;
+  Future<void> _apply() async {
+    final NavigatorState navigator = Navigator.of(context);
+    final OverlayState? overlay = navigator.overlay;
     final String selected = _selectedLanguage;
-    context.setLocale(Locale(selected));
-    Navigator.pop(context);
+    // The snackbar below must be translated after the new language is loaded.
+    await context.setLocale(Locale(selected));
+    rebuildAllElements();
+    if (mounted) navigator.pop();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (overlay != null && overlay.mounted) {
         final String langName = selected == 'az'

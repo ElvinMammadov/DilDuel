@@ -107,6 +107,8 @@ class _BookmarksTab extends StatelessWidget {
           }
           if (state is BookmarksLoaded) {
             final AppColors colors = AppColors.of(context);
+            // Read before the rows are built: the undo action outlives its row.
+            final BookmarksBloc bloc = context.read<BookmarksBloc>();
 
             if (state.bookmarks.isEmpty) {
               return EmptyStateView(
@@ -130,21 +132,15 @@ class _BookmarksTab extends StatelessWidget {
                 return _BookmarkItem(
                   word: word,
                   onRemoveWithUndo: () {
-                    final String? article = word.article;
-                    final String bare =
-                        article != null && word.key.startsWith('$article ')
-                            ? word.key.substring(article.length + 1)
-                            : word.key;
-                    context.read<BookmarksBloc>().removeBookmark(word);
+                    bloc.removeBookmark(word);
                     AppSnackbar.show(
                       context,
                       type: SnackbarType.info,
-                      title: bare,
+                      title: bareWord(word),
                       subtitle: 'bookmarks.removed'.tr(),
                       action: SnackbarAction(
                         label: 'bookmarks.undo'.tr(),
-                        onPressed: () =>
-                            context.read<BookmarksBloc>().addBookmark(word),
+                        onPressed: () => bloc.addBookmark(word),
                       ),
                     );
                   },
@@ -174,6 +170,8 @@ class _UnknownTab extends StatelessWidget {
           }
           if (state is BookmarksLoaded) {
             final AppColors colors = AppColors.of(context);
+            // Read before the rows are built: the undo action outlives its row.
+            final BookmarksBloc bloc = context.read<BookmarksBloc>();
 
             if (state.unknownWords.isEmpty) {
               return EmptyStateView(
@@ -197,21 +195,15 @@ class _UnknownTab extends StatelessWidget {
                 return _BookmarkItem(
                   word: word,
                   onRemoveWithUndo: () {
-                    final String? article = word.article;
-                    final String bare =
-                        article != null && word.key.startsWith('$article ')
-                            ? word.key.substring(article.length + 1)
-                            : word.key;
-                    context.read<BookmarksBloc>().removeUnknownWord(word);
+                    bloc.removeUnknownWord(word);
                     AppSnackbar.show(
                       context,
                       type: SnackbarType.info,
-                      title: bare,
+                      title: bareWord(word),
                       subtitle: 'bookmarks.unknown_removed'.tr(),
                       action: SnackbarAction(
                         label: 'bookmarks.undo'.tr(),
-                        onPressed: () =>
-                            context.read<BookmarksBloc>().addUnknownWord(word),
+                        onPressed: () => bloc.addUnknownWord(word),
                       ),
                     );
                   },

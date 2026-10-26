@@ -312,7 +312,11 @@ class _SnackbarCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: Dimensions.spacingSmall),
                 child: GestureDetector(
-                  onTap: action!.onPressed,
+                  onTap: () {
+                    // Dismiss first: the action may show a snackbar of its own.
+                    onDismissTap();
+                    action!.onPressed();
+                  },
                   child: Text(
                     action!.label,
                     style: AppTextStyles.labelMedium(iconColor),

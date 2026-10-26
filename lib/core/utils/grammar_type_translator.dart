@@ -61,20 +61,33 @@ class GrammarTypeTranslator {
 
   static const Map<String, String> _azGender = <String, String>{
     // English (as stored in the Word entity)
-    'Masculine': 'Kişi',
-    'Feminine': 'Qadın',
-    'Neuter': 'Orta cins',
+    'Masculine': 'kişi cinsi',
+    'Feminine': 'qadın cinsi',
+    'Neuter': 'orta cins',
     // German variants
-    'Maskulinum': 'Kişi',
-    'Femininum': 'Qadın',
-    'Neutrum': 'Orta cins',
-    'maskulin': 'Kişi',
-    'feminin': 'Qadın',
-    'neutral': 'Orta cins',
-    'männlich': 'Kişi',
-    'weiblich': 'Qadın',
-    'sächlich': 'Orta cins',
+    'Maskulinum': 'kişi cinsi',
+    'Femininum': 'qadın cinsi',
+    'Neutrum': 'orta cins',
+    'maskulin': 'kişi cinsi',
+    'feminin': 'qadın cinsi',
+    'neutral': 'orta cins',
+    'männlich': 'kişi cinsi',
+    'weiblich': 'qadın cinsi',
+    'sächlich': 'orta cins',
   };
+
+  /// The dictionary stores the gender in English; the app shows it as the
+  /// German grammar term, like the other word-type labels.
+  static const Map<String, String> _deGender = <String, String>{
+    'Masculine': 'Maskulin',
+    'Feminine': 'Feminin',
+    'Neuter': 'Neutrum',
+  };
+
+  /// Returns the German grammar term for a stored [term] such as `Masculine`.
+  ///
+  /// Falls back to [term] unchanged when no mapping is found.
+  static String germanGender(String term) => _deGender[term.trim()] ?? term;
 
   /// Returns the Azerbaijani translation of [term] (grammatical gender).
   ///

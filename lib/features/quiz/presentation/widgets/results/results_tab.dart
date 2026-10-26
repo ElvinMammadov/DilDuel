@@ -38,7 +38,14 @@ class _ResultCard extends StatelessWidget {
   final QuizResult result;
   final int index;
 
-  const _ResultCard({required this.result, required this.index});
+  /// Translation key of the "#n" title: a quiz or a listening session.
+  final String numberKey;
+
+  const _ResultCard({
+    required this.result,
+    required this.index,
+    this.numberKey = 'quiz.results.quiz_number',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +53,10 @@ class _ResultCard extends StatelessWidget {
     final Color textPrimary = colors.textPrimary;
     final Color textSecondary = colors.textSecondary;
 
-    final String date = DateFormat('MMM d, y HH:mm').format(result.dateTime);
+    final String date = DateFormat(
+      'MMM d, y HH:mm',
+      context.locale.languageCode,
+    ).format(result.dateTime);
     final double percentageValue = (result.score / result.totalQuestions) * 100;
     final String percentage = percentageValue.toStringAsFixed(1);
 
@@ -70,8 +80,7 @@ class _ResultCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'quiz.results.quiz_number'
-                          .tr(args: <String>['${index + 1}']),
+                      numberKey.tr(args: <String>['${index + 1}']),
                       style: AppTextStyles.labelLarge(textPrimary),
                     ),
                     const SizedBox(height: Dimensions.itemHeight2),
@@ -127,6 +136,7 @@ class _ResultCard extends StatelessWidget {
       builder: (BuildContext context) => _AnswersBottomSheet(
         result: result,
         index: index,
+        numberKey: numberKey,
       ),
     );
   }
@@ -135,8 +145,13 @@ class _ResultCard extends StatelessWidget {
 class _AnswersBottomSheet extends StatelessWidget {
   final QuizResult result;
   final int index;
+  final String numberKey;
 
-  const _AnswersBottomSheet({required this.result, required this.index});
+  const _AnswersBottomSheet({
+    required this.result,
+    required this.index,
+    required this.numberKey,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -178,12 +193,12 @@ class _AnswersBottomSheet extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'quiz.results.quiz_number'
-                          .tr(args: <String>['${index + 1}']),
+                      numberKey.tr(args: <String>['${index + 1}']),
                       style: AppTextStyles.titleMedium(colors.textPrimary),
                     ),
                     Text(
-                      DateFormat('d MMM · HH:mm').format(result.dateTime),
+                      DateFormat('d MMM · HH:mm', context.locale.languageCode)
+                          .format(result.dateTime),
                       style: AppTextStyles.caption(colors.textSecondary),
                     ),
                   ],
@@ -682,7 +697,11 @@ class _ListeningResultsList extends StatelessWidget {
                         ? Dimensions.itemHeight8
                         : 0,
                   ),
-                  child: _ResultCard(result: results[index], index: index),
+                  child: _ResultCard(
+                    result: results[index],
+                    index: index,
+                    numberKey: 'listening.results.session_number',
+                  ),
                 ),
               ),
             );

@@ -17,11 +17,13 @@ import 'package:flutter_dic/features/home/home.dart';
 import 'package:flutter_dic/features/quiz/quiz.dart';
 import 'package:flutter_dic/features/settings/settings.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   EasyLocalization.logger.enableBuildModes = <BuildMode>[];
   await EasyLocalization.ensureInitialized();
+  await initializeDateFormatting();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

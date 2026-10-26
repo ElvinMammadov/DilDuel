@@ -39,6 +39,9 @@ class SearchItems extends StatelessWidget {
               return _WordCard(
                 word: word,
                 onTap: () {
+                  // Otherwise the field regains focus, and the keyboard,
+                  // when the sheet closes.
+                  FocusScope.of(context).unfocus();
                   context
                       .read<SearchBloc>()
                       .saveSearch(state.query, appState.dictionaryType.name);

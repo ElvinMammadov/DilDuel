@@ -20,6 +20,7 @@ import 'package:flutter_dic/core/data/repositories/training_progress_repository.
 import 'package:flutter_dic/core/state/ads_cubit.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
+import 'package:flutter_dic/core/utils/bare_word.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/core/utils/grammar_de_labels.dart';
 import 'package:flutter_dic/core/utils/grammar_type_translator.dart';

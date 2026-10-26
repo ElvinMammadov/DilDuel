@@ -8,6 +8,7 @@ import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
+import 'package:flutter_dic/core/utils/bare_word.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/core/utils/grammar_de_labels.dart';
 import 'package:flutter_dic/core/utils/grammar_type_translator.dart';
@@ -133,7 +134,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
       if (mounted) {
         setState(() => _isBookmarked = !_isBookmarked);
         widget.onBookmarkToggled?.call();
-        final String label = _bareWord(widget.word.key, widget.word.article);
+        final String label = bareWord(widget.word);
         AppSnackbar.show(
           context,
           type: adding ? SnackbarType.success : SnackbarType.info,
@@ -163,7 +164,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
       }
       if (mounted) {
         setState(() => _isUnknown = !_isUnknown);
-        final String label = _bareWord(widget.word.key, widget.word.article);
+        final String label = bareWord(widget.word);
         AppSnackbar.show(
           context,
           type: adding ? SnackbarType.success : SnackbarType.info,
@@ -258,48 +259,32 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // ── Article chip (DeAz only) ───────────────
-                  if (_isDeAz && _ok(word.article)) ...<Widget>[
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: _articleColor(word.article, colors, isDark)
-                            .withAlpha(28),
-                        borderRadius: BorderRadius.circular(
-                          Dimensions.borderRadiusPill,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.padding10,
-                          vertical: Dimensions.padding3,
-                        ),
-                        child: Text(
-                          word.article!,
-                          style: AppTextStyles.labelMedium(
-                            _articleColor(word.article, colors, isDark),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: Dimensions.itemHeight6),
-                  ],
-
-                  // ── Word + action buttons ──────────────────
+                  // ── Article chip + action buttons ──────────
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          _isDeAz
-                              ? _bareWord(word.key, word.article)
-                              : word.key,
-                          style: AppTextStyles.wordSource(
-                            colors.textPrimary,
-                            size: 28,
+                      if (_isDeAz && _ok(word.article))
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: _articleColor(word.article, colors, isDark)
+                                .withAlpha(28),
+                            borderRadius: BorderRadius.circular(
+                              Dimensions.borderRadiusPill,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: Dimensions.padding10,
+                              vertical: Dimensions.padding3,
+                            ),
+                            child: Text(
+                              word.article!,
+                              style: AppTextStyles.labelMedium(
+                                _articleColor(word.article, colors, isDark),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: Dimensions.itemWidth12),
+                      const Spacer(),
                       if (_isDeAz)
                         _SpeakButton(
                           controller: _speakController,
@@ -329,6 +314,13 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                         onTap: _toggleUnknown,
                       ),
                     ],
+                  ),
+                  const SizedBox(height: Dimensions.itemHeight6),
+
+                  // ── Word ───────────────────────────────────
+                  _SheetWord(
+                    text: _isDeAz ? bareWord(word) : word.key,
+                    color: colors.textPrimary,
                   ),
 
                   // ── Grammar type line (DeAz only) ─────────
@@ -413,7 +405,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
     if (_ok(word.gender)) {
       b.write(' · ');
       final String raw = word.gender!;
-      b.write(raw);
+      b.write(GrammarTypeTranslator.germanGender(raw));
       if (isAz) {
         final String az = GrammarTypeTranslator.gender(raw);
         if (az != raw) b.write(' ($az)');
@@ -905,10 +897,28 @@ Color _articleColor(String? article, AppColors colors, bool isDark) {
   }
 }
 
-/// Strips the leading article prefix from [key] so only the bare noun
-/// is displayed (e.g. "der Mann" → "Mann").
-String _bareWord(String key, String? article) {
-  if (article == null || article.isEmpty) return key;
-  final String prefix = '$article ';
-  return key.startsWith(prefix) ? key.substring(prefix.length) : key;
+/// The word in the sheet header.
+///
+/// A single long word (a German compound) is scaled down to fit on one line
+/// instead of breaking mid-word; a phrase wraps normally.
+class _SheetWord extends StatelessWidget {
+  const _SheetWord({required this.text, required this.color});
+
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final Text word = Text(
+      text,
+      maxLines: text.contains(' ') ? null : 1,
+      style: AppTextStyles.wordSource(color, size: 28),
+    );
+    if (text.contains(' ')) return word;
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.centerLeft,
+      child: word,
+    );
+  }
 }

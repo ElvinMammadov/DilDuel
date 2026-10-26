@@ -77,6 +77,11 @@ class DBHelper implements WordLocalDataSource {
 
   static Database? _db;
 
+  /// Replaces the open database; lets tests run the static helpers on an
+  /// in-memory database.
+  @visibleForTesting
+  static set database(Database? database) => _db = database;
+
   static Future<void> _createQuizResultsTable(Database db) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS $quizResults(
@@ -199,29 +204,33 @@ class DBHelper implements WordLocalDataSource {
   }
 
   /// Adds `word_id` to existing `bookmark` and `unknown_words` tables.
-  ///
-  /// SQLite does not support `ALTER TABLE ADD COLUMN IF NOT EXISTS`, so
-  /// we catch the [DatabaseException] thrown when the column already exists.
   static Future<void> _migrateAddWordId(Database db) async {
     for (final String table in <String>[bookmark, unknownWords]) {
-      try {
-        await db.execute('ALTER TABLE $table ADD COLUMN word_id TEXT');
-      } on DatabaseException catch (_) {
-        // Column already exists — nothing to do.
-      }
+      await addColumnIfMissing(db, table, 'word_id', 'TEXT');
     }
   }
 
   /// Adds the per-translation `plural` column to an existing `AzDe` table.
+  static Future<void> _migrateAddAzDePlural(Database db) =>
+      addColumnIfMissing(db, azDe, colPlural, 'TEXT');
+
+  /// Adds [column] to [table] unless it is already there.
   ///
-  /// Same approach as [_migrateAddWordId]: SQLite has no
-  /// `ADD COLUMN IF NOT EXISTS`, so the error for an existing column is
-  /// ignored.
-  static Future<void> _migrateAddAzDePlural(Database db) async {
-    try {
-      await db.execute('ALTER TABLE $azDe ADD COLUMN $colPlural TEXT');
-    } on DatabaseException catch (_) {
-      // Column already exists — nothing to do.
+  /// SQLite has no `ADD COLUMN IF NOT EXISTS`, and trying the `ALTER` anyway
+  /// logs a "duplicate column name" error on every launch.
+  @visibleForTesting
+  static Future<void> addColumnIfMissing(
+    Database db,
+    String table,
+    String column,
+    String type,
+  ) async {
+    final List<Map<String, Object?>> columns =
+        await db.rawQuery('PRAGMA table_info($table)');
+    final bool exists =
+        columns.any((Map<String, Object?> row) => row['name'] == column);
+    if (!exists) {
+      await db.execute('ALTER TABLE $table ADD COLUMN $column $type');
     }
   }
 
@@ -558,28 +567,89 @@ class DBHelper implements WordLocalDataSource {
         .toList();
   }
 
-  @override
-  Future<List<Word>> searchWords(String key, String dicType) async {
-    final String lowerQuery = key.toLowerCase();
-    final String query = '''
-      SELECT * FROM $dicType
-      WHERE LOWER(key) LIKE ? OR LOWER(key) LIKE ?
-      ORDER BY
-        CASE
-          WHEN LOWER(key) LIKE ? THEN 1
-          WHEN LOWER(key) LIKE ? THEN 2
-          ELSE 3
-        END,
-        key ASC
-    ''';
+  /// Upper-case letters that SQLite's ASCII-only `LOWER()` leaves untouched,
+  /// with the lower-case form they should match. `İ` folds to a plain `i` so
+  /// that `ingiltərə` finds `İngiltərə`.
+  static const Map<String, String> _foldedLetters = <String, String>{
+    'Ä': 'ä',
+    'Ö': 'ö',
+    'Ü': 'ü',
+    'Ə': 'ə',
+    'Ç': 'ç',
+    'Ş': 'ş',
+    'Ğ': 'ğ',
+    'İ': 'i',
+  };
 
-    final List<Map<String, Object?>> result =
-        await _db!.rawQuery(query, <Object?>[
-      '$lowerQuery%',
-      '%$lowerQuery%',
-      '$lowerQuery%',
-      '%$lowerQuery%',
-    ]);
+  /// German nouns are stored with their article (`das Haus`).
+  static const List<String> _articles = <String>['der', 'die', 'das'];
+
+  /// Lower-cases [text] exactly as [_foldedSql] lower-cases a column.
+  static String _foldCase(String text) {
+    String folded = text;
+    _foldedLetters.forEach((String upper, String lower) {
+      folded = folded.replaceAll(upper, lower);
+    });
+    return folded.toLowerCase();
+  }
+
+  static String _foldedSql(String column) {
+    String expression = column;
+    _foldedLetters.forEach((String upper, String lower) {
+      expression = "REPLACE($expression, '$upper', '$lower')";
+    });
+    return 'LOWER($expression)';
+  }
+
+  /// SQL for [foldedColumn] without a leading article, so `haus` ranks
+  /// `das Haus` as a word starting with `haus`.
+  static String _withoutArticleSql(String foldedColumn) {
+    final String cases = _articles
+        .map(
+          (String article) =>
+              "WHEN $foldedColumn LIKE '$article %' "
+              'THEN SUBSTR($foldedColumn, ${article.length + 2})',
+        )
+        .join(' ');
+    return 'CASE $cases ELSE $foldedColumn END';
+  }
+
+  @override
+  Future<List<Word>> searchWords(String key, String dicType) =>
+      searchIn(_db!, key, dicType);
+
+  /// Finds the words of [dicType] whose key contains [key], ignoring case
+  /// (including `Ä Ö Ü Ə Ç Ş Ğ İ`) and any leading article. An exact match
+  /// comes first, then words starting with [key], then the rest.
+  @visibleForTesting
+  static Future<List<Word>> searchIn(
+    Database db,
+    String key,
+    String dicType,
+  ) async {
+    final String query = _foldCase(key);
+    final String bareKey = dicType == deAz
+        ? _withoutArticleSql('folded_key')
+        : 'folded_key';
+
+    final List<Map<String, Object?>> result = query.isEmpty
+        ? await db.query(dicType, orderBy: 'key ASC')
+        : await db.rawQuery('''
+            SELECT * FROM (
+              SELECT *, $bareKey AS bare_key FROM (
+                SELECT *, ${_foldedSql('key')} AS folded_key FROM $dicType
+              )
+            )
+            WHERE folded_key LIKE ?
+            ORDER BY
+              CASE
+                WHEN bare_key = ? OR folded_key = ? THEN 0
+                WHEN bare_key LIKE ? OR folded_key LIKE ? THEN 1
+                ELSE 2
+              END,
+              bare_key,
+              key
+          ''', <Object?>['%$query%', query, query, '$query%', '$query%']);
 
     return result.map((Map<String, Object?> row) {
       final bool isDeAz = dicType == deAz;
@@ -702,8 +772,8 @@ class DBHelper implements WordLocalDataSource {
   static Future<Word?> getWordByKey(String key, String dicType) async {
     final List<Map<String, Object?>> result = await _db!.query(
       dicType,
-      where: 'UPPER(key) = ?',
-      whereArgs: <Object?>[key.toUpperCase()],
+      where: 'key = ? COLLATE NOCASE',
+      whereArgs: <Object?>[key],
       limit: 1,
     );
     if (result.isEmpty) return null;
@@ -730,6 +800,10 @@ class DBHelper implements WordLocalDataSource {
     );
   }
 
+  // Saved words are matched on their exact key. `COLLATE NOCASE` keeps the
+  // match case-insensitive for ASCII, but must not be replaced by
+  // `UPPER(key)`: SQLite only upper-cases ASCII, so keys with letters such as
+  // `ə` or `ü` would never equal their Dart-uppercased form.
   static Future<void> addBookmark(Word word) async {
     await _db!.insert(
       bookmark,
@@ -746,16 +820,16 @@ class DBHelper implements WordLocalDataSource {
   static Future<void> removeBookmark(Word word) async {
     await _db!.delete(
       bookmark,
-      where: 'UPPER(key) = ? AND value = ?',
-      whereArgs: <Object?>[word.key.toUpperCase(), word.value],
+      where: 'key = ? COLLATE NOCASE AND value = ?',
+      whereArgs: <Object?>[word.key, word.value],
     );
   }
 
   static Future<void> removeBookmarkByKey(String key) async {
     await _db!.delete(
       bookmark,
-      where: 'UPPER(key) = ?',
-      whereArgs: <Object?>[key.toUpperCase()],
+      where: 'key = ? COLLATE NOCASE',
+      whereArgs: <Object?>[key],
     );
   }
 
@@ -770,8 +844,8 @@ class DBHelper implements WordLocalDataSource {
   static Future<bool> isBookmarked(Word word) async {
     final List<Map<String, Object?>> result = await _db!.query(
       bookmark,
-      where: 'UPPER(key) = ? AND value = ?',
-      whereArgs: <Object?>[word.key.toUpperCase(), word.value],
+      where: 'key = ? COLLATE NOCASE AND value = ?',
+      whereArgs: <Object?>[word.key, word.value],
     );
     return result.isNotEmpty;
   }
@@ -779,8 +853,8 @@ class DBHelper implements WordLocalDataSource {
   static Future<Word?> getBookmark(String key) async {
     final List<Map<String, Object?>> result = await _db!.query(
       bookmark,
-      where: 'UPPER(key) = ?',
-      whereArgs: <Object?>[key.toUpperCase()],
+      where: 'key = ? COLLATE NOCASE',
+      whereArgs: <Object?>[key],
     );
     if (result.isEmpty) return null;
     final Map<String, Object?> row = result.first;
@@ -814,16 +888,16 @@ class DBHelper implements WordLocalDataSource {
   static Future<void> removeUnknownWord(Word word) async {
     await _db!.delete(
       unknownWords,
-      where: 'UPPER(key) = ? AND value = ?',
-      whereArgs: <Object?>[word.key.toUpperCase(), word.value],
+      where: 'key = ? COLLATE NOCASE AND value = ?',
+      whereArgs: <Object?>[word.key, word.value],
     );
   }
 
   static Future<bool> isUnknownWord(Word word) async {
     final List<Map<String, Object?>> result = await _db!.query(
       unknownWords,
-      where: 'UPPER(key) = ? AND value = ?',
-      whereArgs: <Object?>[word.key.toUpperCase(), word.value],
+      where: 'key = ? COLLATE NOCASE AND value = ?',
+      whereArgs: <Object?>[word.key, word.value],
     );
     return result.isNotEmpty;
   }
@@ -839,8 +913,8 @@ class DBHelper implements WordLocalDataSource {
   static Future<Word?> getUnknownWord(String key) async {
     final List<Map<String, Object?>> result = await _db!.query(
       unknownWords,
-      where: 'UPPER(key) = ?',
-      whereArgs: <Object?>[key.toUpperCase()],
+      where: 'key = ? COLLATE NOCASE',
+      whereArgs: <Object?>[key],
     );
     if (result.isEmpty) return null;
     final Map<String, Object?> row = result.first;
@@ -870,16 +944,16 @@ class DBHelper implements WordLocalDataSource {
   static Future<void> removeListenedWord(Word word) async {
     await _db!.delete(
       listenedWords,
-      where: 'UPPER(key) = ? AND value = ?',
-      whereArgs: <Object?>[word.key.toUpperCase(), word.value],
+      where: 'key = ? COLLATE NOCASE AND value = ?',
+      whereArgs: <Object?>[word.key, word.value],
     );
   }
 
   static Future<bool> isListenedWord(Word word) async {
     final List<Map<String, Object?>> result = await _db!.query(
       listenedWords,
-      where: 'UPPER(key) = ? AND value = ?',
-      whereArgs: <Object?>[word.key.toUpperCase(), word.value],
+      where: 'key = ? COLLATE NOCASE AND value = ?',
+      whereArgs: <Object?>[word.key, word.value],
     );
     return result.isNotEmpty;
   }
@@ -895,8 +969,8 @@ class DBHelper implements WordLocalDataSource {
   static Future<Word?> getListenedWord(String key) async {
     final List<Map<String, Object?>> result = await _db!.query(
       listenedWords,
-      where: 'UPPER(key) = ?',
-      whereArgs: <Object?>[key.toUpperCase()],
+      where: 'key = ? COLLATE NOCASE',
+      whereArgs: <Object?>[key],
     );
     if (result.isEmpty) return null;
     final Map<String, Object?> row = result.first;

@@ -11,7 +11,6 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DATABASES=(
   "assets/luget.db"
-  "java_dic/app/src/main/assets/luget.db"
 )
 
 : "${LUGET_DB_PASSPHRASE:?Set LUGET_DB_PASSPHRASE}"

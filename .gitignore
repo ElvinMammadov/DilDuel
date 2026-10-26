@@ -64,10 +64,12 @@ ios/Runner/GoogleService-Info.plist
 # Dictionary databases: only the encrypted .enc copies are committed
 # (see scripts/luget_db.sh)
 assets/luget.db
-java_dic/app/src/main/assets/luget.db
 
 # Local build output and machine-specific files
 .gradle/
 local.properties
 hs_err_pid*.log
 replay_pid*.log
+
+# Local leftover of the removed Java app; delete the folder and this rule
+java_dic/

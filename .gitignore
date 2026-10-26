@@ -73,3 +73,6 @@ replay_pid*.log
 
 # Local leftover of the removed Java app; delete the folder and this rule
 java_dic/
+
+# Generated flutter test output
+test_package/

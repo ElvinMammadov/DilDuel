@@ -285,14 +285,6 @@ class _CardContentState extends State<_CardContent>
                       bareWord(widget.word),
                       style: AppTextStyles.wordSource(textPrimary, size: 26),
                     ),
-                    // Grammar type
-                    if (_ok(widget.word.mainType)) ...<Widget>[
-                      const SizedBox(height: Dimensions.itemHeight4),
-                      Text(
-                        _typeLabel(context),
-                        style: AppTextStyles.bodySmall(textSecondary),
-                      ),
-                    ],
                   ],
                 ),
               ),
@@ -333,6 +325,16 @@ class _CardContentState extends State<_CardContent>
               ),
             ],
           ),
+
+          // Grammar type: below the header row so it can use the full width
+          // instead of the space left of the action buttons.
+          if (_ok(widget.word.mainType)) ...<Widget>[
+            const SizedBox(height: Dimensions.itemHeight4),
+            Text(
+              _typeLabel(context),
+              style: AppTextStyles.bodySmall(textSecondary),
+            ),
+          ],
 
           const SizedBox(height: Dimensions.itemHeight16),
           Divider(color: border, height: 1),

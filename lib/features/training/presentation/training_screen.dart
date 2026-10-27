@@ -49,9 +49,7 @@ class _TrainingView extends StatelessWidget {
             return Column(
               children: <Widget>[
                 _LevelBackBar(level: state.level),
-                const Expanded(
-                  child: Center(child: CircularProgressIndicator()),
-                ),
+                const Expanded(child: AppLoadingView()),
               ],
             );
           }

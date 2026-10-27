@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dic/core/components/app_pill.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
-import 'package:flutter_dic/core/utils/dimensions.dart';
+import 'package:flutter_dic/core/utils/article_color.dart';
 import 'package:flutter_dic/core/utils/grammar_type_translator.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 
@@ -39,32 +40,19 @@ class WordTypeBadges extends StatelessWidget {
     return m != null ? first.substring(m.end).trim() : first.trim();
   }
 
-  Color _articleTextColor(AppColors colors) =>
-      switch (word.article?.toLowerCase()) {
-        'der' => colors.primary,
-        'die' => colors.error,
-        'das' => colors.success,
-        _ => colors.textSecondary,
-      };
-
-  Color _articleBgColor(AppColors colors) =>
-      switch (word.article?.toLowerCase()) {
-        'der' => colors.primaryTint,
-        'die' => colors.errorTint,
-        'das' => colors.successTint,
-        _ => Colors.transparent,
-      };
-
   @override
   Widget build(BuildContext context) {
     final AppColors colors = AppColors.of(context);
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final bool isAz = context.locale.languageCode == 'az';
+    final Color articleText =
+        articleColor(word.article, colors, isDark: isDark);
+    final Color articleBg =
+        articleTintColor(word.article, colors, isDark: isDark);
     final List<Widget> badges = <Widget>[];
 
     // ── Article badge (bottom-sheet / detail views only) ──────────────────
     if (showArticle && word.article != null) {
-      final Color articleText = _articleTextColor(colors);
-      final Color articleBg = _articleBgColor(colors);
       badges.add(WordTypeBadge(
         label: word.article!,
         bg: articleBg,
@@ -83,8 +71,6 @@ class WordTypeBadges extends StatelessWidget {
         // When the article badge is hidden, apply the article gender colour to
         // the mainType badge so gender information is not lost.
         final bool colorByArticle = !showArticle && word.article != null;
-        final Color articleText = _articleTextColor(colors);
-        final Color articleBg = _articleBgColor(colors);
         badges.add(WordTypeBadge(
           label: label,
           bg: colorByArticle ? articleBg : colors.chipBg,
@@ -130,19 +116,9 @@ class WordTypeBadge extends StatelessWidget {
   final Color? borderColor;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimensions.padding10,
-          vertical: Dimensions.padding4,
-        ),
-        decoration: BoxDecoration(
-          color: bg,
-          borderRadius:
-              BorderRadius.circular(Dimensions.borderRadiusPill),
-          border: borderColor != null
-              ? Border.all(color: borderColor!)
-              : null,
-        ),
+  Widget build(BuildContext context) => AppPill(
+        color: bg,
+        borderColor: borderColor,
         child: Text(label, style: AppTextStyles.labelMedium(textColor)),
       );
 }

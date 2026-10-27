@@ -89,18 +89,14 @@ class _SignInScreenState extends State<SignInScreen> {
               widget.onAuthenticated!();
             } else {
               final NavigatorState navigator = Navigator.of(ctx);
-              final OverlayState? overlay = navigator.overlay;
-              navigator.popUntil((Route<dynamic> r) => r.isFirst);
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (overlay != null && overlay.mounted) {
-                  AppSnackbar.showOnOverlay(
-                    overlay,
-                    type: SnackbarType.success,
-                    title: 'auth.sign_in.success'.tr(),
-                    subtitle: 'auth.sign_in.success_subtitle'.tr(),
-                  );
-                }
-              });
+              AppSnackbar.showAfterNavigation(
+                navigator,
+                navigate: () =>
+                    navigator.popUntil((Route<dynamic> r) => r.isFirst),
+                type: SnackbarType.success,
+                title: 'auth.sign_in.success'.tr(),
+                subtitle: 'auth.sign_in.success_subtitle'.tr(),
+              );
             }
           }
           if (state is AuthPasswordResetSent) {

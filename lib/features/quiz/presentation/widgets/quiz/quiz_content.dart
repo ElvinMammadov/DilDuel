@@ -12,7 +12,7 @@ class QuizContent extends StatelessWidget {
         child: BlocBuilder<QuizBloc, QuizState>(
           builder: (BuildContext context, QuizState state) {
             if (state is QuizLoading) {
-              return const QuizLoadingView();
+              return const AppLoadingView();
             }
 
             if (state is QuizError) {

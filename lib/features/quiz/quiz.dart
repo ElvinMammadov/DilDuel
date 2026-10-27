@@ -10,6 +10,8 @@ import 'package:flutter_dic/core/components/app_dialog.dart';
 import 'package:flutter_dic/core/components/app_drag_handle.dart';
 import 'package:flutter_dic/core/components/app_icon_filled_card.dart';
 import 'package:flutter_dic/core/components/app_filled_card_list.dart';
+import 'package:flutter_dic/core/components/app_loading_view.dart';
+import 'package:flutter_dic/core/components/app_pill.dart';
 import 'package:flutter_dic/core/components/app_segmented_control.dart';
 import 'package:flutter_dic/core/components/app_sheet_surface.dart';
 import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
@@ -45,7 +47,6 @@ part 'presentation/widgets/quiz/quiz_in_progress_view.dart';
 part 'presentation/widgets/quiz/quiz_question.dart';
 part 'presentation/widgets/quiz/quiz_result_view.dart';
 part 'presentation/widgets/results/results_tab.dart';
-part 'presentation/widgets/quiz/quiz_loading_view.dart';
 
 // Dialogs
 part 'presentation/widgets/quiz/quiz_restart_dialog.dart';

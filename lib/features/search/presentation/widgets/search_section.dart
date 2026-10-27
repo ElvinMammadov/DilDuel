@@ -146,22 +146,22 @@ class _PillSearchBarState extends State<_PillSearchBar> {
   @override
   Widget build(BuildContext context) {
     final AppColors colors = AppColors.of(context);
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.surface,
-        border: Border.all(color: colors.border, width: 1.5),
+        border: Border.all(
+          color: colors.border,
+          width: Dimensions.borderWidthEmphasis,
+        ),
         borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-        boxShadow: isDark
-            ? null
-            : <BoxShadow>[
-                const BoxShadow(
-                  color: Color(0x0A140A3C),
-                  blurRadius: 2,
-                  offset: Offset(0, 1),
-                ),
-              ],
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colors.shadowSubtle,
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(

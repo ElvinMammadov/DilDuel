@@ -16,7 +16,7 @@ class QuizErrorView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Error: $message',
+              'quiz.error'.tr(args: <String>[message]),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: AppColors.of(context).error,
                   ),
@@ -25,7 +25,7 @@ class QuizErrorView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: Dimensions.padding16),
               child: AppElevatedButton(
-                text: 'Try Again',
+                text: 'quiz.try_again'.tr(),
                 onPressed: onTryAgain,
               ),
             ),

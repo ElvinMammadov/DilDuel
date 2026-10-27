@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/components/app_bottom_sheet.dart';
 import 'package:flutter_dic/core/components/app_card.dart';
 import 'package:flutter_dic/core/components/app_dialog.dart';
+import 'package:flutter_dic/core/components/app_divider.dart';
 import 'package:flutter_dic/core/components/app_snackbar.dart';
 import 'package:flutter_dic/core/components/app_text_field.dart';
 import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';

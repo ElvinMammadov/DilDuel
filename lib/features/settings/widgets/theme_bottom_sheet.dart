@@ -9,19 +9,15 @@ class ThemeBottomSheet extends StatelessWidget {
     ThemeType type,
     String themeName,
   ) {
-    final OverlayState? overlay = Navigator.of(context).overlay;
+    final NavigatorState navigator = Navigator.of(context);
     cubit.setTheme(type);
-    Navigator.pop(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (overlay != null && overlay.mounted) {
-        AppSnackbar.showOnOverlay(
-          overlay,
-          type: SnackbarType.success,
-          title: 'settings.theme_changed'.tr(),
-          subtitle: 'settings.theme_changed_to'.tr(args: <String>[themeName]),
-        );
-      }
-    });
+    AppSnackbar.showAfterNavigation(
+      navigator,
+      navigate: navigator.pop,
+      type: SnackbarType.success,
+      title: 'settings.theme_changed'.tr(),
+      subtitle: 'settings.theme_changed_to'.tr(args: <String>[themeName]),
+    );
   }
 
   @override

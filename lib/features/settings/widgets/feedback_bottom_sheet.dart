@@ -54,18 +54,14 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
 
   void _onStateChanged(BuildContext context, FeedbackState state) {
     if (state is! FeedbackSent) return;
-    final OverlayState? overlay = Navigator.of(context).overlay;
-    Navigator.of(context).pop();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (overlay != null && overlay.mounted) {
-        AppSnackbar.showOnOverlay(
-          overlay,
-          type: SnackbarType.success,
-          title: 'settings.feedback.success'.tr(),
-          subtitle: 'settings.feedback.success_subtitle'.tr(),
-        );
-      }
-    });
+    final NavigatorState navigator = Navigator.of(context);
+    AppSnackbar.showAfterNavigation(
+      navigator,
+      navigate: navigator.pop,
+      type: SnackbarType.success,
+      title: 'settings.feedback.success'.tr(),
+      subtitle: 'settings.feedback.success_subtitle'.tr(),
+    );
   }
 
   @override

@@ -7,6 +7,7 @@ import 'package:flutter_dic/core/components/app_back_bar.dart';
 import 'package:flutter_dic/core/components/app_card.dart';
 import 'package:flutter_dic/core/components/app_filled_card_list.dart';
 import 'package:flutter_dic/core/components/app_icon_filled_card.dart';
+import 'package:flutter_dic/core/components/app_loading_view.dart';
 import 'package:flutter_dic/core/components/app_snackbar.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';

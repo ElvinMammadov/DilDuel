@@ -103,7 +103,7 @@ class _BookmarksTab extends StatelessWidget {
       BlocBuilder<BookmarksBloc, BookmarksState>(
         builder: (BuildContext context, BookmarksState state) {
           if (state is BookmarksLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const AppLoadingView();
           }
           if (state is BookmarksLoaded) {
             final AppColors colors = AppColors.of(context);
@@ -166,7 +166,7 @@ class _UnknownTab extends StatelessWidget {
       BlocBuilder<BookmarksBloc, BookmarksState>(
         builder: (BuildContext context, BookmarksState state) {
           if (state is BookmarksLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const AppLoadingView();
           }
           if (state is BookmarksLoaded) {
             final AppColors colors = AppColors.of(context);

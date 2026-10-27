@@ -49,23 +49,9 @@ class ListeningResultView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Dimensions.itemHeight28),
-            GestureDetector(
-              onTap: onTryAgain,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Dimensions.padding12,
-                  horizontal: Dimensions.padding26,
-                ),
-                decoration: BoxDecoration(
-                  color: colors.primary,
-                  borderRadius:
-                      BorderRadius.circular(Dimensions.borderRadiusPill),
-                ),
-                child: Text(
-                  'quiz.try_again'.tr(),
-                  style: AppTextStyles.labelLarge(colors.onPrimary),
-                ),
-              ),
+            AppElevatedButton(
+              text: 'quiz.try_again'.tr(),
+              onPressed: onTryAgain,
             ),
           ],
         ),

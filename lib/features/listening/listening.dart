@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dic/core/components/app_card.dart';
 import 'package:flutter_dic/core/components/app_dialog.dart';
+import 'package:flutter_dic/core/components/app_loading_view.dart';
 import 'package:flutter_dic/core/components/app_speak_button.dart';
 import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source.dart';

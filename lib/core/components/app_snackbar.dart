@@ -68,6 +68,27 @@ class AppSnackbar {
         duration: duration,
       );
 
+  /// Runs [navigate] (usually a pop) and then shows the snackbar on the
+  /// screen it reveals.
+  ///
+  /// The overlay is captured before [navigate] runs, because the context
+  /// that opened the snackbar is usually gone once the route is popped.
+  static void showAfterNavigation(
+    NavigatorState navigator, {
+    required VoidCallback navigate,
+    required SnackbarType type,
+    required String title,
+    String? subtitle,
+  }) {
+    final OverlayState? overlay = navigator.overlay;
+    navigate();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (overlay != null && overlay.mounted) {
+        showOnOverlay(overlay, type: type, title: title, subtitle: subtitle);
+      }
+    });
+  }
+
   static void _insert(
     OverlayState overlay, {
     required SnackbarType type,

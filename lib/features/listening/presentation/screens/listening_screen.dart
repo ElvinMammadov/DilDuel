@@ -30,7 +30,7 @@ class _ListeningView extends StatelessWidget {
       BlocBuilder<ListeningCubit, ListeningState>(
         builder: (BuildContext context, ListeningState state) {
           if (state is ListeningLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const AppLoadingView();
           }
 
           if (state is ListeningError) {

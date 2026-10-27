@@ -1,19 +1,5 @@
 part of training;
 
-/// Article colours follow the standard German grammar colour convention.
-Color _articleColor(String? article, AppColors colors, bool isDark) {
-  switch (article?.toLowerCase()) {
-    case 'der':
-      return isDark ? const Color(0xFF82B1FF) : const Color(0xFF1565C0);
-    case 'die':
-      return colors.error;
-    case 'das':
-      return colors.success;
-    default:
-      return colors.textSecondary;
-  }
-}
-
 class _TrainingWordCard extends StatelessWidget {
   final TrainingReady state;
 
@@ -201,7 +187,6 @@ class _CardContentState extends State<_CardContent> {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color textPrimary = colors.textPrimary;
     final Color textSecondary = colors.textSecondary;
-    final Color border = colors.border;
     final Color cardBg =
         isDark ? colors.headerBg : Theme.of(context).scaffoldBackgroundColor;
     final Color primary = colors.primary;
@@ -227,28 +212,7 @@ class _CardContentState extends State<_CardContent> {
                   children: <Widget>[
                     // Article chip
                     if (_ok(widget.word.article)) ...<Widget>[
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.padding10,
-                          vertical: Dimensions.padding3,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _articleColor(
-                            widget.word.article,
-                            colors,
-                            isDark,
-                          ).withAlpha(28),
-                          borderRadius: BorderRadius.circular(
-                            Dimensions.borderRadiusPill,
-                          ),
-                        ),
-                        child: Text(
-                          widget.word.article!,
-                          style: AppTextStyles.labelMedium(
-                            _articleColor(widget.word.article, colors, isDark),
-                          ),
-                        ),
-                      ),
+                      ArticleChip(article: widget.word.article!),
                       const SizedBox(height: Dimensions.itemHeight6),
                     ],
                     // German word
@@ -306,7 +270,7 @@ class _CardContentState extends State<_CardContent> {
           ],
 
           const SizedBox(height: Dimensions.itemHeight16),
-          Divider(color: border, height: 1),
+          const AppDivider(),
           const SizedBox(height: Dimensions.itemHeight12),
 
           // ── Scrollable details ───────────────────────────────────────
@@ -422,7 +386,7 @@ class _SectionHeader extends StatelessWidget {
       children: <Widget>[
         Text(label, style: AppTextStyles.labelSmall(colors.textSecondary)),
         const SizedBox(width: Dimensions.itemWidth8),
-        Expanded(child: Divider(color: colors.border, height: 1, thickness: 1)),
+        const Expanded(child: AppDivider(thickness: Dimensions.itemHeight1)),
       ],
     );
   }
@@ -510,7 +474,7 @@ class _GrammarTable extends StatelessWidget {
                       ),
                     ),
                     if (e.$1 < rows.length - 1)
-                      Divider(height: 1, color: border),
+                      const AppDivider(),
                   ],
                 ))
             .toList(),

@@ -81,4 +81,46 @@ void main() {
     check(pressed).equals(1);
     check(find.text('Title').evaluate()).isEmpty();
   });
+
+  testWidgets('showAfterNavigation shows the snackbar on the screen revealed '
+      'by the pop', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.lightTheme,
+        home: Builder(
+          builder: (BuildContext context) => Scaffold(
+            body: TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => Scaffold(
+                    body: TextButton(
+                      onPressed: () => AppSnackbar.showAfterNavigation(
+                        Navigator.of(context),
+                        navigate: Navigator.of(context).pop,
+                        type: SnackbarType.success,
+                        title: 'Saved',
+                      ),
+                      child: const Text('save'),
+                    ),
+                  ),
+                ),
+              ),
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('save'));
+    await tester.pumpAndSettle();
+
+    check(find.text('save').evaluate()).isEmpty();
+    check(find.text('open').evaluate()).isNotEmpty();
+    check(find.text('Saved').evaluate()).isNotEmpty();
+
+    AppSnackbar.dismiss();
+    await tester.pumpAndSettle();
+  });
 }

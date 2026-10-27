@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dic/core/components/app_card.dart';
 import 'package:flutter_dic/core/components/app_close_button.dart';
+import 'package:flutter_dic/core/components/app_divider.dart';
 import 'package:flutter_dic/core/components/app_drag_handle.dart';
 import 'package:flutter_dic/core/components/app_snackbar.dart';
 import 'package:flutter_dic/core/components/app_speak_button.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_dic/core/utils/dimensions.dart';
 import 'package:flutter_dic/core/utils/grammar_de_labels.dart';
 import 'package:flutter_dic/core/utils/grammar_type_translator.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
+import 'package:flutter_dic/features/shared/widgets/article_chip.dart';
 import 'package:flutter_dic/features/shared/widgets/word_type_badges.dart';
 
 /// Opens the word detail bottom sheet from anywhere in the app.
@@ -218,27 +220,7 @@ class _WordBottomSheetState extends State<WordBottomSheet> {
                   Row(
                     children: <Widget>[
                       if (_isDeAz && _ok(word.article))
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: _articleColor(word.article, colors, isDark)
-                                .withAlpha(28),
-                            borderRadius: BorderRadius.circular(
-                              Dimensions.borderRadiusPill,
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: Dimensions.padding10,
-                              vertical: Dimensions.padding3,
-                            ),
-                            child: Text(
-                              word.article!,
-                              style: AppTextStyles.labelMedium(
-                                _articleColor(word.article, colors, isDark),
-                              ),
-                            ),
-                          ),
-                        ),
+                        ArticleChip(article: word.article!),
                       const Spacer(),
                       if (_isDeAz)
                         AppSpeakButton(speech: _speech, text: word.key),
@@ -434,8 +416,8 @@ class _SheetSection extends StatelessWidget {
       children: <Widget>[
         Text(label, style: AppTextStyles.labelSmall(colors.textSecondary)),
         const SizedBox(width: Dimensions.itemWidth8),
-        Expanded(
-          child: Divider(color: colors.border, height: 1, thickness: 1),
+        const Expanded(
+          child: AppDivider(thickness: Dimensions.itemHeight1),
         ),
       ],
     );
@@ -587,7 +569,7 @@ class _AzDeTranslationCard extends StatelessWidget {
                   ),
                 ),
                 if (i < rows.length - 1)
-                  Divider(height: 1, color: colors.border),
+                  const AppDivider(),
               ],
             );
           }).toList(),
@@ -711,7 +693,7 @@ class _GrammarRow extends StatelessWidget {
             ],
           ),
         ),
-        if (showDivider) Divider(height: 1, color: colors.border),
+        if (showDivider) const AppDivider(),
       ],
     );
   }
@@ -780,27 +762,9 @@ class _ExampleEntry extends StatelessWidget {
             ],
           ),
         ),
-        if (showDivider) Divider(height: 1, color: colors.border),
+        if (showDivider) const AppDivider(),
       ],
     );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Article colour + bare-word helpers (mirrors training_word_card.dart)
-// ─────────────────────────────────────────────────────────────────────────────
-
-/// Article colours follow the standard German grammar colour convention.
-Color _articleColor(String? article, AppColors colors, bool isDark) {
-  switch (article?.toLowerCase()) {
-    case 'der':
-      return isDark ? const Color(0xFF82B1FF) : const Color(0xFF1565C0);
-    case 'die':
-      return colors.error;
-    case 'das':
-      return colors.success;
-    default:
-      return colors.textSecondary;
   }
 }
 

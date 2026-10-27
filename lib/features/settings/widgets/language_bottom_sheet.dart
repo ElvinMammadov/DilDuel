@@ -22,65 +22,59 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
 
   Future<void> _apply() async {
     final NavigatorState navigator = Navigator.of(context);
-    final OverlayState? overlay = navigator.overlay;
     final String selected = _selectedLanguage;
     // The snackbar below must be translated after the new language is loaded.
     await context.setLocale(Locale(selected));
     rebuildAllElements();
-    if (mounted) navigator.pop();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (overlay != null && overlay.mounted) {
-        final String langName = selected == 'az'
-            ? 'settings.language_azerbaijani'.tr()
-            : 'settings.language_german'.tr();
-        AppSnackbar.showOnOverlay(
-          overlay,
-          type: SnackbarType.success,
-          title: 'settings.language_changed'.tr(),
-          subtitle: 'settings.language_changed_to'.tr(args: <String>[langName]),
-        );
-      }
-    });
+    final String langName = selected == 'az'
+        ? 'settings.language_azerbaijani'.tr()
+        : 'settings.language_german'.tr();
+    AppSnackbar.showAfterNavigation(
+      navigator,
+      navigate: () {
+        if (mounted) navigator.pop();
+      },
+      type: SnackbarType.success,
+      title: 'settings.language_changed'.tr(),
+      subtitle: 'settings.language_changed_to'.tr(args: <String>[langName]),
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-    return AppBottomSheet(
-      title: 'settings.choose_language'.tr(),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Divider(height: 1, color: colors.border),
-          _LanguageRow(
-            flag: '🇦🇿',
-            name: 'settings.language_azerbaijani'.tr(),
-            isSelected: _selectedLanguage == 'az',
-            onTap: () => setState(() => _selectedLanguage = 'az'),
-          ),
-          _LanguageRow(
-            flag: '🇩🇪',
-            name: 'settings.language_german'.tr(),
-            isSelected: _selectedLanguage == 'de',
-            onTap: () => setState(() => _selectedLanguage = 'de'),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              Dimensions.padding20,
-              Dimensions.padding14,
-              Dimensions.padding20,
-              Dimensions.padding24,
+  Widget build(BuildContext context) => AppBottomSheet(
+        title: 'settings.choose_language'.tr(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const AppDivider(),
+            _LanguageRow(
+              flag: '🇦🇿',
+              name: 'settings.language_azerbaijani'.tr(),
+              isSelected: _selectedLanguage == 'az',
+              onTap: () => setState(() => _selectedLanguage = 'az'),
             ),
-            child: AppElevatedButton(
-              text: 'common.confirm'.tr(),
-              onPressed: _apply,
-              width: double.infinity,
+            _LanguageRow(
+              flag: '🇩🇪',
+              name: 'settings.language_german'.tr(),
+              isSelected: _selectedLanguage == 'de',
+              onTap: () => setState(() => _selectedLanguage = 'de'),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                Dimensions.padding20,
+                Dimensions.padding14,
+                Dimensions.padding20,
+                Dimensions.padding24,
+              ),
+              child: AppElevatedButton(
+                text: 'common.confirm'.tr(),
+                onPressed: _apply,
+                width: double.infinity,
+              ),
+            ),
+          ],
+        ),
+      );
 }
 
 class _LanguageRow extends StatelessWidget {

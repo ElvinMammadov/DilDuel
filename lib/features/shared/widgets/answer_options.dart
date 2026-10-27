@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dic/core/components/buttons/app_elevated_button.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/utils/dimensions.dart';
@@ -56,7 +57,11 @@ class _AnswerOptionsState extends State<AnswerOptions> {
         ),
       if (_isRevealed) ...<Widget>[
         const SizedBox(height: Dimensions.itemHeight10),
-        _NextButton(onTap: _continue),
+        AppElevatedButton(
+          text: 'quiz.next'.tr(),
+          onPressed: _continue,
+          width: double.infinity,
+        ),
       ],
     ],
   );
@@ -116,34 +121,6 @@ class _OptionTile extends StatelessWidget {
           child: Text(
             label,
             style: AppTextStyles.labelLarge(foreground),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _NextButton extends StatelessWidget {
-  const _NextButton({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: colors.primary,
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusPill),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: Dimensions.padding14),
-          child: Text(
-            'quiz.next'.tr(),
-            style: AppTextStyles.titleSmall(colors.onPrimary),
             textAlign: TextAlign.center,
           ),
         ),

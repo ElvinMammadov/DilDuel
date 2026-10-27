@@ -210,31 +210,26 @@ class _CounterPill extends StatelessWidget {
   final bool showIcon;
 
   @override
-  Widget build(BuildContext context) => DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.of(context).primaryTint,
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusPill),
+  Widget build(BuildContext context) => AppPill(
+        color: AppColors.of(context).primaryTint,
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.padding8,
+          vertical: Dimensions.padding2,
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Dimensions.padding8,
-            vertical: Dimensions.padding2,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(text, style: AppTextStyles.caption(color)),
-              if (showIcon) ...<Widget>[
-                const SizedBox(width: Dimensions.itemWidth2),
-                Icon(
-                  Icons.unfold_more_rounded,
-                  size: Dimensions.itemHeight14,
-                  color: color,
-                ),
-              ],
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(text, style: AppTextStyles.caption(color)),
+            if (showIcon) ...<Widget>[
+              const SizedBox(width: Dimensions.itemWidth2),
+              Icon(
+                Icons.unfold_more_rounded,
+                size: Dimensions.itemHeight14,
+                color: color,
+              ),
             ],
-          ),
+          ],
         ),
       );
 }

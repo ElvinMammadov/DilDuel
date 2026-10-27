@@ -154,7 +154,7 @@ class _FaqItemState extends State<_FaqItem> {
                 style: AppTextStyles.bodyMedium(colors.textPrimary)
                     .copyWith(height: 1.5, fontSize: 13)),
           ),
-        if (widget.showDivider) Divider(height: 1, color: colors.border),
+        if (widget.showDivider) const AppDivider(),
       ],
     );
   }

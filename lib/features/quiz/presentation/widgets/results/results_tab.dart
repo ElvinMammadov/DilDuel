@@ -214,22 +214,16 @@ class _AnswersBottomSheet extends StatelessWidget {
                             bg: colors.errorTint,
                           ),
                           const Spacer(),
-                          DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: _scoreBg(pct, colors),
-                              borderRadius: BorderRadius.circular(
-                                Dimensions.borderRadiusPill,
-                              ),
+                          AppPill(
+                            color: _scoreBg(pct, colors),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: Dimensions.padding16,
+                              vertical: Dimensions.padding6,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: Dimensions.padding16,
-                                vertical: Dimensions.padding6,
-                              ),
-                              child: Text(
-                                '${pct.toStringAsFixed(0)}%',
-                                style: AppTextStyles.labelLarge(
-                                    _scoreColor(pct, colors)),
+                            child: Text(
+                              '${pct.toStringAsFixed(0)}%',
+                              style: AppTextStyles.labelLarge(
+                                _scoreColor(pct, colors),
                               ),
                             ),
                           ),
@@ -279,29 +273,18 @@ class _SheetStatChip extends StatelessWidget {
   final Color bg;
 
   @override
-  Widget build(BuildContext context) => DecoratedBox(
-        decoration: BoxDecoration(
-          color: bg,
-          borderRadius: BorderRadius.circular(Dimensions.borderRadiusPill),
+  Widget build(BuildContext context) => AppPill(
+        color: bg,
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.padding12,
+          vertical: Dimensions.padding6,
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Dimensions.padding12,
-            vertical: Dimensions.padding6,
-          ),
-          child: RichText(
-            text: TextSpan(
-              children: <TextSpan>[
-                TextSpan(
-                  text: label,
-                  style: AppTextStyles.labelMedium(color),
-                ),
-                TextSpan(
-                  text: suffix,
-                  style: AppTextStyles.caption(color),
-                ),
-              ],
-            ),
+        child: RichText(
+          text: TextSpan(
+            children: <TextSpan>[
+              TextSpan(text: label, style: AppTextStyles.labelMedium(color)),
+              TextSpan(text: suffix, style: AppTextStyles.caption(color)),
+            ],
           ),
         ),
       );
@@ -579,7 +562,7 @@ class _QuizResultsList extends StatelessWidget {
           builder: (BuildContext context,
               AsyncSnapshot<List<QuizResult>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const AppLoadingView();
             }
             final List<QuizResult> results = snapshot.data ?? <QuizResult>[];
             if (results.isEmpty) {
@@ -668,7 +651,7 @@ class _ListeningResultsList extends StatelessWidget {
           builder: (BuildContext context,
               AsyncSnapshot<List<QuizResult>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const AppLoadingView();
             }
             final List<QuizResult> results =
                 snapshot.data ?? <QuizResult>[];

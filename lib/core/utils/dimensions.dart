@@ -102,6 +102,7 @@ class Dimensions {
   static const double borderRadiusSmall = 8.0;
   static const double borderRadiusSheet = 28.0;
   static const double borderRadiusPill = 100.0;
+  static const double borderWidthEmphasis = 1.5;
 
   // ─── Spacing ─────────────────────────────────────────────────
   static const double spacing = 8.0;

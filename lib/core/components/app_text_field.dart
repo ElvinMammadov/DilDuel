@@ -22,7 +22,11 @@ class AppTextField extends StatelessWidget {
     this.maxLines = 1,
     this.maxLength,
     this.showCounter = false,
+    this.obscureText = false,
+    this.prefixIcon,
+    this.suffixIcon,
     this.onChanged,
+    this.onSubmitted,
   });
 
   final String label;
@@ -37,14 +41,24 @@ class AppTextField extends StatelessWidget {
   final int? maxLines;
   final int? maxLength;
   final bool showCounter;
-  final ValueChanged<String>? onChanged;
+  final bool obscureText;
 
-  OutlineInputBorder _border(Color color,
-          {double width = Dimensions.itemWidth1}) =>
-      OutlineInputBorder(
-        borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-        borderSide: BorderSide(color: color, width: width),
-      );
+  /// Icon shown inside the field before the text.
+  final IconData? prefixIcon;
+
+  /// Widget shown inside the field after the text, such as a visibility
+  /// toggle.
+  final Widget? suffixIcon;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+
+  OutlineInputBorder _border(
+    Color color, {
+    double width = Dimensions.itemWidth1,
+  }) => OutlineInputBorder(
+    borderRadius: BorderRadius.circular(Dimensions.borderRadius),
+    borderSide: BorderSide(color: color, width: width),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +78,23 @@ class AppTextField extends StatelessWidget {
           minLines: minLines,
           maxLines: maxLines,
           maxLength: maxLength,
+          obscureText: obscureText,
           onChanged: onChanged,
+          onSubmitted: onSubmitted,
           style: AppTextStyles.bodyLarge(colors.textPrimary),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: AppTextStyles.bodyLarge(
               colors.textSecondary.withValues(alpha: 0.5),
             ),
+            prefixIcon: prefixIcon == null
+                ? null
+                : Icon(
+                    prefixIcon,
+                    size: Dimensions.itemWidth20,
+                    color: colors.textSecondary,
+                  ),
+            suffixIcon: suffixIcon,
             errorText: errorText,
             errorStyle: AppTextStyles.bodySmall(colors.error),
             counterText: showCounter ? null : '',

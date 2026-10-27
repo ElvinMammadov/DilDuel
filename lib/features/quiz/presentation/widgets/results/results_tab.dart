@@ -125,15 +125,10 @@ class _ResultCard extends StatelessWidget {
   }
 
   void _showAnswersSheet(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
+    AppBottomSheet.show<void>(
+      context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(Dimensions.borderRadiusSheet),
-        ),
-      ),
-      builder: (BuildContext context) => _AnswersBottomSheet(
+      child: _AnswersBottomSheet(
         result: result,
         index: index,
         numberKey: numberKey,
@@ -163,108 +158,109 @@ class _AnswersBottomSheet extends StatelessWidget {
       expand: false,
       initialChildSize: 0.65,
       maxChildSize: 0.92,
-      builder: (BuildContext context, ScrollController controller) => Column(
-        children: <Widget>[
-          // ── Handle ──────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: Dimensions.padding12),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: colors.textSecondary.withValues(alpha: 0.25),
-                borderRadius:
-                    BorderRadius.circular(Dimensions.borderRadiusPill),
-              ),
-              child: const SizedBox(width: 40, height: 4),
-            ),
-          ),
-          // ── Header ──────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              Dimensions.padding20,
-              0,
-              Dimensions.padding20,
-              Dimensions.padding16,
-            ),
+      builder: (BuildContext context, ScrollController controller) =>
+          AppSheetSurface(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      numberKey.tr(args: <String>['${index + 1}']),
-                      style: AppTextStyles.titleMedium(colors.textPrimary),
-                    ),
-                    Text(
-                      DateFormat('d MMM · HH:mm', context.locale.languageCode)
-                          .format(result.dateTime),
-                      style: AppTextStyles.caption(colors.textSecondary),
-                    ),
-                  ],
+                // ── Handle ──────────────────────────────────────────────
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: Dimensions.padding12),
+                  child: AppDragHandle(),
                 ),
-                const SizedBox(height: Dimensions.padding12),
-                Row(
-                  children: <Widget>[
-                    _SheetStatChip(
-                      label: '${result.score}',
-                      suffix: ' ${'quiz.correct'.tr()}',
-                      color: colors.success,
-                      bg: colors.successTint,
-                    ),
-                    const SizedBox(width: Dimensions.padding8),
-                    _SheetStatChip(
-                      label: '$wrong',
-                      suffix: ' ${'quiz.wrong'.tr()}',
-                      color: colors.error,
-                      bg: colors.errorTint,
-                    ),
-                    const Spacer(),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: _scoreBg(pct, colors),
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.borderRadiusPill),
+                // ── Header ──────────────────────────────────────────────
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    Dimensions.padding20,
+                    0,
+                    Dimensions.padding20,
+                    Dimensions.padding16,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            numberKey.tr(args: <String>['${index + 1}']),
+                            style: AppTextStyles.titleMedium(
+                              colors.textPrimary,
+                            ),
+                          ),
+                          Text(
+                            DateFormat(
+                              'd MMM · HH:mm',
+                              context.locale.languageCode,
+                            ).format(result.dateTime),
+                            style: AppTextStyles.caption(colors.textSecondary),
+                          ),
+                        ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.padding16,
-                          vertical: Dimensions.padding6,
-                        ),
-                        child: Text(
-                          '${pct.toStringAsFixed(0)}%',
-                          style: AppTextStyles.labelLarge(
-                              _scoreColor(pct, colors)),
-                        ),
+                      const SizedBox(height: Dimensions.padding12),
+                      Row(
+                        children: <Widget>[
+                          _SheetStatChip(
+                            label: '${result.score}',
+                            suffix: ' ${'quiz.correct'.tr()}',
+                            color: colors.success,
+                            bg: colors.successTint,
+                          ),
+                          const SizedBox(width: Dimensions.padding8),
+                          _SheetStatChip(
+                            label: '$wrong',
+                            suffix: ' ${'quiz.wrong'.tr()}',
+                            color: colors.error,
+                            bg: colors.errorTint,
+                          ),
+                          const Spacer(),
+                          DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: _scoreBg(pct, colors),
+                              borderRadius: BorderRadius.circular(
+                                Dimensions.borderRadiusPill,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: Dimensions.padding16,
+                                vertical: Dimensions.padding6,
+                              ),
+                              child: Text(
+                                '${pct.toStringAsFixed(0)}%',
+                                style: AppTextStyles.labelLarge(
+                                    _scoreColor(pct, colors)),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                // ── Answer list ─────────────────────────────────────────
+                Expanded(
+                  child: ListView.separated(
+                    controller: controller,
+                    padding: const EdgeInsets.fromLTRB(
+                      Dimensions.padding16,
+                      Dimensions.padding12,
+                      Dimensions.padding16,
+                      Dimensions.padding24,
                     ),
-                  ],
+                    itemCount: result.answers.length,
+                    separatorBuilder: (_, __) =>
+                        const SizedBox(height: Dimensions.padding8),
+                    itemBuilder: (BuildContext context, int i) => _AnswerCard(
+                      answer: result.answers[i],
+                      number: i + 1,
+                    ),
+                  ),
                 ),
               ],
-            ),
-          ),
-          const Divider(height: 1),
-          // ── Answer list ─────────────────────────────────────────
-          Expanded(
-            child: ListView.separated(
-              controller: controller,
-              padding: const EdgeInsets.fromLTRB(
-                Dimensions.padding16,
-                Dimensions.padding12,
-                Dimensions.padding16,
-                Dimensions.padding24,
               ),
-              itemCount: result.answers.length,
-              separatorBuilder: (_, __) =>
-                  const SizedBox(height: Dimensions.padding8),
-              itemBuilder: (BuildContext context, int i) => _AnswerCard(
-                answer: result.answers[i],
-                number: i + 1,
-              ),
-            ),
           ),
-        ],
-      ),
     );
   }
 }

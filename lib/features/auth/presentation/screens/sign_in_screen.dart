@@ -212,7 +212,7 @@ class _SignInView extends StatelessWidget {
               ),
               const SizedBox(height: Dimensions.itemHeight30),
               // ── Email field ──────────────────────────────────────────────
-              _AuthTextField(
+              AppTextField(
                 label: 'auth.sign_in.email_label'.tr(),
                 hint: 'auth.sign_in.email_hint'.tr(),
                 controller: state._emailCtrl,
@@ -223,7 +223,7 @@ class _SignInView extends StatelessWidget {
               ),
               const SizedBox(height: Dimensions.itemHeight16),
               // ── Password field ───────────────────────────────────────────
-              _AuthTextField(
+              AppTextField(
                 label: 'auth.sign_in.password_label'.tr(),
                 hint: '••••••••',
                 controller: state._passwordCtrl,
@@ -302,97 +302,6 @@ class _SignInView extends StatelessWidget {
 }
 
 // ── Shared private widgets ──────────────────────────────────────────────────
-
-class _AuthTextField extends StatelessWidget {
-  const _AuthTextField({
-    required this.label,
-    required this.controller,
-    this.hint,
-    this.keyboardType,
-    this.obscureText = false,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.errorText,
-    this.textInputAction,
-    this.onSubmitted,
-    this.onChanged,
-  });
-
-  final String label;
-  final TextEditingController controller;
-  final String? hint;
-  final TextInputType? keyboardType;
-  final bool obscureText;
-  final IconData? prefixIcon;
-  final Widget? suffixIcon;
-  final String? errorText;
-  final TextInputAction? textInputAction;
-  final ValueChanged<String>? onSubmitted;
-  final ValueChanged<String>? onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          label,
-          style: AppTextStyles.labelMedium(colors.textSecondary),
-        ),
-        const SizedBox(height: Dimensions.itemHeight6),
-        TextField(
-          controller: controller,
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          textInputAction: textInputAction,
-          onSubmitted: onSubmitted,
-          onChanged: onChanged,
-          style: AppTextStyles.bodyLarge(colors.textPrimary),
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: AppTextStyles.bodyLarge(
-              colors.textSecondary.withValues(alpha: 0.5),
-            ),
-            prefixIcon: prefixIcon != null
-                ? Icon(prefixIcon, size: 20, color: colors.textSecondary)
-                : null,
-            suffixIcon: suffixIcon,
-            errorText: errorText,
-            errorStyle: AppTextStyles.bodySmall(colors.error),
-            filled: true,
-            fillColor: colors.surface,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-              borderSide: BorderSide(color: colors.border),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-              borderSide: BorderSide(color: colors.border),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-              borderSide: BorderSide(color: colors.primary, width: 1.5),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-              borderSide: BorderSide(color: colors.error),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(Dimensions.borderRadius),
-              borderSide: BorderSide(color: colors.error, width: 1.5),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: Dimensions.padding16,
-              vertical: Dimensions.padding14,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class _OrDivider extends StatelessWidget {
   const _OrDivider();

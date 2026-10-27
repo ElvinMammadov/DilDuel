@@ -2,10 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dic/core/components/app_card.dart';
 import 'package:flutter_dic/core/components/app_close_button.dart';
+import 'package:flutter_dic/core/components/app_drag_handle.dart';
 import 'package:flutter_dic/core/components/app_snackbar.dart';
+import 'package:flutter_dic/core/components/app_speak_button.dart';
 import 'package:flutter_dic/core/data/data_sources/local/word_local_data_source_impl.dart';
 import 'package:flutter_dic/core/data/repositories/bookmark_repository.dart';
 import 'package:flutter_dic/core/di/dependency_injection.dart';
+import 'package:flutter_dic/core/state/speech_cubit.dart';
 import 'package:flutter_dic/core/theme/app_colors.dart';
 import 'package:flutter_dic/core/theme/app_text_styles.dart';
 import 'package:flutter_dic/core/utils/bare_word.dart';
@@ -14,7 +17,6 @@ import 'package:flutter_dic/core/utils/grammar_de_labels.dart';
 import 'package:flutter_dic/core/utils/grammar_type_translator.dart';
 import 'package:flutter_dic/features/search/domain/entities/word.dart';
 import 'package:flutter_dic/features/shared/widgets/word_type_badges.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 /// Opens the word detail bottom sheet from anywhere in the app.
 ///
@@ -61,29 +63,16 @@ class WordBottomSheet extends StatefulWidget {
   State<WordBottomSheet> createState() => _WordBottomSheetState();
 }
 
-class _WordBottomSheetState extends State<WordBottomSheet>
-    with SingleTickerProviderStateMixin {
-  late final FlutterTts _flutterTts;
-  late final AnimationController _speakController;
+class _WordBottomSheetState extends State<WordBottomSheet> {
+  final SpeechCubit _speech = SpeechCubit();
   bool _isBookmarked = false;
   bool _isUnknown = false;
-  bool _isSpeaking = false;
 
   bool get _isDeAz => widget.locale == 'de-DE';
 
   @override
   void initState() {
     super.initState();
-    _flutterTts = FlutterTts();
-    _flutterTts.setLanguage('de-DE');
-    _flutterTts.setSpeechRate(0.5);
-    _flutterTts.setCompletionHandler(() {
-      if (mounted) setState(() => _isSpeaking = false);
-    });
-    _speakController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
     _initActionStates();
   }
 
@@ -98,28 +87,6 @@ class _WordBottomSheetState extends State<WordBottomSheet>
         _isUnknown = results[1];
       });
     }
-  }
-
-  Future<void> _speak() async {
-    if (_isSpeaking) {
-      await _flutterTts.stop();
-      _speakController.stop();
-      _speakController.reset();
-      if (mounted) setState(() => _isSpeaking = false);
-      return;
-    }
-    if (mounted) {
-      setState(() => _isSpeaking = true);
-      _speakController.repeat(reverse: true);
-    }
-    await _flutterTts.speak(widget.word.key);
-  }
-
-  /// Speaks [text] without toggling the main speaking indicator.
-  /// Used for individual AzDe translation entries.
-  Future<void> _speakText(String text) async {
-    await _flutterTts.stop();
-    await _flutterTts.speak(text);
   }
 
   Future<void> _toggleBookmark() async {
@@ -187,8 +154,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
 
   @override
   void dispose() {
-    _flutterTts.stop();
-    _speakController.dispose();
+    _speech.close();
     super.dispose();
   }
 
@@ -217,22 +183,11 @@ class _WordBottomSheetState extends State<WordBottomSheet>
             height: Dimensions.itemHeight56,
             child: Stack(
               children: <Widget>[
-                Align(
+                const Align(
                   alignment: Alignment.topCenter,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: Dimensions.padding12),
-                    child: SizedBox(
-                      width: Dimensions.itemWidth40,
-                      height: Dimensions.itemHeight4,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: colors.border,
-                          borderRadius: BorderRadius.circular(
-                            Dimensions.borderRadiusPill,
-                          ),
-                        ),
-                      ),
-                    ),
+                    padding: EdgeInsets.only(top: Dimensions.padding12),
+                    child: AppDragHandle(),
                   ),
                 ),
                 Positioned(
@@ -286,11 +241,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                         ),
                       const Spacer(),
                       if (_isDeAz)
-                        _SpeakButton(
-                          controller: _speakController,
-                          isSpeaking: _isSpeaking,
-                          onTap: _speak,
-                        ),
+                        AppSpeakButton(speech: _speech, text: word.key),
                       if (_isDeAz) const SizedBox(width: Dimensions.itemWidth8),
                       _CircleButton(
                         icon: _isBookmarked
@@ -353,7 +304,7 @@ class _WordBottomSheetState extends State<WordBottomSheet>
                     _AzDeTranslationCard(
                       rows: _parseAzDeRows(word),
                       cardBg: cardBg,
-                      onSpeak: _speakText,
+                      onSpeak: _speech.speakQuietly,
                     ),
 
                   // ── Grammar ────────────────────────────────
@@ -514,50 +465,6 @@ class _CircleButton extends StatelessWidget {
           child: Icon(icon, size: Dimensions.itemHeight20, color: color),
         ),
       );
-}
-
-class _SpeakButton extends StatelessWidget {
-  const _SpeakButton({
-    required this.controller,
-    required this.isSpeaking,
-    required this.onTap,
-  });
-
-  final AnimationController controller;
-  final bool isSpeaking;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedBuilder(
-        animation: controller,
-        builder: (BuildContext ctx, Widget? _) {
-          final double scale = isSpeaking ? 1.0 + controller.value * 0.1 : 1.0;
-          return Transform.scale(
-            scale: scale,
-            child: SizedBox(
-              width: Dimensions.itemWidth44,
-              height: Dimensions.itemHeight44,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: isSpeaking ? colors.primary : colors.primaryTint,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  isSpeaking ? Icons.stop_rounded : Icons.volume_up_outlined,
-                  size: Dimensions.itemHeight20,
-                  color: isSpeaking ? colors.onPrimary : colors.primary,
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
 }
 
 class _AzDeTranslationCard extends StatelessWidget {

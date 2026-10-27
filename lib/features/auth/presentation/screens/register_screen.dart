@@ -206,7 +206,7 @@ class _RegisterView extends StatelessWidget {
               ),
               const SizedBox(height: Dimensions.itemHeight24),
               // ── Name field ───────────────────────────────────────────────
-              _AuthTextField(
+              AppTextField(
                 label: 'auth.register.name_label'.tr(),
                 hint: 'auth.register.name_hint'.tr(),
                 controller: state._nameCtrl,
@@ -218,7 +218,7 @@ class _RegisterView extends StatelessWidget {
               ),
               const SizedBox(height: Dimensions.itemHeight14),
               // ── Email field ──────────────────────────────────────────────
-              _AuthTextField(
+              AppTextField(
                 label: 'auth.register.email_label'.tr(),
                 hint: 'auth.register.email_hint'.tr(),
                 controller: state._emailCtrl,
@@ -230,7 +230,7 @@ class _RegisterView extends StatelessWidget {
               ),
               const SizedBox(height: Dimensions.itemHeight14),
               // ── Password field ───────────────────────────────────────────
-              _AuthTextField(
+              AppTextField(
                 label: 'auth.register.password_label'.tr(),
                 hint: '••••••••',
                 controller: state._passwordCtrl,
@@ -252,7 +252,7 @@ class _RegisterView extends StatelessWidget {
               ),
               const SizedBox(height: Dimensions.itemHeight14),
               // ── Confirm password ─────────────────────────────────────────
-              _AuthTextField(
+              AppTextField(
                 label: 'auth.register.confirm_label'.tr(),
                 hint: '••••••••',
                 controller: state._confirmCtrl,

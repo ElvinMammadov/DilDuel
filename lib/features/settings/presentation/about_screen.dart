@@ -14,26 +14,29 @@ class AboutScreen extends StatelessWidget {
       showBackButton: true,
       showProfileButton: false,
     ),
-    body: ListView(
-      padding: const EdgeInsets.fromLTRB(
-        Dimensions.padding18,
-        Dimensions.padding16,
-        Dimensions.padding18,
-        Dimensions.padding30,
+    body: SafeArea(
+      top: false,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(
+          Dimensions.padding18,
+          Dimensions.padding16,
+          Dimensions.padding18,
+          Dimensions.padding30,
+        ),
+        children: <Widget>[
+          _AboutHeader(packageInfo: packageInfo),
+          const SizedBox(height: Dimensions.padding24),
+          _AboutSection(
+            title: 'settings.about.dictionary_title'.tr(),
+            text: 'settings.about.dictionary_text'.tr(),
+          ),
+          const SizedBox(height: Dimensions.padding12),
+          _AboutSection(
+            title: 'settings.about.levels_title'.tr(),
+            text: 'settings.about.levels_text'.tr(),
+          ),
+        ],
       ),
-      children: <Widget>[
-        _AboutHeader(packageInfo: packageInfo),
-        const SizedBox(height: Dimensions.padding24),
-        _AboutSection(
-          title: 'settings.about.dictionary_title'.tr(),
-          text: 'settings.about.dictionary_text'.tr(),
-        ),
-        const SizedBox(height: Dimensions.padding12),
-        _AboutSection(
-          title: 'settings.about.levels_title'.tr(),
-          text: 'settings.about.levels_text'.tr(),
-        ),
-      ],
     ),
   );
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -78,6 +79,15 @@ class _HomeShellState extends State<HomeShell> {
             listener: (BuildContext ctx, AuthState state) =>
                 ctx.read<BookmarksBloc>().reset(),
           ),
+          // Sign-in replaces the saved words in the database; reload them in
+          // case the Bookmarks tab is already open (it only reloads when
+          // switched to).
+          BlocListener<AuthCubit, AuthState>(
+            listenWhen: (AuthState p, AuthState c) =>
+                p is! AuthAuthenticated && c is AuthAuthenticated,
+            listener: (BuildContext ctx, AuthState state) =>
+                ctx.read<BookmarksBloc>().loadBookmarks(),
+          ),
         ],
         child: Scaffold(
           appBar: DilDuelAppBar(
@@ -136,9 +146,14 @@ class _DesignedNavBar extends StatelessWidget {
         color: surface,
         border: Border(top: BorderSide(color: border)),
       ),
-      padding: const EdgeInsets.only(
+      padding: EdgeInsets.only(
         top: Dimensions.padding8,
-        bottom: Dimensions.padding20,
+        // Clear the system navigation bar: 3-button mode is taller than the
+        // gesture bar, and Android 15+ draws the app behind it.
+        bottom: math.max(
+          Dimensions.padding20,
+          MediaQuery.viewPaddingOf(context).bottom,
+        ),
         left: Dimensions.padding6,
         right: Dimensions.padding6,
       ),

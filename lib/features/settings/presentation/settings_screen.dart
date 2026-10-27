@@ -108,89 +108,93 @@ class _SettingsScreenState extends State<SettingsScreen> {
           showBackButton: true,
           showProfileButton: false,
         ),
-        body: ListView(
-          padding: const EdgeInsets.fromLTRB(
-            Dimensions.padding18,
-            Dimensions.padding16,
-            Dimensions.padding18,
-            Dimensions.padding30,
-          ),
-          children: <Widget>[
-            _ProfileCard(onSignIn: _openSignIn),
-            const SizedBox(height: Dimensions.itemHeight14),
-            _SettingsGroup(
-              children: <Widget>[
-                _SettingsRow(
-                  icon: Icons.language_outlined,
-                  iconBackground: colors.levelB1,
-                  title: 'settings.language'.tr(),
-                  subtitle: 'settings.language_name'.tr(),
-                  onTap: _showLanguageBottomSheet,
-                ),
-                const ThemeRow(),
-              ],
+        body: SafeArea(
+          top: false,
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(
+              Dimensions.padding18,
+              Dimensions.padding16,
+              Dimensions.padding18,
+              Dimensions.padding30,
             ),
-            const SizedBox(height: Dimensions.itemHeight14),
-            _SettingsGroup(
-              children: <Widget>[
-                _SettingsRow(
-                  icon: Icons.help_outline,
-                  iconBackground: colors.quizCard,
-                  title: 'settings.faq.title'.tr(),
-                  subtitle: 'settings.faq.row_subtitle'.tr(
-                    args: <String>['${FaqScreen.itemCount}'],
-                  ),
-                  onTap: _openFaq,
-                ),
-                _SettingsRow(
-                  icon: Icons.rate_review_outlined,
-                  iconBackground: colors.resultsCard,
-                  title: 'settings.feedback.title'.tr(),
-                  subtitle: 'settings.feedback.row_subtitle'.tr(),
-                  onTap: _openFeedback,
-                ),
-                _SettingsRow(
-                  icon: Icons.privacy_tip_outlined,
-                  iconBackground: colors.levelB2,
-                  title: 'settings.privacy_policy.title'.tr(),
-                  subtitle: 'settings.privacy_policy.subtitle'.tr(),
-                  onTap: () => _openLink(LegalLinks.privacyPolicy),
-                ),
-                if (privacyOptionsRequired)
+            children: <Widget>[
+              _ProfileCard(onSignIn: _openSignIn),
+              const SizedBox(height: Dimensions.itemHeight14),
+              _SettingsGroup(
+                children: <Widget>[
                   _SettingsRow(
-                    icon: Icons.tune,
-                    iconBackground: colors.info,
-                    title: 'settings.privacy_options.title'.tr(),
-                    subtitle: 'settings.privacy_options.subtitle'.tr(),
-                    onTap: () => context.read<AdsCubit>().showPrivacyOptions(),
+                    icon: Icons.language_outlined,
+                    iconBackground: colors.levelB1,
+                    title: 'settings.language'.tr(),
+                    subtitle: 'settings.language_name'.tr(),
+                    onTap: _showLanguageBottomSheet,
                   ),
-                _SettingsRow(
-                  icon: Icons.gavel_outlined,
-                  iconBackground: colors.unknownCard,
-                  title: 'settings.legal_notice.title'.tr(),
-                  subtitle: 'settings.legal_notice.subtitle'.tr(),
-                  onTap: () => _openLink(LegalLinks.impressum),
-                ),
-                FutureBuilder<PackageInfo>(
-                  future: _packageInfo,
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<PackageInfo> snapshot,
-                  ) =>
-                      _SettingsRow(
-                    icon: Icons.info_outline,
-                    iconBackground: colors.primary,
-                    title: 'settings.about.title'.tr(),
-                    subtitle: 'settings.version'.tr(
-                      args: <String>[snapshot.data?.version ?? '...'],
+                  const ThemeRow(),
+                ],
+              ),
+              const SizedBox(height: Dimensions.itemHeight14),
+              _SettingsGroup(
+                children: <Widget>[
+                  _SettingsRow(
+                    icon: Icons.help_outline,
+                    iconBackground: colors.quizCard,
+                    title: 'settings.faq.title'.tr(),
+                    subtitle: 'settings.faq.row_subtitle'.tr(
+                      args: <String>['${FaqScreen.itemCount}'],
                     ),
-                    onTap: _openAbout,
+                    onTap: _openFaq,
                   ),
-                ),
-              ],
-            ),
-            const _AccountActions(),
-          ],
+                  _SettingsRow(
+                    icon: Icons.rate_review_outlined,
+                    iconBackground: colors.resultsCard,
+                    title: 'settings.feedback.title'.tr(),
+                    subtitle: 'settings.feedback.row_subtitle'.tr(),
+                    onTap: _openFeedback,
+                  ),
+                  _SettingsRow(
+                    icon: Icons.privacy_tip_outlined,
+                    iconBackground: colors.levelB2,
+                    title: 'settings.privacy_policy.title'.tr(),
+                    subtitle: 'settings.privacy_policy.subtitle'.tr(),
+                    onTap: () => _openLink(LegalLinks.privacyPolicy),
+                  ),
+                  if (privacyOptionsRequired)
+                    _SettingsRow(
+                      icon: Icons.tune,
+                      iconBackground: colors.info,
+                      title: 'settings.privacy_options.title'.tr(),
+                      subtitle: 'settings.privacy_options.subtitle'.tr(),
+                      onTap: () =>
+                          context.read<AdsCubit>().showPrivacyOptions(),
+                    ),
+                  _SettingsRow(
+                    icon: Icons.gavel_outlined,
+                    iconBackground: colors.unknownCard,
+                    title: 'settings.legal_notice.title'.tr(),
+                    subtitle: 'settings.legal_notice.subtitle'.tr(),
+                    onTap: () => _openLink(LegalLinks.impressum),
+                  ),
+                  FutureBuilder<PackageInfo>(
+                    future: _packageInfo,
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<PackageInfo> snapshot,
+                    ) =>
+                        _SettingsRow(
+                      icon: Icons.info_outline,
+                      iconBackground: colors.primary,
+                      title: 'settings.about.title'.tr(),
+                      subtitle: 'settings.version'.tr(
+                        args: <String>[snapshot.data?.version ?? '...'],
+                      ),
+                      onTap: _openAbout,
+                    ),
+                  ),
+                ],
+              ),
+              const _AccountActions(),
+            ],
+          ),
         ),
       ),
     );

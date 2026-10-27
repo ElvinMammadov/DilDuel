@@ -67,26 +67,29 @@ class FaqScreen extends StatelessWidget {
           showBackButton: true,
           showProfileButton: false,
         ),
-        body: ListView.separated(
-          padding: const EdgeInsets.fromLTRB(
-            Dimensions.padding18,
-            Dimensions.padding16,
-            Dimensions.padding18,
-            Dimensions.padding30,
+        body: SafeArea(
+          top: false,
+          child: ListView.separated(
+            padding: const EdgeInsets.fromLTRB(
+              Dimensions.padding18,
+              Dimensions.padding16,
+              Dimensions.padding18,
+              Dimensions.padding30,
+            ),
+            itemCount: _items.length,
+            separatorBuilder: (_, __) =>
+                const SizedBox(height: Dimensions.padding8),
+            itemBuilder: (BuildContext context, int index) {
+              final (String q, String a) = _items[index];
+              return AppCard(
+                child: _FaqItem(
+                  question: q.tr(),
+                  answer: a.tr(),
+                  showDivider: false,
+                ),
+              );
+            },
           ),
-          itemCount: _items.length,
-          separatorBuilder: (_, __) =>
-              const SizedBox(height: Dimensions.padding8),
-          itemBuilder: (BuildContext context, int index) {
-            final (String q, String a) = _items[index];
-            return AppCard(
-              child: _FaqItem(
-                question: q.tr(),
-                answer: a.tr(),
-                showDivider: false,
-              ),
-            );
-          },
         ),
       );
 }
